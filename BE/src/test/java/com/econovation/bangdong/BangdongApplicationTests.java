@@ -1,4 +1,4 @@
-package com.econovation.bangdong.bangdong;
+package com.econovation.bangdong;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

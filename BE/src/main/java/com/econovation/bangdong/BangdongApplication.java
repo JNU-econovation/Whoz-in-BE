@@ -1,4 +1,4 @@
-package com.econovation.bangdong.bangdong;
+package com.econovation.bangdong;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

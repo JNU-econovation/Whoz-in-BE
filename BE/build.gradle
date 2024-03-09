@@ -1,10 +1,10 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.3'
+    id 'org.springframework.boot' version '2.7.12'
     id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.econovation.bangdong'
+group = 'com.econovation'
 version = '0.0.1-SNAPSHOT'
 
 java {
