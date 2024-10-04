@@ -1,13 +1,13 @@
-package com.whozin.whozin;
+package api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class WhozInApplication {
+public class WhozInApiApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(WhozInApplication.class, args);
+        SpringApplication.run(WhozInApiApplication.class, args);
     }
 
 }
