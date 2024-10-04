@@ -3,6 +3,4 @@ include 'modules:domain'
 findProject(':modules:domain')?.name = 'domain'
 include 'modules:api'
 findProject(':modules:api')?.name = 'api'
-include 'modules:shared'
-findProject(':modules:shared')?.name = 'shared'
 
