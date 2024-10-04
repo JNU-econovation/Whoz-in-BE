@@ -1,10 +1,8 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.3.4'
-    id 'io.spring.dependency-management' version '1.1.6'
 }
 
-group = 'com.whoz-In'
+group = 'com.Whoz-In'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -23,20 +21,32 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
+    group 'com.Whoz-In'
+    version '0.0.1-SNAPSHOT'
 
-    compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
-    runtimeOnly 'com.mysql:mysql-connector-j'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies { // 모든 하위 모듈에 추가 될 의존성 목록
+        implementation 'org.springframework:spring-context:6.1.13'
+        compileOnly 'org.projectlombok:lombok:1.18.24'
+        annotationProcessor 'org.projectlombok:lombok:1.18.24'
+    }
+
+    test {
+        useJUnitPlatform()
+    }
 }
 
 tasks.named('test') {
