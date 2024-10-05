@@ -1,13 +1,9 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version "3.3.4"
-    id 'io.spring.dependency-management' version '1.1.5'
 }
 
 group = 'com.Whoz-In'
 version = '0.0.1-SNAPSHOT'
-
-jar.enabled = true
 
 repositories {
     mavenCentral()
@@ -15,10 +11,9 @@ repositories {
 
 dependencies {
     implementation project(':modules:domain')
-    implementation project(":modules:infrastructure:jpa")
 
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
+    runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'

@@ -1,9 +1,9 @@
 package api.shared;
 
-import shared.domain.bus.command.Command;
-import shared.domain.bus.command.CommandBus;
-import shared.domain.bus.query.Query;
-import shared.domain.bus.query.QueryBus;
+import domain.shared.domain.bus.command.Command;
+import domain.shared.domain.bus.command.CommandBus;
+import domain.shared.domain.bus.query.Query;
+import domain.shared.domain.bus.query.QueryBus;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 

@@ -39,9 +39,13 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
     }
 
     dependencies { // 모든 하위 모듈에 추가 될 의존성 목록
+        //for Spring DI
         implementation 'org.springframework:spring-context:6.1.13'
+
+        //lombok
         compileOnly 'org.projectlombok:lombok:1.18.24'
         annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
     }
 
     test {
