@@ -3,4 +3,6 @@ include 'modules:domain'
 findProject(':modules:domain')?.name = 'domain'
 include 'modules:api'
 findProject(':modules:api')?.name = 'api'
+include 'modules:infrastructure:jpa'
+findProject(':modules:infrastructure:jpa')?.name = 'jpa'
 
