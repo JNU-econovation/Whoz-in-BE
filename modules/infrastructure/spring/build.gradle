@@ -2,19 +2,14 @@ plugins {
     id 'java'
 }
 
-group = 'com.whoz_in'
+group = 'com.Whoz-In'
 version = '0.0.1-SNAPSHOT'
-
-jar.enabled = true
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    //트랜잭션을 사용하기 위함
-    implementation 'org.springframework:spring-tx:6.1.13'
-
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }

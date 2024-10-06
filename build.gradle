@@ -22,7 +22,7 @@ repositories {
 }
 
 subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
-    group 'com.Whoz-In'
+    group 'com.whoz_in'
     version '0.0.1-SNAPSHOT'
 
     apply plugin: 'java'
