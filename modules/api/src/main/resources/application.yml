@@ -1,3 +1,9 @@
 spring:
   profiles:
     include: jpa
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
