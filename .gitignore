@@ -1,3 +1,6 @@
+#환경 설정 파일
+**/env.properties
+
 HELP.md
 .gradle
 build/
