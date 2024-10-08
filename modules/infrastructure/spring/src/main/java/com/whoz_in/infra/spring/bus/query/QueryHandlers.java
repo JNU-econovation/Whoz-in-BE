@@ -2,7 +2,6 @@ package com.whoz_in.infra.spring.bus.query;
 
 import com.whoz_in.domain.shared.domain.bus.query.Query;
 import com.whoz_in.domain.shared.domain.bus.query.QueryHandler;
-import com.whoz_in.domain.shared.domain.bus.query.Response;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.stream.Collectors;
