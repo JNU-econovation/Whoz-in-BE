@@ -1,0 +1,7 @@
+package com.whoz_in.infra.jpa.auth;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface AuthJpaRepository extends JpaRepository<AuthEntity, Long> {
+
+}
