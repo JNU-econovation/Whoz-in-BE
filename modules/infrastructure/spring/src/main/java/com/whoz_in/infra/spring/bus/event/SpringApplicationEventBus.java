@@ -1,4 +1,4 @@
-package com.whoz_in.infra.spring.event;
+package com.whoz_in.infra.spring.bus.event;
 
 
 import com.whoz_in.domain.shared.domain.bus.event.DomainEvent;

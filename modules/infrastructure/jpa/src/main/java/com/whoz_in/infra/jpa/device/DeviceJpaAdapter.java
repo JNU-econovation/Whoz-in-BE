@@ -1,5 +1,6 @@
 package com.whoz_in.infra.jpa.device;
 
+import com.whoz_in.domain.device.domain.Device;
 import com.whoz_in.domain.device.domain.DeviceRepository;
 import org.springframework.stereotype.Repository;
 
@@ -7,7 +8,7 @@ import org.springframework.stereotype.Repository;
 public class DeviceJpaAdapter implements DeviceRepository {
 
     @Override
-    public void save() {
-        System.out.println("1");
+    public void save(Device device) {
+
     }
 }
