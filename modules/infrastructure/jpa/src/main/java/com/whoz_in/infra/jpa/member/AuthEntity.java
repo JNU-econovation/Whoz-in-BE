@@ -1,6 +1,5 @@
-package com.whoz_in.infra.jpa.auth;
+package com.whoz_in.infra.jpa.member;
 
-import com.whoz_in.infra.jpa.member.MemberEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

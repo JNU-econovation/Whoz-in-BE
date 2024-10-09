@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.auth;
+package com.whoz_in.infra.jpa.member;
 
 import com.whoz_in.domain.auth.domain.Auth;
 import com.whoz_in.domain.auth.domain.AuthRepository;
