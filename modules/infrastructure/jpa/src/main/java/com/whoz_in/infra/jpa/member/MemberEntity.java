@@ -1,5 +1,6 @@
 package com.whoz_in.infra.jpa.member;
 
+import com.whoz_in.infra.jpa.shared.entity.BaseEntity;
 import com.whoz_in.infra.jpa.shared.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +12,7 @@ import jakarta.persistence.Id;
 
 
 @Entity
-public class MemberEntity {
+public class MemberEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
