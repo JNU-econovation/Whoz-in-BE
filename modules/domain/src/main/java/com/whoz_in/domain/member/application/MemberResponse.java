@@ -4,6 +4,6 @@ import com.whoz_in.domain.shared.domain.bus.query.Response;
 import lombok.Getter;
 
 @Getter
-public final class MemberService implements Response {
+public final class MemberResponse implements Response {
 
 }

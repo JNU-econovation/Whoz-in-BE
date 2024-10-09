@@ -4,9 +4,9 @@ import com.whoz_in.domain.shared.domain.bus.query.QueryHandler;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemberServiceGetHandler extends QueryHandler<MemberServiceGet, MemberService> {
+public class MemberGetHandler extends QueryHandler<MemberGet, MemberResponse> {
 
   @Override
-  public MemberService handle(MemberServiceGet query) {return new MemberService();}
+  public MemberResponse handle(MemberGet query) {return new MemberResponse();}
 
 }
