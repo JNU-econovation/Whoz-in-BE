@@ -16,7 +16,7 @@ public abstract class AggregateRoot {
     }
 
     //AggregateRoot 구현체만 이벤트를 등록할 수 있으므로 protected
-    protected final void add(DomainEvent event) {
+    protected final void register(DomainEvent event) {
         domainEvents.add(event);
     }
 }
