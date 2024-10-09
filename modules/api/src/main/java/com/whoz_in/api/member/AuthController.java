@@ -1,4 +1,4 @@
-package com.whoz_in.api.auth;
+package com.whoz_in.api.member;
 
 import com.whoz_in.api.shared.CommandQueryController;
 import com.whoz_in.domain.shared.domain.bus.command.CommandBus;
