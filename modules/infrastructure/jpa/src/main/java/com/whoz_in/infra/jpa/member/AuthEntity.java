@@ -1,5 +1,6 @@
 package com.whoz_in.infra.jpa.member;
 
+import com.whoz_in.infra.jpa.shared.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,14 +10,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class AuthEntity {
+public class AuthEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // 회원은 여러 계정을 만들 수 있지만
-  // 계정 하나당 회원 정보 하나씩 고유로 가지므로 일대일
   @OneToOne
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
