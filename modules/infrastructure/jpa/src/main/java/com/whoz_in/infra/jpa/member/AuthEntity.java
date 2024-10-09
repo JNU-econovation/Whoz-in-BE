@@ -8,16 +8,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
+@Where(clause = "deleted_at is null")
+@Table(name = "auth")
+@SQLDelete(sql = "UPDATE auth SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 public class AuthEntity extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // 회원은 여러 계정을 만들 수 있지만
-  // 계정 하나당 회원 정보 하나씩 고유로 가지므로 일대일
   @OneToOne
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
