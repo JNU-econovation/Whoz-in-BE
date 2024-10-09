@@ -1,7 +1,10 @@
 package com.whoz_in.infra.jpa.member;
 
+import com.whoz_in.infra.jpa.shared.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -20,12 +23,13 @@ public class MemberEntity {
   private int generation;
 
   @Column(name = "position", nullable = false)
-  private String position;
+  @Enumerated(EnumType.STRING)
+  private Position position;
 
   @Column(name = "status_message", nullable = false)
   private String statusMessage;
 
-  public MemberEntity(String name, int generation, String position, String statusMessage) {
+  public MemberEntity(String name, int generation, Position position, String statusMessage) {
     this.name = name;
     this.generation = generation;
     this.position = position;
@@ -46,7 +50,7 @@ public class MemberEntity {
     return generation;
   }
 
-  public String getPosition() {
+  public Position getPosition() {
     return position;
   }
 
