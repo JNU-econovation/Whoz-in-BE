@@ -1,6 +1,6 @@
 package com.whoz_in.infra.jpa.member;
 
-import com.whoz_in.infra.jpa.shared.entity.BaseEntity;
+import com.whoz_in.infra.jpa.shared.BaseEntity;
 import com.whoz_in.infra.jpa.shared.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,15 +9,9 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 
 @Entity
-@Where(clause = "deleted_at is null")
-@Table(name = "member")
-@SQLDelete(sql = "UPDATE member SET deleted_at = CURRENT_TIMESTAMP WHERE id = ?")
 public class MemberEntity extends BaseEntity {
 
   @Id
