@@ -1,6 +1,6 @@
 package com.whoz_in.infra.jpa.device;
 
-import com.whoz_in.domain.device.domain.Device;
+import com.whoz_in.domain.device.domain.model.Device;
 import com.whoz_in.domain.device.domain.DeviceRepository;
 import org.springframework.stereotype.Repository;
 
