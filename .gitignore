@@ -1,5 +1,6 @@
 #환경 설정 파일
 **/env.properties
+**/.DS_Store
 
 HELP.md
 .gradle
