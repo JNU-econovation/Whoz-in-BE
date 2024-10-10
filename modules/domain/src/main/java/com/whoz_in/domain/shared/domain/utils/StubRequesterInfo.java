@@ -1,4 +1,4 @@
-package com.whoz_in.domain.shared.infrastructure.utils;
+package com.whoz_in.domain.shared.domain.utils;
 
 import java.util.Optional;
 import org.springframework.stereotype.Component;
