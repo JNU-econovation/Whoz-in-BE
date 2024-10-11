@@ -1,7 +1,7 @@
 package com.whoz_in.infra.jpa.member;
 
+import com.whoz_in.domain.member.domain.model.Position;
 import com.whoz_in.infra.jpa.shared.BaseEntity;
-import com.whoz_in.infra.jpa.shared.enums.Position;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
