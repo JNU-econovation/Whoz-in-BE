@@ -9,7 +9,6 @@ import com.whoz_in.domain.device.application.ExampleGet;
 import com.whoz_in.domain.device.application.ExamplesGet;
 import com.whoz_in.domain.shared.domain.bus.command.CommandBus;
 import com.whoz_in.domain.shared.domain.bus.query.QueryBus;
-import com.whoz_in.domain.shared.domain.bus.query.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
