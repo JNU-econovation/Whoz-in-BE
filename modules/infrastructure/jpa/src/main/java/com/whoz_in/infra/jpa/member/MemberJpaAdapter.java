@@ -1,7 +1,7 @@
 package com.whoz_in.infra.jpa.member;
 
-import com.whoz_in.domain.member.domain.Member;
-import com.whoz_in.domain.member.domain.MemberRepository;
+import com.whoz_in.domain.member.Member;
+import com.whoz_in.domain.member.MemberRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository

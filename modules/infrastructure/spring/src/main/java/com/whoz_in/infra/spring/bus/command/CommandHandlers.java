@@ -1,7 +1,7 @@
 package com.whoz_in.infra.spring.bus.command;
 
-import com.whoz_in.domain.shared.domain.bus.command.Command;
-import com.whoz_in.domain.shared.domain.bus.command.CommandHandler;
+import com.whoz_in.application.shared.command.Command;
+import com.whoz_in.application.shared.command.CommandHandler;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.stream.Collectors;
