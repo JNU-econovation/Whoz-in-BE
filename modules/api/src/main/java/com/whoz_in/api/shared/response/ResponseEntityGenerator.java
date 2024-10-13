@@ -1,6 +1,6 @@
 package com.whoz_in.api.shared.response;
 
-import com.whoz_in.domain.shared.domain.BusinessException;
+import com.whoz_in.domain.shared.BusinessException;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

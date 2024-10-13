@@ -1,8 +1,7 @@
 package com.whoz_in.infra.spring.bus.event;
 
-
-import com.whoz_in.domain.shared.domain.bus.event.DomainEvent;
-import com.whoz_in.domain.shared.domain.bus.event.EventBus;
+import com.whoz_in.domain.shared.event.DomainEvent;
+import com.whoz_in.domain.shared.event.EventBus;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
