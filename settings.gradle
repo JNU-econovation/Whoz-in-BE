@@ -7,4 +7,6 @@ include 'modules:infrastructure:jpa'
 findProject(':modules:infrastructure:jpa')?.name = 'jpa'
 include 'modules:infrastructure:spring'
 findProject(':modules:infrastructure:spring')?.name = 'spring'
+include 'modules:application'
+findProject(':modules:application')?.name = 'application'
 

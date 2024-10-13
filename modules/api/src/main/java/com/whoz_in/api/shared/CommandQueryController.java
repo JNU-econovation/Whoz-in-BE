@@ -1,10 +1,10 @@
 package com.whoz_in.api.shared;
 
-import com.whoz_in.domain.shared.domain.bus.command.Command;
-import com.whoz_in.domain.shared.domain.bus.command.CommandBus;
-import com.whoz_in.domain.shared.domain.bus.query.Query;
-import com.whoz_in.domain.shared.domain.bus.query.QueryBus;
-import com.whoz_in.domain.shared.domain.bus.query.Response;
+import com.whoz_in.application.shared.command.Command;
+import com.whoz_in.application.shared.command.CommandBus;
+import com.whoz_in.application.shared.query.Query;
+import com.whoz_in.application.shared.query.QueryBus;
+import com.whoz_in.application.shared.query.Response;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
