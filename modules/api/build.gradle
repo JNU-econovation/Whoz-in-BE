@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':modules:domain')
+    implementation project(':modules:application')
 
     /*
     application, domain에서 필요한 infra를 주입하기 위해 의존합니다.

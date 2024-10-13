@@ -1,8 +1,8 @@
 package com.whoz_in.infra.spring.bus.command;
 
-import com.whoz_in.domain.shared.domain.bus.command.Command;
-import com.whoz_in.domain.shared.domain.bus.command.CommandBus;
-import com.whoz_in.domain.shared.domain.bus.command.CommandHandler;
+import com.whoz_in.application.shared.command.Command;
+import com.whoz_in.application.shared.command.CommandBus;
+import com.whoz_in.application.shared.command.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
