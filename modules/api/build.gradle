@@ -14,15 +14,15 @@ repositories {
 }
 
 dependencies {
-    implementation project(':modules:application')
+    implementation project(':modules:domain')
 
-    /*
-    application, domain에서 필요한 infra를 주입하기 위해 의존합니다.
-    api에선 직접 사용할 일이 없으니, runtimeOnly를 사용하도록 합시다.
-     */
+    //for domain DI (runtimeOnly)
     runtimeOnly project(":modules:infrastructure:jpa")
+
+    //for api DI (runtimeOnly - 순환 의존 방지)
     runtimeOnly project(":modules:infrastructure:spring")
 
+    //직접 의존
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 //    implementation 'org.springframework.boot:spring-boot-starter-security'
