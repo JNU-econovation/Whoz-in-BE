@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':modules:domain')
+    compileOnly project(':modules:domain')
     compileOnly project(':modules:api')
 
     testImplementation platform('org.junit:junit-bom:5.9.1')
