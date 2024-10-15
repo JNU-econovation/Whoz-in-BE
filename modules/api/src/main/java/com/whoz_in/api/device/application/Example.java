@@ -1,0 +1,12 @@
+package com.whoz_in.api.device.application;
+
+import com.whoz_in.api.shared.application.query.Response;
+import lombok.Getter;
+
+@Getter
+public final class Example implements Response {
+    private final String goodResponse = "성공응답";
+    public String get(){
+        return "성공";
+    }
+}
