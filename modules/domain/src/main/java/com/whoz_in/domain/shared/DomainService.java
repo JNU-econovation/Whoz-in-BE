@@ -1,4 +1,4 @@
-package com.whoz_in.application.shared;
+package com.whoz_in.domain.shared;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Component
 public @interface DomainService {
     @AliasFor(annotation = Component.class)
     String value() default "";
