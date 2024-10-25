@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.shared.enums;
+package com.whoz_in.domain_jpa.shared.enums;
 
 public enum Position {
   BE, AI, FE, DE, PM, GAME

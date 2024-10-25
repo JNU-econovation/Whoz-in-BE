@@ -1,6 +1,6 @@
-package com.whoz_in.infra.jpa.member;
+package com.whoz_in.domain_jpa.member;
 
-import com.whoz_in.infra.jpa.shared.BaseEntity;
+import com.whoz_in.domain_jpa.shared.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

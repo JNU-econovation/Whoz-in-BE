@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.config;
+package com.whoz_in.domain_jpa.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
