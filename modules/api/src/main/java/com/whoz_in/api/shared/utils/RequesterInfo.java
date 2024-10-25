@@ -9,4 +9,7 @@ import java.util.Optional;
 
 public interface RequesterInfo {
     Optional<Long> findUserId();
+    default Long getUserId(){
+        return findUserId().orElseThrow(UserNotAuthenticationException::new);
+    }
 }

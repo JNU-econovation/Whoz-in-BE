@@ -1,4 +1,4 @@
-package com.whoz_in.api.member.presentation;
+package com.whoz_in.api.command.member.presentation;
 
 import com.whoz_in.api.shared.presentation.CommandQueryController;
 import com.whoz_in.api.shared.application.command.CommandBus;
