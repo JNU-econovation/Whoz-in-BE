@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.device;
+package com.whoz_in.domain_jpa.device;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.member;
+package com.whoz_in.domain_jpa.member;
 
 import com.whoz_in.domain.member.Member;
 import com.whoz_in.domain.member.MemberRepository;

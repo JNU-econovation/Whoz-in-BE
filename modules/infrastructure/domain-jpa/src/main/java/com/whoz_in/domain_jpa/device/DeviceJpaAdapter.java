@@ -1,4 +1,4 @@
-package com.whoz_in.infra.jpa.device;
+package com.whoz_in.domain_jpa.device;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
