@@ -16,11 +16,11 @@ public final class Device extends AggregateRoot {
     private MacAddress mac;
     private IpAddress ip;
 
-    public static Device create(Long memberId, String macAddress, String ipAddress){
+    public static Device create(Long memberId, MacAddress mac, IpAddress ip){
         Device device = Device.builder()
                 .memberId(memberId)
-                .mac(MacAddress.create(macAddress))
-                .ip(IpAddress.create(ipAddress))
+                .mac(mac)
+                .ip(ip)
                 .build();
         device.register(new DeviceCreated());
         return device;
