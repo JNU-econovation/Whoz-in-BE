@@ -1,4 +1,4 @@
-package com.whoz_in.api_query_jpa.device_info;
+package com.whoz_in.api_query_domain_jpa.device_info;
 
 import com.whoz_in.api.query.device_info.application.DeviceInfo;
 import com.whoz_in.api.query.device_info.application.DeviceInfoViewer;

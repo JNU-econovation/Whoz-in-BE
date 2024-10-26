@@ -7,6 +7,6 @@ include 'modules:infrastructure:domain-jpa'
 findProject(':modules:infrastructure:domain-jpa')?.name = 'domain-jpa'
 include 'modules:infrastructure:spring'
 findProject(':modules:infrastructure:spring')?.name = 'spring'
-include 'modules:infrastructure:api-query-jpa'
-findProject(':modules:infrastructure:api-query-jpa')?.name = 'api-query-jpa'
+include 'modules:infrastructure:api-query-domain-jpa'
+findProject(':modules:infrastructure:api-query-domain-jpa')?.name = 'api-query-domain-jpa'
 
