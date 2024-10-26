@@ -15,6 +15,11 @@ public class DeviceInfoJpaViewer implements DeviceInfoViewer {
     private final DeviceJpaRepository deviceJpaRepository;
 
     @Override
+    public Object fin() {
+        return null;
+    }
+
+    @Override
     public DeviceInfo findByDeviceId(Long deviceId) {
         deviceJpaRepository.findById(deviceId);
         deviceJpaRepository.save(new DeviceEntity());
