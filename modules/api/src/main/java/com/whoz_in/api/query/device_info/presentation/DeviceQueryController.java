@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class DeviceController extends CommandQueryController {
+public class DeviceQueryController extends CommandQueryController {
 
-    protected DeviceController(CommandBus commandBus, QueryBus queryBus) {
+    protected DeviceQueryController(CommandBus commandBus, QueryBus queryBus) {
         super(commandBus, queryBus);
     }
 
