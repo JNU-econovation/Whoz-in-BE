@@ -8,7 +8,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import lombok.Getter;
 
+@Getter
 @Entity
 public class AuthEntity extends BaseEntity {
 
@@ -20,10 +22,10 @@ public class AuthEntity extends BaseEntity {
   @JoinColumn(name = "member_id")
   private MemberEntity memberEntity;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "login_id", nullable = false)
   private String loginId;
 
-  @Column(name = "name", nullable = false)
+  @Column(name = "password", nullable = false)
   private String password;
 
   protected AuthEntity() { }
@@ -34,19 +36,4 @@ public class AuthEntity extends BaseEntity {
     this.password = password;
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public MemberEntity getMemberEntity() {
-    return memberEntity;
-  }
-
-  public String getLoginId() {
-    return loginId;
-  }
-
-  public String getPassword() {
-    return password;
-  }
 }
