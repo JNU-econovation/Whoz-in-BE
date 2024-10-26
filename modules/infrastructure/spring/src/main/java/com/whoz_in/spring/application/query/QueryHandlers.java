@@ -1,4 +1,4 @@
-package com.whoz_in.infra.spring.application.query;
+package com.whoz_in.spring.application.query;
 
 import com.whoz_in.api.shared.application.query.Query;
 import com.whoz_in.api.shared.application.query.QueryHandler;

@@ -1,4 +1,4 @@
-package com.whoz_in.infra.spring.application.command;
+package com.whoz_in.spring.application.command;
 
 import com.whoz_in.api.shared.application.command.Command;
 import com.whoz_in.api.shared.application.command.CommandBus;
