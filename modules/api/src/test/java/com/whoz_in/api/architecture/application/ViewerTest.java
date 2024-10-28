@@ -1,4 +1,4 @@
-package com.whoz_in.api.architecture;
+package com.whoz_in.api.architecture.application;
 
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
