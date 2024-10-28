@@ -1,7 +1,9 @@
 package com.whoz_in.api.query.device_info.application;
 
 
-public interface DeviceInfoViewer {
+import com.whoz_in.api.shared.application.query.Viewer;
+
+public interface DeviceInfoViewer extends Viewer {
     DeviceInfo findByDeviceId(Long deviceId);
     DevicesInfo findAll();
 }
