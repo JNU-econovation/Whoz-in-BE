@@ -1,7 +1,7 @@
-package com.econovation.whozin.whozinnetwork.application.process;
+package com.whoz_in.networklog.application.process;
 
-import com.econovation.whozin.whozinnetwork.application.log.NetworkLogSaver;
-import com.econovation.whozin.whozinnetwork.config.ProcessConfig;
+import com.whoz_in.networklog.application.log.NetworkLogSaver;
+import com.whoz_in.networklog.config.ProcessConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
