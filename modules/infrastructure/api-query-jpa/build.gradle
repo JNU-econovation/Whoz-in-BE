@@ -11,7 +11,6 @@ repositories {
 
 dependencies {
     compileOnly project(":modules:api")
-    implementation project(":modules:infrastructure:domain-jpa")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
 //    runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
