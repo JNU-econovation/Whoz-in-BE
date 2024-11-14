@@ -1,4 +1,4 @@
-package com.econovation.whozin.whozinnetwork;
+package com.whoz_in.networklog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

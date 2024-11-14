@@ -1,7 +1,7 @@
-package com.econovation.whozin.whozinnetwork.application.log;
+package com.whoz_in.networklog.application.log;
 
-import com.econovation.whozin.whozinnetwork.application.process.LogCollector;
-import com.econovation.whozin.whozinnetwork.domain.log.repository.LogRepository;
+import com.whoz_in.networklog.application.process.LogCollector;
+import com.whoz_in.networklog.domain.log.repository.LogRepository;
 import java.util.Set;
 import org.springframework.stereotype.Component;
 

@@ -1,4 +1,4 @@
-package com.econovation.whozin.whozinnetwork.config;
+package com.whoz_in.networklog.config;
 
 import java.util.Arrays;
 import lombok.Getter;
