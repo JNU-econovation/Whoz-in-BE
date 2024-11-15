@@ -10,8 +10,8 @@ public class LogParserTest {
     private final DefaultLogParser defaultLogParser = new DefaultLogParser();
     
     @Test
-    @DisplayName("src_mac parse 테스트")
-    public void parser_test(){
+    @DisplayName("LogLine 입력 -> src_mac 파싱")
+    public void src_mac_test(){
         String log = "Nov 15, 2024 15:29:01.169884000 KST\t8c:55:4a:ad:1a:9c\t01:00:5e:00:00:fb\t10.20.11.57\t224.0.0.251";
 
         Map<String, String> result = defaultLogParser.parse(log);
@@ -20,8 +20,8 @@ public class LogParserTest {
     }
 
     @Test
-    @DisplayName("dst_mac parse 테스트")
-    public void parser_test2(){
+    @DisplayName("LogLine 입력 -> dst_mac 파싱")
+    public void dst_mac_test(){
         String log = "JANUARY 15, 2024 15:29:01.169884000 KST\t8c:55:4a:ad:1a:9c\t01:00:5e:00:00:fb\t10.20.11.57\t224.0.0.251";
 
         Map<String, String> result = defaultLogParser.parse(log);
@@ -30,8 +30,8 @@ public class LogParserTest {
     }
 
     @Test
-    @DisplayName("src_ip parse 테스트")
-    public void parser_test3(){
+    @DisplayName("LogLine 입력 -> src_ip 파싱")
+    public void src_ip_test(){
         String log = "JANUARY 15, 2024 15:29:01.169884000 KST\t8c:55:4a:ad:1a:9c\t01:00:5e:00:00:fb\t10.20.11.57\t224.0.0.251";
 
         Map<String, String> result = defaultLogParser.parse(log);
@@ -40,13 +40,23 @@ public class LogParserTest {
     }
 
     @Test
-    @DisplayName("dst_ip parse 테스트")
-    public void parser_test4(){
+    @DisplayName("LogLine 입력 -> dst_ip 파싱")
+    public void dst_ip_test(){
         String log = "JANUARY 15, 2024 15:29:01.169884000 KST\t8c:55:4a:ad:1a:9c\t01:00:5e:00:00:fb\t10.20.11.57\t224.0.0.251";
 
         Map<String, String> result = defaultLogParser.parse(log);
 
         Assertions.assertEquals(result.get("dst_ip"), "224.0.0.251");
+    }
+
+    @Test
+    @DisplayName("LogLine 입력 -> time 파싱")
+    public void time_test(){
+        String log = "JANUARY 15, 2024 15:29:01.169884000 KST\t8c:55:4a:ad:1a:9c\t01:00:5e:00:00:fb\t10.20.11.57\t224.0.0.251";
+
+        Map<String, String> result = defaultLogParser.parse(log);
+
+        Assertions.assertEquals(result.get("time"), "JANUARY 15, 2024 15:29:01.169884000 KST");
     }
 
 }
