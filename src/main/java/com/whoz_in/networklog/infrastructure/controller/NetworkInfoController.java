@@ -1,6 +1,6 @@
 package com.whoz_in.networklog.infrastructure.controller;
 
-import com.whoz_in.networklog.application.log.NetworkLogSaver;
+import com.whoz_in.networklog.application.log.manager.MulticastDNSLogManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/network")
 public class NetworkInfoController {
 
-    private final NetworkLogSaver networkLogSaver;
+    private final MulticastDNSLogManager networkLogSaver;
 
     @GetMapping
     public ResponseEntity<String> test(){
