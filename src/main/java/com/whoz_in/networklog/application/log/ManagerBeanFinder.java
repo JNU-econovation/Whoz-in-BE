@@ -4,7 +4,6 @@ import com.whoz_in.networklog.application.log.manager.LogManager;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +24,6 @@ public class ManagerBeanFinder {
             if(beanName.contains("LogManager"))
                 managers.put(beanName, (LogManager) applicationContext.getBean(beanName));
         }
-
     }
 
 }
