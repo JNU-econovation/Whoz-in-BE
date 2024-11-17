@@ -1,4 +1,4 @@
-package com.whoz_in.networklog.domain.log.model;
+package com.whoz_in.networklog.domain.managed.model;
 
 public enum ProcessableProtocol {
 

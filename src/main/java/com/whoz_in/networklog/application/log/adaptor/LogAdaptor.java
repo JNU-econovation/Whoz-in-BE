@@ -1,6 +1,6 @@
 package com.whoz_in.networklog.application.log.adaptor;
 
-import com.whoz_in.networklog.domain.log.repository.LogRepository;
+import com.whoz_in.networklog.domain.managed.repository.LogRepository;
 import com.whoz_in.networklog.infrastructure.jpa.log.LogJpaRepository;
 import com.whoz_in.networklog.infrastructure.jpa.log.NetworkLog;
 import java.util.Collection;
