@@ -6,7 +6,6 @@ import jakarta.persistence.MappedSuperclass;
 import java.sql.Timestamp;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -18,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @MappedSuperclass
-@EntityListeners({AuditingEntityListener.class, SoftDeleteListener.class})
+@EntityListeners({AuditingEntityListener.class})
 @SuperBuilder(toBuilder = true)
 public class BaseEntity {
 
@@ -30,11 +29,4 @@ public class BaseEntity {
 	@Column(nullable = false)
 	private Timestamp updatedDate;
 
-	@Builder.Default
-	@Column(nullable = false)
-	private boolean isDeleted = false;
-
-	public void delete() {
-		this.isDeleted = true;
-	}
 }
