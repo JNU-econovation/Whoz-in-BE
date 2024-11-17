@@ -1,6 +1,6 @@
 package com.whoz_in.network_log.infrastructure.controller;
 
-import com.whoz_in.network_log.application.log.manager.MulticastDNSLogManager;
+import com.whoz_in.network_log.domain.managed.manager.MulticastDNSLogManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
