@@ -1,7 +1,7 @@
-package com.whoz_in.network_log.application.log.collector;
+package com.whoz_in.network_log.domain.managed.collector;
 
-import com.whoz_in.network_log.application.log.manager.LogManager;
-import com.whoz_in.network_log.config.ProcessConfig;
+import com.whoz_in.network_log.domain.managed.manager.LogManager;
+import com.whoz_in.network_log.domain.managed.ProcessConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class DefaultLogCollector implements LogCollector {
         try{
             Process process = pb.start();
             bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
-            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()), 100);
         } catch (IOException e){
             throw new RuntimeException(e);
         }
