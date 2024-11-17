@@ -28,6 +28,7 @@ public class MulticastDNSLogManager implements LogManager {
         this.logRepository = logRepository;
         this.logParser = logParser;
 
+        this.logCollector.setManager(this);
         this.logCollector.collect();
     }
 

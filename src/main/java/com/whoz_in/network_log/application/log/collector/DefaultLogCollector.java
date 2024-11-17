@@ -1,6 +1,5 @@
 package com.whoz_in.network_log.application.log.collector;
 
-import com.whoz_in.network_log.application.log.ManagerBeanFinder;
 import com.whoz_in.network_log.application.log.manager.LogManager;
 import com.whoz_in.network_log.config.ProcessConfig;
 import java.io.BufferedReader;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +21,15 @@ public class DefaultLogCollector implements LogCollector {
     private final ProcessBuilder pb;
     private BufferedWriter bw;
     private BufferedReader br;
-    private ManagerBeanFinder managerFinder;
+    private LogManager logManager;
 
     @Getter
     private final Set<String> logInfos = new HashSet<>();
 
     @Autowired
-    public DefaultLogCollector(ProcessConfig config,
-                               ManagerBeanFinder managerFinder ) {
+    public DefaultLogCollector(ProcessConfig config) {
         this.pb = new ProcessBuilder(config.mDnsCommand())
                 .redirectErrorStream(true);
-        this.managerFinder = managerFinder;
 
         try{
             Process process = pb.start();
@@ -70,11 +66,13 @@ public class DefaultLogCollector implements LogCollector {
         }
     }
 
-    private void callBack(Set<String> logInfos) {
-        Map<String, LogManager> managers = managerFinder.getManagers();
+    @Override
+    public void setManager(LogManager manager) {
+        this.logManager = manager;
+    }
 
-        managers.keySet()
-                .forEach(key -> managers.get(key).callBack(logInfos));
+    private void callBack(Set<String> logInfos) {
+        logManager.callBack(logInfos);
 
     }
 
