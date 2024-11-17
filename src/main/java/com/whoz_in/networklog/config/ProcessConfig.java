@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 public class ProcessConfig {
 
     @Value("${network.process.command}")
-    private String command;
+    private String mDnsCommand;
 
     @Getter
     @Value("${network.process.password}")
@@ -17,10 +17,8 @@ public class ProcessConfig {
 
     public ProcessConfig() {}
 
-    public String[] getCommand(){
-        Arrays.stream(command.split(" "))
-                .forEach(System.out::println);
-        return command.split(" ");
+    public String[] mDnsCommand(){
+        return mDnsCommand.split(" ");
     }
 
 }
