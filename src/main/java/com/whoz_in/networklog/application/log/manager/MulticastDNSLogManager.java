@@ -2,7 +2,7 @@ package com.whoz_in.networklog.application.log.manager;
 
 import com.whoz_in.networklog.application.log.collector.LogCollector;
 import com.whoz_in.networklog.application.log.parser.LogParser;
-import com.whoz_in.networklog.domain.log.repository.LogRepository;
+import com.whoz_in.networklog.domain.managed.repository.LogRepository;
 import com.whoz_in.networklog.infrastructure.jpa.log.NetworkLog;
 import java.util.Map;
 import java.util.Set;

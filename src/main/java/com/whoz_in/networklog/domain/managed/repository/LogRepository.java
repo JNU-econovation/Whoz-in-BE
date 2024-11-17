@@ -1,4 +1,4 @@
-package com.whoz_in.networklog.domain.log.repository;
+package com.whoz_in.networklog.domain.managed.repository;
 
 import com.whoz_in.networklog.infrastructure.jpa.log.NetworkLog;
 import java.util.Collection;
