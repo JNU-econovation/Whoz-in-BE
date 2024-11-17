@@ -11,4 +11,5 @@ public record NetworkAddress(String macAddress,
     public static NetworkAddress create(String macAddress, String ipAddress, LocalDateTime time, String ssid, boolean isMonitorMode) {
         return new NetworkAddress(macAddress, ipAddress, time, ssid, isMonitorMode);
     }
+
 }
