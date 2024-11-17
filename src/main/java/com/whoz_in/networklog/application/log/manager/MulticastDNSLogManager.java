@@ -3,6 +3,7 @@ package com.whoz_in.networklog.application.log.manager;
 import com.whoz_in.networklog.application.log.collector.LogCollector;
 import com.whoz_in.networklog.application.log.parser.LogParser;
 import com.whoz_in.networklog.domain.log.repository.LogRepository;
+import com.whoz_in.networklog.infrastructure.jpa.log.NetworkLog;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,9 +44,9 @@ public class MulticastDNSLogManager implements LogManager {
     }
 
     private void saveLogs(Set<Map<String, String>> parsed) {
+        Set<NetworkLog> entities = parsed.stream().map(NetworkLog::create).collect(Collectors.toSet());
 
-        
-
+        logRepository.saveAll(entities);
     }
 
 }
