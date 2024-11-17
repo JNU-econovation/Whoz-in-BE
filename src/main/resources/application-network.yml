@@ -6,4 +6,4 @@ spring:
 network:
   process:
     command: ${NETWORK_PROCESS_COMMAND}
-    password: ${PROCESS_EXECUTE_PASSWORD}
+    password: ${SUDO_PASSWORD}
