@@ -1,7 +1,6 @@
 package com.whoz_in.networklog.application.log.collector;
 
 import com.whoz_in.networklog.application.log.ManagerBeanFinder;
-import com.whoz_in.networklog.application.log.collector.LogCollector;
 import com.whoz_in.networklog.application.log.manager.LogManager;
 import com.whoz_in.networklog.config.ProcessConfig;
 import java.io.BufferedReader;
@@ -9,7 +8,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
