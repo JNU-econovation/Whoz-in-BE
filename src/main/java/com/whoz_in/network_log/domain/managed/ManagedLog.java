@@ -33,10 +33,14 @@ public class ManagedLog extends BaseEntity {
     @Column(name = PREFIX + "_device_name", nullable = true)
     private String deviceName;
 
-    public static ManagedLog create(Map<String, String> log) {
+    public static ManagedLog create(LogDTO log) {
+        String mac = log.getMac();
+        String ip = log.getIp();
+        String device = log.getDevice();
+
         return ManagedLog.builder()
-                .logId(new LogId(log.get("src_mac"), log.get("src_ip")))
-                .deviceName(log.get("device_name"))
+                .logId(new LogId(mac,ip))
+                .deviceName(device)
                 .build();
     }
 
@@ -44,7 +48,7 @@ public class ManagedLog extends BaseEntity {
     @AllArgsConstructor
     @NoArgsConstructor
     @Embeddable
-    static class LogId {
+    public static class LogId {
 
         @Column(name = PREFIX + "_mac", nullable = false)
         private String mac;
