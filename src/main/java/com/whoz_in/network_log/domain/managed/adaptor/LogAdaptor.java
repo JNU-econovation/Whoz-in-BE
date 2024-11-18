@@ -17,4 +17,14 @@ public class LogAdaptor implements LogRepository {
     public void saveAll(Collection<NetworkLog> logs) {
         logJpaRepository.saveAll(logs);
     }
+
+    @Override
+    public void bulkInsert(Collection<NetworkLog> logs) {
+        // TODO: Bulk Insert 구현
+    }
+
+    @Override
+    public void save(NetworkLog log) {
+        logJpaRepository.save(log);
+    }
 }
