@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ProcessConfig {
 
-    @Value("${network.process.command}")
+    @Value("${network.process.command.managed}")
     private String mDnsCommand;
 
     @Getter
