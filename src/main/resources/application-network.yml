@@ -5,7 +5,9 @@ spring:
 
 network:
   process:
-    command: ${NETWORK_PROCESS_COMMAND}
+    command:
+      managed: ${MANAGED_COMMAND}
+      monitor: ${MONITOR_COMMAND}
     password: ${SUDO_PASSWORD}
   interface:
     monitor: ${MONITOR_INTERFACE}
