@@ -7,4 +7,8 @@ public interface LogRepository {
 
     void saveAll(Collection<NetworkLog> logs);
 
+    void bulkInsert(Collection<NetworkLog> logs);
+
+    void save(NetworkLog log);
+
 }
