@@ -45,9 +45,9 @@ public class LogAdaptor implements LogRepository {
                     try {
                         ManagedLog networkLog = logList.get(i);
                         preparedStatement.setString(1, networkLog.getLogId().getMac());
-                        preparedStatement.setString(4, networkLog.getDeviceName());
-                        preparedStatement.setString(5, networkLog.getLogId().getIp());
-                        preparedStatement.setString(6, networkLog.getWifiSsid());
+                        preparedStatement.setString(2, networkLog.getDeviceName());
+                        preparedStatement.setString(3, networkLog.getLogId().getIp());
+                        preparedStatement.setString(4, networkLog.getWifiSsid());
                         preparedStatement.execute();
                     } catch (SQLException e) {
                         System.err.println("[ERROR] SQL Exception: " + e.getMessage());
