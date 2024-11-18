@@ -4,9 +4,11 @@ import com.whoz_in.network_log.domain.managed.collector.LogCollector;
 import com.whoz_in.network_log.domain.managed.parser.LogParser;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.infrastructure.jpa.log.NetworkLog;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +22,7 @@ public class MulticastDNSLogManager implements LogManager {
     private final LogCollector logCollector;
     private final LogRepository logRepository;
     private final LogParser logParser;
+    private final Set<Map<String,String>> logs = new HashSet<>();
 
     public MulticastDNSLogManager(LogCollector logCollector,
                                   LogRepository logRepository,
@@ -41,23 +44,23 @@ public class MulticastDNSLogManager implements LogManager {
                 .map(logParser::parse)
                 .collect(Collectors.toSet());
 
-        saveLogs(parsed);
+        this.logs.addAll(parsed);
     }
 
     @Override
     public void receive(String log) {
         Map<String, String> parsed = logParser.parse(log);
 
-        NetworkLog entity = NetworkLog.create(parsed);
-
-        logRepository.save(entity);
+        this.logs.add(parsed);
     }
 
 
-    private void saveLogs(Set<Map<String, String>> parsed) {
-        Set<NetworkLog> entities = parsed.stream().map(NetworkLog::create).collect(Collectors.toSet());
+    @Scheduled(fixedRate = 10000)
+    private void saveLogs() {
+        System.out.println("[managed] 저장할 로그 개수 : " + this.logs.size());
+        Set<NetworkLog> entities = this.logs.stream().map(NetworkLog::create).collect(Collectors.toSet());
 
-        logRepository.saveAll(entities);
+        logRepository.bulkInsert(entities);
     }
 
 }
