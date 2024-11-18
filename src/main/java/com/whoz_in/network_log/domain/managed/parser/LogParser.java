@@ -1,9 +1,10 @@
 package com.whoz_in.network_log.domain.managed.parser;
 
+import com.whoz_in.network_log.domain.managed.LogDTO;
 import java.util.Map;
 
 public interface LogParser {
 
-    Map<String, String> parse(String log);
+    LogDTO parse(String log);
 
 }
