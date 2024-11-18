@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.application.log.parser;
+package com.whoz_in.network_log.domain.managed.parser;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 public class DefaultLogParser implements LogParser{
 
     // TODO: Regex가 맞는지 검증해야 함
-    private final String macRegex = "[0-9A-z]{2}:[A-z0-9]{2}:[A-z0-9]{2}:[A-z0-9]{2}:[A-z0-9]{2}:[A-z0-9]{2}";
+    private final String macRegex = "^([0-9A-Fa-f]{2}([-:])){5}[0-9A-Fa-f]{2}$";
     private final String ipRegex = "((25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)";
     private final String timeRegex = "[A-Z][a-z]{2} \\d{1,2}, \\d{4} \\d{2}:\\d{2}:\\d{2}\\.\\d{6,9} [A-Z]{3}";
+    private final String deviceRegex = "[가-힣\\w\\s'.()\\-]+(\\._[a-zA-Z0-9\\-]+)+\\.local";
+
 
     @Override
     public Map<String, String> parse(String log) {
@@ -28,13 +30,13 @@ public class DefaultLogParser implements LogParser{
 
         int[] macIndex = findMatchedIndex(splited, macRegex);
         int[] ipIndex = findMatchedIndex(splited, ipRegex);
-        int[] timeIndex = findMatchedIndex(splited, timeRegex);
+        int[] deviceIndex = findMatchedIndex(splited, deviceRegex);
         
         logMap.put("src_mac", splited[macIndex[0]]);
         logMap.put("src_ip", splited[ipIndex[0]]);
         logMap.put("dst_mac", splited[macIndex[1]]);
         logMap.put("dst_ip", splited[ipIndex[1]]);
-        logMap.put("time", splited[timeIndex[0]]);
+        logMap.put("device_name", validateDeviceName(splited[deviceIndex[0]]));
 
         return logMap;
     }
@@ -49,6 +51,18 @@ public class DefaultLogParser implements LogParser{
             }
         }
         return indexes;
+    }
+
+    private String validateDeviceName(String old){
+        if(old.contains("._rdlink._tcp.local")) return old.replace("._rdlink._tcp.local", "");
+        if(old.contains("._companion-link._tcp.local")) return old.replace("._companion-link._tcp.local", "");
+        if(old.contains("._airplay._tcp.local")) return old.replace("._airplay._tcp.local", "");
+        if(old.contains("._dosvc._tcp.local")) return old.replace("._dosvc._tcp.local", "");
+        //TODO: null 반환이 맞나..?
+
+        // 잘못된 파싱으로 인해 mac 주소가 파싱될 경우
+        if(old.matches(macRegex)) return null;
+        return old;
     }
 
 }
