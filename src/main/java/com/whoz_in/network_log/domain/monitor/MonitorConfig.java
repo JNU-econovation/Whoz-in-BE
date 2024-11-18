@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MonitorConfig {
-    @Value("${network.process.password}")
-    private String sudoPassword;
 
     @Value("${network.process.command.monitor}")
     private String command;
@@ -21,10 +19,6 @@ public class MonitorConfig {
         Process process;
         try {
             process = pb.start();
-            OutputStream os = process.getOutputStream();
-            os.write((sudoPassword+"\n").getBytes());
-            os.flush();
-
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("monitorTshark 시작 실패");
