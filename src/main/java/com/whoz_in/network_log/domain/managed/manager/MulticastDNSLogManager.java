@@ -3,7 +3,7 @@ package com.whoz_in.network_log.domain.managed.manager;
 import com.whoz_in.network_log.domain.managed.collector.LogCollector;
 import com.whoz_in.network_log.domain.managed.parser.LogParser;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.infrastructure.jpa.log.NetworkLog;
+import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -58,8 +58,8 @@ public class MulticastDNSLogManager implements LogManager {
     @Scheduled(fixedRate = 10000)
     private void saveLogs() {
         System.out.println("[managed] 저장할 로그 개수 : " + this.logs.size());
-        Set<NetworkLog> entities = this.logs.stream().map(NetworkLog::create).collect(Collectors.toSet());
-        
+        Set<ManagedLog> entities = this.logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
+
         logRepository.bulkInsert(entities);
     }
 
