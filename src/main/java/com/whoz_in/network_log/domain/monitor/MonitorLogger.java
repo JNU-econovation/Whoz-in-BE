@@ -23,6 +23,7 @@ public class MonitorLogger {
     }
 
     private void processLogs() {
+        //TODO: NON-BLOCKING으로 변경
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(monitorTShark.getInputStream()))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -41,6 +42,7 @@ public class MonitorLogger {
     public void saveLogs(){
         System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         repo.upsertAll(macs);
+        macs.clear();
     }
 
 }
