@@ -2,6 +2,7 @@ package com.whoz_in.network_log.domain.monitor;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,20 +12,12 @@ public class MonitorConfig {
     @Value("${network.process.password}")
     private String sudoPassword;
 
-    @Value("${network.interface.monitor}")
-    private String monitorInterfaceName;
+    @Value("${network.process.command.monitor}")
+    private String command;
 
     @Bean
     public Process monitorTShark(){
-
-        ProcessBuilder pb = new ProcessBuilder(
-                "sudo", "-S",
-                "tshark",
-                "-i", monitorInterfaceName,
-                "-T", "fields",
-                "-e", "wlan.sa",
-                "-e", "eth.src"
-        );
+        ProcessBuilder pb = new ProcessBuilder(command.split(" "));
         Process process;
         try {
             process = pb.start();
