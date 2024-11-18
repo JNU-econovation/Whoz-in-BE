@@ -2,10 +2,12 @@ package com.whoz_in.network_log.domain.managed;
 
 import com.whoz_in.network_log.common.BaseEntity;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Map;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,12 +24,8 @@ public class ManagedLog extends BaseEntity {
 
     public static final String PREFIX = "managed_log";
 
-    @Id // uuid
-    @Column(name = PREFIX + "_mac_address", nullable = false, unique = true)
-    private String macAddress;
-
-    @Column(name = PREFIX + "_ip_address", nullable = false)
-    private String ipAddress;
+    @EmbeddedId
+    private  LogId logId;
 
     @Column(name = PREFIX + "_wifi_ssid", nullable = true)
     private String wifiSsid;
@@ -37,10 +35,35 @@ public class ManagedLog extends BaseEntity {
 
     public static ManagedLog create(Map<String, String> log) {
         return ManagedLog.builder()
-                .macAddress(log.get("src_mac"))
-                .ipAddress(log.get("src_ip"))
+                .logId(new LogId(log.get("src_mac"), log.get("src_ip")))
                 .deviceName(log.get("device_name"))
                 .build();
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Embeddable
+    static class LogId {
+
+        @Column(name = PREFIX + "_mac", nullable = false)
+        private String mac;
+
+        @Column(name = PREFIX + "_ip", nullable = false)
+        private String ip;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            LogId logId = (LogId) o;
+            return logId.mac.equals(mac) && logId.ip.equals(ip);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(mac, ip);
+        }
     }
 
 }
