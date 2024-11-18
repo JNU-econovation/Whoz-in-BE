@@ -33,7 +33,7 @@ public class MulticastDNSLogManager implements LogManager {
     }
 
     @Override
-    public void callBack(Set<String> logs){
+    public void receive(Set<String> logs){
         logs.forEach(System.out::println);
         // collector 로부터 받은 로그를 정제하여 DB에 저장하는 과정
 
@@ -43,6 +43,16 @@ public class MulticastDNSLogManager implements LogManager {
 
         saveLogs(parsed);
     }
+
+    @Override
+    public void receive(String log) {
+        Map<String, String> parsed = logParser.parse(log);
+
+        NetworkLog entity = NetworkLog.create(parsed);
+
+        logRepository.save(entity);
+    }
+
 
     private void saveLogs(Set<Map<String, String>> parsed) {
         Set<NetworkLog> entities = parsed.stream().map(NetworkLog::create).collect(Collectors.toSet());
