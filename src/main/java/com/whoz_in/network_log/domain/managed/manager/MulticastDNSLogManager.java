@@ -1,7 +1,7 @@
-package com.whoz_in.network_log.application.log.manager;
+package com.whoz_in.network_log.domain.managed.manager;
 
-import com.whoz_in.network_log.application.log.collector.LogCollector;
-import com.whoz_in.network_log.application.log.parser.LogParser;
+import com.whoz_in.network_log.domain.managed.collector.LogCollector;
+import com.whoz_in.network_log.domain.managed.parser.LogParser;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.infrastructure.jpa.log.NetworkLog;
 import java.util.Map;
