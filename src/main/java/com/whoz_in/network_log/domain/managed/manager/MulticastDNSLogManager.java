@@ -59,7 +59,7 @@ public class MulticastDNSLogManager implements LogManager {
     private void saveLogs() {
         System.out.println("[managed] 저장할 로그 개수 : " + this.logs.size());
         Set<NetworkLog> entities = this.logs.stream().map(NetworkLog::create).collect(Collectors.toSet());
-
+        
         logRepository.bulkInsert(entities);
     }
 
