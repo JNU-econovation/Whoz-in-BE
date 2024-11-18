@@ -7,12 +7,14 @@ import jakarta.persistence.Table;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = NetworkLog.PREFIX)
 @SuperBuilder(toBuilder = true)
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NetworkLog extends BaseEntity {
