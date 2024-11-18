@@ -16,21 +16,22 @@ public class MonitorConfig {
 
     @Bean
     public Process monitorTShark(){
+
         ProcessBuilder pb = new ProcessBuilder(
                 "sudo", "-S",
                 "tshark",
                 "-i", monitorInterfaceName,
                 "-T", "fields",
-                "-e", "ip.src",
+                "-e", "wlan.sa",
                 "-e", "eth.src"
         );
-        pb.redirectErrorStream(true);
         Process process;
         try {
             process = pb.start();
             OutputStream os = process.getOutputStream();
             os.write((sudoPassword+"\n").getBytes());
             os.flush();
+
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("monitorTshark 시작 실패");
