@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.infrastructure.jpa.log;
+package com.whoz_in.network_log.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
