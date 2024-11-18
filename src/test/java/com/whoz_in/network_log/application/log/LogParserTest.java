@@ -1,6 +1,6 @@
 package com.whoz_in.network_log.application.log;
 
-import com.whoz_in.network_log.application.log.parser.DefaultLogParser;
+import com.whoz_in.network_log.domain.managed.parser.DefaultLogParser;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -59,5 +59,18 @@ public class LogParserTest {
 
         Assertions.assertEquals(result.get("time"), "JANUARY 15, 2024 15:29:01.169884000 KST");
     }
+
+
+    @Test
+    @DisplayName("LogLine 입력 -> message 파싱")
+    public void message_test(){
+        String log = "eth:ethertype:ip:udp:mdns\t96:d6:41:d0:8d:48\t10.30.140.166\t224.0.0.251\t01:00:5e:00:00:fb\t김종민의 MacBookAir._companion-link._tcp.local";
+        
+        Map<String, String> result = defaultLogParser.parse(log);
+        
+        Assertions.assertEquals(result.get("message"), "김종민의 MacBookAir._companion-link._tcp.local");
+    }
+
+
 
 }

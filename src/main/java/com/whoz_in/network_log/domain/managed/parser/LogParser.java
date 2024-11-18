@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.application.log.parser;
+package com.whoz_in.network_log.domain.managed.parser;
 
 import java.util.Map;
 
