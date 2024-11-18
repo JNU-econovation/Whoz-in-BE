@@ -1,7 +1,7 @@
 package com.whoz_in.network_log.domain.managed.collector;
 
 import com.whoz_in.network_log.domain.managed.manager.LogManager;
-import com.whoz_in.network_log.domain.managed.ProcessConfig;
+import com.whoz_in.network_log.config.ProcessConfig;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

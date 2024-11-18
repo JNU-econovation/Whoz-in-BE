@@ -1,10 +1,8 @@
 package com.whoz_in.network_log.domain.managed.adaptor;
 
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.infrastructure.jpa.log.LogJpaRepository;
-import com.whoz_in.network_log.infrastructure.jpa.log.NetworkLog;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.whoz_in.network_log.domain.managed.repository.LogJpaRepository;
+import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -25,15 +23,15 @@ public class LogAdaptor implements LogRepository {
     private final JdbcTemplate jdbcTemplate;
 
     @Override
-    public void saveAll(Collection<NetworkLog> logs) {
+    public void saveAll(Collection<ManagedLog> logs) {
         logJpaRepository.saveAll(logs);
     }
 
     @Override
-    public void bulkInsert(Collection<NetworkLog> logs) {
+    public void bulkInsert(Collection<ManagedLog> logs) {
         // TODO: Bulk Insert 구현
         if(logs.size() > 0) {
-            List<NetworkLog> logList = logs.stream().toList();
+            List<ManagedLog> logList = logs.stream().toList();
 
             String sql = new StringBuilder()
                     .append("INSERT INTO network_log ")
@@ -45,7 +43,7 @@ public class LogAdaptor implements LogRepository {
                 @Override
                 public void setValues(PreparedStatement preparedStatement, int i) {
                     try {
-                        NetworkLog networkLog = logList.get(i);
+                        ManagedLog networkLog = logList.get(i);
                         preparedStatement.setString(1, networkLog.getMacAddress());
                         preparedStatement.setString(4, networkLog.getDeviceName());
                         preparedStatement.setString(5, networkLog.getIpAddress());
@@ -68,7 +66,7 @@ public class LogAdaptor implements LogRepository {
     }
 
     @Override
-    public void save(NetworkLog log) {
+    public void save(ManagedLog log) {
         logJpaRepository.save(log);
     }
 }
