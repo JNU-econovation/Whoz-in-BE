@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.config;
+package com.whoz_in.network_log.domain.managed;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

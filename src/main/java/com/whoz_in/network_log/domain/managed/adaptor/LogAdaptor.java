@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.application.log.adaptor;
+package com.whoz_in.network_log.domain.managed.adaptor;
 
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.infrastructure.jpa.log.LogJpaRepository;
