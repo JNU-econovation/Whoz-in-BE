@@ -4,6 +4,8 @@ import java.util.Set;
 
 public interface LogManager {
 
-    public void callBack(Set<String> logs);
+    public void receive(Set<String> logs);
+    
+    public void receive(String log);
 
 }
