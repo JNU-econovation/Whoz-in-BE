@@ -5,6 +5,7 @@ import com.whoz_in.network_log.domain.managed.repository.LogJpaRepository;
 import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,8 @@ public class LogAdaptor implements LogRepository {
             List<ManagedLog> logList = logs.stream().toList();
 
             String sql = new StringBuilder()
-                    .append("INSERT INTO network_log ")
-                    .append("(managed_log_mac_address, create_date, update_date,managed_log_device_name, managed_log_ip_address, managed_log_wifi_ssid)")
+                    .append("INSERT INTO " + ManagedLog.TABLE_NAME)
+                    .append("(managed_log_mac, created_date, updated_date, managed_log_device_name, managed_log_ip, managed_log_wifi_ssid)")
                     .append("values (?, now(), now(), ?, ?, ?)")
                     .toString();
 
@@ -49,9 +50,11 @@ public class LogAdaptor implements LogRepository {
                         preparedStatement.setString(3, networkLog.getLogId().getIp());
                         preparedStatement.setString(4, networkLog.getWifiSsid());
                         preparedStatement.execute();
+                    } catch (SQLIntegrityConstraintViolationException e){
+                        System.out.println("중복된 IP/MAC 주소 저장");
+                        System.err.println("[ERROR] SQL Exception: " + e.getMessage());
                     } catch (SQLException e) {
                         System.err.println("[ERROR] SQL Exception: " + e.getMessage());
-                        throw new RuntimeException(e);
                     } catch (ArrayIndexOutOfBoundsException e) {
                     }
                 }
