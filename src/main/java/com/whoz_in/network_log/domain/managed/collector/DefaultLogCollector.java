@@ -53,9 +53,9 @@ public class DefaultLogCollector implements LogCollector {
             String line;
 
             while ((line = br.readLine()) != null) {
-                if(line.contains("Capturing on") || line.contains("packets captured")) continue;
-                logInfos.add(line);
-                callBack(new HashSet<>(logInfos));
+                System.out.println("DefaultCollector.collect"+Thread.currentThread().getName());
+                if(line.charAt(3)!=':') continue;
+                callBack(line);
             }
 
         } catch (IOException e) {
@@ -72,5 +72,7 @@ public class DefaultLogCollector implements LogCollector {
     private void callBack(Set<String> logInfos) {
         logManager.receive(logInfos);
     }
+
+    private void callBack(String log){ logManager.receive(log); }
 
 }
