@@ -57,6 +57,7 @@ public class DefaultLogParser implements LogParser{
         if(old.contains("._companion-link._tcp.local")) return old.replace("._companion-link._tcp.local", "");
         if(old.contains("._airplay._tcp.local")) return old.replace("._airplay._tcp.local", "");
         if(old.contains("._dosvc._tcp.local")) return old.replace("._dosvc._tcp.local", "");
+        if(old.contains("._googlecast._tcp.local")) return old.replace("._googlecast._tcp.local", "");
         //TODO: null 반환이 맞나..?
 
         // 잘못된 파싱으로 인해 mac 주소가 파싱될 경우
