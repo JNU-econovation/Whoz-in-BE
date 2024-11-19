@@ -48,6 +48,7 @@ public class MulticastDNSLogManager implements LogManager {
 
     @Override
     public void receive(String log) {
+        System.out.println("MDNSLogManager.receive : "+Thread.currentThread().getName());
         LogDTO parsed = logParser.parse(log);
 
         this.logs.add(parsed);
