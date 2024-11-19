@@ -1,6 +1,7 @@
 package com.whoz_in.network_log.domain.monitor;
 
-import com.whoz_in.network_log.infrastructure.jpa.log.BaseEntity;
+
+import com.whoz_in.network_log.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
