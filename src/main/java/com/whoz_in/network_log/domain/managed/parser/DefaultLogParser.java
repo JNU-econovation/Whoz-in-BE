@@ -1,7 +1,9 @@
 package com.whoz_in.network_log.domain.managed.parser;
 
+import com.whoz_in.network_log.domain.managed.LogDTO;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
 // TODO: 테스트하기
@@ -16,29 +18,26 @@ public class DefaultLogParser implements LogParser{
 
 
     @Override
-    public Map<String, String> parse(String log) {
-        Map<String, String> logMap = logMap(log);
+    public LogDTO parse(String log) {
+        LogDTO logDTO = logMap(log);
 
-        return logMap;
+        return logDTO;
     }
 
     // TODO: 인덱스로 파싱하게 되면, 안되지 않을까
     // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다.
-    private Map<String, String> logMap(String log){
-        Map<String, String> logMap = new HashMap<>();
+    private LogDTO logMap(String log){
         String[] splited = log.split("\t");
 
         int[] macIndex = findMatchedIndex(splited, macRegex);
         int[] ipIndex = findMatchedIndex(splited, ipRegex);
         int[] deviceIndex = findMatchedIndex(splited, deviceRegex);
         
-        logMap.put("src_mac", splited[macIndex[0]]);
-        logMap.put("src_ip", splited[ipIndex[0]]);
-        logMap.put("dst_mac", splited[macIndex[1]]);
-        logMap.put("dst_ip", splited[ipIndex[1]]);
-        logMap.put("device_name", validateDeviceName(splited[deviceIndex[0]]));
+        String mac = splited[macIndex[0]];
+        String ip = splited[ipIndex[0]];
+        String device = validateDeviceName(splited[deviceIndex[0]]);
 
-        return logMap;
+        return LogDTO.createNew(mac, ip, device);
     }
 
     private int[] findMatchedIndex(String[] addresses, String regex){
@@ -54,15 +53,10 @@ public class DefaultLogParser implements LogParser{
     }
 
     private String validateDeviceName(String old){
-        if(old.contains("._rdlink._tcp.local")) return old.replace("._rdlink._tcp.local", "");
-        if(old.contains("._companion-link._tcp.local")) return old.replace("._companion-link._tcp.local", "");
-        if(old.contains("._airplay._tcp.local")) return old.replace("._airplay._tcp.local", "");
-        if(old.contains("._dosvc._tcp.local")) return old.replace("._dosvc._tcp.local", "");
         //TODO: null 반환이 맞나..?
-
         // 잘못된 파싱으로 인해 mac 주소가 파싱될 경우
         if(old.matches(macRegex)) return null;
-        return old;
+        return old.replaceAll("\\._[a-zA-Z0-9\\-]+._tcp\\.local", "");
     }
 
 }
