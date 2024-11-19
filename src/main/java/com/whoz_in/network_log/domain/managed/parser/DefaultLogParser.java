@@ -24,20 +24,15 @@ public class DefaultLogParser implements LogParser{
         return logDTO;
     }
 
-    // TODO: 인덱스로 파싱하게 되면, 안되지 않을까
-    // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다.
+    // TODO: 인덱스로 파싱하게 되면, 안되지 않을까 -> mac ip의 순서가 바뀔 수도 있는데, 정규식보다 차라리 env에서 명령어의 순서를 유지하는 방식이 더 비용이 낮을 것이라고 판단
+    // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다. -> 시간이 너무 오래걸리므로, 기각
     private LogDTO logMap(String log){
         String[] splited = log.split("\t");
+        String mac = splited[0];
+        String ip = splited[1];
+        String deviceName = validateDeviceName(splited[2]);
 
-        int[] macIndex = findMatchedIndex(splited, macRegex);
-        int[] ipIndex = findMatchedIndex(splited, ipRegex);
-        int[] deviceIndex = findMatchedIndex(splited, deviceRegex);
-        
-        String mac = splited[macIndex[0]];
-        String ip = splited[ipIndex[0]];
-        String device = validateDeviceName(splited[deviceIndex[0]]);
-
-        return LogDTO.createNew(mac, ip, device);
+        return LogDTO.createNew(mac, ip, deviceName);
     }
 
     private int[] findMatchedIndex(String[] addresses, String regex){
