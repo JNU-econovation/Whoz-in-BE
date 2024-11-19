@@ -6,7 +6,6 @@ import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import java.util.Map;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,22 +14,22 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = ManagedLog.PREFIX)
+@Table(name = ManagedLog.TABLE_NAME)
 @SuperBuilder(toBuilder = true)
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ManagedLog extends BaseEntity {
 
-    public static final String PREFIX = "managed_log";
+    public static final String TABLE_NAME = "managed_log";
 
     @EmbeddedId
     private  LogId logId;
 
-    @Column(name = PREFIX + "_wifi_ssid", nullable = true)
+    @Column(name = TABLE_NAME + "_wifi_ssid", nullable = true)
     private String wifiSsid;
 
-    @Column(name = PREFIX + "_device_name", nullable = true)
+    @Column(name = TABLE_NAME + "_device_name", nullable = true)
     private String deviceName;
 
     public static ManagedLog create(LogDTO log) {
@@ -50,10 +49,10 @@ public class ManagedLog extends BaseEntity {
     @Embeddable
     public static class LogId {
 
-        @Column(name = PREFIX + "_mac", nullable = false)
+        @Column(name = TABLE_NAME + "_mac", nullable = false)
         private String mac;
 
-        @Column(name = PREFIX + "_ip", nullable = false)
+        @Column(name = TABLE_NAME + "_ip", nullable = false)
         private String ip;
 
         @Override
