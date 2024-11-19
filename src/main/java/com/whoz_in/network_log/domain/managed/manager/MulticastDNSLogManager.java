@@ -37,7 +37,6 @@ public class MulticastDNSLogManager implements LogManager {
 
     @Override
     public void receive(Set<String> logs){
-        logs.forEach(System.out::println);
         // collector 로부터 받은 로그를 정제하여 DB에 저장하는 과정
 
         Set<LogDTO> parsed = logs.stream()
@@ -49,6 +48,7 @@ public class MulticastDNSLogManager implements LogManager {
 
     @Override
     public void receive(String log) {
+        System.out.println("MDNSLogManager.receive : "+Thread.currentThread().getName());
         LogDTO parsed = logParser.parse(log);
 
         this.logs.add(parsed);

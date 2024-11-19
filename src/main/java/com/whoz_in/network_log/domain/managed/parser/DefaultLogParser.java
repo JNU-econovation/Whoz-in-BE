@@ -53,15 +53,10 @@ public class DefaultLogParser implements LogParser{
     }
 
     private String validateDeviceName(String old){
-        if(old.contains("._rdlink._tcp.local")) return old.replace("._rdlink._tcp.local", "");
-        if(old.contains("._companion-link._tcp.local")) return old.replace("._companion-link._tcp.local", "");
-        if(old.contains("._airplay._tcp.local")) return old.replace("._airplay._tcp.local", "");
-        if(old.contains("._dosvc._tcp.local")) return old.replace("._dosvc._tcp.local", "");
         //TODO: null 반환이 맞나..?
-
         // 잘못된 파싱으로 인해 mac 주소가 파싱될 경우
         if(old.matches(macRegex)) return null;
-        return old;
+        return old.replaceAll("\\._[a-zA-Z0-9\\-]+._tcp\\.local", "");
     }
 
 }
