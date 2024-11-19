@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -51,8 +52,9 @@ public class LogAdaptor implements LogRepository {
                         preparedStatement.setString(4, networkLog.getWifiSsid());
                         preparedStatement.execute();
                     } catch (SQLIntegrityConstraintViolationException e){
-                        System.out.println("중복된 IP/MAC 주소 저장");
                         System.err.println("[ERROR] SQL Exception: " + e.getMessage());
+                    } catch(DuplicateKeyException e){
+                        System.err.println("[ERROR] Duplicate key: " + e.getMessage());
                     } catch (SQLException e) {
                         System.err.println("[ERROR] SQL Exception: " + e.getMessage());
                     } catch (ArrayIndexOutOfBoundsException e) {
