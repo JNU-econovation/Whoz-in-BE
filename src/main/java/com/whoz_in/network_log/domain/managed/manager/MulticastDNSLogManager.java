@@ -6,6 +6,7 @@ import com.whoz_in.network_log.domain.managed.parser.LogParser;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -40,6 +41,7 @@ public class MulticastDNSLogManager implements LogManager {
         // collector 로부터 받은 로그를 정제하여 DB에 저장하는 과정
 
         Set<LogDTO> parsed = logs.stream()
+                .filter(Objects::nonNull)
                 .map(logParser::parse)
                 .collect(Collectors.toSet());
 
@@ -50,7 +52,7 @@ public class MulticastDNSLogManager implements LogManager {
     public void receive(String log) {
         LogDTO parsed = logParser.parse(log);
 
-        this.logs.add(parsed);
+        if(parsed!=null) this.logs.add(parsed);
     }
 
 
