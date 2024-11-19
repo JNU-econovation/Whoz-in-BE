@@ -28,6 +28,12 @@ public class DefaultLogParser implements LogParser{
     // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다. -> 시간이 너무 오래걸리므로, 기각
     private LogDTO logMap(String log){
         String[] splited = log.split("\t");
+
+        if(splited.length < 3) {
+            System.err.println("Invalid log format");
+            return null; // 과연 null 반환이 맞는지는 모르겠다.
+        }
+
         String mac = splited[0];
         String ip = splited[1];
         String deviceName = validateDeviceName(splited[2]);
