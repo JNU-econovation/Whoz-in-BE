@@ -53,7 +53,6 @@ public class DefaultLogCollector implements LogCollector {
             String line;
 
             while ((line = br.readLine()) != null) {
-                System.out.println("DefaultCollector.collect"+Thread.currentThread().getName());
                 if(line.charAt(2)!=':') continue;
                 callBack(line);
             }
