@@ -42,7 +42,7 @@ public class DefaultLogCollector implements LogCollector {
     public void collect() {
         try {
             process = pb.start();
-            br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()), 64 * 1024);
         } catch (IOException e){
             System.err.println(e.getMessage());
             throw new RuntimeException(e);
@@ -54,7 +54,7 @@ public class DefaultLogCollector implements LogCollector {
 
             while ((line = br.readLine()) != null) {
                 System.out.println("DefaultCollector.collect"+Thread.currentThread().getName());
-                if(line.charAt(3)!=':') continue;
+                if(line.charAt(2)!=':') continue;
                 callBack(line);
             }
 
