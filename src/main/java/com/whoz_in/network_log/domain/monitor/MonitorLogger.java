@@ -32,6 +32,7 @@ public class MonitorLogger {
                 macs.add(lineWords[0]);
                 macs.add(lineWords[1]);
             }
+            //TODO: 여기 도달하면 안됨
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("monitor logger: tshark 출력 읽기 실패", e);
