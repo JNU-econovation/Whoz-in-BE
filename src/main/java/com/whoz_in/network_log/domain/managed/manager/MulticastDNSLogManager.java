@@ -62,6 +62,7 @@ public class MulticastDNSLogManager implements LogManager {
         Set<ManagedLog> entities = this.logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
 
         logRepository.bulkInsert(entities);
+        this.logs.clear();
     }
 
 }
