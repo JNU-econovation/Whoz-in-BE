@@ -1,11 +1,12 @@
 package com.whoz_in.network_log.domain.managed.collector;
 
-import com.whoz_in.network_log.config.ProcessConfig;
+import com.whoz_in.network_log.domain.managed.ManagedConfig;
 import com.whoz_in.network_log.domain.managed.manager.LogManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultLogCollector implements LogCollector {
 
-    private final ProcessBuilder pb;
     private Process process;
     private BufferedWriter bw;
     private BufferedReader br;
@@ -28,26 +28,30 @@ public class DefaultLogCollector implements LogCollector {
     private final Set<String> logInfos = new HashSet<>();
 
     @Autowired
-    public DefaultLogCollector(ProcessConfig config) {
-        this.pb = new ProcessBuilder(config.mDnsCommand())
-                .redirectErrorStream(true);
+    public DefaultLogCollector(ManagedConfig config) {
+        start(config);
     }
 
-    public DefaultLogCollector(String command) {
-        this.pb = new ProcessBuilder(command.split(" "));
+    private void start(ManagedConfig config) {
+        ProcessBuilder pb = new ProcessBuilder(config.mDnsCommand())
+                .redirectErrorStream(true);
+
+        try {
+            process = pb.start();
+            br = new BufferedReader(new InputStreamReader(process.getInputStream()), 64 * 1024);
+            bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()), 64 * 1024);
+            bw.write(config.getPassword());
+            bw.newLine();
+            bw.flush();
+        } catch (IOException e){
+            System.err.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     @Async
     public void collect() {
-        try {
-            process = pb.start();
-            br = new BufferedReader(new InputStreamReader(process.getInputStream()), 64 * 1024);
-        } catch (IOException e){
-            System.err.println(e.getMessage());
-            throw new RuntimeException(e);
-        }
-
         // 읽어오기
         try {
             String line;
