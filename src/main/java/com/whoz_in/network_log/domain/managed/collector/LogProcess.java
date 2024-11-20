@@ -45,7 +45,6 @@ public class LogProcess {
         String line;
         try{
             while((line = br.readLine())!=null){
-                System.out.println(line);
                 ((MulticastDNSLogManager) callback).receive(line);
             }
         } catch (IOException e) {
