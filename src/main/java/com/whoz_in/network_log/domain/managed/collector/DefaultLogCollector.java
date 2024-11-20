@@ -7,9 +7,8 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Set;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -24,23 +23,23 @@ public class DefaultLogCollector implements LogCollector {
     private BufferedReader br;
     private LogManager logManager;
 
-    @Getter
-    private final Set<String> logInfos = new HashSet<>();
-
     @Autowired
     public DefaultLogCollector(ManagedConfig config) {
-        start(config);
+        String password = config.getPassword();
+        Arrays.stream(config.mDnsCommands())
+                        .map(command -> command.split(" "))
+                        .forEach(command -> new Thread(() -> start(command, password)).start());
     }
 
-    private void start(ManagedConfig config) {
-        ProcessBuilder pb = new ProcessBuilder(config.mDnsCommand())
+    private void start(String[] command, String password) {
+        ProcessBuilder pb = new ProcessBuilder(command)
                 .redirectErrorStream(true);
 
         try {
             process = pb.start();
             br = new BufferedReader(new InputStreamReader(process.getInputStream()), 64 * 1024);
             bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()), 64 * 1024);
-            bw.write(config.getPassword());
+            bw.write(password);
             bw.newLine();
             bw.flush();
         } catch (IOException e){
