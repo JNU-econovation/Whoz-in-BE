@@ -53,6 +53,7 @@ public class DefaultLogParser implements LogParser{
         return indexes;
     }
 
+    // TODO: deviceName에 _companion-link._tcp.local <- 이렇게 저장되는 놈 이유를 찾아야 함
     private String parseDeviceName(String deviceLog){
         String[] splited = deviceLog.split(",");
         for(int i = splited.length - 1; i >= 0; i--){
