@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ManagedConfig {
 
     @Value("${network.process.command.managed}")
-    private String mDnsCommand;
+    private String mDnsCommands;
 
     @Getter
     @Value("${network.process.password}")
@@ -16,8 +16,9 @@ public class ManagedConfig {
 
     public ManagedConfig() {}
 
-    public String[] mDnsCommand(){
-        return mDnsCommand.split(" ");
+    public String[] mDnsCommands(){
+        return mDnsCommands.split(",");
     }
 
 }
+g
