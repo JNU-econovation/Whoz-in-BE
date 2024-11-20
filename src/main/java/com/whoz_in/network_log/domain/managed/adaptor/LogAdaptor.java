@@ -66,7 +66,7 @@ public class LogAdaptor implements LogRepository {
 
             @Override
             public int getBatchSize() {
-                return 100;
+                return logList.size();
             }
         });
     }
