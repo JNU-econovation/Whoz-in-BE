@@ -2,7 +2,6 @@ package com.whoz_in.network_log.controller;
 
 import com.whoz_in.network_log.common.ApiResponse;
 import com.whoz_in.network_log.common.util.RequesterInfo;
-import com.whoz_in.network_log.controller.dto.MacResponse;
 import com.whoz_in.network_log.persistence.ManagedLogDAO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,8 +22,7 @@ public class MacAddressController {
         String ip = requesterInfo.getIp();
         System.out.println("Requester Info : " + ip);
 
-        return ApiResponse.success(HttpStatus.OK, "조회 성공", new MacResponse(
-                managedLogDAO.findByIp(ip).getLogId().getMac()));
+        return ApiResponse.success(HttpStatus.OK, "조회 성공", managedLogDAO.findByIp(ip).getLogId().getMac());
     }
 
     @GetMapping("/macs")
