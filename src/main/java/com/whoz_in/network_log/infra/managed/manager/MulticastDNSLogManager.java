@@ -4,7 +4,7 @@ import com.whoz_in.network_log.infra.managed.LogDTO;
 import com.whoz_in.network_log.infra.managed.ManagedConfig;
 import com.whoz_in.network_log.infra.managed.collector.LogProcess;
 import com.whoz_in.network_log.infra.managed.parser.LogParser;
-import com.whoz_in.network_log.persistence.LogRepository;
+import com.whoz_in.network_log.persistence.LogAdaptor;
 import com.whoz_in.network_log.persistence.ManagedLog;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
@@ -24,15 +24,15 @@ public class MulticastDNSLogManager implements LogManager {
     // TODO: 올바른 wifi에 연결 됐는지 확인 해야 함
     // TODO: 모니터 모드인지 확인 해야 함
 
-    private final LogRepository logRepository;
+    private final LogAdaptor logAdaptor;
     private final LogParser logParser;
     private final Set<LogDTO> logs = Collections.newSetFromMap(new ConcurrentHashMap<>()); // 동시성에 최적화된 Set
     private final ManagedConfig config;
 
-    public MulticastDNSLogManager(LogRepository logRepository,
+    public MulticastDNSLogManager(LogAdaptor logAdaptor,
                                   LogParser logParser,
                                   ManagedConfig config) {
-        this.logRepository = logRepository;
+        this.logAdaptor = logAdaptor;
         this.logParser = logParser;
         this.config = config;
     }
@@ -73,7 +73,7 @@ public class MulticastDNSLogManager implements LogManager {
         System.out.println("[managed] 저장할 로그 개수 : " + this.logs.size());
         Set<ManagedLog> entities = this.logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
 
-        logRepository.bulkInsert(entities);
+        logAdaptor.bulkInsert(entities);
         this.logs.clear();
     }
 
