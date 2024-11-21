@@ -30,13 +30,12 @@ public class DefaultLogParser implements LogParser{
         String[] splited = log.split("\t");
 
         if(splited.length < 3) {
-            System.err.println("Invalid log format");
             return null; // 과연 null 반환이 맞는지는 모르겠다.
         }
 
         String mac = splited[0];
         String ip = splited[1];
-        String deviceName = validateDeviceName(splited[2]);
+        String deviceName = validateDeviceName(parseDeviceName(splited[2]));
 
         return LogDTO.createNew(mac, ip, deviceName);
     }
@@ -51,6 +50,17 @@ public class DefaultLogParser implements LogParser{
             }
         }
         return indexes;
+    }
+
+    // TODO: deviceName에 _companion-link._tcp.local <- 이렇게 저장되는 놈 이유를 찾아야 함
+    private String parseDeviceName(String deviceLog){
+        String[] splited = deviceLog.split(",");
+        for(int i = splited.length - 1; i >= 0; i--){
+            if(splited[i].matches(deviceRegex)) return splited[i];
+        }
+
+        // 정규식 매칭이 안되는 경우에는 어떤 상황일까?
+        return "Anonymous Device";
     }
 
     private String validateDeviceName(String old){
