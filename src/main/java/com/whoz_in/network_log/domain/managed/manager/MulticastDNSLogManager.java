@@ -8,9 +8,11 @@ import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.domain.managed.ManagedLog;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -25,7 +27,7 @@ public class MulticastDNSLogManager implements LogManager {
 
     private final LogRepository logRepository;
     private final LogParser logParser;
-    private final Set<LogDTO> logs = new HashSet<>();
+    private final Set<LogDTO> logs = Collections.newSetFromMap(new ConcurrentHashMap<>()); // 동시성에 최적화된 Set
     private final ManagedConfig config;
 
     public MulticastDNSLogManager(LogRepository logRepository,
