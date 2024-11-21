@@ -14,18 +14,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LogAdaptor{
-    
-    private final LogJpaRepository logJpaRepository;
+public class ManagedLogDAO {
+
+    private final ManagedLogRepository managedLogRepository;
 
     private final JdbcTemplate jdbcTemplate;
 
-    public void saveAll(Collection<ManagedLog> logs) {
-        logJpaRepository.saveAll(logs);
-    }
-
     public ManagedLog findByIp(String ip) {
-        return logJpaRepository.findByIp(ip)
+        return managedLogRepository.findByIp(ip)
                 .orElseThrow(() -> new RuntimeException(String.format("IP 존재하지 않음 : %s", ip)));
     }
 
@@ -70,11 +66,7 @@ public class LogAdaptor{
         });
     }
 
-    public void save(ManagedLog log) {
-        logJpaRepository.save(log);
-    }
-
     public List<ManagedLog> findAllByIp(String ip) {
-        return logJpaRepository.findAllByIp(ip);
+        return managedLogRepository.findAllByIp(ip);
     }
 }
