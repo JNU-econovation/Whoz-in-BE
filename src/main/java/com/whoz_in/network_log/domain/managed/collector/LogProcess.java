@@ -10,24 +10,27 @@ import java.io.OutputStreamWriter;
 
 public class LogProcess {
 
-    private ProcessBuilder pb;
+    private Process process;
     private BufferedReader br;
     private BufferedWriter bw;
-    private Process process;
     private String password;
     private Object callback;
 
     public LogProcess(String[] command, Object callback) {
-        this.pb = new ProcessBuilder(command)
-                            .redirectErrorStream(true);
+        try {
+            this.process = new ProcessBuilder(command)
+                    .redirectErrorStream(true)
+                    .start();
 
-        this.callback = callback;
+            this.callback = callback;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void start(String password) {
         try {
-            this.process = pb.start();
-
             br = new BufferedReader(new InputStreamReader(process.getInputStream()), 64 * 1024);
             bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()), 64 * 1024);
 
@@ -45,7 +48,6 @@ public class LogProcess {
         String line;
         try{
             while((line = br.readLine())!=null){
-                System.out.println(line);
                 ((MulticastDNSLogManager) callback).receive(line);
             }
         } catch (IOException e) {
