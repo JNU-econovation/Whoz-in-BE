@@ -1,26 +1,34 @@
 package com.whoz_in.network_log.common;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.http.HttpStatus;
 
 public class ApiResponse {
 
-    @RequiredArgsConstructor
-    public static class SuccessBody {
-        private final int status;
-        private final String message;
-        private final Object data;
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class SuccessBody<T> {
+        private int status;
+        private String message;
+        private T data;
     }
 
-    @RequiredArgsConstructor
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class FailureBody {
-        private final int status;
-        private final String message;
+        private int status;
+        private String message;
     }
 
-    public static ApiResponse.SuccessBody success(HttpStatus status,
+    public static <T> ApiResponse.SuccessBody success(HttpStatus status,
                                                   String message,
-                                                  Object data) {
+                                                  T data) {
         return new SuccessBody(status.value(), message, data);
     }
 
