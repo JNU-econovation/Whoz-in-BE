@@ -30,7 +30,6 @@ public class DefaultLogParser implements LogParser{
         String[] splited = log.split("\t");
 
         if(splited.length < 3) {
-//            System.err.println("Invalid log format");
             return null; // 과연 null 반환이 맞는지는 모르겠다.
         }
 
