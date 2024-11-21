@@ -1,6 +1,6 @@
-package com.whoz_in.network_log.infra.managed.collector;
+package com.whoz_in.network_log.infra.managed.mdns.collector;
 
-import com.whoz_in.network_log.infra.managed.manager.MulticastDNSLogManager;
+import com.whoz_in.network_log.infra.managed.mdns.manager.MulticastDNSLogManager;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

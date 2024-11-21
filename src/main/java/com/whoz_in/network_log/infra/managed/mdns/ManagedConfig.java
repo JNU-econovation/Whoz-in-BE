@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.infra.managed;
+package com.whoz_in.network_log.infra.managed.mdns;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
