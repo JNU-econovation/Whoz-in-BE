@@ -1,14 +1,13 @@
-package com.whoz_in.network_log.domain.managed.manager;
+package com.whoz_in.network_log.infra.managed.manager;
 
-import com.whoz_in.network_log.domain.managed.LogDTO;
-import com.whoz_in.network_log.domain.managed.ManagedConfig;
-import com.whoz_in.network_log.domain.managed.collector.LogProcess;
-import com.whoz_in.network_log.domain.managed.parser.LogParser;
-import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.domain.managed.ManagedLog;
+import com.whoz_in.network_log.infra.managed.LogDTO;
+import com.whoz_in.network_log.infra.managed.ManagedConfig;
+import com.whoz_in.network_log.infra.managed.collector.LogProcess;
+import com.whoz_in.network_log.infra.managed.parser.LogParser;
+import com.whoz_in.network_log.persistence.LogRepository;
+import com.whoz_in.network_log.persistence.ManagedLog;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;

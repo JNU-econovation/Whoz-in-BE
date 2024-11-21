@@ -1,6 +1,6 @@
-package com.whoz_in.network_log.domain.managed.repository;
+package com.whoz_in.network_log.persistence;
 
-import com.whoz_in.network_log.domain.managed.ManagedLog;
+import com.whoz_in.network_log.persistence.ManagedLog;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

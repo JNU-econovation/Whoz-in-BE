@@ -1,5 +1,6 @@
-package com.whoz_in.network_log.domain.monitor;
+package com.whoz_in.network_log.infra.monitor;
 
+import com.whoz_in.network_log.persistence.MonitorLogDAO;
 import jakarta.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
