@@ -1,15 +1,9 @@
-package com.whoz_in.network_log.domain.managed.adaptor;
+package com.whoz_in.network_log.persistence;
 
-import com.whoz_in.network_log.domain.managed.LogDTO;
-import com.whoz_in.network_log.domain.managed.repository.LogJpaRepository;
-import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
