@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.infra.managed;
+package com.whoz_in.network_log.infra.managed.mdns;
 
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
