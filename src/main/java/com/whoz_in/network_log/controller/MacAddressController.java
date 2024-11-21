@@ -11,20 +11,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/macs")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class MacAddressController {
 
     private final LogRepository logRepository;
     private final RequesterInfo requesterInfo;
 
-    @GetMapping
-    public ApiResponse.SuccessBody getMacAddress() {
+    @GetMapping("/mac")
+    public ApiResponse.SuccessBody<?> getMac() {
         String ip = requesterInfo.getIp();
-        System.out.println("Requester Info : " + requesterInfo.getIp());
+        System.out.println("Requester Info : " + ip);
 
-        MacResponse response = new MacResponse(logRepository.findByIp(ip).getLogId().getMac());
+        return ApiResponse.success(HttpStatus.OK, "조회 성공", new MacResponse(logRepository.findByIp(ip).getLogId().getMac()));
+    }
 
-        return ApiResponse.success(HttpStatus.OK, "조회 성공", response);
+    @GetMapping("/macs")
+    public ApiResponse.SuccessBody<?> getMacs(){
+        String ip = requesterInfo.getIp();
+        System.out.println("Requester Info : " + ip);
+
+        return ApiResponse.success(HttpStatus.OK, "조회 성공", logRepository.findAllByIp(ip));
     }
 }

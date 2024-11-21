@@ -83,4 +83,9 @@ public class LogAdaptor implements LogRepository {
     public void save(ManagedLog log) {
         logJpaRepository.save(log);
     }
+
+    @Override
+    public List<ManagedLog> findAllByIp(String ip) {
+        return logJpaRepository.findAllByIp(ip);
+    }
 }
