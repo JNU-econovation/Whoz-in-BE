@@ -1,9 +1,9 @@
-package com.whoz_in.network_log.infra.managed.manager;
+package com.whoz_in.network_log.infra.managed.mdns.manager;
 
-import com.whoz_in.network_log.infra.managed.LogDTO;
-import com.whoz_in.network_log.infra.managed.ManagedConfig;
-import com.whoz_in.network_log.infra.managed.collector.LogProcess;
-import com.whoz_in.network_log.infra.managed.parser.LogParser;
+import com.whoz_in.network_log.infra.managed.mdns.LogDTO;
+import com.whoz_in.network_log.infra.managed.mdns.ManagedConfig;
+import com.whoz_in.network_log.infra.managed.mdns.collector.LogProcess;
+import com.whoz_in.network_log.infra.managed.mdns.parser.LogParser;
 import com.whoz_in.network_log.persistence.ManagedLogDAO;
 import com.whoz_in.network_log.persistence.ManagedLog;
 import jakarta.annotation.PostConstruct;
