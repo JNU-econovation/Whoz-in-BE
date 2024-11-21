@@ -24,7 +24,7 @@ public class ManagedLog extends BaseEntity {
     public static final String TABLE_NAME = "managed_log";
 
     @EmbeddedId
-    private  LogId logId;
+    private LogId logId;
 
     @Column(name = TABLE_NAME + "_wifi_ssid", nullable = true)
     private String wifiSsid;
