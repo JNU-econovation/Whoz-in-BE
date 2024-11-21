@@ -1,7 +1,9 @@
 package com.whoz_in.network_log.domain.managed.parser;
 
+import com.whoz_in.network_log.domain.managed.LogDTO;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Component;
 
 // TODO: 테스트하기
@@ -16,29 +18,26 @@ public class DefaultLogParser implements LogParser{
 
 
     @Override
-    public Map<String, String> parse(String log) {
-        Map<String, String> logMap = logMap(log);
+    public LogDTO parse(String log) {
+        LogDTO logDTO = logMap(log);
 
-        return logMap;
+        return logDTO;
     }
 
-    // TODO: 인덱스로 파싱하게 되면, 안되지 않을까
-    // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다.
-    private Map<String, String> logMap(String log){
-        Map<String, String> logMap = new HashMap<>();
+    // TODO: 인덱스로 파싱하게 되면, 안되지 않을까 -> mac ip의 순서가 바뀔 수도 있는데, 정규식보다 차라리 env에서 명령어의 순서를 유지하는 방식이 더 비용이 낮을 것이라고 판단
+    // TODO: 정규 표현식을 match하여 파싱하고, log의 시간과 message를 같이 담는다. -> 시간이 너무 오래걸리므로, 기각
+    private LogDTO logMap(String log){
         String[] splited = log.split("\t");
 
-        int[] macIndex = findMatchedIndex(splited, macRegex);
-        int[] ipIndex = findMatchedIndex(splited, ipRegex);
-        int[] deviceIndex = findMatchedIndex(splited, deviceRegex);
-        
-        logMap.put("src_mac", splited[macIndex[0]]);
-        logMap.put("src_ip", splited[ipIndex[0]]);
-        logMap.put("dst_mac", splited[macIndex[1]]);
-        logMap.put("dst_ip", splited[ipIndex[1]]);
-        logMap.put("device_name", validateDeviceName(splited[deviceIndex[0]]));
+        if(splited.length < 3) {
+            return null; // 과연 null 반환이 맞는지는 모르겠다.
+        }
 
-        return logMap;
+        String mac = splited[0];
+        String ip = splited[1];
+        String deviceName = validateDeviceName(parseDeviceName(splited[2]));
+
+        return LogDTO.createNew(mac, ip, deviceName);
     }
 
     private int[] findMatchedIndex(String[] addresses, String regex){
@@ -53,16 +52,22 @@ public class DefaultLogParser implements LogParser{
         return indexes;
     }
 
-    private String validateDeviceName(String old){
-        if(old.contains("._rdlink._tcp.local")) return old.replace("._rdlink._tcp.local", "");
-        if(old.contains("._companion-link._tcp.local")) return old.replace("._companion-link._tcp.local", "");
-        if(old.contains("._airplay._tcp.local")) return old.replace("._airplay._tcp.local", "");
-        if(old.contains("._dosvc._tcp.local")) return old.replace("._dosvc._tcp.local", "");
-        //TODO: null 반환이 맞나..?
+    // TODO: deviceName에 _companion-link._tcp.local <- 이렇게 저장되는 놈 이유를 찾아야 함
+    private String parseDeviceName(String deviceLog){
+        String[] splited = deviceLog.split(",");
+        for(int i = splited.length - 1; i >= 0; i--){
+            if(splited[i].matches(deviceRegex)) return splited[i];
+        }
 
+        // 정규식 매칭이 안되는 경우에는 어떤 상황일까?
+        return "Anonymous Device";
+    }
+
+    private String validateDeviceName(String old){
+        //TODO: null 반환이 맞나..?
         // 잘못된 파싱으로 인해 mac 주소가 파싱될 경우
         if(old.matches(macRegex)) return null;
-        return old;
+        return old.replaceAll("\\._[a-zA-Z0-9\\-]+._tcp\\.local", "");
     }
 
 }

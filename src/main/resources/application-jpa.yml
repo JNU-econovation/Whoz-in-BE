@@ -1,0 +1,21 @@
+spring:
+  config:
+    activate:
+      on-profile: jpa
+
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+    driver-class-name: ${DB_DRIVER_CLASS}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: false
+        dialect: ${DB_DIALECT}
+    generate-ddl: false
+    open-in-view: false
