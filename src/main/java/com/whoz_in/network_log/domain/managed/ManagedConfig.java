@@ -1,23 +1,23 @@
-package com.whoz_in.network_log.config;
+package com.whoz_in.network_log.domain.managed;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ProcessConfig {
+public class ManagedConfig {
 
     @Value("${network.process.command.managed}")
-    private String mDnsCommand;
+    private String mDnsCommands;
 
     @Getter
     @Value("${network.process.password}")
     private String password;
 
-    public ProcessConfig() {}
+    public ManagedConfig() {}
 
-    public String[] mDnsCommand(){
-        return mDnsCommand.split(" ");
+    public String[] mDnsCommands(){
+        return mDnsCommands.split(",");
     }
 
 }

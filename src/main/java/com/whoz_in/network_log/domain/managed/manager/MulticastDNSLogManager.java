@@ -1,13 +1,18 @@
 package com.whoz_in.network_log.domain.managed.manager;
 
 import com.whoz_in.network_log.domain.managed.LogDTO;
-import com.whoz_in.network_log.domain.managed.collector.LogCollector;
+import com.whoz_in.network_log.domain.managed.ManagedConfig;
+import com.whoz_in.network_log.domain.managed.collector.LogProcess;
 import com.whoz_in.network_log.domain.managed.parser.LogParser;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.domain.managed.ManagedLog;
-import java.util.HashSet;
+import jakarta.annotation.PostConstruct;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,20 +25,28 @@ public class MulticastDNSLogManager implements LogManager {
     // TODO: 올바른 wifi에 연결 됐는지 확인 해야 함
     // TODO: 모니터 모드인지 확인 해야 함
 
-    private final LogCollector logCollector;
     private final LogRepository logRepository;
     private final LogParser logParser;
-    private final Set<LogDTO> logs = new HashSet<>();
+    private final Set<LogDTO> logs = Collections.newSetFromMap(new ConcurrentHashMap<>()); // 동시성에 최적화된 Set
+    private final ManagedConfig config;
 
-    public MulticastDNSLogManager(LogCollector logCollector,
-                                  LogRepository logRepository,
-                                  LogParser logParser) {
-        this.logCollector = logCollector;
+    public MulticastDNSLogManager(LogRepository logRepository,
+                                  LogParser logParser,
+                                  ManagedConfig config) {
         this.logRepository = logRepository;
         this.logParser = logParser;
+        this.config = config;
+    }
 
-        this.logCollector.setManager(this);
-        this.logCollector.collect();
+    @PostConstruct
+    public void init() {
+        Arrays.stream(config.mDnsCommands())
+                .map(command -> command.split(" "))
+                .map(command -> new Thread(() -> {
+                    LogProcess logProcess = new LogProcess(command,this);
+                    logProcess.start(config.getPassword());
+                }))
+                .forEach(Thread::start);
     }
 
     @Override
@@ -62,6 +75,7 @@ public class MulticastDNSLogManager implements LogManager {
         Set<ManagedLog> entities = this.logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
 
         logRepository.bulkInsert(entities);
+        this.logs.clear();
     }
 
 }
