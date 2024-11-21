@@ -2,7 +2,9 @@ package com.whoz_in.network_log.controller;
 
 import com.whoz_in.network_log.common.ApiResponse;
 import com.whoz_in.network_log.controller.dto.MacResponse;
+import com.whoz_in.network_log.controller.util.HttpUtils;
 import com.whoz_in.network_log.domain.managed.repository.LogRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,9 @@ public class MacAddressController {
     private final LogRepository logRepository;
 
     @GetMapping
-    public ApiResponse.SuccessBody getMacAddress(@RequestParam(name = "ipAddress", required = false) String ip) {
+    public ApiResponse.SuccessBody getMacAddress(HttpServletRequest request) {
+        String ip = HttpUtils.extractIp(request);
+
         MacResponse response = new MacResponse(logRepository.findByIp(ip).getLogId().getMac());
 
         return ApiResponse.success(HttpStatus.OK, "조회 성공", response);

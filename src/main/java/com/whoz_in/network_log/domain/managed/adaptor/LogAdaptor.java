@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -32,7 +33,8 @@ public class LogAdaptor implements LogRepository {
 
     @Override
     public ManagedLog findByIp(String ip) {
-        return logJpaRepository.findByIp(ip);
+        return logJpaRepository.findByIp(ip)
+                .orElseThrow(() -> new RuntimeException(String.format("IP 존재하지 않음 : %s", ip)));
     }
 
     @Override
