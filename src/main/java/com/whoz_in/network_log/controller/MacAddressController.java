@@ -31,6 +31,6 @@ public class MacAddressController {
         String ip = requesterInfo.getIp();
         System.out.println("Requester Info : " + ip);
 
-        return ApiResponse.success(HttpStatus.OK, "조회 성공", logRepository.findAllByIp(ip));
+        return ApiResponse.success(HttpStatus.OK, "조회 성공", logRepository.findAllByIp(ip).stream().map(log->log.getLogId().getMac()).toList());
     }
 }
