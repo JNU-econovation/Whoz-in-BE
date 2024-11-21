@@ -1,7 +1,8 @@
 package com.whoz_in.network_log.domain.managed.adaptor;
 
-import com.whoz_in.network_log.domain.managed.repository.LogRepository;
+import com.whoz_in.network_log.domain.managed.LogDTO;
 import com.whoz_in.network_log.domain.managed.repository.LogJpaRepository;
+import com.whoz_in.network_log.domain.managed.repository.LogRepository;
 import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -27,6 +28,11 @@ public class LogAdaptor implements LogRepository {
     @Override
     public void saveAll(Collection<ManagedLog> logs) {
         logJpaRepository.saveAll(logs);
+    }
+
+    @Override
+    public ManagedLog findByIp(String ip) {
+        return logJpaRepository.findByIp(ip);
     }
 
     @Override
