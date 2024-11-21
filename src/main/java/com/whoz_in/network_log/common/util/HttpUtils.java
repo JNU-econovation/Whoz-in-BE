@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.controller.util;
+package com.whoz_in.network_log.common.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 
