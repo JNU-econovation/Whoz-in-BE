@@ -44,8 +44,9 @@ public class MdnsLogWriter {
                             }
                         });
         System.out.println("[managed] 저장할 로그 개수 : " + logs.size());
+        //TODO: jpa entity -> native query
+        //TODO: ssid 저장
         Set<ManagedLog> entities = logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
-
         managedLogDAO.bulkInsert(entities);
         logs.clear();
     }
