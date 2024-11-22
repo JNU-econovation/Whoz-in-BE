@@ -1,6 +1,7 @@
-package com.whoz_in.network_log.domain.managed;
+package com.whoz_in.network_log.persistence;
 
 import com.whoz_in.network_log.common.BaseEntity;
+import com.whoz_in.network_log.infra.managed.mdns.LogDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;

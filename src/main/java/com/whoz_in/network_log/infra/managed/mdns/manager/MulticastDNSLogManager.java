@@ -1,14 +1,13 @@
-package com.whoz_in.network_log.domain.managed.manager;
+package com.whoz_in.network_log.infra.managed.mdns.manager;
 
-import com.whoz_in.network_log.domain.managed.LogDTO;
-import com.whoz_in.network_log.domain.managed.ManagedConfig;
-import com.whoz_in.network_log.domain.managed.collector.LogProcess;
-import com.whoz_in.network_log.domain.managed.parser.LogParser;
-import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.domain.managed.ManagedLog;
+import com.whoz_in.network_log.infra.managed.mdns.LogDTO;
+import com.whoz_in.network_log.infra.managed.mdns.ManagedConfig;
+import com.whoz_in.network_log.infra.managed.mdns.collector.LogProcess;
+import com.whoz_in.network_log.infra.managed.mdns.parser.LogParser;
+import com.whoz_in.network_log.persistence.ManagedLogDAO;
+import com.whoz_in.network_log.persistence.ManagedLog;
 import jakarta.annotation.PostConstruct;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
@@ -25,15 +24,15 @@ public class MulticastDNSLogManager implements LogManager {
     // TODO: 올바른 wifi에 연결 됐는지 확인 해야 함
     // TODO: 모니터 모드인지 확인 해야 함
 
-    private final LogRepository logRepository;
+    private final ManagedLogDAO managedLogDAO;
     private final LogParser logParser;
     private final Set<LogDTO> logs = Collections.newSetFromMap(new ConcurrentHashMap<>()); // 동시성에 최적화된 Set
     private final ManagedConfig config;
 
-    public MulticastDNSLogManager(LogRepository logRepository,
+    public MulticastDNSLogManager(ManagedLogDAO managedLogDAO,
                                   LogParser logParser,
                                   ManagedConfig config) {
-        this.logRepository = logRepository;
+        this.managedLogDAO = managedLogDAO;
         this.logParser = logParser;
         this.config = config;
     }
@@ -74,7 +73,7 @@ public class MulticastDNSLogManager implements LogManager {
         System.out.println("[managed] 저장할 로그 개수 : " + this.logs.size());
         Set<ManagedLog> entities = this.logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
 
-        logRepository.bulkInsert(entities);
+        managedLogDAO.bulkInsert(entities);
         this.logs.clear();
     }
 

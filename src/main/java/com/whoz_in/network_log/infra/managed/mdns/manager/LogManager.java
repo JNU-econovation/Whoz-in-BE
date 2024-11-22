@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.domain.managed.manager;
+package com.whoz_in.network_log.infra.managed.mdns.manager;
 
 import java.util.Set;
 

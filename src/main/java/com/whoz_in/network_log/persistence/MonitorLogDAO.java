@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.domain.monitor;
+package com.whoz_in.network_log.persistence;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -14,7 +14,7 @@ public class MonitorLogDAO {
 
     @Modifying
     @Transactional
-    void upsertAll(Set<String> macs) {
+    public void upsertAll(Set<String> macs) {
         if (macs.isEmpty()) return;
         StringBuilder sql = new StringBuilder("INSERT INTO monitor_log (mac, created_date, updated_date) VALUES ");
         macs.forEach(mac -> sql.append(String.format("('%s', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),", mac)));

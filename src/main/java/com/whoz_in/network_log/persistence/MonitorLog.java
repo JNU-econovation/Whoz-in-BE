@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.domain.monitor;
+package com.whoz_in.network_log.persistence;
 
 
 import com.whoz_in.network_log.common.BaseEntity;
