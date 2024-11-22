@@ -1,7 +1,7 @@
 package com.whoz_in.network_log.persistence;
 
 import com.whoz_in.network_log.common.BaseEntity;
-import com.whoz_in.network_log.infra.managed.mdns.LogDTO;
+import com.whoz_in.network_log.infra.managed.mdns.MdnsLog;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
@@ -33,7 +33,7 @@ public class ManagedLog extends BaseEntity {
     @Column(name = TABLE_NAME + "_device_name", nullable = true)
     private String deviceName;
 
-    public static ManagedLog create(LogDTO log) {
+    public static ManagedLog create(MdnsLog log) {
         String mac = log.getMac();
         String ip = log.getIp();
         String device = log.getDevice();
