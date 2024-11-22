@@ -1,9 +1,6 @@
-package com.whoz_in.network_log.domain.managed.parser;
+package com.whoz_in.network_log.infra.managed.mdns.parser;
 
-import com.whoz_in.network_log.domain.managed.LogDTO;
-import java.util.HashMap;
-import java.util.Map;
-import lombok.extern.java.Log;
+import com.whoz_in.network_log.infra.managed.mdns.LogDTO;
 import org.springframework.stereotype.Component;
 
 // TODO: 테스트하기

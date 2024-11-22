@@ -1,6 +1,6 @@
 package com.whoz_in.network_log.application.log;
 
-import com.whoz_in.network_log.domain.managed.parser.DefaultLogParser;
+import com.whoz_in.network_log.infra.managed.mdns.parser.DefaultLogParser;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

@@ -1,15 +1,9 @@
-package com.whoz_in.network_log.domain.managed.adaptor;
+package com.whoz_in.network_log.persistence;
 
-import com.whoz_in.network_log.domain.managed.LogDTO;
-import com.whoz_in.network_log.domain.managed.repository.LogJpaRepository;
-import com.whoz_in.network_log.domain.managed.repository.LogRepository;
-import com.whoz_in.network_log.domain.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -20,24 +14,17 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class LogAdaptor implements LogRepository {
-    
-    private final LogJpaRepository logJpaRepository;
+public class ManagedLogDAO {
+
+    private final ManagedLogRepository managedLogRepository;
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Override
-    public void saveAll(Collection<ManagedLog> logs) {
-        logJpaRepository.saveAll(logs);
-    }
-
-    @Override
     public ManagedLog findByIp(String ip) {
-        return logJpaRepository.findByIp(ip)
+        return managedLogRepository.findByIp(ip)
                 .orElseThrow(() -> new RuntimeException(String.format("IP 존재하지 않음 : %s", ip)));
     }
 
-    @Override
     public void bulkInsert(Collection<ManagedLog> logs) {
         // TODO: Bulk Insert 구현
         if(logs.size() > 0) {
@@ -79,13 +66,7 @@ public class LogAdaptor implements LogRepository {
         });
     }
 
-    @Override
-    public void save(ManagedLog log) {
-        logJpaRepository.save(log);
-    }
-
-    @Override
     public List<ManagedLog> findAllByIp(String ip) {
-        return logJpaRepository.findAllByIp(ip);
+        return managedLogRepository.findAllByIp(ip);
     }
 }
