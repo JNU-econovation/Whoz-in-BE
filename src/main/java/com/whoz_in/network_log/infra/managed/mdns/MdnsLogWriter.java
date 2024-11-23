@@ -1,7 +1,7 @@
 package com.whoz_in.network_log.infra.managed.mdns;
 
-import com.whoz_in.network_log.persistence.ManagedLogDAO;
 import com.whoz_in.network_log.persistence.ManagedLog;
+import com.whoz_in.network_log.persistence.ManagedLogDAO;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
