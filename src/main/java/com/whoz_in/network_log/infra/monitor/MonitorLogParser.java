@@ -7,7 +7,7 @@ import java.util.Set;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MonitorLogParser {
+public final class MonitorLogParser {
     /**
      * @param log
      * 한 줄 데이터만 들어와야 한다. 들어온 데이터중 \t가 1개가 존재하는 것만 처리한다.
