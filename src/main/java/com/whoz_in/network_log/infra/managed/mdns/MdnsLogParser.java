@@ -4,7 +4,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MdnsLogParser {
+public final class MdnsLogParser {
     private static final String deviceRegex = "[가-힣\\w\\s'.()\\-]+(\\._[a-zA-Z0-9\\-]+)+\\.local";
 
     /**

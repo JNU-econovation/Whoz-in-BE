@@ -8,15 +8,15 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Component
-public class MdnsConfig {
+public final class MdnsConfig {
     private final List<String> mDnsCommands;
     private final String password;
 
     public MdnsConfig(
             @Value("${network.process.command.managed.mdns}") String rawMdnsCommands,
-            @Value("${network.process.password}") String password) {
+            @Value("${network.process.password}") String sudoPassword) {
         this.mDnsCommands = Arrays.asList(rawMdnsCommands.split(","));
-        this.password = password;
+        this.password = sudoPassword;
     }
 
 }
