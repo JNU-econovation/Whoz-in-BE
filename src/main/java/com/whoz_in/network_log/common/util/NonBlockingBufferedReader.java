@@ -3,11 +3,11 @@ package com.whoz_in.network_log.common.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-public class CustomBufferedReader {
+public class NonBlockingBufferedReader {
     private final BufferedReader br;
     private final StringBuilder buffer = new StringBuilder();
 
-    public CustomBufferedReader(BufferedReader br) {
+    public NonBlockingBufferedReader(BufferedReader br) {
         this.br = br;
     }
 
@@ -19,7 +19,7 @@ public class CustomBufferedReader {
         while(true){
             int i = buffer.indexOf(System.lineSeparator());
             if (i != -1){
-                String extracted = buffer.substring(0, i);//.trim();
+                String extracted = buffer.substring(0, i);
                 buffer.delete(0, i+1);
                 return extracted;
             }
