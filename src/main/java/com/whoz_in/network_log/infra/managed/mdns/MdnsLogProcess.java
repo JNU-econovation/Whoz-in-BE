@@ -1,6 +1,6 @@
 package com.whoz_in.network_log.infra.managed.mdns;
 
-import com.whoz_in.network_log.common.util.CustomBufferedReader;
+import com.whoz_in.network_log.common.util.NonBlockingBufferedReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,14 +9,14 @@ import java.io.Writer;
 
 public final class MdnsLogProcess {
     private final Process process;
-    private final CustomBufferedReader cbr;
+    private final NonBlockingBufferedReader cbr;
 
     public MdnsLogProcess(String command, String sudoPassword) {
         try {
             this.process = new ProcessBuilder(command.split(" "))
                     .start();
             //TODO: errorStream 로깅 - process.getErrorStream()
-            this.cbr = new CustomBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
+            this.cbr = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
 
             Writer writer = new OutputStreamWriter(process.getOutputStream());
             writer.write(sudoPassword + System.lineSeparator());
