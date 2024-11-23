@@ -14,9 +14,9 @@ public final class MdnsConfig {
 
     public MdnsConfig(
             @Value("${network.process.command.managed.mdns}") String rawMdnsCommands,
-            @Value("${network.process.password}") String password) {
+            @Value("${network.process.password}") String sudoPassword) {
         this.mDnsCommands = Arrays.asList(rawMdnsCommands.split(","));
-        this.password = password;
+        this.password = sudoPassword;
     }
 
 }
