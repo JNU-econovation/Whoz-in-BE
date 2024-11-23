@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Component
-public class MdnsConfig {
+public final class MdnsConfig {
     private final List<String> mDnsCommands;
     private final String password;
 

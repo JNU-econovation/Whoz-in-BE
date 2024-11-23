@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 //TODO: mac과 ip를 equals and hashcode
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class MdnsLog {
+public final class MdnsLog {
     @EqualsAndHashCode.Include
     private final String mac;
     @EqualsAndHashCode.Include
