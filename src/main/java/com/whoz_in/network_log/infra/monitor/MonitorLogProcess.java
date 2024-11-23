@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.infra.managed.mdns;
+package com.whoz_in.network_log.infra.monitor;
 
 import com.whoz_in.network_log.common.util.CustomBufferedReader;
 import java.io.BufferedReader;
@@ -6,17 +6,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.List;
 
-public final class MdnsLogProcess {
+public final class MonitorLogProcess {
     private final Process process;
     private final CustomBufferedReader cbr;
 
-    public MdnsLogProcess(String command, String sudoPassword) {
+    public MonitorLogProcess(String command, String sudoPassword) {
+        ProcessBuilder pb = new ProcessBuilder(command.split(" "));
         try {
-            this.process = new ProcessBuilder(command.split(" "))
-                    .start();
-            //TODO: errorStream 로깅 - process.getErrorStream()
+            process = pb.start();
             this.cbr = new CustomBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
 
             Writer writer = new OutputStreamWriter(process.getOutputStream());
@@ -27,11 +25,6 @@ public final class MdnsLogProcess {
         }
     }
 
-    /**
-     *
-     * @return 프로세스의 출력에서 한 줄을 읽어들인다.
-     * 읽을 줄이 없을경우 null을 출력한다.
-     */
     public String readLine() throws IOException {
         return cbr.readLine();
     }
@@ -40,7 +33,7 @@ public final class MdnsLogProcess {
         return this.process.isAlive();
     }
 
-    public void terminate(){
+    public void destory(){
         this.process.destroy();
     }
 }
