@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Getter
 @Configuration
-public class MonitorConfig {
+public final class MonitorConfig {
     private final String command;
     private final String sudoPassword;
     public MonitorConfig(@Value("${network.process.command.monitor}") String command,
