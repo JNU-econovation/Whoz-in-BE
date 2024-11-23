@@ -2,10 +2,8 @@ package com.whoz_in.network_log.infra.managed.mdns;
 
 import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
-import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 //TODO: mac과 ip를 equals and hashcode
 @Getter

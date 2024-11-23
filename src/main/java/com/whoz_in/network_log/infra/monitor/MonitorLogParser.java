@@ -1,8 +1,6 @@
 package com.whoz_in.network_log.infra.monitor;
 
-import com.whoz_in.network_log.infra.managed.mdns.MdnsLog;
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 import org.springframework.stereotype.Component;
 
