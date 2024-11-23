@@ -8,7 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.List;
 
-public class MdnsLogProcess {
+public final class MdnsLogProcess {
     private final Process process;
     private final CustomBufferedReader cbr;
 
