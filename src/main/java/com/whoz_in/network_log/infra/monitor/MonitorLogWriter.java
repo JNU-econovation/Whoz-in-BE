@@ -14,38 +14,37 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
-public class MonitorLogger {
-    @Qualifier("monitorTShark")
-    private final Process monitorTShark;
-    private final Set<String> macs = new HashSet<>();
+public class MonitorLogWriter {
+    private final MonitorLogProcess process;
+    private final MonitorLogParser parser;
     private final MonitorLogDAO repo;
-    @PostConstruct
-    public void startLogging() {
-        new Thread(this::processLogs).start();
-    }
+    private final MonitorConfig config;
 
-    private void processLogs() {
-        //TODO: NON-BLOCKING으로 변경
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(monitorTShark.getInputStream()))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] lineWords = line.split("\t");
-                if (lineWords.length != 2) return;
-                macs.add(lineWords[0]);
-                macs.add(lineWords[1]);
-            }
-            //TODO: 여기 도달하면 안됨
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException("monitor logger: tshark 출력 읽기 실패", e);
-        }
+    public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO repo, MonitorConfig config) {
+        this.parser = parser;
+        this.repo = repo;
+        this.config = config;
+        this.process = new MonitorLogProcess(config.getCommand(), config.getSudoPassword());
     }
-
     @Scheduled(fixedRate = 10000)
-    public void saveLogs(){
-        System.out.println("[monitor] 저장할 mac 개수: " + macs.size() + " - " +
+    private void saveLogs(){
+        System.out.println(
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+        Set<String> macs = new HashSet<>();
+        String line;
+        for(;;) {
+            try {
+                line = process.readLine();
+                if (line == null) break;
+                macs.addAll(parser.parse(line));
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
+        macs.remove("");
         repo.upsertAll(macs);
         macs.clear();
     }
