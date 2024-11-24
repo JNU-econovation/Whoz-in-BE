@@ -1,12 +1,15 @@
 package com.whoz_in.network_log.persistence;
 
 import com.whoz_in.network_log.common.BaseEntity;
+import com.whoz_in.network_log.infra.managed.arp.ArpLog;
 import com.whoz_in.network_log.infra.managed.mdns.MdnsLog;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,6 +44,21 @@ public class ManagedLog extends BaseEntity {
         return ManagedLog.builder()
                 .logId(new LogId(mac,ip))
                 .deviceName(device)
+                .build();
+    }
+
+    public static ManagedLog create(ArpLog log){
+        String mac = log.getMac();
+        String ip = log.getIp();
+        String device = log.getDevice();
+        String ssid = log.getSsid();
+        LocalDateTime createdDate = log.getCreatedDate();
+
+        return ManagedLog.builder()
+                .logId(new LogId(mac, ip))
+                .deviceName(device)
+                .wifiSsid(ssid)
+                .createdDate(Timestamp.valueOf(createdDate))
                 .build();
     }
 
