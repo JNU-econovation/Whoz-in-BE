@@ -1,6 +1,5 @@
 package com.whoz_in.network_log.infra.managed.arp;
 
-import java.util.Optional;
 import org.springframework.stereotype.Component;
 
 @Component
