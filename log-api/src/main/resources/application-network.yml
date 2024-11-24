@@ -1,0 +1,15 @@
+spring:
+  config:
+    activate:
+      on-profile: network
+
+network:
+  process:
+    command:
+      managed:
+        mdns: ${MDNS_MANAGED_COMMAND}
+        arp: ${ARP_MANAGED_COMMAND}
+      monitor: ${MONITOR_COMMAND}
+    password: ${SUDO_PASSWORD}
+  interface:
+    monitor: ${MONITOR_INTERFACE}
