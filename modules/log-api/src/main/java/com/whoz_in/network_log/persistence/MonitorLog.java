@@ -1,7 +1,6 @@
 package com.whoz_in.network_log.persistence;
 
 
-import com.whoz_in.network_log.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
