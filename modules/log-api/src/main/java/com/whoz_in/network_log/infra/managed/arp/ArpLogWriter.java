@@ -1,8 +1,9 @@
 package com.whoz_in.network_log.infra.managed.arp;
 
-import com.whoz_in.network_log.persistence.ManagedLog;
-import com.whoz_in.network_log.persistence.ManagedLogDAO;
-import com.whoz_in.network_log.persistence.ManagedLogRepository;
+
+import com.whoz_in.domain_jpa.log.managed.ManagedLog;
+import com.whoz_in.domain_jpa.log.managed.ManagedLogRepository;
+import com.whoz_in.network_log.infra.managed.ManagedLogDAO;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
