@@ -9,6 +9,7 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -17,46 +18,40 @@ public class ArpLogWriter {
     private final ManagedLogRepository repository;
     private final ManagedLogDAO managedLogDAO;
     private final ArpLogParser arpLogParser;
-    private final ArpConfig arpConfig;
+    private final ArpLogProcess arpLogProcess;
 
     private final Set<String> logs = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     public ArpLogWriter(ManagedLogRepository repository,
                         ManagedLogDAO managedLogDAO,
                         ArpLogParser arpLogParser,
-                        ArpConfig arpConfig) {
+                        ArpLogProcess arpLogProcess) {
         this.repository = repository;
         this.managedLogDAO = managedLogDAO;
         this.arpLogParser = arpLogParser;
-        this.arpConfig = arpConfig;
+        this.arpLogProcess = arpLogProcess;
     }
 
-    @PostConstruct
-    private void init() {
+    @Scheduled(fixedRate = 5000)
+    private void scan() {
         CompletableFuture<Set<String>> logCollect =
-                CompletableFuture.supplyAsync(() -> {
-                    ArpLogProcess arpLogProcess =
-                            new ArpLogProcess(
-                            arpConfig.getCommand(),
-                            arpConfig.getPassword());
-
-                    return arpLogProcess.start();
-                });
+                CompletableFuture.supplyAsync(arpLogProcess::start);
 
         Set<String> result = logCollect.join();
-        result.forEach(System.out::println);
-
         logs.addAll(result);
+
+        save();
     }
 
     //TODO: LogEntity들 저장
     private void save(){
         Set<ManagedLog> managedLogs = logs.stream()
+                .filter(arpLogParser::validate)
                 .map(arpLogParser::parse)
-                .map(opt -> {
-                    return ManagedLog.create(opt.orElse(null));
-                })
+                .map(ManagedLog::create)
                 .collect(Collectors.toSet());
+
+        System.out.println(String.format("[arp] 저장할 로그 개수 : %d", managedLogs.size()));
 
         managedLogDAO.bulkInsert(managedLogs);
     }
