@@ -18,7 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+log-api/.idea
 *.iws
 *.iml
 *.ipr
