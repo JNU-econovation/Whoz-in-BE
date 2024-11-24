@@ -23,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    compileOnly project(':modules:infrastructure:domain-jpa')
     //직접 의존
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
