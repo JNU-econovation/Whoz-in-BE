@@ -1,6 +1,7 @@
 package com.whoz_in.network_log.infra.managed.mdns;
 
 import com.whoz_in.domain_jpa.log.managed.ManagedLog;
+import com.whoz_in.network_log.infra.managed.ManagedLogConverter;
 import com.whoz_in.network_log.infra.managed.ManagedLogDAO;
 import java.util.HashSet;
 import java.util.List;
@@ -46,7 +47,9 @@ public class MdnsLogWriter {
         System.out.println("[managed] 저장할 로그 개수 : " + logs.size());
         //TODO: jpa entity -> native query
         //TODO: ssid 저장
-        Set<ManagedLog> entities = logs.stream().map(ManagedLog::create).collect(Collectors.toSet());
+        Set<ManagedLog> entities = logs.stream()
+                .map(ManagedLogConverter::toEntity)
+                .collect(Collectors.toSet());
         managedLogDAO.bulkInsert(entities);
         logs.clear();
     }
