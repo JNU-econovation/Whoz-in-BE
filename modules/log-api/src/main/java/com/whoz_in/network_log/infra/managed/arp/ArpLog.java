@@ -16,14 +16,14 @@ public class ArpLog {
 
     private String device;
     private String ssid;
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     public ArpLog(String mac, String ip, @Nullable String device, String ssid) {
         this.mac = mac;
         this.ip = ip;
         this.device = device;
         this.ssid = ssid;
-        this.createdDate = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
 }
