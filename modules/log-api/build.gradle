@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     compileOnly project(':modules:infrastructure:domain-jpa')
+    compileOnly project(':modules:infrastructure:log-writer')
     //직접 의존
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'
