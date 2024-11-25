@@ -4,6 +4,7 @@ import com.whoz_in.domain_jpa.log.managed.ManagedLog;
 import com.whoz_in.domain_jpa.log.managed.ManagedLog.LogId;
 import com.whoz_in.log_writer.infra.managed.arp.ArpLog;
 import com.whoz_in.log_writer.infra.managed.mdns.MdnsLog;
+import java.sql.Timestamp;
 
 public class ManagedLogConverter {
 
@@ -11,7 +12,7 @@ public class ManagedLogConverter {
         return ManagedLog.builder()
                 .logId(new LogId(log.getMac(), log.getIp()))
                 .deviceName(log.getDevice())
-                .createdAt(log.getCreatedAt())
+                .createdAt(Timestamp.valueOf(log.getCreatedAt()))
                 .build();
     }
 
@@ -19,7 +20,7 @@ public class ManagedLogConverter {
         return ManagedLog.builder()
                 .logId(new LogId(log.getMac(), log.getIp()))
                 .deviceName(log.getDevice())
-                .createdAt(log.getCreatedAt())
+                .createdAt(Timestamp.valueOf(log.getCreatedAt()))
                 .build();
     }
 
