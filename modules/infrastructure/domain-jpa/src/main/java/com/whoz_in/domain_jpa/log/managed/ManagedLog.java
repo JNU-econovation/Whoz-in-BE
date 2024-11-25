@@ -1,14 +1,11 @@
 package com.whoz_in.domain_jpa.log.managed;
 
 import com.whoz_in.domain_jpa.shared.BaseEntity;
-import com.whoz_in.network_log.infra.managed.arp.ArpLog;
-import com.whoz_in.network_log.infra.managed.mdns.MdnsLog;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -34,32 +31,6 @@ public class ManagedLog extends BaseEntity {
 
     @Column(name = TABLE_NAME + "_device_name", nullable = true)
     private String deviceName;
-
-    public static ManagedLog create(MdnsLog log) {
-        String mac = log.getMac();
-        String ip = log.getIp();
-        String device = log.getDevice();
-
-        return ManagedLog.builder()
-                .logId(new LogId(mac,ip))
-                .deviceName(device)
-                .build();
-    }
-
-    public static ManagedLog create(ArpLog log){
-        String mac = log.getMac();
-        String ip = log.getIp();
-        String device = log.getDevice();
-        String ssid = log.getSsid();
-        LocalDateTime createdAt = log.getCreatedDate();
-
-        return ManagedLog.builder()
-                .logId(new LogId(mac, ip))
-                .deviceName(device)
-                .wifiSsid(ssid)
-                .createdAt(createdAt)
-                .build();
-    }
 
     @Getter
     @AllArgsConstructor
