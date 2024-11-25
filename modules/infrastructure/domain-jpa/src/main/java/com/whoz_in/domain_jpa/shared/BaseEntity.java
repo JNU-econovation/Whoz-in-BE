@@ -3,6 +3,7 @@ package com.whoz_in.domain_jpa.shared;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -24,18 +25,18 @@ public abstract class BaseEntity {
 
   @Column(name = "created_at", nullable = false, updatable = false)
   @CreatedDate
-  private LocalDateTime createdAt;
+  private Timestamp createdAt;
 
   @Column(name = "updated_at", nullable = false)
   @LastModifiedDate
-  private LocalDateTime updatedAt;
+  private Timestamp updatedAt;
 
   @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
+  private Timestamp deletedAt;
 
   public void delete() {
     if (this.deletedAt == null) {
-      this.deletedAt = LocalDateTime.now();
+      this.deletedAt = Timestamp.valueOf(LocalDateTime.now());
     }
   }
 
