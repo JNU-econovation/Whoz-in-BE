@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly project(":modules:infrastructure:domain-jpa")
+    implementation project(":modules:infrastructure:domain-log-jpa")
 
     // 컴파일시에만 의존
     compileOnly 'jakarta.annotation:jakarta.annotation-api:2.1.1'
