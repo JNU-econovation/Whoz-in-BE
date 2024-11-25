@@ -16,18 +16,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ArpLogWriter {
 
-    private final ManagedLogRepository repository;
     private final ManagedLogDAO managedLogDAO;
     private final ArpLogParser arpLogParser;
     private final ArpLogProcess arpLogProcess;
 
     private final Set<String> logs = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-    public ArpLogWriter(ManagedLogRepository repository,
-                        ManagedLogDAO managedLogDAO,
+    public ArpLogWriter(ManagedLogDAO managedLogDAO,
                         ArpLogParser arpLogParser,
                         ArpLogProcess arpLogProcess) {
-        this.repository = repository;
         this.managedLogDAO = managedLogDAO;
         this.arpLogParser = arpLogParser;
         this.arpLogProcess = arpLogProcess;
