@@ -7,7 +7,7 @@ import com.whoz_in.network_log.infra.managed.mdns.MdnsLog;
 
 public class ManagedLogConverter {
 
-    public static ManagedLog from(MdnsLog log){
+    public static ManagedLog toEntity(MdnsLog log){
         return ManagedLog.builder()
                 .logId(new LogId(log.getMac(), log.getIp()))
                 .deviceName(log.getDevice())
@@ -15,7 +15,7 @@ public class ManagedLogConverter {
                 .build();
     }
 
-    public static ManagedLog from(ArpLog log){
+    public static ManagedLog toEntity(ArpLog log){
         return ManagedLog.builder()
                 .logId(new LogId(log.getMac(), log.getIp()))
                 .deviceName(log.getDevice())
