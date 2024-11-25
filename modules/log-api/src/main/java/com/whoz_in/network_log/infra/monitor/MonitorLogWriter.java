@@ -1,6 +1,5 @@
 package com.whoz_in.network_log.infra.monitor;
 
-import com.whoz_in.network_log.persistence.MonitorLogDAO;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
