@@ -15,6 +15,6 @@ include 'modules:infrastructure:log-writer'
 findProject(':modules:infrastructure:log-writer')?.name = 'log-writer'
 include 'modules:infrastructure:domain-log-jpa'
 findProject(':modules:infrastructure:domain-log-jpa')?.name = 'domain-log-jpa'
-include 'modules:infrastructure:domain-common-jpa'
-findProject(':modules:infrastructure:domain-common-jpa')?.name = 'domain-common-jpa'
+include 'modules:infrastructure:common-domain-jpa'
+findProject(':modules:infrastructure:domain-common-jpa')?.name = 'common-domain-jpa'
 
