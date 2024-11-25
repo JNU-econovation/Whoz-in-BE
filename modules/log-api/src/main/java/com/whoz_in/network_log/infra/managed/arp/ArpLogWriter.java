@@ -2,7 +2,9 @@ package com.whoz_in.network_log.infra.managed.arp;
 
 
 import com.whoz_in.domain_jpa.log.managed.ManagedLog;
+import com.whoz_in.domain_jpa.log.managed.ManagedLog.LogId;
 import com.whoz_in.domain_jpa.log.managed.ManagedLogRepository;
+import com.whoz_in.network_log.infra.managed.ManagedLogConverter;
 import com.whoz_in.network_log.infra.managed.ManagedLogDAO;
 import java.util.Collections;
 import java.util.Set;
@@ -48,7 +50,7 @@ public class ArpLogWriter {
         Set<ManagedLog> managedLogs = logs.stream()
                 .filter(arpLogParser::validate)
                 .map(arpLogParser::parse)
-                .map(ManagedLog::create)
+                .map(ManagedLogConverter::toEntity)
                 .collect(Collectors.toSet());
 
         System.out.println(String.format("[arp] 저장할 로그 개수 : %d", managedLogs.size()));
