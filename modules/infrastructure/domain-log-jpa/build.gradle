@@ -11,7 +11,9 @@ repositories {
 
 dependencies {
     compileOnly project(':modules:infrastructure:domain-jpa')
-    compileOnly project(':modules:infrastructure:domain-common-jpa')
+
+    // 강한 의존성 결합
+    compileOnly project(':modules:infrastructure:common-domain-jpa')
 
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
