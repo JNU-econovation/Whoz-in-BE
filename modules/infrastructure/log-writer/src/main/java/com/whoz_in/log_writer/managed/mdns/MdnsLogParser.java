@@ -1,6 +1,6 @@
-package com.whoz_in.log_writer.infra.managed.mdns;
+package com.whoz_in.log_writer.managed.mdns;
 
-import com.whoz_in.log_writer.infra.managed.ManagedLog;
+import com.whoz_in.log_writer.managed.ManagedLog;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 

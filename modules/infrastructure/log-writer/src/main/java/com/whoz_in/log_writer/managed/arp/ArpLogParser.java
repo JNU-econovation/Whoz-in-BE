@@ -1,6 +1,6 @@
-package com.whoz_in.log_writer.infra.managed.arp;
+package com.whoz_in.log_writer.managed.arp;
 
-import com.whoz_in.log_writer.infra.managed.ManagedLog;
+import com.whoz_in.log_writer.managed.ManagedLog;
 import org.springframework.stereotype.Component;
 
 @Component

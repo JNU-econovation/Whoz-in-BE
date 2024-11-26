@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.managed.mdns;
+package com.whoz_in.log_writer.managed.mdns;
 
 import java.util.Arrays;
 import java.util.List;
