@@ -1,27 +1,26 @@
-package com.whoz_in.log_writer.infra.managed.mdns;
+package com.whoz_in.log_writer.infra.managed;
 
-import jakarta.annotation.Nullable;
 import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
-//TODO: mac과 ip를 equals and hashcode
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public final class MdnsLog {
+public class ManagedLog {
     @EqualsAndHashCode.Include
     private final String mac;
     @EqualsAndHashCode.Include
     private final String ip;
-
-    private final String device;
+    private final String deviceName;
+    @Setter //Parser에선 로그로부터 ssid를 얻을 수 없기 때문에 추후에 설정할 수 있도록 함
+    private String ssid;
     private final LocalDateTime createdAt;
 
-    //기기 이름이 없는 경우 null
-    public MdnsLog(String mac, String ip, @Nullable String device) {
+    public ManagedLog(String mac, String ip, String deviceName) {
         this.mac = mac;
         this.ip = ip;
-        this.device = device;
+        this.deviceName = deviceName;
         this.createdAt = LocalDateTime.now();
     }
 }

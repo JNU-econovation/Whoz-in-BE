@@ -1,5 +1,6 @@
 package com.whoz_in.log_writer.infra.managed.arp;
 
+import com.whoz_in.log_writer.infra.managed.ManagedLog;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,9 +16,9 @@ public class ArpLogParser {
         return !log.split("\t")[1].matches(ipRegex);
     }
 
-    public ArpLog parse(String log){
+    public ManagedLog parse(String log){
         String[] splited = log.split("\t");
 
-        return new ArpLog(splited[0], splited[1], splited[2], "ECONO_5G");
+        return new ManagedLog(splited[0], splited[1], splited[2]);
     }
 }

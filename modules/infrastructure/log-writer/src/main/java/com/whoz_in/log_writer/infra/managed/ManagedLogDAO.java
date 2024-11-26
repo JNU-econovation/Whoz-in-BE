@@ -1,6 +1,5 @@
 package com.whoz_in.log_writer.infra.managed;
 
-import com.whoz_in.domain_jpa.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
@@ -17,13 +16,12 @@ public class ManagedLogDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public void bulkInsert(Collection<ManagedLog> logs) {
-        // TODO: Bulk Insert 구현
+    public void insertAll(Collection<ManagedLog> logs) {
         if(logs.size() > 0) {
             List<ManagedLog> logList = logs.stream().toList();
 
             String sql = new StringBuilder()
-                    .append("INSERT INTO " + ManagedLog.TABLE_NAME)
+                    .append("INSERT INTO " + "managed_log")
                     .append("(managed_log_mac, created_date, updated_date, managed_log_device_name, managed_log_ip, managed_log_wifi_ssid)")
                     .append("values (?, now(), now(), ?, ?, ?)")
                     .append(" ON DUPLICATE KEY UPDATE updated_date = CURRENT_TIMESTAMP")
@@ -45,10 +43,10 @@ public class ManagedLogDAO {
             @Override
             public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
                     ManagedLog networkLog = logList.get(i);
-                    preparedStatement.setString(1, networkLog.getLogId().getMac());
+                    preparedStatement.setString(1, networkLog.getMac());
                     preparedStatement.setString(2, networkLog.getDeviceName());
-                    preparedStatement.setString(3, networkLog.getLogId().getIp());
-                    preparedStatement.setString(4, networkLog.getWifiSsid());
+                    preparedStatement.setString(3, networkLog.getIp());
+                    preparedStatement.setString(4, networkLog.getSsid());
             }
 
             @Override

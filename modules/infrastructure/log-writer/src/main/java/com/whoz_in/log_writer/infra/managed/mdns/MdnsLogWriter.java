@@ -1,12 +1,10 @@
 package com.whoz_in.log_writer.infra.managed.mdns;
 
-import com.whoz_in.log_writer.infra.managed.ManagedLogConverter;
+import com.whoz_in.log_writer.infra.managed.ManagedLog;
 import com.whoz_in.log_writer.infra.managed.ManagedLogDAO;
-import com.whoz_in.domain_jpa.managed.ManagedLog;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +28,7 @@ public class MdnsLogWriter {
 
     @Scheduled(fixedRate = 10000)
     private void writeLogs() {
-        Set<MdnsLog> logs = new HashSet<>();
+        Set<ManagedLog> logs = new HashSet<>();
         this.processes.parallelStream()
                         .forEach(process-> {
                             String line;
@@ -45,12 +43,9 @@ public class MdnsLogWriter {
                             }
                         });
         System.out.println("[managed] 저장할 로그 개수 : " + logs.size());
-        //TODO: jpa entity -> native query
-        //TODO: ssid 저장
-        Set<ManagedLog> entities = logs.stream()
-                .map(ManagedLogConverter::toEntity)
-                .collect(Collectors.toSet());
-        managedLogDAO.bulkInsert(entities);
+
+        managedLogDAO.insertAll(logs);
+
         logs.clear();
     }
 
