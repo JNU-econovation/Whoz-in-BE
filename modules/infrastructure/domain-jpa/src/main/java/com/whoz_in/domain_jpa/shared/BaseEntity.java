@@ -1,4 +1,4 @@
-package com.whoz_in.common_domain_jpa;
+package com.whoz_in.domain_jpa.shared;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
