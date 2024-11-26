@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.monitor;
+package com.whoz_in.log_writer.monitor;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

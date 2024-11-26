@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.managed.mdns;
+package com.whoz_in.log_writer.managed.mdns;
 
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import java.io.BufferedReader;

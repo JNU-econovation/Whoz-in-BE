@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.managed.arp;
+package com.whoz_in.log_writer.managed.arp;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
