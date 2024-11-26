@@ -1,9 +1,8 @@
 package com.whoz_in.log_writer.infra.managed.arp;
 
 
-import com.whoz_in.log_writer.infra.managed.ManagedLogConverter;
+import com.whoz_in.log_writer.infra.managed.ManagedLog;
 import com.whoz_in.log_writer.infra.managed.ManagedLogDAO;
-import com.whoz_in.domain_jpa.managed.ManagedLog;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -19,7 +18,7 @@ public class ArpLogWriter {
     private final ArpLogParser arpLogParser;
     private final ArpLogProcess arpLogProcess;
 
-    private final Set<String> logs = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<String> logs = Collections.newSetFromMap(new ConcurrentHashMap<>()); //TODO: 일반 HashSet으로 변경
 
     public ArpLogWriter(ManagedLogDAO managedLogDAO,
                         ArpLogParser arpLogParser,
@@ -31,6 +30,7 @@ public class ArpLogWriter {
 
     @Scheduled(fixedRate = 5000)
     private void scan() {
+        //TODO: 비동기 제거
         CompletableFuture<Set<String>> logCollect =
                 CompletableFuture.supplyAsync(arpLogProcess::start);
 
@@ -45,12 +45,11 @@ public class ArpLogWriter {
         Set<ManagedLog> managedLogs = logs.stream()
                 .filter(arpLogParser::validate)
                 .map(arpLogParser::parse)
-                .map(ManagedLogConverter::toEntity)
                 .collect(Collectors.toSet());
 
         System.out.println(String.format("[arp] 저장할 로그 개수 : %d", managedLogs.size()));
 
-        managedLogDAO.bulkInsert(managedLogs);
+        managedLogDAO.insertAll(managedLogs);
     }
 
 }
