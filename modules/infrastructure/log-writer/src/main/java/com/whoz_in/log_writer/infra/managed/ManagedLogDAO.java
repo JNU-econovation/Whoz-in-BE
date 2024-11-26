@@ -1,6 +1,6 @@
 package com.whoz_in.log_writer.infra.managed;
 
-import com.whoz_in.domain_log_jpa.managed.ManagedLog;
+import com.whoz_in.domain_jpa.managed.ManagedLog;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Collection;
