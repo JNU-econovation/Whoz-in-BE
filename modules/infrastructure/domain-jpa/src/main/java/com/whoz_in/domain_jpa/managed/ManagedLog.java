@@ -1,6 +1,6 @@
-package com.whoz_in.domain_log_jpa.managed;
+package com.whoz_in.domain_jpa.managed;
 
-import com.whoz_in.common_domain_jpa.BaseEntity;
+import com.whoz_in.domain_jpa.shared.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;

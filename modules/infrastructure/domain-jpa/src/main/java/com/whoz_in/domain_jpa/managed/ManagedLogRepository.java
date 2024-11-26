@@ -1,4 +1,4 @@
-package com.whoz_in.domain_log_jpa.managed;
+package com.whoz_in.domain_jpa.managed;
 
 import java.util.List;
 import java.util.Optional;

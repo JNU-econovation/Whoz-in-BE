@@ -1,4 +1,4 @@
-package com.whoz_in.domain_log_jpa.monitor;
+package com.whoz_in.domain_jpa.monitor;
 
 
 import jakarta.persistence.Entity;
@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import com.whoz_in.common_domain_jpa.BaseEntity;
+import com.whoz_in.domain_jpa.shared.BaseEntity;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
