@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.monitor;
+package com.whoz_in.log_writer.monitor;
 
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import java.io.BufferedReader;

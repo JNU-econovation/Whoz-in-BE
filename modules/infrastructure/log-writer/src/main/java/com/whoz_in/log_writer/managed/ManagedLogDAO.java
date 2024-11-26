@@ -1,4 +1,4 @@
-package com.whoz_in.log_writer.infra.managed;
+package com.whoz_in.log_writer.managed;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
