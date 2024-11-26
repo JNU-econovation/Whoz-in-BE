@@ -2,6 +2,7 @@ package com.whoz_in.log_writer.infra.monitor;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.Set;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ public class MonitorLogDAO {
 
     @Modifying
     @Transactional
-    public void upsertAll(Set<String> macs) {
+    public void upsertAll(Collection<String> macs) {
         if (macs.isEmpty()) return;
         StringBuilder sql = new StringBuilder("INSERT INTO monitor_log (mac, created_date, updated_date) VALUES ");
         macs.forEach(mac -> sql.append(String.format("('%s', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),", mac)));
