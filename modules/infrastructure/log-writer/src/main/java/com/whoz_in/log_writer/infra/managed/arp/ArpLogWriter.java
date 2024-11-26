@@ -3,7 +3,7 @@ package com.whoz_in.log_writer.infra.managed.arp;
 
 import com.whoz_in.log_writer.infra.managed.ManagedLogConverter;
 import com.whoz_in.log_writer.infra.managed.ManagedLogDAO;
-import com.whozin.domain_log_jpa.managed.ManagedLog;
+import com.whoz_in.domain_log_jpa.managed.ManagedLog;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
