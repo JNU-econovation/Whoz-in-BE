@@ -1,10 +1,9 @@
-spring:
-  application:
-    name: WhozIn-Network
-
-  profiles:
-    group:
-      local:
-        - network
-        - jpa
-    active: local
+#spring:
+#  application:
+#    name: WhozIn-Network
+#
+#  profiles:
+#    group:
+#      local:
+#        - jpa
+#    active: local

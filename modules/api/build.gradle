@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation project(':modules:domain')
+    compileOnly project(':modules:domain')
 
     //for domain DI (runtimeOnly)
     runtimeOnly project(":modules:infrastructure:domain-jpa")
