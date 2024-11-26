@@ -10,16 +10,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly project(':modules:domain')
+    compileOnly project(':modules:infrastructure:domain-jpa')
 
     // 강한 의존성 결합
     compileOnly project(':modules:infrastructure:common-domain-jpa')
 
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
-
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 test {
