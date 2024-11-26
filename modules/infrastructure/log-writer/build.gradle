@@ -12,7 +12,7 @@ repositories {
 dependencies {
     compileOnly project(":modules:infrastructure:domain-log-jpa")
     compileOnly project(":modules:infrastructure:domain-jpa")
-    compileOnly project(":modules:infrastructure:domain-common-jpa")
+    compileOnly project(":modules:infrastructure:common-domain-jpa")
 
 
     // 컴파일시에만 의존

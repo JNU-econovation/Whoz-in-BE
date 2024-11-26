@@ -25,6 +25,7 @@ repositories {
 dependencies {
     compileOnly project(':modules:infrastructure:log-writer')
     compileOnly project(':modules:infrastructure:domain-log-jpa')
+    compileOnly project(':modules:infrastructure:common-domain-jpa')
 
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.4'
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
