@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: WhozIn-Network
+
+  profiles:
+    group:
+      local:
+        - log-writer
+    active: local
