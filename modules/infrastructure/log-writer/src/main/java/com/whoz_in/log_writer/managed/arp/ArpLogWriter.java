@@ -5,7 +5,6 @@ import com.whoz_in.log_writer.managed.ManagedLog;
 import com.whoz_in.log_writer.managed.ManagedLogDAO;
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -30,24 +29,18 @@ public class ArpLogWriter {
 
     @Scheduled(fixedRate = 5000)
     private void scan() {
-        //TODO: 비동기 제거
-        CompletableFuture<Set<String>> logCollect =
-                CompletableFuture.supplyAsync(arpLogProcess::start);
-
-        Set<String> result = logCollect.join();
-        logs.addAll(result);
+        logs.addAll(arpLogProcess.run());
 
         save();
     }
 
-    //TODO: LogEntity들 저장
     private void save(){
         Set<ManagedLog> managedLogs = logs.stream()
                 .filter(arpLogParser::validate)
                 .map(arpLogParser::parse)
                 .collect(Collectors.toSet());
 
-        System.out.println(String.format("[arp] 저장할 로그 개수 : %d", managedLogs.size()));
+        System.out.println(String.format("[managed - arp] 저장할 로그 개수 : %d", managedLogs.size()));
 
         managedLogDAO.insertAll(managedLogs);
     }
