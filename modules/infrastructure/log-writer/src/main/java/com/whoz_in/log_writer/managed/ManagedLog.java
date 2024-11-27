@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ManagedLog {
+public final class ManagedLog {
     @EqualsAndHashCode.Include
     private final String mac;
     @EqualsAndHashCode.Include

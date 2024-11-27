@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArpLogProcess {
+public final class ArpLogProcess {
 
     private final String command;
     private final String password;
