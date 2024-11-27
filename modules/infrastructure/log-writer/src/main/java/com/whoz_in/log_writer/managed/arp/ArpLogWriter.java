@@ -40,7 +40,7 @@ public class ArpLogWriter {
                 .map(arpLogParser::parse)
                 .collect(Collectors.toSet());
 
-        System.out.println(String.format("[arp] 저장할 로그 개수 : %d", managedLogs.size()));
+        System.out.println(String.format("[managed - arp] 저장할 로그 개수 : %d", managedLogs.size()));
 
         managedLogDAO.insertAll(managedLogs);
     }

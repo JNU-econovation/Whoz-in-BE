@@ -42,7 +42,7 @@ public class MdnsLogWriter {
                                 }
                             }
                         });
-        System.out.println("[managed] 저장할 로그 개수 : " + logs.size());
+        System.out.println("[managed - mdns] 저장할 로그 개수 : " + logs.size());
 
         managedLogDAO.insertAll(logs);
 
