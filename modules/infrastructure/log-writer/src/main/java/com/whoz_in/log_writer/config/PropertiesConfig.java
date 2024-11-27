@@ -1,4 +1,4 @@
-package com.whoz_in.network_log.config;
+package com.whoz_in.log_writer.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
