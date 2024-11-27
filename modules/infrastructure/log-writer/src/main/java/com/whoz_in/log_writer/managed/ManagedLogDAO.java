@@ -18,21 +18,20 @@ public class ManagedLogDAO {
     private final JdbcTemplate jdbcTemplate;
 
     public void insertAll(Collection<ManagedLog> logs) {
-        if(logs.size() > 0) {
-            List<ManagedLog> logList = logs.stream().toList();
+        if (logs.isEmpty()) return;
+        List<ManagedLog> logList = logs.stream().toList();
 
-            String sql = "INSERT INTO managed_log " +
-                    "(mac, created_at, updated_at, device_name, ip, ssid) " +
-                    "values (?, ?, ?, ?, ?, ?) " +
-                    "ON DUPLICATE KEY UPDATE updated_at = ?";
+        String sql = "INSERT INTO managed_log " +
+                "(mac, created_at, updated_at, device_name, ip, ssid) " +
+                "values (?, ?, ?, ?, ?, ?) " +
+                "ON DUPLICATE KEY UPDATE updated_at = ?";
 
-            try{
-                batchExecute(sql, logList);
-            } catch(DuplicateKeyException e){
-                System.err.println("[ERROR] Duplicate key: "+ e.getMessage());
-            } catch (Exception e){
-                System.err.println("[ERROR] Unexpected error: "+ e.getMessage());
-            }
+        try{
+            batchExecute(sql, logList);
+        } catch(DuplicateKeyException e){
+            System.err.println("[ERROR] Duplicate key: "+ e.getMessage());
+        } catch (Exception e){
+            System.err.println("[ERROR] Unexpected error: "+ e.getMessage());
         }
 
     }
