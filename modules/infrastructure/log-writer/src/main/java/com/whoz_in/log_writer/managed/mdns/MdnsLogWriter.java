@@ -2,8 +2,10 @@ package com.whoz_in.log_writer.managed.mdns;
 
 import com.whoz_in.log_writer.managed.ManagedLog;
 import com.whoz_in.log_writer.managed.ManagedLogDAO;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,7 @@ public class MdnsLogWriter {
 
     @Scheduled(fixedRate = 10000)
     private void writeLogs() {
-        Set<ManagedLog> logs = new HashSet<>();
+        Map<ManagedLog, ManagedLog> logs = new HashMap<>();
         this.processes.parallelStream()
                         .forEach(process-> {
                             String line;
@@ -36,7 +38,12 @@ public class MdnsLogWriter {
                                 try {
                                     line = process.readLine();
                                     if (line == null) return;
-                                    parser.parse(line).ifPresent(logs::add);
+                                    parser.parse(line).ifPresent(
+                                            log -> {
+                                                logs.put(log, log);
+                                                //TODO: ssid 설정
+                                            }
+                                    );
                                 } catch (Exception e){
                                     e.printStackTrace();
                                 }
@@ -44,7 +51,7 @@ public class MdnsLogWriter {
                         });
         System.out.println("[managed - mdns] 저장할 로그 개수 : " + logs.size());
 
-        managedLogDAO.insertAll(logs);
+        managedLogDAO.insertAll(logs.values());
 
         logs.clear();
     }
