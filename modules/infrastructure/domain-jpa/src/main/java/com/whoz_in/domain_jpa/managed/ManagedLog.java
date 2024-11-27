@@ -23,6 +23,7 @@ public class ManagedLog extends BaseEntity {
     @EmbeddedId
     private LogId logId;
 
+    @Column(nullable = false)
     private String ssid;
 
     private String deviceName;
