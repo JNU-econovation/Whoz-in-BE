@@ -36,9 +36,8 @@ public class MonitorLogWriter {
                 e.printStackTrace();
             }
         }
-
-        System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         macs.remove("");
+        System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         repo.upsertAll(macs);
         macs.clear();
     }

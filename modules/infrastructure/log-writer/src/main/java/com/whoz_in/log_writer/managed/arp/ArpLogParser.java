@@ -4,7 +4,7 @@ import com.whoz_in.log_writer.managed.ManagedLog;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArpLogParser {
+public final class ArpLogParser {
 
     private final String macRegex = "^([0-9A-Fa-f]{2}([-:])(?=[0-9A-Fa-f]{2}([-:]))[0-9A-Fa-f]{2}([-:])){5}[0-9A-Fa-f]{2}$|^[0-9A-Fa-f]{4}(\\.[0-9A-Fa-f]{4}){2}$";
     private final String ipRegex = "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
