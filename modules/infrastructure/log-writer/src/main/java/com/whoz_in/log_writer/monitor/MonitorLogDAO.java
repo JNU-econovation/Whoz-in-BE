@@ -1,25 +1,23 @@
 package com.whoz_in.log_writer.monitor;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import java.util.Collection;
-import org.springframework.data.jpa.repository.Modifying;
+import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@RequiredArgsConstructor
 public class MonitorLogDAO {
-    @PersistenceContext
-    private EntityManager em;
 
-    @Modifying
-    @Transactional
+    private final JdbcTemplate jdbcTemplate;
+
     public void upsertAll(Collection<String> macs) {
         if (macs.isEmpty()) return;
-        StringBuilder sql = new StringBuilder("INSERT INTO monitor_log (mac, created_date, updated_date) VALUES ");
-        macs.forEach(mac -> sql.append(String.format("('%s', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),", mac)));
-        sql.setLength(sql.length() - 1);
-        sql.append(" ON DUPLICATE KEY UPDATE updated_date = CURRENT_TIMESTAMP");
-        em.createNativeQuery(sql.toString()).executeUpdate();
+
+        String sql = "INSERT INTO monitor_log (mac, created_at, updated_at) VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP";
+        jdbcTemplate.batchUpdate(sql, macs, macs.size(),
+                (ps, mac) -> ps.setString(1, mac));
     }
+
+
 }
