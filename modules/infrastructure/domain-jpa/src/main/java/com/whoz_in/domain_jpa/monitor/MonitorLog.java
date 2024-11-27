@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 import com.whoz_in.domain_jpa.shared.BaseEntity;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MonitorLog extends BaseEntity {
     @Id
     private String mac;
