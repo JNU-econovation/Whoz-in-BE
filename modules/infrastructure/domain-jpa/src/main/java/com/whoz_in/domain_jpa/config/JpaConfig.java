@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @EnableJpaAuditing
-//멀티 모듈에서 명시적으로 엔티티와 JpaRepository의 위치를 지정하기 위함
-@EnableJpaRepositories(basePackages = {"com.whoz_in.domain", "com.whoz_in.common_domain_jpa"})
+//기본적으로 SpringApplication 모듈에서 찾기 때문에 이 모듈에서도 찾을 수 있도록 함
+@EnableJpaRepositories(basePackages = {"com.whoz_in.domain_jpa"})
 @EntityScan(basePackages = "com.whoz_in")
 public class JpaConfig {
 }
