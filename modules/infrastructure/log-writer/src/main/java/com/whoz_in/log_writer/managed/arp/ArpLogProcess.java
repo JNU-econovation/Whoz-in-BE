@@ -30,7 +30,7 @@ public class ArpLogProcess {
     }
 
     // 단발성 프로세스 이므로, start 를 호출하면 arp 로그를 받아오는 프로세스를 실행
-    public Set<String> start(){
+    public Set<String> run(){
         Set<String> logs = new HashSet<>();
 
         try {
