@@ -34,7 +34,6 @@ public class ArpLogWriter {
         save();
     }
 
-    //TODO: LogEntity들 저장
     private void save(){
         Set<ManagedLog> managedLogs = logs.stream()
                 .filter(arpLogParser::validate)
