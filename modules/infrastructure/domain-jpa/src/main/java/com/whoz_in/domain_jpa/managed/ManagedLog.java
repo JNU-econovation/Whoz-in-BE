@@ -14,22 +14,17 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@Table(name = ManagedLog.TABLE_NAME)
 @SuperBuilder(toBuilder = true)
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ManagedLog extends BaseEntity {
 
-    public static final String TABLE_NAME = "managed_log";
-
     @EmbeddedId
     private LogId logId;
 
-    @Column(name = TABLE_NAME + "_wifi_ssid", nullable = true)
-    private String wifiSsid;
+    private String ssid;
 
-    @Column(name = TABLE_NAME + "_device_name", nullable = true)
     private String deviceName;
 
     @Getter
@@ -38,10 +33,10 @@ public class ManagedLog extends BaseEntity {
     @Embeddable
     public static class LogId {
 
-        @Column(name = TABLE_NAME + "_mac", nullable = false)
+        @Column(name = "mac", nullable = false)
         private String mac;
 
-        @Column(name = TABLE_NAME + "_ip", nullable = false)
+        @Column(name = "ip", nullable = false)
         private String ip;
 
         @Override
