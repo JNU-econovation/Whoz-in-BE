@@ -4,14 +4,4 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
-
-network:
-  process:
-    command:
-      managed:
-        mdns: ${MDNS_MANAGED_COMMAND}
-        arp: ${ARP_MANAGED_COMMAND}
-      monitor: ${MONITOR_COMMAND}
-    password: ${SUDO_PASSWORD}
-  interface:
-    monitor: ${MONITOR_INTERFACE}
+sudo_password: ${SUDO_PASSWORD}
