@@ -17,8 +17,8 @@
       "interfaces": ["en0"]
     },
     "arp": {
-      "command": "sudo -S arp-scan --interface= --localnet",
-      "interfaces": []
+      "command": "sudo -S arp-scan --interface={{interface}} --localnet",
+      "interfaces": ["en0"]
     }
   }
 }

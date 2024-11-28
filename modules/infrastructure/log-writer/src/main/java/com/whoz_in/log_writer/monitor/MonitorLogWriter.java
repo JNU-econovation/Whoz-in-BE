@@ -1,24 +1,29 @@
 package com.whoz_in.log_writer.monitor;
 
+import com.whoz_in.log_writer.config.NetworkConfig;
+import com.whoz_in.log_writer.config.NetworkConfig.Monitor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MonitorLogWriter {
-    private final MonitorLogProcess process;
+    private MonitorLogProcess process; //교체될 수 있으므로 final X
     private final MonitorLogParser parser;
     private final MonitorLogDAO repo;
-    private final MonitorConfig config;
+    private final String sudoPassword;
+    private final Monitor monitor;
 
-    public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO repo, MonitorConfig config) {
+    public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO repo, NetworkConfig config, @Value("${sudo_password}") String sudoPassword) {
         this.parser = parser;
         this.repo = repo;
-        this.config = config;
-        this.process = new MonitorLogProcess(config.getCommand(), config.getSudoPassword());
+        this.monitor = config.getMonitor();
+        this.sudoPassword = sudoPassword;
+        this.process = new MonitorLogProcess(monitor.command(), sudoPassword);
     }
     @Scheduled(fixedRate = 10000)
     private void saveLogs(){

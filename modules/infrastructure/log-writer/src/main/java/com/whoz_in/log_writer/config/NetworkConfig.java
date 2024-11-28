@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,10 @@ public class NetworkConfig {
     private final List<Managed> mdnsList;
     private final List<Managed> arpList;
 
-    public NetworkConfig(ResourceLoader loader, ObjectMapper mapper) {
-        Resource resource = loader.getResource("classpath:/network.json");
+    @SuppressWarnings("unchecked")
+    public NetworkConfig(@Value("${spring.profiles.active:default}") String profile, ResourceLoader loader, ObjectMapper mapper) {
+        Resource resource = loader.getResource("classpath:/network-%s.json".formatted(profile));
+
         try {
             //JSON 파일 읽기
             Map<String, Object> map = mapper.readValue(resource.getFile(), Map.class);
@@ -40,12 +43,14 @@ public class NetworkConfig {
 
             // managed
             Map<String, Object> managedMap = (Map<String, Object>) map.get("managed");
+
             // mdns
             Map<String, Object> mdnsMap = (Map<String, Object>) managedMap.get("mdns");
             String mdnsCommand = (String) mdnsMap.get("command");
             this.mdnsList = ((List<String>) mdnsMap.get("interfaces")).stream()
                     .map(interfaceName->new Managed(interfaceName, interfaceInfo.get(interfaceName), generateCommand(mdnsCommand, interfaceName)))
                     .toList();
+
             // arp
             Map<String, Object> arpMap = (Map<String, Object>) managedMap.get("arp");
             String arpCommand = (String) arpMap.get("command");
