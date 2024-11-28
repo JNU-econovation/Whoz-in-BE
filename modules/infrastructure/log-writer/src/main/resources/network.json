@@ -1,0 +1,24 @@
+{
+  "interface_info": [
+    {
+      "name": "en0",
+      "ssid": "*"
+    }
+  ],
+
+  "monitor": {
+    "command": "tshark -l -i {{interface}} -T fields -e wlan.sa -e eth.src",
+    "interface": "en0"
+  },
+
+  "managed": {
+    "mdns": {
+      "command": "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name",
+      "interfaces": ["en0"]
+    },
+    "arp": {
+      "command": "sudo -S arp-scan --interface= --localnet",
+      "interfaces": []
+    }
+  }
+}
