@@ -36,6 +36,7 @@ public final class ManagedLogDAO {
 
     }
 
+    //TODO: 람다로 변경
     private void batchExecute(String sql, List<ManagedLog> logList){
         jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
             @Override
