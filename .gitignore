@@ -1,5 +1,5 @@
 #환경 설정 파일
-**/env.properties
+**/env*
 **/.DS_Store
 
 HELP.md
