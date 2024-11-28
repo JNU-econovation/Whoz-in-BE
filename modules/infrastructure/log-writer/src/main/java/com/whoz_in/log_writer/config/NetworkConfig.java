@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class NetworkConfig {
     // Getters and setters
-    private final Map<String, String> interfaceInfo; //k: name, v: ssid
+    private final Map<String, String> ssidInfo; //k: name, v: ssid
     private final Monitor monitor;
     private final List<Managed> mdnsList;
     private final List<Managed> arpList;
@@ -29,9 +29,8 @@ public class NetworkConfig {
             Map<String, Object> map = mapper.readValue(resource.getFile(), Map.class);
 
             //interface_info
-            List<Map<String, String>> interfaceInfoList = (List<Map<String, String>>) map.get(
-                    "interface_info");
-            this.interfaceInfo = interfaceInfoList.stream()
+            List<Map<String, String>> interfaceInfoList = (List<Map<String, String>>) map.get("ssid_info");
+            this.ssidInfo = interfaceInfoList.stream()
                     .collect(Collectors.toMap(info-> info.get("name"), info->info.get("ssid")));
 
             //monitor
@@ -48,14 +47,14 @@ public class NetworkConfig {
             Map<String, Object> mdnsMap = (Map<String, Object>) managedMap.get("mdns");
             String mdnsCommand = (String) mdnsMap.get("command");
             this.mdnsList = ((List<String>) mdnsMap.get("interfaces")).stream()
-                    .map(interfaceName->new Managed(interfaceName, interfaceInfo.get(interfaceName), generateCommand(mdnsCommand, interfaceName)))
+                    .map(interfaceName->new Managed(interfaceName, ssidInfo.get(interfaceName), generateCommand(mdnsCommand, interfaceName)))
                     .toList();
 
             // arp
             Map<String, Object> arpMap = (Map<String, Object>) managedMap.get("arp");
             String arpCommand = (String) arpMap.get("command");
             this.arpList = ((List<String>) arpMap.get("interfaces")).stream()
-                    .map(interfaceName->new Managed(interfaceName, interfaceInfo.get(interfaceName), generateCommand(arpCommand, interfaceName)))
+                    .map(interfaceName->new Managed(interfaceName, ssidInfo.get(interfaceName), generateCommand(arpCommand, interfaceName)))
                     .toList();
 
         } catch (IOException e) {
