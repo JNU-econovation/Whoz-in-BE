@@ -5,5 +5,6 @@ spring:
   profiles:
     group:
       local:
-        - log-writer
-    active: local
+      prod:
+    active: prod
+    include: log-writer
