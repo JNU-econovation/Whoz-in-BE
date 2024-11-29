@@ -47,8 +47,4 @@ public class ArpLogProcess extends TransientProcess {
 
         return logs;
     }
-
-    public boolean isAlive(){
-        return process.isAlive();
-    }
 }
