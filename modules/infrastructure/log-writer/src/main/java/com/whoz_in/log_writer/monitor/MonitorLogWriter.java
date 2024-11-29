@@ -24,7 +24,7 @@ public class MonitorLogWriter {
         this.sudoPassword = sudoPassword;
         this.process = new MonitorLogProcess(monitorInfo, sudoPassword);
     }
-    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs(){
         if (!process.isAlive()) {
             System.err.println("[monitor] 종료됨 : ERROR");

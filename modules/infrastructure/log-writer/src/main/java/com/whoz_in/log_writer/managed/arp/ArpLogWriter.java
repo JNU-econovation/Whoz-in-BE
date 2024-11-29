@@ -31,7 +31,7 @@ public class ArpLogWriter {
         this.sudoPassword = sudoPassword;
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 5000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
     private void scan() {
         List<ManagedLog> logs= arpList.stream()
                 .flatMap(arpInfo-> {
