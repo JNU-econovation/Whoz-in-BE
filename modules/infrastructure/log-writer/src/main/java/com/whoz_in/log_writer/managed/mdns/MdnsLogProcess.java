@@ -1,5 +1,6 @@
 package com.whoz_in.log_writer.managed.mdns;
 
+import com.whoz_in.log_writer.common.process.ContinuousProcess;
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import com.whoz_in.log_writer.managed.ManagedInfo;
 import java.io.BufferedReader;
@@ -9,11 +10,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-public class MdnsLogProcess {
+public class MdnsLogProcess extends ContinuousProcess {
     private final Process process;
     private final NonBlockingBufferedReader cbr;
 
-    //TODO: Info로 변경
     public MdnsLogProcess(ManagedInfo info, String sudoPassword) {
         try {
             new File("../error").mkdir(); //에러 처리 수정하면 이거 없앨게요..
@@ -33,8 +33,8 @@ public class MdnsLogProcess {
      * @return 프로세스의 출력에서 한 줄을 읽어들인다.
      * 읽을 줄이 없을경우 null을 출력한다.
      */
+    @Override
     public String readLine(){
-        //여기서 try catch
         try {
             return this.cbr.readLine();
         } catch (IOException e) {
@@ -42,10 +42,12 @@ public class MdnsLogProcess {
         }
     }
 
+    @Override
     public boolean isAlive(){
         return this.process.isAlive();
     }
 
+    @Override
     public void terminate(){
         this.process.destroy();
     }

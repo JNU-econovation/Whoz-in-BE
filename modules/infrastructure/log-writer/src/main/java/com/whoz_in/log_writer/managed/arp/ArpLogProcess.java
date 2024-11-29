@@ -1,5 +1,6 @@
 package com.whoz_in.log_writer.managed.arp;
 
+import com.whoz_in.log_writer.common.process.TransientProcess;
 import com.whoz_in.log_writer.managed.ManagedInfo;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -10,8 +11,7 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-//단발성 프로세스
-public class ArpLogProcess {
+public class ArpLogProcess extends TransientProcess {
     private final BufferedReader br;
     private final Process process;
     public ArpLogProcess(ManagedInfo info, String password) {
@@ -31,8 +31,9 @@ public class ArpLogProcess {
         }
     }
 
-    //단발성 프로세스로, 프로세스가 종료될 때까지 run은 블로킹된다.
-    public List<String> readLines(){
+
+    @Override
+    public List<String> results(){
         List<String> logs = new ArrayList<>();
 
         try {

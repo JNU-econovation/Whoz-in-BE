@@ -24,7 +24,7 @@ public class MonitorLogWriter {
         this.sudoPassword = sudoPassword;
         this.process = new MonitorLogProcess(monitorInfo, sudoPassword);
     }
-    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs(){
         if (!process.isAlive()) {
             System.err.println("[monitor] 종료됨 : ERROR");
@@ -41,7 +41,6 @@ public class MonitorLogWriter {
 
         System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         repo.upsertAll(macs);
-        macs.clear();
     }
 
 }
