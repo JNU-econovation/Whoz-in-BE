@@ -1,7 +1,6 @@
 package com.whoz_in.log_writer.monitor;
 
 import com.whoz_in.log_writer.config.NetworkConfig;
-import com.whoz_in.log_writer.config.NetworkConfig.Monitor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -16,32 +15,30 @@ public class MonitorLogWriter {
     private final MonitorLogParser parser;
     private final MonitorLogDAO repo;
     private final String sudoPassword;
-    private final Monitor monitor;
+    private final MonitorInfo monitorInfo;
 
     public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO repo, NetworkConfig config, @Value("${sudo_password}") String sudoPassword) {
         this.parser = parser;
         this.repo = repo;
-        this.monitor = config.getMonitor();
+        this.monitorInfo = config.getMonitorInfo();
         this.sudoPassword = sudoPassword;
-        this.process = new MonitorLogProcess(monitor.command(), sudoPassword);
+        this.process = new MonitorLogProcess(monitorInfo, sudoPassword);
     }
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedRate = 10000)
     private void saveLogs(){
-        System.out.println(
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-
+        if (!process.isAlive()) {
+            System.err.println("[monitor] 종료됨 : ERROR");
+            return;
+        }
         Set<String> macs = new HashSet<>();
         String line;
         for(;;) {
-            try {
-                line = process.readLine();
-                if (line == null) break;
-                macs.addAll(parser.parse(line));
-            } catch (Exception e){
-                e.printStackTrace();
-            }
+            line = process.readLine();
+            if (line == null) break;
+            macs.addAll(parser.parse(line));
         }
         macs.remove("");
+
         System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         repo.upsertAll(macs);
         macs.clear();

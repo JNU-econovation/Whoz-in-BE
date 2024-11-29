@@ -1,7 +1,7 @@
 package com.whoz_in.log_writer.managed.mdns;
 
 import com.whoz_in.log_writer.config.NetworkConfig;
-import com.whoz_in.log_writer.config.NetworkConfig.Managed;
+import com.whoz_in.log_writer.managed.ManagedInfo;
 import com.whoz_in.log_writer.managed.ManagedLog;
 import com.whoz_in.log_writer.managed.ManagedLogDAO;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MdnsLogWriter {
-    private final Map<Managed, MdnsLogProcess> processes;
+    private final Map<ManagedInfo, MdnsLogProcess> processes;
     private final MdnsLogParser parser;
     private final ManagedLogDAO dao;
     private final String sudoPassword;
@@ -25,39 +25,42 @@ public class MdnsLogWriter {
         this.sudoPassword = sudoPassword;
         this.processes = config.getMdnsList().parallelStream()
                 .collect(Collectors.toMap(
-                        managed -> managed,
-                        managedInfo -> new MdnsLogProcess(managedInfo.command(), sudoPassword)
+                        managedInfo -> managedInfo,
+                        managedInfo -> new MdnsLogProcess(managedInfo, sudoPassword)
                 ));
     }
 
-    //TODO: 프로세스 살아있는지 확인하고 재시동
-
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedRate = 10000)
     private void writeLogs() {
-        Map<ManagedLog, ManagedLog> logs = new HashMap<>();
-        this.processes.entrySet().parallelStream()
-                        .forEach(entry -> {
-                            Managed managed = entry.getKey();
-                            MdnsLogProcess process = entry.getValue();
-                            String line;
-                            for(;;) {
-                                try {
-                                    line = process.readLine();
-                                    if (line == null) return;
-                                    parser.parse(line).ifPresent(
-                                            log -> {
-                                                logs.put(log, log);
-                                                log.setSsid(managed.ssid());
-                                            }
-                                    );
-                                } catch (Exception e){
-                                    e.printStackTrace();
-                                }
-                            }
-                        });
-        System.out.println("[managed - mdns] 저장할 로그 개수 : " + logs.size());
+        List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
+                .filter(entry-> {
+                    ManagedInfo managedInfo = entry.getKey();
+                    MdnsLogProcess process = entry.getValue();
+                    boolean alive = process.isAlive();
+                    if (!alive) System.err.println("[managed - mdns(%s)] 종료됨 : ERROR".formatted(managedInfo.ssid()));
+                    return alive;})
+                .flatMap(entry -> {
+                    ManagedInfo managedInfo = entry.getKey();
+                    MdnsLogProcess process = entry.getValue();
+                    Map<ManagedLog, ManagedLog> logs = new HashMap<>();
+                    String line;
+                    for(;;) {
+                        line = process.readLine();
+                        if (line == null) {
+                            System.out.println("[managed - mdns(%s)] 저장할 로그 개수 : ".formatted(
+                                    managedInfo.ssid()) + logs.size());
+                            return logs.values().stream();
+                        }
+                        parser.parse(line).ifPresent(
+                                log -> {
+                                    logs.put(log, log);
+                                    log.setSsid(managedInfo.ssid());}
+                        );
+                    }
+                })
+                .toList();
 
-        dao.insertAll(logs.values());
+        dao.insertAll(totalLogs);
     }
 
 }
