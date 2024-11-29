@@ -60,6 +60,6 @@ public class ArpLogWriter {
                 })
                 .toList();
 
-        dao.insertAll(logs);
+        dao.upsertAll(logs);
     }
 }

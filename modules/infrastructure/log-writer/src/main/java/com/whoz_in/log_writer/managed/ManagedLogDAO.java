@@ -17,7 +17,7 @@ public final class ManagedLogDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public void insertAll(Collection<ManagedLog> logs) {
+    public void upsertAll(Collection<ManagedLog> logs) {
         if (logs.isEmpty()) return;
         List<ManagedLog> logList = logs.stream().toList();
 
