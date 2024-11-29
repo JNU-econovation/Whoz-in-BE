@@ -44,9 +44,7 @@ public class NetworkConfig {
             //monitor
             Map<String, String> monitorMap = (Map<String, String>) map.get("monitor");
             this.monitorInfo = new MonitorInfo(
-                    monitorMap.get("interface"),
-                    generateCommand(monitorMap.get("command"), monitorMap.get("interface"))
-            );
+                    generateCommand(monitorMap.get("command"), monitorMap.get("interface")));
             // managed
             Map<String, Object> managedMap = (Map<String, Object>) map.get("managed");
             // mdns
