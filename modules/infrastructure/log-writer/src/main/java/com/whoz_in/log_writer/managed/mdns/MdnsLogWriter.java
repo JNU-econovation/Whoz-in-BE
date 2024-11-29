@@ -60,7 +60,7 @@ public class MdnsLogWriter {
                 })
                 .toList();
 
-        dao.insertAll(totalLogs);
+        dao.upsertAll(totalLogs);
     }
 
 }
