@@ -30,7 +30,7 @@ public class MdnsLogWriter {
                 ));
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 10000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void writeLogs() {
         List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
                 .filter(entry-> {
@@ -60,7 +60,7 @@ public class MdnsLogWriter {
                 })
                 .toList();
 
-        dao.insertAll(totalLogs);
+        dao.upsertAll(totalLogs);
     }
 
 }

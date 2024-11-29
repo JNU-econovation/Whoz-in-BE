@@ -31,12 +31,12 @@ public class ArpLogWriter {
         this.sudoPassword = sudoPassword;
     }
 
-    @Scheduled(initialDelay = 10000, fixedRate = 5000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
     private void scan() {
         List<ManagedLog> logs= arpList.stream()
                 .flatMap(arpInfo-> {
                     ArpLogProcess proc = new ArpLogProcess(arpInfo, sudoPassword); //프로세스 실행
-                    List<String> lines = proc.readLines(); //프로세스의 모든 출력 가져오기
+                    List<String> lines = proc.results(); //프로세스의 모든 출력 가져오기
                     Set<ManagedLog> procLogs = lines.stream() //출력 라인들을 ManagedLog 변환하며 ssid도 넣어줌
                             .filter(parser::validate)
                             .map(line->{
@@ -60,6 +60,6 @@ public class ArpLogWriter {
                 })
                 .toList();
 
-        dao.insertAll(logs);
+        dao.upsertAll(logs);
     }
 }
