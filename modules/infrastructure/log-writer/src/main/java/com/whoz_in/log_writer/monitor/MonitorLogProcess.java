@@ -14,6 +14,7 @@ public final class MonitorLogProcess {
 
     public MonitorLogProcess(MonitorInfo info, String sudoPassword) {
         try {
+            new File("../error").mkdir(); //에러 처리 수정하면 이거 없앨게요..
             process = new ProcessBuilder(info.command().split(" "))
                     .redirectError(new File("../error", "monitor.txt"))
                     .start();
