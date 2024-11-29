@@ -1,5 +1,6 @@
 package com.whoz_in.log_writer.monitor;
 
+import com.whoz_in.log_writer.common.process.ContinuousProcess;
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,7 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 
-public final class MonitorLogProcess {
+public final class MonitorLogProcess extends ContinuousProcess {
     private final Process process;
     private final NonBlockingBufferedReader cbr;
 
@@ -28,6 +29,7 @@ public final class MonitorLogProcess {
         }
     }
 
+    @Override
     public String readLine(){
         try {
             return cbr.readLine();
@@ -36,11 +38,13 @@ public final class MonitorLogProcess {
         }
     }
 
+    @Override
     public boolean isAlive(){
         return this.process.isAlive();
     }
 
-    public void destory(){
+    @Override
+    public void terminate(){
         this.process.destroy();
     }
 }
