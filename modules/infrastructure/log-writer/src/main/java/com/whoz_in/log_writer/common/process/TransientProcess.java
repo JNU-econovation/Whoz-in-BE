@@ -28,7 +28,6 @@ public class TransientProcess {
     }
     public TransientProcess(String command, @Nullable String sudoPassword) {
         try {
-            System.out.println("command = " + command);
             this.process = new ProcessBuilder(command.split(" "))
                     .redirectErrorStream(true)
                     .start();
@@ -44,6 +43,7 @@ public class TransientProcess {
 
     //종료되었을 때 출력을 얻는다.
     //종료되지 않았다면 블로킹된다.
+    //출력이 없는 프로세스의 경우 빈 리스트를 출력한다.
     public List<String> results(){
         List<String> logs = new ArrayList<>();
 
