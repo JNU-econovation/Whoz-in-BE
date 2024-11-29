@@ -16,6 +16,7 @@ public class MdnsLogProcess {
     //TODO: Info로 변경
     public MdnsLogProcess(ManagedInfo info, String sudoPassword) {
         try {
+            new File("../error").mkdir(); //에러 처리 수정하면 이거 없앨게요..
             this.process = new ProcessBuilder(info.command().split(" "))
                     .redirectError(new File("../error", info.ssid()+".txt"))
                     .start();
