@@ -2,6 +2,7 @@ package com.whoz_in.log_writer.monitor;
 
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -11,22 +12,27 @@ public final class MonitorLogProcess {
     private final Process process;
     private final NonBlockingBufferedReader cbr;
 
-    public MonitorLogProcess(String command, String sudoPassword) {
-        ProcessBuilder pb = new ProcessBuilder(command.split(" "));
+    public MonitorLogProcess(MonitorInfo info, String sudoPassword) {
         try {
-            process = pb.start();
+            process = new ProcessBuilder(info.command().split(" "))
+                    .redirectError(new File("../error", "monitor.txt"))
+                    .start();
             this.cbr = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
 
             Writer writer = new OutputStreamWriter(process.getOutputStream());
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(command + " 실행 실패");
+            throw new RuntimeException(info.command() + " 실행 실패");
         }
     }
 
-    public String readLine() throws IOException {
-        return cbr.readLine();
+    public String readLine(){
+        try {
+            return cbr.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean isAlive(){
