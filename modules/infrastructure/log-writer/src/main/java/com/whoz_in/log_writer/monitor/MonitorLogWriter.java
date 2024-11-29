@@ -41,7 +41,6 @@ public class MonitorLogWriter {
 
         System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
         repo.upsertAll(macs);
-        macs.clear();
     }
 
 }
