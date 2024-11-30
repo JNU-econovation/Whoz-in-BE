@@ -32,7 +32,7 @@ public class NetworkConfig {
 
         //JSON 파일 읽기
         try {
-            map = mapper.readValue(resource.getFile(), Map.class);
+            map = mapper.readValue(resource.getInputStream(), Map.class);
         } catch (IOException e) {
             throw new RuntimeException(jsonPath + " 로드 실패");
         }
