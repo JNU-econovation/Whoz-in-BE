@@ -1,8 +1,9 @@
 {
-  "ssid_info": [
+  "network_interfaces": [
     {
       "name": "en0",
-      "ssid": "*"
+      "ssid": "*",
+      "mode": "managed"
     }
   ],
 

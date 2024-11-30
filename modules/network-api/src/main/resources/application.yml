@@ -6,5 +6,5 @@ spring:
     group:
       local:
       prod:
-    active: prod
+    active: local
     include: log-writer
