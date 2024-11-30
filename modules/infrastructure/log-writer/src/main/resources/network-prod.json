@@ -1,16 +1,24 @@
 {
-  "ssid_info": [
+  "network_interfaces": [
     {
       "name": "default_wlan",
-      "ssid": "JNU"
+      "ssid": "JNU",
+      "mode": "managed"
     },
     {
       "name": "usb_wlan0",
-      "ssid": "eduroam"
+      "ssid": "eduroam",
+      "mode": "managed"
     },
     {
       "name": "usb_wlan1",
-      "ssid": "ECONO_5G"
+      "ssid": "ECONO_5G",
+      "mode": "managed"
+    },
+    {
+      "name": "monitor_wlan",
+      "ssid": "",
+      "mode": "monitor"
     }
   ],
 
