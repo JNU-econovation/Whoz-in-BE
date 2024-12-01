@@ -36,6 +36,7 @@ public final class SystemValidator {
         checkCommandInstalled("tshark");
         checkCommandInstalled("arp-scan");
         checkCommandInstalled("iwconfig");
+        checkCommandInstalled("nmcli");
 
         checkNetworkInterfaces(getNetworkInterfaces(), config.getNetworkInterfaces());
         System.out.println("시스템 검증 완료");
