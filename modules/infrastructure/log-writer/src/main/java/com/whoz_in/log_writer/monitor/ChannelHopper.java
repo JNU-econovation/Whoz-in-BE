@@ -33,6 +33,7 @@ public class ChannelHopper {
             channelsToHop.addAll(channels);
         }
         Integer channel = channelsToHop.iterator().next();
+        channelsToHop.remove(channel);
         String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getName(), channel);
         new TransientProcess(hopCommand, sudoPassword);
     }
