@@ -29,7 +29,7 @@ public class ChannelHopper {
                     .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
                     .map(split -> Integer.parseInt(split[1]))
                     .collect(Collectors.toSet());
-            channels.stream().forEach(System.out::println);
+            System.out.println("[monitor] channels to hop : "+channels);
             channelsToHop.addAll(channels);
         }
         Integer channel = channelsToHop.iterator().next();
