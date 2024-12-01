@@ -2,14 +2,12 @@ package com.whoz_in.log_writer.common.process;
 
 import jakarta.annotation.Nullable;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.NoArgsConstructor;
 
 //실행 후 종료되어 모든 출력을 얻는 프로세스
 //출력 스트림을 통한 프로세스와의 상호작용은 없다.
