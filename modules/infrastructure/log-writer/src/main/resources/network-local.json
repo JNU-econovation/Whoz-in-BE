@@ -8,7 +8,7 @@
   ],
 
   "monitor": {
-    "command": "tshark -l -i {{interface}} -T fields -e wlan.sa -e eth.src",
+    "command": "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e eth.src",
     "interface": "en0"
   },
 

@@ -1,8 +1,6 @@
 package com.whoz_in.log_writer.monitor;
 
 import com.whoz_in.log_writer.config.NetworkConfig;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
