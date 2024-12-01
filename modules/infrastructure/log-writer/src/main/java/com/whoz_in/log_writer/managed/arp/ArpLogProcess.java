@@ -14,7 +14,9 @@ public class ArpLogProcess extends TransientProcess {
         try {
             //TODO: error 처리 로직 수정
             super.process = new ProcessBuilder(info.command().split(" "))
-                    .redirectError(Redirect.INHERIT)
+                    //arp-scan 실행할 때마다 아래와 같은 오류가 떠서 일단 Error Stream 출력 안하도록 했음
+                    // WARNING: Cannot open MAC/Vendor file ieee-oui.txt: Permission denied
+//                    .redirectError(Redirect.INHERIT)
                     .start();
             super.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(process.getOutputStream()));
