@@ -68,14 +68,17 @@ public final class SystemValidator {
         for (String line : iwconfigOutput) {
             line = line.trim();
             // 인터페이스 이름 감지 (인터페이스 정보 나오기 시작)
-            if (!line.startsWith(" ") && line.contains("IEEE 802.11")) {
+            if (!line.startsWith(" ") && (line.contains("IEEE 802.11") || line.contains("unassociated"))) {
                 if (currentName != null) {
                     // 첫 인터페이스가 아니면 모아둔 이전 인터페이스의 정보 저장
                     interfaces.add(new NetworkInterface(currentName, currentEssid, currentMode));
                 }
                 // 새 인터페이스 정보 모으기 & 초기화
                 currentName = line.split("\\s+")[0];
-                currentEssid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "").trim();
+                if (line.contains("ESSID:"))
+                    currentEssid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "").trim();
+                else
+                    currentEssid = "";
                 currentMode = null; // 초기화
             }
             // Mode 추출
