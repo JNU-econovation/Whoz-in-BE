@@ -19,6 +19,6 @@ public final class ArpLogParser {
     public ManagedLog parse(String log){
         String[] splited = log.split("\t");
 
-        return new ManagedLog(splited[0], splited[1], splited[2]);
+        return new ManagedLog(splited[0], splited[1], null);
     }
 }
