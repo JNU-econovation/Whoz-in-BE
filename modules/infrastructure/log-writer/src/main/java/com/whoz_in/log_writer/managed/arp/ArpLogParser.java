@@ -18,7 +18,7 @@ public final class ArpLogParser {
 
     public ManagedLog parse(String log){
         String[] splited = log.split("\t");
-
-        return new ManagedLog(splited[0], splited[1], null);
+        //ip mac devicename
+        return new ManagedLog(splited[1], splited[0], null);
     }
 }
