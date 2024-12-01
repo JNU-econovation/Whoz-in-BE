@@ -16,6 +16,7 @@ public class ChannelHopperConfig {
         this.sudoPassword = sudoPassword;
     }
 
+    //모니터 모드인 네트워크 인터페이스가 있을경우 채널을 이동하는 ChannelHopper를 빈으로 등록
     @Bean
     public ChannelHopper channelHopper(){
         return config.getNetworkInterfaces().stream()
