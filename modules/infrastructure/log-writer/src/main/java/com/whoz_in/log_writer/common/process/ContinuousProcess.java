@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import lombok.NoArgsConstructor;
 
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
