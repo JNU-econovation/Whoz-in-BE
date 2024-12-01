@@ -54,7 +54,7 @@ public final class SystemValidator {
         System.out.println("\n설정된 네트워크 인터페이스:");
         setting.forEach(System.out::println);
         if (!system.containsAll(setting))
-            throw new IllegalStateException("로깅하려는 인터페이스가 시스템에 존재하지 않습니다.");
+            throw new IllegalStateException("로깅하려는 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다.");
     }
 
     private List<NetworkInterface> getNetworkInterfaces() {
