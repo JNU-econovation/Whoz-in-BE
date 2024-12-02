@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.lang.ProcessBuilder.Redirect;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public final class MonitorLogProcess extends ContinuousProcess {
 
     public MonitorLogProcess(MonitorInfo info, String sudoPassword) {
@@ -22,7 +24,9 @@ public final class MonitorLogProcess extends ContinuousProcess {
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(info.command() + " 실행 실패");
+            String message = info.command() + " 실행 실패";
+            log.error(message);
+            throw new RuntimeException(message);
         }
     }
 }
