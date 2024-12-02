@@ -6,11 +6,13 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public final class ManagedLogDAO {
@@ -29,9 +31,9 @@ public final class ManagedLogDAO {
         try{
             batchExecute(sql, logList);
         } catch(DuplicateKeyException e){
-            System.err.println("[ERROR] Duplicate key: "+ e.getMessage());
+            log.error("Duplicate key: "+ e.getMessage());
         } catch (Exception e){
-            System.err.println("[ERROR] Unexpected error: "+ e.getMessage());
+            log.error("Unexpected error: "+ e.getMessage());
         }
 
     }

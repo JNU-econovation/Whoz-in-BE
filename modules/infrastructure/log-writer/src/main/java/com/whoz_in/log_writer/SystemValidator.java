@@ -6,11 +6,13 @@ import com.whoz_in.log_writer.common.process.TransientProcess;
 import com.whoz_in.log_writer.config.NetworkConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
-
+@Slf4j
 @Component
 public final class SystemValidator {
 
@@ -20,16 +22,15 @@ public final class SystemValidator {
             NetworkConfig config
     ) {
         context.getBeanFactory().destroyBean(this);
-
-        System.out.println("시스템 검증을 수행합니다..");
+        log.info("시스템 검증을 수행합니다");
         String osName = System.getProperty("os.name").toLowerCase();
-        System.out.println("운영체제: " + osName);
-        System.out.println("스프링 프로필: " + profile);
+        log.info("운영체제 - {}", osName);
+        log.info("스프링 프로필 - {}", profile);
 
         if (!profile.equals("prod") || !osName.contains("nux")){
             //log-writer는 리눅스에 맞춰서 개발되었으므로 검증도 리눅스 기준으로 수행한다.
             //따라서 리눅스가 아니면 개발 환경으로 취급하여 검증을 수행하지 않는다.
-            System.out.println("리눅스가 아니거나 스프링 프로필이 prod가 아니므로 시스템 검증을 수행하지 않습니다.");
+            log.info("리눅스가 아니거나 스프링 프로필이 prod가 아니므로 시스템 검증을 수행하지 않습니다.");
             return;
         }
 
@@ -39,27 +40,37 @@ public final class SystemValidator {
         checkCommandInstalled("nmcli");
 
         checkNetworkInterfaces(getNetworkInterfaces(), config.getNetworkInterfaces());
-        System.out.println("시스템 검증 완료");
+        log.info("시스템 검증 완료");
     }
 
     private void checkCommandInstalled(String command) {
         List<String> results = new TransientProcess("which " + command).results();
-        if (results.isEmpty() || !results.get(0).contains("/"))
+        if (results.isEmpty() || !results.get(0).contains("/")) {
+            log.error("{}가 설치되지 않았습니다.", command);
             throw new IllegalStateException(command + "가 설치되지 않았습니다.");
+        }
     }
 
     //세팅된 NetworkInterface들이 시스템에 존재하는 NetworkInterface인지 확인
     private void checkNetworkInterfaces(List<NetworkInterface> system, List<NetworkInterface> setting) {
-        System.out.println("시스템 네트워크 인터페이스:");
-        system.forEach(System.out::println);
-        System.out.println("\n설정된 네트워크 인터페이스:");
-        setting.forEach(System.out::println);
-        if (!system.containsAll(setting))
-            throw new IllegalStateException("로깅하려는 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다.");
+        log.info("시스템 네트워크 인터페이스 - \n{}",
+                system.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")));
+        log.info("설정된 네트워크 인터페이스 - \n{}",
+                setting.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")));
+        if (!system.containsAll(setting)) {
+            String e = "설정된 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다.";
+            log.error(e);
+            throw new IllegalStateException(e);
+        }
     }
 
     private List<NetworkInterface> getNetworkInterfaces() {
         List<String> iwconfigOutput = new TransientProcess("iwconfig").results();
+
         List<NetworkInterface> interfaces = new ArrayList<>();
 
         String currentName = null;
