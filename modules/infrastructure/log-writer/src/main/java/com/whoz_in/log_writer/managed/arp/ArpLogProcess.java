@@ -7,7 +7,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.lang.ProcessBuilder.Redirect;
 
 public class ArpLogProcess extends TransientProcess {
     public ArpLogProcess(ManagedInfo info, String password) {
