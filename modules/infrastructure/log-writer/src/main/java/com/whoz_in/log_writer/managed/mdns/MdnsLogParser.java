@@ -2,20 +2,22 @@ package com.whoz_in.log_writer.managed.mdns;
 
 import com.whoz_in.log_writer.managed.ManagedLog;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public final class MdnsLogParser {
     private static final String deviceRegex = "[가-힣\\w\\s'.()\\-]+(\\._[a-zA-Z0-9\\-]+)+\\.local";
 
     /**
-     * @param log
+     * @param logLine
      * 한 줄 데이터만 들어와야 한다. 들어온 데이터중 \t가 2개가 존재하는 것만 처리한다.
      */
-    public Optional<ManagedLog> parse(String log) {
-        String[] logParts = log.split("\t");
+    public Optional<ManagedLog> parse(String logLine) {
+        String[] logParts = logLine.split("\t");
         if(logParts.length < 2 || logParts[0].isEmpty() || logParts[1].isEmpty()) {
-            System.out.println("[managed] 파싱 실패 : " + log);
+            log.warn("[managed] failed to parse this : {}", logLine);
             return Optional.empty();
         }
 

@@ -9,10 +9,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ArpLogWriter {
     private final ManagedLogDAO dao;
@@ -52,10 +54,10 @@ public class ArpLogWriter {
                     따라서 Arp-scan의 경우 무조건 1개 이상의 결과가 나오므로 0개라면 실행 실패라고 판단한다.
                      */
                     if (procLogs.isEmpty()) {
-                        System.err.println("[managed - arp(%s)] 실행 실패 : ERROR".formatted(arpInfo.ssid()));
+                        log.warn("[managed - arp({})] 실행 실패 : ERROR", arpInfo.ssid());
                         return Stream.empty();
                     }
-                    System.out.println("[managed - arp(%s)] 저장할 로그 개수 : %d".formatted(arpInfo.ssid(), procLogs.size()));
+                    log.info("[managed - arp({})] log to save : {}", arpInfo.ssid(), procLogs.size());
                     return procLogs.stream();
                 })
                 .toList();
