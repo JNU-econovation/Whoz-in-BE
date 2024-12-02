@@ -14,7 +14,10 @@ public final class MdnsLogParser {
      */
     public Optional<ManagedLog> parse(String log) {
         String[] logParts = log.split("\t");
-        if(logParts.length < 2 || logParts[0].isEmpty() || logParts[1].isEmpty()) return Optional.empty();
+        if(logParts.length < 2 || logParts[0].isEmpty() || logParts[1].isEmpty()) {
+            System.out.println("[managed] 파싱 실패 : " + log);
+            return Optional.empty();
+        }
 
         String mac = logParts[0];
         String ip = logParts[1];
