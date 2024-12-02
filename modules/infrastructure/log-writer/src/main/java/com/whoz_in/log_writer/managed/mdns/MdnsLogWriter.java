@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class MdnsLogWriter {
     private final Map<ManagedInfo, MdnsLogProcess> processes;
@@ -37,7 +39,7 @@ public class MdnsLogWriter {
                     ManagedInfo managedInfo = entry.getKey();
                     MdnsLogProcess process = entry.getValue();
                     boolean alive = process.isAlive();
-                    if (!alive) System.err.println("[managed - mdns(%s)] 종료됨 : ERROR".formatted(managedInfo.ssid()));
+                    if (!alive) log.error("[managed - mdns({})] dead", managedInfo.ssid());
                     return alive;})
                 .flatMap(entry -> {
                     ManagedInfo managedInfo = entry.getKey();
@@ -47,14 +49,13 @@ public class MdnsLogWriter {
                     for(;;) {
                         line = process.readLine();
                         if (line == null) {
-                            System.out.println("[managed - mdns(%s)] 저장할 로그 개수 : ".formatted(
-                                    managedInfo.ssid()) + logs.size());
+                            log.info("[managed - mdns({})] log to save : {}", managedInfo.ssid(),  logs.size());
                             return logs.values().stream();
                         }
                         parser.parse(line).ifPresent(
-                                log -> {
-                                    logs.put(log, log);
-                                    log.setSsid(managedInfo.ssid());}
+                                mdnsLog -> {
+                                    logs.put(mdnsLog, mdnsLog);
+                                    mdnsLog.setSsid(managedInfo.ssid());}
                         );
                     }
                 })

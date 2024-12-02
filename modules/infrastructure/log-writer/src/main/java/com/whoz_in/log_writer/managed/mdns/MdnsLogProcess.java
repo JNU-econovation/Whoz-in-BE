@@ -22,6 +22,7 @@ public class MdnsLogProcess extends ContinuousProcess {
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
+
             throw new RuntimeException(info.command() + " 실행 실패");
         }
     }
