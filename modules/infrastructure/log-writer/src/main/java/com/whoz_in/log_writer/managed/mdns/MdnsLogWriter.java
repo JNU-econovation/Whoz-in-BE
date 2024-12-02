@@ -46,6 +46,7 @@ public class MdnsLogWriter {
                     String line;
                     for(;;) {
                         line = process.readLine();
+                        System.out.println("            mdns(%s): ".formatted(managedInfo.ssid()) + line);
                         if (line == null) {
                             System.out.println("[managed - mdns(%s)] 저장할 로그 개수 : ".formatted(
                                     managedInfo.ssid()) + logs.size());
