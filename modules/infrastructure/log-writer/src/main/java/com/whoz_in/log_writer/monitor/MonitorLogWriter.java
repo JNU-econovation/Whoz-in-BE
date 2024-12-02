@@ -3,10 +3,12 @@ package com.whoz_in.log_writer.monitor;
 import com.whoz_in.log_writer.config.NetworkConfig;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class MonitorLogWriter {
     private MonitorLogProcess process; //교체될 수 있으므로 final X
@@ -25,7 +27,7 @@ public class MonitorLogWriter {
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs(){
         if (!process.isAlive()) {
-            System.err.println("[monitor] 종료됨 : ERROR");
+            log.error("[monitor] dead");
             return;
         }
         Set<String> macs = new HashSet<>();
@@ -37,7 +39,7 @@ public class MonitorLogWriter {
         }
         macs.remove("");
 
-        System.out.println("[monitor] 저장할 mac 개수: " + macs.size());
+        log.info("[monitor] mac to save: " + macs.size());
         repo.upsertAll(macs);
     }
 
