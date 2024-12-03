@@ -1,0 +1,49 @@
+<configuration>
+  <springProfile name="!prod">
+    <root level="INFO">
+      <appender-ref ref="COLOR_CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="prod">
+    <root level="INFO">
+      <appender-ref ref="NO_COLOR_CONSOLE"/>
+      <appender-ref ref="FILE"/>
+    </root>
+  </springProfile>
+
+
+  <property name="COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] %boldWhite([%15.15thread]) %boldWhite([%36.36logger{36}]) %highlight(%-5level) - %msg%n"/>
+  <appender name="COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %-5level - %msg%n"/>
+  <appender name="NO_COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <!-- 작성 완료되기 전의 로그 파일 이름 -->
+    <file>${user.home}/whozin_log/temp.log</file>
+    <!-- 시간을 기준으로 파일을 관리함 -->
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- 하루 단위(%d)로 log를 남기며 최대 용량을 넘어가면 %i로 구별하여 저장 -->
+      <fileNamePattern>log_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <!-- 한 파일은 최대 10MB -->
+      <maxFileSize>10MB</maxFileSize>
+      <!-- 로그 파일들은 30일(%d)까지 유지-->
+      <maxHistory>30</maxHistory>
+      <!-- 모든 로그 파일은 5GB를 넘기면 안됨 -->
+      <totalSizeCap>5GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{HH:mm:ss}] [%thread] %level %logger{0} - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+</configuration>
