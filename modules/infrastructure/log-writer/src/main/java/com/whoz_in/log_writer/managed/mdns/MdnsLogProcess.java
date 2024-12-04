@@ -13,17 +13,6 @@ import java.lang.ProcessBuilder.Redirect;
 public class MdnsLogProcess extends ContinuousProcess {
 
     public MdnsLogProcess(ManagedInfo info, String sudoPassword) {
-        try {
-            super.process = new ProcessBuilder(info.command().split(" "))
-                    .redirectError(Redirect.INHERIT)
-                    .start();
-            super.br = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(this.process.getInputStream())));
-            Writer writer = new OutputStreamWriter(this.process.getOutputStream());
-            writer.write(sudoPassword + System.lineSeparator());
-            writer.flush();
-        } catch (IOException e) {
-
-            throw new RuntimeException(info.command() + " 실행 실패");
-        }
+        super(info.command(), sudoPassword);
     }
 }
