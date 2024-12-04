@@ -23,6 +23,7 @@ repositories {
 }
 
 dependencies {
+    implementation project(':modules:infrastructure:logging')
     implementation project(':modules:infrastructure:log-writer')
 
     implementation 'org.springframework.boot:spring-boot-starter'
