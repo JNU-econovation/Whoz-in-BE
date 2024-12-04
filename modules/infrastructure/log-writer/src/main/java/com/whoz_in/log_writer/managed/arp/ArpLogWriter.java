@@ -55,6 +55,7 @@ public class ArpLogWriter {
                     따라서 Arp-scan의 경우 무조건 1개 이상의 결과가 나오므로 0개라면 실행 실패라고 판단한다.
                      */
                     if (procLogs.isEmpty()) {
+                        //SystemValidator가 시스템의 네트워크 인터페이스가 올바른지 검증하기 때문에 여기서는 warn으로 로깅
                         log.warn("[managed - arp({})] 실행 실패 : ERROR", arpInfo.ssid());
                         return Stream.empty();
                     }
