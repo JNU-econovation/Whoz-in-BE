@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+//TODO: 에러 로그 어떻게 관리할지 생각. 일단 TransientProcess라서 구현 안함
 @Slf4j
 @Component
 public class ArpLogWriter {
