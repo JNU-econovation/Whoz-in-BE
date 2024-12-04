@@ -14,19 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 public final class MonitorLogProcess extends ContinuousProcess {
 
     public MonitorLogProcess(MonitorInfo info, String sudoPassword) {
-        try {
-            super.process = new ProcessBuilder(info.command().split(" "))
-                    .redirectError(Redirect.INHERIT)
-                    .start();
-            super.br = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
-
-            Writer writer = new OutputStreamWriter(process.getOutputStream());
-            writer.write(sudoPassword + System.lineSeparator());
-            writer.flush();
-        } catch (IOException e) {
-            String message = info.command() + " 실행 실패";
-            log.error(message);
-            throw new RuntimeException(message);
-        }
+        super(info.command(), sudoPassword);
     }
 }
