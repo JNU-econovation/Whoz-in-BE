@@ -8,70 +8,77 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.stereotype.Component;
+import org.springframework.scheduling.annotation.Scheduled;
 
+//서버 시작 시 시스템을 검증함
+//또한 주기적으로 시스템을 검증함
 @Slf4j
-@Component
 public final class SystemValidator {
-
+    private final NetworkConfig config;
     public SystemValidator(
-            @Value("${spring.profiles.active:default}") String profile,
-            ConfigurableApplicationContext context,
             NetworkConfig config
     ) {
-        context.getBeanFactory().destroyBean(this);
+        this.config = config;
         log.info("시스템 검증을 수행합니다");
-        String osName = System.getProperty("os.name").toLowerCase();
-        log.info("운영체제 - {}", osName);
-        log.info("스프링 프로필 - {}", profile);
 
-        if (!profile.equals("prod") || !osName.contains("nux")){
-            //log-writer는 리눅스에 맞춰서 개발되었으므로 검증도 리눅스 기준으로 수행한다.
-            //따라서 리눅스가 아니면 개발 환경으로 취급하여 검증을 수행하지 않는다.
-            log.info("리눅스가 아니거나 스프링 프로필이 prod가 아니므로 시스템 검증을 수행하지 않습니다.");
-            return;
-        }
-
+        //명령어 설치 확인
         checkCommandInstalled("tshark");
         checkCommandInstalled("arp-scan");
         checkCommandInstalled("iwconfig");
         checkCommandInstalled("nmcli");
 
-        checkNetworkInterfaces(getNetworkInterfaces(), config.getNetworkInterfaces());
+        //네트워크 인터페이스 확인
+        List<NetworkInterface> system = getSystemNetworkInterfaces();
+        List<NetworkInterface> setting = config.getNetworkInterfaces();
+        log.info("\n시스템 네트워크 인터페이스 - \n{}",
+                system.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")));
+        log.info("\n설정된 네트워크 인터페이스 - \n{}",
+                setting.stream()
+                        .map(Object::toString)
+                        .collect(Collectors.joining("\n")));
+        checkNetworkInterfaces(system, setting);
         log.info("시스템 검증 완료");
+    }
+
+    //정기적으로 시스템 상태를 검사합니다.
+    @Scheduled(fixedDelay = 30000)
+    private void checkRegularly(){
+        try {
+            checkNetworkInterfaces(getSystemNetworkInterfaces(), this.config.getNetworkInterfaces());
+        }catch (Exception e){
+            log.error(e.getMessage());
+        }
     }
 
     private void checkCommandInstalled(String command) {
         List<String> results = new TransientProcess("which " + command).results();
         if (results.isEmpty() || !results.get(0).contains("/")) {
-            log.error("{}가 설치되지 않았습니다.", command);
             throw new IllegalStateException(command + "가 설치되지 않았습니다.");
         }
     }
 
     //세팅된 NetworkInterface들이 시스템에 존재하는 NetworkInterface인지 확인
     private void checkNetworkInterfaces(List<NetworkInterface> system, List<NetworkInterface> setting) {
-        log.info("시스템 네트워크 인터페이스 - \n{}",
-                system.stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining("\n")));
-        log.info("설정된 네트워크 인터페이스 - \n{}",
-                setting.stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining("\n")));
-        if (!system.containsAll(setting)) {
-            String e = "설정된 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다.";
-            log.error(e);
-            throw new IllegalStateException(e);
+        List<NetworkInterface> unmatchedNIs = setting.stream()
+                .filter(ni -> !system.contains(ni))
+                .toList();
+
+        if (!unmatchedNIs.isEmpty()) {
+            throw new IllegalStateException(
+                    "시스템에 존재하지 않거나 상태가 올바르지 않습니다: \n" +
+                    unmatchedNIs.stream()
+                            .map(Object::toString)
+                            .collect(Collectors.joining("\n"))
+            );
         }
     }
 
-    private List<NetworkInterface> getNetworkInterfaces() {
-        List<String> iwconfigOutput = new TransientProcess("iwconfig").results();
-
+    private List<NetworkInterface> getSystemNetworkInterfaces() {
         List<NetworkInterface> interfaces = new ArrayList<>();
+
+        List<String> iwconfigOutput = new TransientProcess("iwconfig").results();
 
         String currentName = null;
         String currentEssid = null;
