@@ -8,24 +8,18 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 //실행 후 종료되어 모든 출력을 얻는 프로세스
 //출력 스트림을 통한 프로세스와의 상호작용은 없다.
 
 public class TransientProcess {
-    private static final Logger logger = LoggerFactory.getLogger(TransientProcess.class);
 
     protected BufferedReader br;
+    protected BufferedReader ebr;
     protected Process process;
 
     public TransientProcess() {}
 
-    public TransientProcess(Process process){
-        this.process = process;
-        this.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    }
     public TransientProcess(String command){
         this(command, null);
     }
@@ -35,6 +29,7 @@ public class TransientProcess {
                     .redirectErrorStream(true)
                     .start();
             this.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            this.ebr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
             if (sudoPassword==null) return;
             Writer writer = new OutputStreamWriter(this.process.getOutputStream());
             writer.write(sudoPassword + System.lineSeparator());
@@ -44,10 +39,26 @@ public class TransientProcess {
         }
     }
 
+    public String resultString(){
+        return resultString(this.br);
+    }
+
+    public List<String> resultList(){
+        return resultList(this.br);
+    }
+
+    public String errorResultString(){
+        return resultString(this.ebr);
+    }
+
+    public List<String> errorResultList(){
+        return resultList(this.ebr);
+    }
+
     //종료되었을 때 출력을 얻는다.
     //종료되지 않았다면 블로킹된다.
     //출력이 없는 프로세스의 경우 빈 리스트를 출력한다.
-    public List<String> results(){
+    private List<String> resultList(BufferedReader br){
         waitTermination();
         List<String> logs = new ArrayList<>();
         try {
@@ -62,7 +73,7 @@ public class TransientProcess {
     }
 
     //결과를 하나의 String으로 반환
-    public String resultsInOne(){
+    private String resultString(BufferedReader br){
         waitTermination();
         StringBuilder sb = new StringBuilder();
         try {
@@ -82,7 +93,7 @@ public class TransientProcess {
         try {
             process.waitFor();
         } catch (InterruptedException e) {
-            logger.error("인터럽트됨");
+            throw new RuntimeException(e);
         }
     }
 }
