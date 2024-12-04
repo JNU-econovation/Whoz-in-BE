@@ -2,7 +2,6 @@ package com.whoz_in.log_writer.common.process;
 
 import com.whoz_in.log_writer.common.util.NonBlockingBufferedReader;
 import jakarta.annotation.Nullable;
-import jakarta.annotation.PostConstruct;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
