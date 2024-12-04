@@ -53,7 +53,7 @@ public final class SystemValidator {
     }
 
     private void checkCommandInstalled(String command) {
-        List<String> results = new TransientProcess("which " + command).results();
+        List<String> results = new TransientProcess("which " + command).resultList();
         if (results.isEmpty() || !results.get(0).contains("/")) {
             throw new IllegalStateException(command + "가 설치되지 않았습니다.");
         }
@@ -78,7 +78,7 @@ public final class SystemValidator {
     private List<NetworkInterface> getSystemNetworkInterfaces() {
         List<NetworkInterface> interfaces = new ArrayList<>();
 
-        List<String> iwconfigOutput = new TransientProcess("iwconfig").results();
+        List<String> iwconfigOutput = new TransientProcess("iwconfig").resultList();
 
         String currentName = null;
         String currentEssid = null;

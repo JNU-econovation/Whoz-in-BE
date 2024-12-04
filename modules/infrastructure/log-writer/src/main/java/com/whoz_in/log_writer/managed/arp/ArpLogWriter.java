@@ -38,7 +38,7 @@ public class ArpLogWriter {
         List<ManagedLog> logs= arpList.stream()
                 .flatMap(arpInfo-> {
                     ArpLogProcess proc = new ArpLogProcess(arpInfo, sudoPassword); //프로세스 실행
-                    List<String> lines = proc.results(); //프로세스의 모든 출력 가져오기
+                    List<String> lines = proc.resultList(); //프로세스의 모든 출력 가져오기
                     Set<ManagedLog> procLogs = lines.stream() //출력 라인들을 ManagedLog 변환하며 ssid도 넣어줌
                             .filter(parser::validate)
                             .map(line->{

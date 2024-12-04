@@ -25,7 +25,7 @@ public class ChannelHopper {
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)
     public void hop(){
         if (!channelsToHop.iterator().hasNext()) {
-            Set<Integer> channels = new TransientProcess("nmcli -f SSID,CHAN dev wifi").results()
+            Set<Integer> channels = new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
                     .stream()
                     .map(line -> line.trim().split("\\s+"))
                     .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
