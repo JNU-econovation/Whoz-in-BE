@@ -7,16 +7,17 @@ import com.whoz_in.log_writer.managed.ManagedLogDAO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+//TODO: tshark가 종료되지 않더라도 오류가 발생할 수 있으려나? 이 경우에도 로깅이 필요하긴 함
 @Slf4j
 @Component
 public class MdnsLogWriter {
     private final Map<ManagedInfo, MdnsLogProcess> processes;
+    private final Map<ManagedInfo, Boolean> wasDead;
     private final MdnsLogParser parser;
     private final ManagedLogDAO dao;
     private final String sudoPassword;
@@ -25,11 +26,13 @@ public class MdnsLogWriter {
         this.dao = dao;
         this.parser = parser;
         this.sudoPassword = sudoPassword;
-        this.processes = config.getMdnsList().parallelStream()
-                .collect(Collectors.toMap(
-                        managedInfo -> managedInfo,
-                        managedInfo -> new MdnsLogProcess(managedInfo, sudoPassword)
-                ));
+        this.processes = new HashMap<>();
+        this.wasDead = new HashMap<>();
+        config.getMdnsList().parallelStream()
+                .forEach(managedInfo -> {
+                    this.processes.put(managedInfo, new MdnsLogProcess(managedInfo, sudoPassword));
+                    this.wasDead.put(managedInfo, false);
+                });
     }
 
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
@@ -39,7 +42,10 @@ public class MdnsLogWriter {
                     ManagedInfo managedInfo = entry.getKey();
                     MdnsLogProcess process = entry.getValue();
                     boolean alive = process.isAlive();
-                    if (!alive) log.error("[managed - mdns({})] dead", managedInfo.ssid());
+                    if (!alive && wasDead.get(managedInfo).equals(Boolean.FALSE)) {
+                        wasDead.put(managedInfo, true);
+                        log.error("[managed - mdns({})] dead :\n{}", managedInfo.ssid(), process.readErrorLines());
+                    }
                     return alive;})
                 .flatMap(entry -> {
                     ManagedInfo managedInfo = entry.getKey();

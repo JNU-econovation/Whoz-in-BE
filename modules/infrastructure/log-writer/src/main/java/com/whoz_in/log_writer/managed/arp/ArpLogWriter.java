@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+//TODO: 에러 로그 어떻게 관리할지 생각. 일단 TransientProcess라서 구현 안함
 @Slf4j
 @Component
 public class ArpLogWriter {
@@ -38,7 +39,7 @@ public class ArpLogWriter {
         List<ManagedLog> logs= arpList.stream()
                 .flatMap(arpInfo-> {
                     ArpLogProcess proc = new ArpLogProcess(arpInfo, sudoPassword); //프로세스 실행
-                    List<String> lines = proc.results(); //프로세스의 모든 출력 가져오기
+                    List<String> lines = proc.resultList(); //프로세스의 모든 출력 가져오기
                     Set<ManagedLog> procLogs = lines.stream() //출력 라인들을 ManagedLog 변환하며 ssid도 넣어줌
                             .filter(parser::validate)
                             .map(line->{
@@ -54,6 +55,7 @@ public class ArpLogWriter {
                     따라서 Arp-scan의 경우 무조건 1개 이상의 결과가 나오므로 0개라면 실행 실패라고 판단한다.
                      */
                     if (procLogs.isEmpty()) {
+                        //SystemValidator가 시스템의 네트워크 인터페이스가 올바른지 검증하기 때문에 여기서는 warn으로 로깅
                         log.warn("[managed - arp({})] 실행 실패 : ERROR", arpInfo.ssid());
                         return Stream.empty();
                     }
