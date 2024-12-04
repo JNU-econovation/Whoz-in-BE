@@ -22,7 +22,7 @@ public class ChannelHopper {
         this.monitor = monitor;
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 5000, fixedDelay = 1000)
     public void hop(){
         if (!channelsToHop.iterator().hasNext()) {
             Set<Integer> channels = new TransientProcess("nmcli -f SSID,CHAN dev wifi").results()
