@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MonitorLogWriter {
     private MonitorLogProcess process; //교체될 수 있으므로 final X
+    private Boolean wasDead = false;
     private final MonitorLogParser parser;
     private final MonitorLogDAO repo;
     private final String sudoPassword;
@@ -27,7 +28,10 @@ public class MonitorLogWriter {
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs(){
         if (!process.isAlive()) {
-            log.error("[monitor] dead");
+            if (wasDead.equals(Boolean.FALSE)) {
+                log.error("[monitor] dead:\n{}", process.readErrorLines());
+                wasDead = true;
+            }
             return;
         }
         Set<String> macs = new HashSet<>();

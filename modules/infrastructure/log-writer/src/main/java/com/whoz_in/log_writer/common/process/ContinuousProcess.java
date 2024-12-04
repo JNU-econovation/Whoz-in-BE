@@ -64,6 +64,15 @@ public class ContinuousProcess {
         }
     }
 
+    public String readErrorLines(){
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while((line = readErrorLine()) != null){
+            sb.append(line).append("\n");
+        }
+        return sb.toString();
+    }
+
     public boolean isAlive(){
         return this.process.isAlive();
     }
