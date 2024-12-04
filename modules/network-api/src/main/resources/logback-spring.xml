@@ -1,3 +1,5 @@
+<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
+
 <configuration>
   <springProfile name="!prod">
     <root level="INFO">
@@ -9,6 +11,7 @@
     <root level="INFO">
       <appender-ref ref="NO_COLOR_CONSOLE"/>
       <appender-ref ref="FILE"/>
+      <appender-ref ref="ASYNC_DISCORD_ERROR"/>
     </root>
   </springProfile>
 
@@ -43,6 +46,23 @@
     </rollingPolicy>
     <encoder>
       <pattern>[%d{HH:mm:ss}] [%thread] %level %logger{0} - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- AsyncAppender가 Appender를 감싸서 디스코드 로깅을 비동기로 처리할 수 있도록 함. -->
+  <appender name="ASYNC_DISCORD_ERROR" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="DISCORD_ERROR"/>
+  </appender>
+  <!-- Web hook url은 외부에 공개하면 안되므로 스프링 설정에서 읽어옴 -->
+  <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
+  <!-- 웹훅을 과도하게 사용하면 디스코드에서 제한을 거니까 ERROR 수준만 로깅 -->
+  <appender name="DISCORD_ERROR" class="com.whoz_in.logging.DiscordAppender">
+    <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <encoder>
+      <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
