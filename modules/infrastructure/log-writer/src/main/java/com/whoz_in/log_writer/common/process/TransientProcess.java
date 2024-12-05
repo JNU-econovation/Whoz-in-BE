@@ -35,7 +35,7 @@ public class TransientProcess {
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("TransientProcess 실행 실패 -", e);
         }
     }
 
