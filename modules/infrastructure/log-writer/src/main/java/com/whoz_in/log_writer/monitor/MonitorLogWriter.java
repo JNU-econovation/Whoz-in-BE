@@ -24,6 +24,7 @@ public class MonitorLogWriter {
         this.monitorInfo = config.getMonitorInfo();
         this.sudoPassword = sudoPassword;
         this.process = new MonitorLogProcess(monitorInfo, sudoPassword);
+        log.info("[monitor] started");
     }
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs(){
