@@ -1,81 +1,16 @@
-package com.whoz_in.log_writer;
-
+package com.whoz_in.log_writer.system_validator;
 
 import com.whoz_in.log_writer.common.NetworkInterface;
 import com.whoz_in.log_writer.common.process.TransientProcess;
-import com.whoz_in.log_writer.config.NetworkConfig;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-//서버 시작 시 시스템을 검증함
-//또한 주기적으로 시스템을 검증함
-@Slf4j
-public final class SystemValidator {
-    private final NetworkConfig config;
-    public SystemValidator(
-            NetworkConfig config
-    ) {
-        this.config = config;
-        log.info("시스템 검증을 수행합니다");
-
-        //명령어 설치 확인
-        checkCommandInstalled("tshark");
-        checkCommandInstalled("arp-scan");
-        checkCommandInstalled("iwconfig");
-        checkCommandInstalled("nmcli");
-
-        //네트워크 인터페이스 확인
-        List<NetworkInterface> system = getSystemNetworkInterfaces();
-        List<NetworkInterface> setting = config.getNetworkInterfaces();
-        log.info("\n시스템 네트워크 인터페이스 - \n{}",
-                system.stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining("\n")));
-        log.info("\n설정된 네트워크 인터페이스 - \n{}",
-                setting.stream()
-                        .map(Object::toString)
-                        .collect(Collectors.joining("\n")));
-        checkNetworkInterfaces(system, setting);
-        log.info("시스템 검증 완료");
-    }
-
-    //정기적으로 시스템 상태를 검사합니다.
-    @Scheduled(fixedDelay = 30000)
-    private void checkRegularly(){
-        try {
-            checkNetworkInterfaces(getSystemNetworkInterfaces(), this.config.getNetworkInterfaces());
-        }catch (Exception e){
-            log.error(e.getMessage());
-        }
-    }
-
-    private void checkCommandInstalled(String command) {
-        List<String> results = new TransientProcess("which " + command).resultList();
-        if (results.isEmpty() || !results.get(0).contains("/")) {
-            throw new IllegalStateException(command + "가 설치되지 않았습니다.");
-        }
-    }
-
-    //세팅된 NetworkInterface들이 시스템에 존재하는 NetworkInterface인지 확인
-    private void checkNetworkInterfaces(List<NetworkInterface> system, List<NetworkInterface> setting) {
-        List<NetworkInterface> unmatchedNIs = setting.stream()
-                .filter(ni -> !system.contains(ni))
-                .toList();
-
-        if (!unmatchedNIs.isEmpty()) {
-            throw new IllegalStateException(
-                    "시스템에 존재하지 않거나 상태가 올바르지 않습니다: \n" +
-                    unmatchedNIs.stream()
-                            .map(Object::toString)
-                            .collect(Collectors.joining("\n"))
-            );
-        }
-    }
-
-    private List<NetworkInterface> getSystemNetworkInterfaces() {
+//iwconfig의 출력을 파싱하여 네트워크 인터페이스들을 반환함
+@Component
+public class SystemNetworkInterfaces {
+    //최신 정보를 가져온다.
+    public List<NetworkInterface> getLatest() {
         List<NetworkInterface> interfaces = new ArrayList<>();
 
         List<String> iwconfigOutput = new TransientProcess("iwconfig").resultList();
@@ -112,7 +47,6 @@ public final class SystemValidator {
         }
         return interfaces;
     }
-}
 
 
 /*
@@ -149,4 +83,5 @@ List<String> iwconfigOutput = List.of(
         "          Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0",
         "          Tx excessive retries:0  Invalid misc:0   Missed beacon:0"
 );
- */
+*/
+}
