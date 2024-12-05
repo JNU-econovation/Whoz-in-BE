@@ -24,6 +24,7 @@ public class ChannelHopper {
 
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)
     public void hop(){
+        //hopping할 채널이 없을경우 채널 불러오기
         if (!channelsToHop.iterator().hasNext()) {
             Set<Integer> channels = new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
                     .stream()
@@ -34,9 +35,11 @@ public class ChannelHopper {
             log.info("channels to hop : "+channels);
             channelsToHop.addAll(channels);
         }
+        //hop channel
         Integer channel = channelsToHop.iterator().next();
-        channelsToHop.remove(channel);
         String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getName(), channel);
         new TransientProcess(hopCommand, sudoPassword);
+        //hopping된 채널 삭제
+        channelsToHop.remove(channel);
     }
 }
