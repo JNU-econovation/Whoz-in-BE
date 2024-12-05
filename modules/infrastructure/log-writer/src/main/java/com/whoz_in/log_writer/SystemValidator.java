@@ -46,7 +46,9 @@ public final class SystemValidator {
     @Scheduled(fixedDelay = 30000)
     private void checkRegularly(){
         try {
+            log.info("시스템 검증을 시작합니다.");
             checkNetworkInterfaces(getSystemNetworkInterfaces(), this.config.getNetworkInterfaces());
+            log.info("시스템 검증이 완료되었습니다.");
         }catch (Exception e){
             log.error(e.getMessage());
         }
