@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class ValidationResult {
+//Validator가 검증 실패한 내용을 담는 객체
+public final class ValidationResult {
     private final List<String> errors;
 
     public ValidationResult() {
