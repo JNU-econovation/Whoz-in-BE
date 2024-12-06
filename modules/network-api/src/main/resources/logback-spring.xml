@@ -30,7 +30,7 @@
     </encoder>
   </appender>
 
-  <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <!-- 작성 완료되기 전의 로그 파일 이름 -->
     <file>${user.home}/whozin_log/temp.log</file>
     <!-- 시간을 기준으로 파일을 관리함 -->
