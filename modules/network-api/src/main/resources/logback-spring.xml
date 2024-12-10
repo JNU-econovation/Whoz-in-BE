@@ -33,7 +33,7 @@
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <!-- 작성 완료되기 전의 로그 파일 이름 -->
     <file>${user.home}/whozin_log/temp.log</file>
-    <!-- 시간을 기준으로 파일을 관리함 -->
+    <!-- 시간과 파일 크기를 기준으로 파일을 관리함 -->
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <!-- 하루 단위(%d)로 log를 남기며 최대 용량을 넘어가면 %i로 구별하여 저장 -->
       <fileNamePattern>${user.home}/whozin_log/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
