@@ -45,7 +45,7 @@ public class MdnsLogWriter {
                     boolean alive = process.isAlive();
                     if (!alive && wasDead.get(managedInfo).equals(Boolean.FALSE)) {
                         wasDead.put(managedInfo, true);
-                        log.error("[managed - mdns({})] dead :\n{}", managedInfo.ssid(), process.readErrorLines());
+                        log.error("[managed - mdns({})] dead :\n{}\n{}", managedInfo.ssid(), "에러 스트림 내용:", process.readErrorLines());
                     }
                     return alive;})
                 .flatMap(entry -> {
