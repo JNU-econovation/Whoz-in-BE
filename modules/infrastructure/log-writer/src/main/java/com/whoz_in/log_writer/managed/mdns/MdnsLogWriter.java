@@ -28,7 +28,7 @@ public class MdnsLogWriter {
         this.sudoPassword = sudoPassword;
         this.processes = new HashMap<>();
         this.wasDead = new HashMap<>();
-        config.getMdnsList().parallelStream()
+        config.getMdnsList()
                 .forEach(managedInfo -> {
                     this.processes.put(managedInfo, new MdnsLogProcess(managedInfo, sudoPassword));
                     log.info("[managed - mdns({})] started", managedInfo.ssid());
