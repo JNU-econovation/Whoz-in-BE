@@ -30,7 +30,7 @@ public class MonitorLogWriter {
     private void saveLogs(){
         if (!process.isAlive()) {
             if (wasDead.equals(Boolean.FALSE)) {
-                log.error("[monitor] dead:\n{}", process.readErrorLines());
+                log.error("[monitor] dead :\n{}\n{}", "에러 스트림 내용:", process.readErrorLines());
                 wasDead = true;
             }
             return;
