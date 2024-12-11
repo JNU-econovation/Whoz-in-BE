@@ -28,7 +28,7 @@ public class MdnsLogWriter {
         this.sudoPassword = sudoPassword;
         this.processes = new HashMap<>();
         this.wasDead = new HashMap<>();
-        config.getMdnsList().parallelStream()
+        config.getMdnsList()
                 .forEach(managedInfo -> {
                     this.processes.put(managedInfo, new MdnsLogProcess(managedInfo, sudoPassword));
                     log.info("[managed - mdns({})] started", managedInfo.ssid());
@@ -45,7 +45,7 @@ public class MdnsLogWriter {
                     boolean alive = process.isAlive();
                     if (!alive && wasDead.get(managedInfo).equals(Boolean.FALSE)) {
                         wasDead.put(managedInfo, true);
-                        log.error("[managed - mdns({})] dead :\n{}", managedInfo.ssid(), process.readErrorLines());
+                        log.error("[managed - mdns({})] dead :\n{}\n{}", managedInfo.ssid(), "에러 스트림 내용:", process.readErrorLines());
                     }
                     return alive;})
                 .flatMap(entry -> {
