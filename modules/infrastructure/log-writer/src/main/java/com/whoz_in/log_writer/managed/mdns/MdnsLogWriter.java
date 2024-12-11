@@ -7,6 +7,7 @@ import com.whoz_in.log_writer.managed.ManagedLogDAO;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MdnsLogWriter {
     private final Map<ManagedInfo, MdnsLogProcess> processes;
-    private final Map<ManagedInfo, Boolean> wasDead;
+    private final Map<ManagedInfo, Boolean> dead;
     private final MdnsLogParser parser;
     private final ManagedLogDAO dao;
     private final String sudoPassword;
@@ -27,13 +28,8 @@ public class MdnsLogWriter {
         this.parser = parser;
         this.sudoPassword = sudoPassword;
         this.processes = new HashMap<>();
-        this.wasDead = new HashMap<>();
-        config.getMdnsList()
-                .forEach(managedInfo -> {
-                    this.processes.put(managedInfo, new MdnsLogProcess(managedInfo, sudoPassword));
-                    log.info("[managed - mdns({})] started", managedInfo.ssid());
-                    this.wasDead.put(managedInfo, false);
-                });
+        this.dead = new HashMap<>();
+        config.getMdnsList().forEach(this::startProcess);
     }
 
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
@@ -43,9 +39,13 @@ public class MdnsLogWriter {
                     ManagedInfo managedInfo = entry.getKey();
                     MdnsLogProcess process = entry.getValue();
                     boolean alive = process.isAlive();
-                    if (!alive && wasDead.get(managedInfo).equals(Boolean.FALSE)) {
-                        wasDead.put(managedInfo, true);
-                        log.error("[managed - mdns({})] dead :\n{}\n{}", managedInfo.ssid(), "에러 스트림 내용:", process.readErrorLines());
+                    //프로세스가 죽었다는 것을 인지했을때만 아래 로직을 실행
+                    if (!alive && dead.get(managedInfo).equals(Boolean.FALSE)) {
+                        dead.put(managedInfo, true);
+                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", managedInfo.ssid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
+                        log.error("[managed - mdns({})] 프로세스를 재실행합니다.", managedInfo.ssid());
+                        //프로세스 실행은 논블로킹
+                        new Thread(()->startProcess(managedInfo)).start();
                     }
                     return alive;})
                 .flatMap(entry -> {
@@ -70,5 +70,14 @@ public class MdnsLogWriter {
 
         dao.upsertAll(totalLogs);
     }
+
+    private void startProcess(ManagedInfo info){
+        Optional.ofNullable(this.processes.get(info)).ifPresent(MdnsLogProcess::terminate);
+        MdnsLogProcess process = new MdnsLogProcess(info, sudoPassword);
+        this.processes.put(info, process);
+        log.info("[managed - mdns({})] 프로세스 실행 완료", info.ssid());
+        this.dead.put(info, false);
+    }
+
 
 }
