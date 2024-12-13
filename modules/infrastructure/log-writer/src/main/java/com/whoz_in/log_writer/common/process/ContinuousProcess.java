@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
@@ -45,6 +47,19 @@ public class ContinuousProcess {
     public String readLine(){
         try {
             return this.br.readLine();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<String> readLines() {
+        List<String> lines = new ArrayList<>();
+        try {
+            String line;
+            while((line=this.br.readLine()) != null) {
+                lines.add(line);
+            }
+            return lines;
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -16,16 +16,16 @@ public class MonitorLogWriter {
     private MonitorLogProcess process; //교체될 수 있으므로 final X
     private boolean isProcDead;
     private final MonitorLogParser parser;
-    private final MonitorLogDAO repo;
+    private final MonitorLogDAO dao;
     private final String sudoPassword;
     private final MonitorInfo monitorInfo;
     private final SystemNetworkInterfaces systemNIs;
 
-    public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO repo, NetworkConfig config,
+    public MonitorLogWriter(MonitorLogParser parser, MonitorLogDAO dao, NetworkConfig config,
             @Value("${sudo_password}") String sudoPassword,
             SystemNetworkInterfaces systemNIs) {
         this.parser = parser;
-        this.repo = repo;
+        this.dao = dao;
         this.monitorInfo = config.getMonitorInfo();
         this.sudoPassword = sudoPassword;
         this.systemNIs = systemNIs;
@@ -36,19 +36,18 @@ public class MonitorLogWriter {
     private void saveLogs(){
         //프로세스 죽었으면 기록 안함
         if (!process.isAlive()) return;
+
         Set<String> macs = new HashSet<>();
-        String line;
-        for(;;) {
-            line = process.readLine();
-            if (line == null) break;
-            macs.addAll(parser.parse(line));
-        }
+        process.readLines().stream()
+                .map(parser::parse)
+                .forEach(macs::addAll);
         macs.remove("");
 
         log.info("[monitor] mac to save: " + macs.size());
-        repo.upsertAll(macs);
+        dao.upsertAll(macs);
     }
 
+    //프로세스 죽었으면 에러 내용을 기록하고 프로세스 재실행
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void checkProcess(){
         if (process.isAlive()) return;
