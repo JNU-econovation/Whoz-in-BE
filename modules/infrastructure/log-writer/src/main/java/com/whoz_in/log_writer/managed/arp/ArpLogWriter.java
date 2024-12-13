@@ -52,14 +52,12 @@ public class ArpLogWriter {
     private Set<ManagedLog> getLogsFromProcess(ArpLogProcess process){
         Set<ManagedLog> logs = process.resultList().stream()
                 .filter(parser::validate)
-                .map(line -> {
-                    ManagedLog log = parser.parse(line);
-                    //ssid도 넣어줌
-                    log.setSsid(process.getInfo().ni().getEssid());
-                    return log;
-                })
+                .map(parser::parse)
                 .collect(Collectors.toSet());//Set으로 중복 제거
-        log.info("[managed - arp({})] log to save : {}", process.getInfo().ni().getEssid(), logs.size());
+
+        String ssid = process.getInfo().ni().getEssid();
+        logs.forEach(log->log.setSsid(ssid));
+        log.info("[managed - arp({})] log to save : {}", ssid, logs.size());
         return logs;
     }
 }
