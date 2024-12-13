@@ -44,7 +44,7 @@ public class ArpLogWriter {
                             .filter(parser::validate)
                             .map(line->{
                                 ManagedLog log = parser.parse(line);
-                                log.setSsid(arpInfo.ssid());
+                                log.setSsid(arpInfo.ni().getEssid());
                                 return log;
                             })
                             .collect(Collectors.toSet()); //Set으로 중복 제거
@@ -56,10 +56,10 @@ public class ArpLogWriter {
                      */
                     if (procLogs.isEmpty()) {
                         //SystemValidator가 시스템의 네트워크 인터페이스가 올바른지 검증하기 때문에 여기서는 warn으로 로깅
-                        log.warn("[managed - arp({})] 실행 실패 : ERROR", arpInfo.ssid());
+                        log.warn("[managed - arp({})] 실행 실패 : ERROR", arpInfo.ni().getEssid());
                         return Stream.empty();
                     }
-                    log.info("[managed - arp({})] log to save : {}", arpInfo.ssid(), procLogs.size());
+                    log.info("[managed - arp({})] log to save : {}", arpInfo.ni().getEssid(), procLogs.size());
                     return procLogs.stream();
                 })
                 .toList();

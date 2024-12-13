@@ -47,7 +47,12 @@ public class NetworkConfig {
         //monitor
         Map<String, String> monitorMap = (Map<String, String>) map.get("monitor");
         this.monitorInfo = new MonitorInfo(
-                generateCommand(monitorMap.get("command"), monitorMap.get("interface")));
+                this.networkInterfaces.stream()
+                        .filter(ni->ni.getName().equals(monitorMap.get("interface")))
+                        .findAny()
+                        .orElseThrow(()->new IllegalStateException(monitorMap.get("interface")+"은 설정된 network_interfaces에 존재하지 않습니다.")),
+                generateCommand(monitorMap.get("command"), monitorMap.get("interface"))
+        );
         // managed
         Map<String, Object> managedMap = (Map<String, Object>) map.get("managed");
         // mdns
@@ -55,12 +60,11 @@ public class NetworkConfig {
         String mdnsCommand = (String) mdnsMap.get("command");
         this.mdnsList = ((List<String>) mdnsMap.get("interfaces")).stream()
                 .map(interfaceName -> {
-                    NetworkInterface mdnsNI = networkInterfaces.stream().filter(
-                            ni -> ni.getName().equals(interfaceName)
-                    ).findAny().orElseThrow(()->new IllegalStateException(interfaceName+"은 설정된 network_interfaces에 존재하지 않습니다."));
-                    return new ManagedInfo(interfaceName,
-                        mdnsNI.getEssid(),
-                        generateCommand(mdnsCommand, interfaceName));
+                    NetworkInterface mdnsNI = networkInterfaces.stream()
+                            .filter(ni -> ni.getName().equals(interfaceName))
+                            .findAny()
+                            .orElseThrow(()->new IllegalStateException(interfaceName+"은 설정된 network_interfaces에 존재하지 않습니다."));
+                    return new ManagedInfo(mdnsNI, generateCommand(mdnsCommand, interfaceName));
                 })
                 .toList();
         // arp
@@ -71,9 +75,7 @@ public class NetworkConfig {
                     NetworkInterface arpNI = networkInterfaces.stream().filter(
                             ni -> ni.getName().equals(interfaceName)
                     ).findAny().orElseThrow(()->new IllegalStateException(interfaceName+"은 설정된 network_interfaces에 존재하지 않습니다."));
-                    return new ManagedInfo(interfaceName,
-                        arpNI.getEssid(),
-                        generateCommand(arpCommand, interfaceName));
+                    return new ManagedInfo(arpNI, generateCommand(arpCommand, interfaceName));
                 })
                 .toList();
     }
