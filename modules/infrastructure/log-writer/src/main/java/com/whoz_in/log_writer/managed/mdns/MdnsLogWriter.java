@@ -42,8 +42,8 @@ public class MdnsLogWriter {
                     //프로세스가 죽었다는 것을 인지했을때만 아래 로직을 실행
                     if (!alive && dead.get(managedInfo).equals(Boolean.FALSE)) {
                         dead.put(managedInfo, true);
-                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", managedInfo.ssid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
-                        log.error("[managed - mdns({})] 프로세스를 재실행합니다.", managedInfo.ssid());
+                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", managedInfo.ni().getEssid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
+                        log.error("[managed - mdns({})] 프로세스를 재실행합니다.", managedInfo.ni().getEssid());
                         //프로세스 실행은 논블로킹
                         new Thread(()->startProcess(managedInfo)).start();
                     }
@@ -56,13 +56,13 @@ public class MdnsLogWriter {
                     for(;;) {
                         line = process.readLine();
                         if (line == null) {
-                            log.info("[managed - mdns({})] log to save : {}", managedInfo.ssid(),  logs.size());
+                            log.info("[managed - mdns({})] log to save : {}", managedInfo.ni().getEssid(),  logs.size());
                             return logs.values().stream();
                         }
                         parser.parse(line).ifPresent(
                                 mdnsLog -> {
                                     logs.put(mdnsLog, mdnsLog);
-                                    mdnsLog.setSsid(managedInfo.ssid());}
+                                    mdnsLog.setSsid(managedInfo.ni().getEssid());}
                         );
                     }
                 })
@@ -75,7 +75,7 @@ public class MdnsLogWriter {
         Optional.ofNullable(this.processes.get(info)).ifPresent(MdnsLogProcess::terminate);
         MdnsLogProcess process = new MdnsLogProcess(info, sudoPassword);
         this.processes.put(info, process);
-        log.info("[managed - mdns({})] 프로세스 실행 완료", info.ssid());
+        log.info("[managed - mdns({})] 프로세스 실행 완료", info.ni().getEssid());
         this.dead.put(info, false);
     }
 
