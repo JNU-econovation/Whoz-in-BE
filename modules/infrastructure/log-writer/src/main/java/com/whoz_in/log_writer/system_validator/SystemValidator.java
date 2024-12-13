@@ -11,10 +11,13 @@ import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 //시스템의 전체적인 검증을 진행하는 클래스
 //SystemValidatorConfig에 의해 빈으로 등록됩니다
 @Slf4j
+@Profile("prod")
+@Component
 public final class SystemValidator {
     private final NetworkConfig config;
     private final SystemNetworkInterfaces systemNIs;
