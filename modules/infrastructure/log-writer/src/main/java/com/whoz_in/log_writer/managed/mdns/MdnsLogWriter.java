@@ -5,10 +5,13 @@ import com.whoz_in.log_writer.config.NetworkConfig;
 import com.whoz_in.log_writer.managed.ManagedInfo;
 import com.whoz_in.log_writer.managed.ManagedLog;
 import com.whoz_in.log_writer.managed.ManagedLogDAO;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -38,33 +41,31 @@ public class MdnsLogWriter {
         config.getMdnsList().forEach(this::startProcess);
     }
 
+    //주기적으로 로그를 저장함
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void saveLogs() {
-        List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
-                .filter(entry-> entry.getValue().isAlive())
-                .flatMap(entry -> {
-                    ManagedInfo managedInfo = entry.getKey();
-                    MdnsLogProcess process = entry.getValue();
-                    Map<ManagedLog, ManagedLog> logs = new HashMap<>();
-                    String line;
-                    for(;;) {
-                        line = process.readLine();
-                        if (line == null) {
-                            log.info("[managed - mdns({})] log to save : {}", managedInfo.ni().getEssid(),  logs.size());
-                            return logs.values().stream();
-                        }
-                        parser.parse(line).ifPresent(
-                                mdnsLog -> {
-                                    logs.put(mdnsLog, mdnsLog);
-                                    mdnsLog.setSsid(managedInfo.ni().getEssid());}
-                        );
-                    }
-                })
+        List<ManagedLog> totalLogs = this.processes.values().parallelStream()
+                .filter(MdnsLogProcess::isAlive)
+                .map(this::getLogsFromProcess)
+                .flatMap(Collection::stream)
                 .toList();
-
         dao.upsertAll(totalLogs);
     }
 
+    //프로세스에 쌓인 출력들을 로그로 변환
+    private Set<ManagedLog> getLogsFromProcess(MdnsLogProcess process){
+        Set<ManagedLog> logs = process.readLines().stream()
+                .map(parser::parse)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+        String ssid = process.getInfo().ni().getEssid();
+        logs.forEach(log->log.setSsid(ssid));
+        log.info("[managed - mdns({})] log to save : {}", ssid,  logs.size()); //이거 여기 있는건 좀 그러긴 함
+        return logs;
+    }
+
+    //주기적으로 프로세스가 죽었는지 확인하고 재실행함
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)
     private void checkProcesses(){
         this.processes.entrySet().parallelStream()
