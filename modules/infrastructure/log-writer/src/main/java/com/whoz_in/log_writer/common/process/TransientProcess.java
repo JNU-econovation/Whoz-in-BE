@@ -1,6 +1,5 @@
 package com.whoz_in.log_writer.common.process;
 
-import jakarta.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,22 +19,31 @@ public class TransientProcess {
 
     public TransientProcess() {}
 
+    // sudo 없이 실행할 커맨드
+    // command 예시: "ifconfig"
     public TransientProcess(String command){
-        this(command, null);
-    }
-    public TransientProcess(String command, @Nullable String sudoPassword) {
         try {
             this.process = new ProcessBuilder(command.split(" "))
                     .redirectErrorStream(true)
                     .start();
-            this.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            this.ebr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-            if (sudoPassword==null) return;
-            Writer writer = new OutputStreamWriter(this.process.getOutputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(command+" - 실행 실패");
+        }
+        this.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        this.ebr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+    }
+
+    // sudo로 실행할 커맨드
+    // sudoCommand 예시: "sudo iwconfig"
+    // sudo 없이 실행한 커맨드일 경우 writer에 flush하기도 전에 끝날 수 있으므로 나눠진 것
+    public TransientProcess(String sudoCommand, String sudoPassword) {
+        this(sudoCommand);
+        Writer writer = new OutputStreamWriter(this.process.getOutputStream());
+        try {
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException("TransientProcess 실행 실패 -", e);
+            throw new RuntimeException(sudoCommand + " - sudo 명령어 입력 중 오류 발생");
         }
     }
 

@@ -1,12 +1,13 @@
 package com.whoz_in.log_writer.system_validator;
 
+import com.whoz_in.log_writer.common.process.TransientProcess;
 import com.whoz_in.log_writer.common.validation.ValidationResult;
 import com.whoz_in.log_writer.common.validation.Validator;
-import com.whoz_in.log_writer.common.process.TransientProcess;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+//which로 커맨드가 설치되어있는지 확인함
 @Component
 @RequiredArgsConstructor
 public class CommandInstalledValidator implements Validator<String> {
