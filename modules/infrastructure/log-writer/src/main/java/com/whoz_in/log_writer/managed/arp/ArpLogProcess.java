@@ -2,7 +2,6 @@ package com.whoz_in.log_writer.managed.arp;
 
 import com.whoz_in.log_writer.common.process.TransientProcess;
 import com.whoz_in.log_writer.managed.ManagedInfo;
-import java.io.IOException;
 import lombok.Getter;
 
 @Getter

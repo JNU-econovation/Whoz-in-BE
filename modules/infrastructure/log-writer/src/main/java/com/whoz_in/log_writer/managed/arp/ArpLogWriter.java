@@ -5,19 +5,16 @@ import com.whoz_in.log_writer.config.NetworkConfig;
 import com.whoz_in.log_writer.managed.ManagedInfo;
 import com.whoz_in.log_writer.managed.ManagedLog;
 import com.whoz_in.log_writer.managed.ManagedLogDAO;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//TODO: 에러 로그 어떻게 관리할지 생각. 일단 TransientProcess라서 구현 안함
+
 @Slf4j
 @Component
 public class ArpLogWriter {
@@ -52,14 +49,12 @@ public class ArpLogWriter {
     private Set<ManagedLog> getLogsFromProcess(ArpLogProcess process){
         Set<ManagedLog> logs = process.resultList().stream()
                 .filter(parser::validate)
-                .map(line -> {
-                    ManagedLog log = parser.parse(line);
-                    //ssid도 넣어줌
-                    log.setSsid(process.getInfo().ni().getEssid());
-                    return log;
-                })
+                .map(parser::parse)
                 .collect(Collectors.toSet());//Set으로 중복 제거
-        log.info("[managed - arp({})] log to save : {}", process.getInfo().ni().getEssid(), logs.size());
+
+        String ssid = process.getInfo().ni().getEssid();
+        logs.forEach(log->log.setSsid(ssid));
+        log.info("[managed - arp({})] log to save : {}", ssid, logs.size());
         return logs;
     }
 }

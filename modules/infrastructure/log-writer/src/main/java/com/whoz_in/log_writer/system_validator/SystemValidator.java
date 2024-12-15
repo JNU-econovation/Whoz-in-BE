@@ -2,7 +2,6 @@ package com.whoz_in.log_writer.system_validator;
 
 
 import com.whoz_in.log_writer.common.NetworkInterface;
-import com.whoz_in.log_writer.common.IwconfigNetworkInterfaces;
 import com.whoz_in.log_writer.common.SystemNetworkInterfaces;
 import com.whoz_in.log_writer.common.validation.ValidationResult;
 import com.whoz_in.log_writer.config.NetworkConfig;
