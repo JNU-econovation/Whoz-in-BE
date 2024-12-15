@@ -27,17 +27,22 @@ public class TransientProcess {
                     .redirectErrorStream(true)
                     .start();
         } catch (IOException e) {
-            throw new RuntimeException(command+" - 실행 실패");
+            throw new RuntimeException(command+" - 알 수 없는 원인으로 실행에 실패했습니다.");
         }
         this.br = new BufferedReader(new InputStreamReader(process.getInputStream()));
         this.ebr = new BufferedReader(new InputStreamReader(process.getErrorStream()));
     }
 
-    // sudo로 실행할 커맨드
-    // sudoCommand 예시: "sudo iwconfig"
-    // sudo 없이 실행한 커맨드일 경우 writer에 flush하기도 전에 끝날 수 있으므로 나눠진 것
+    // sudo로 실행할 커맨드는 비밀번호 입력이 필요하여 나눠진 것
+    // sudoCommand 예시: "sudo -S iwconfig"
     public TransientProcess(String sudoCommand, String sudoPassword) {
         this(sudoCommand);
+        /*
+        output stream에 쓰기 전에 종료될 가능성이 있는 경우
+        1. sudo로 실행을 안했을때
+        2. (리눅스) groups에 포함된 사용자로 실행했을 때
+        */
+        if (!this.process.isAlive()) return;
         Writer writer = new OutputStreamWriter(this.process.getOutputStream());
         try {
             writer.write(sudoPassword + System.lineSeparator());
