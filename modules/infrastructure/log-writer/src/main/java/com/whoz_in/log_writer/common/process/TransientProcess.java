@@ -21,6 +21,7 @@ public class TransientProcess {
 
     // sudo 없이 실행할 커맨드
     // command 예시: "ifconfig"
+    // IOException을 여기서 처리하므로 무조건 실행되어야 하는 명령어는 사용하면 안된다!
     public TransientProcess(String command){
         try {
             this.process = new ProcessBuilder(command.split(" "))
@@ -35,6 +36,7 @@ public class TransientProcess {
 
     // sudo로 실행할 커맨드는 비밀번호 입력이 필요하여 나눠진 것
     // sudoCommand 예시: "sudo -S iwconfig"
+    // IOException을 여기서 처리하므로 무조건 실행되어야 하는 명령어는 사용하면 안된다!
     public TransientProcess(String sudoCommand, String sudoPassword) {
         this(sudoCommand);
         /*
