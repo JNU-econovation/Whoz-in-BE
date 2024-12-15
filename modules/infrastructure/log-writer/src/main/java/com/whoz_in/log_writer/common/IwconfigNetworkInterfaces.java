@@ -1,14 +1,17 @@
-package com.whoz_in.log_writer.system_validator;
+package com.whoz_in.log_writer.common;
 
-import com.whoz_in.log_writer.common.NetworkInterface;
 import com.whoz_in.log_writer.common.process.TransientProcess;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 //iwconfig의 출력을 파싱하여 네트워크 인터페이스들을 반환함
+//prod 환경에선 iwconfig가 설치되어있을 것을 SystemValidator를 통해 보장한다.
+@Profile("prod")
 @Component
-public class SystemNetworkInterfaces {
+public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces {
+
     //최신 정보를 가져온다.
     public List<NetworkInterface> getLatest() {
         List<NetworkInterface> interfaces = new ArrayList<>();
@@ -22,7 +25,8 @@ public class SystemNetworkInterfaces {
         for (String line : iwconfigOutput) {
             line = line.trim();
             // 인터페이스 이름 감지 (인터페이스 정보 나오기 시작)
-            if (!line.startsWith(" ") && (line.contains("IEEE 802.11") || line.contains("unassociated"))) {
+            if (!line.startsWith(" ") && (line.contains("IEEE 802.11") || line.contains(
+                    "unassociated"))) {
                 if (currentName != null) {
                     // 첫 인터페이스가 아니면 모아둔 이전 인터페이스의 정보 저장
                     interfaces.add(new NetworkInterface(currentName, currentEssid, currentMode));
@@ -30,7 +34,8 @@ public class SystemNetworkInterfaces {
                 // 새 인터페이스 정보 모으기 & 초기화
                 currentName = line.split("\\s+")[0];
                 if (line.contains("ESSID:"))
-                    currentEssid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "").trim();
+                    currentEssid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "")
+                            .trim();
                 else
                     currentEssid = "";
                 currentMode = null; // 초기화
@@ -47,7 +52,7 @@ public class SystemNetworkInterfaces {
         }
         return interfaces;
     }
-
+}
 
 /*
 //샘플 iwconfig
@@ -84,4 +89,3 @@ List<String> iwconfigOutput = List.of(
         "          Tx excessive retries:0  Invalid misc:0   Missed beacon:0"
 );
 */
-}
