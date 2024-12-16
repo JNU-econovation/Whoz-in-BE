@@ -13,7 +13,7 @@ import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.whoz_in.main_api.shared.application.query.View;
 import com.whoz_in.main_api.shared.application.query.Viewer;
 
-@AnalyzeClasses(packages = "com.whoz_in.api", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(packages = "com.whoz_in.main_api", importOptions = ImportOption.DoNotIncludeTests.class)
 class ViewerTest {
 
     @ArchTest
