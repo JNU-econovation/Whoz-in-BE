@@ -1,7 +1,7 @@
 package com.whoz_in.spring.application.command;
 
-import com.whoz_in.api.shared.application.command.Command;
-import com.whoz_in.api.shared.application.command.CommandHandler;
+import com.whoz_in.main_api.shared.application.command.Command;
+import com.whoz_in.main_api.shared.application.command.CommandHandler;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.stream.Collectors;
