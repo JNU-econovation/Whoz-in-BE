@@ -50,7 +50,8 @@ public class TransientProcess {
             writer.write(sudoPassword + System.lineSeparator());
             writer.flush();
         } catch (IOException e) {
-            throw new RuntimeException(sudoCommand + " - sudo 명령어 입력 중 오류 발생");
+            //TODO: 에러 스트림 띄우는거 실험용임 꼭 제거하기
+            throw new RuntimeException(sudoCommand + " - sudo 명령어 입력 중 오류 발생: \n" + errorResultString());
         }
     }
 
