@@ -1,7 +1,7 @@
 package com.whoz_in.spring.application.query;
 
-import com.whoz_in.api.shared.application.query.Query;
-import com.whoz_in.api.shared.application.query.QueryHandler;
+import com.whoz_in.main_api.shared.application.query.Query;
+import com.whoz_in.main_api.shared.application.query.QueryHandler;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.stream.Collectors;
