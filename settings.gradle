@@ -1,6 +1,6 @@
 rootProject.name = 'whoz_in'
-include 'modules:api'
-findProject(':modules:api')?.name = 'api'
+include 'modules:main-api'
+findProject(':modules:main-api')?.name = 'main-api'
 include 'modules:network-api'
 findProject(':modules:network-api')?.name = 'network-api'
 include 'modules:domain'
