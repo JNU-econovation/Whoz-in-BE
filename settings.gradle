@@ -15,3 +15,6 @@ include 'modules:infrastructure:log-writer'
 findProject(':modules:infrastructure:log-writer')?.name = 'log-writer'
 include 'modules:infrastructure:logging'
 findProject(':modules:infrastructure:logging')?.name = 'logging'
+include 'modules:master-api'
+findProject(':modules:master-api')?.name = 'master-api'
+

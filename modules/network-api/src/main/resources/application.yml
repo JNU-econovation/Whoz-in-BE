@@ -4,12 +4,4 @@ spring:
       local:
       prod:
     active: local
-    include: log-writer
-
-  #@PropertySource는 스프링 컨텍스트가 초기화된 이후 처리되기 때문에 여기서 env를 미리 로드
-  config:
-    import: "classpath:env-network-api.properties"
-
-logging:
-  discord:
-    webhook-url: ${DISCORD_WEBHOOK_URL}
+    include: network-api
