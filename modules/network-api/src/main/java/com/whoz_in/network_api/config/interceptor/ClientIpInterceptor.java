@@ -1,6 +1,6 @@
-package com.whoz_in.network_log.config.interceptor;
+package com.whoz_in.network_api.config.interceptor;
 
-import com.whoz_in.network_log.common.util.RequesterInfo;
+import com.whoz_in.network_api.common.util.RequesterInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
