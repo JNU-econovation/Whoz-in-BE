@@ -3,5 +3,3 @@ spring:
     import:
       - "classpath:application-main-api.yml"
       - "classpath:application-network-api.yml"
-logging:
-  config: "classpath:logback-common.xml"
