@@ -1,12 +1,9 @@
 spring:
-#  config:
-#    activate:
-#      on-profile: local
   datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: ${DB_DRIVER_CLASS}
   jpa:
     hibernate:
       ddl-auto: create
