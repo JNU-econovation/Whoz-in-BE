@@ -15,7 +15,7 @@ repositories {
 
 dependencies {
     implementation project(':modules:domain')
-
+    implementation project(":modules:infrastructure:logging")
     //domain 구현 모듈
     runtimeOnly project(":modules:infrastructure:domain-jpa")
 
