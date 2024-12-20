@@ -1,11 +1,7 @@
 spring:
   config:
     import:
-      #@PropertySource는 스프링 컨텍스트가 초기화된 이후 처리되기 때문에 여기서 env를 미리 로드
-      - "classpath:env-network-api.properties"
       #log-writer 모듈
       - "classpath:application-log-writer.yml"
-
 logging:
-  discord:
-    webhook-url: ${DISCORD_WEBHOOK_URL}
+  config: "classpath:logback-common.xml"
