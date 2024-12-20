@@ -1,6 +1,6 @@
-package com.whoz_in.network_log.config;
+package com.whoz_in.network_api.config;
 
-import com.whoz_in.network_log.config.interceptor.ClientIpInterceptor;
+import com.whoz_in.network_api.config.interceptor.ClientIpInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
