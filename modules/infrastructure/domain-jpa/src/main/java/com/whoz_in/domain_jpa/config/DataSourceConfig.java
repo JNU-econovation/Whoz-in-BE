@@ -12,6 +12,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -59,6 +60,7 @@ public class DataSourceConfig {
     }
 
     //세팅값을 통해 DataSource 생성
+    @Primary
     @Bean
     public DataSource domainJpaDataSource(DataSourceProperties properties) {
         HikariDataSource dataSource = new HikariDataSource();
@@ -70,6 +72,7 @@ public class DataSourceConfig {
     }
 
     //JPA 설정
+    @Primary
     @Bean
     public LocalContainerEntityManagerFactoryBean domainJpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
@@ -90,6 +93,7 @@ public class DataSourceConfig {
     }
 
     //트랜잭션 설정
+    @Primary
     @Bean
     public PlatformTransactionManager domainJpaTransactionManager(
             @Qualifier("domainJpaEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
