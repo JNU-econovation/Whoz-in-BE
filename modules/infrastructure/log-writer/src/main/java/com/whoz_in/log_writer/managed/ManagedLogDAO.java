@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public final class ManagedLogDAO {
+public class ManagedLogDAO {
 
     private final JdbcTemplate jdbcTemplate;
 
