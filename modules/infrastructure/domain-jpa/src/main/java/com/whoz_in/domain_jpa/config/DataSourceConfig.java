@@ -22,7 +22,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableJpaRepositories(
         basePackages = "com.whoz_in.domain_jpa",
         entityManagerFactoryRef = "domainJpaEntityManagerFactory",
-        transactionManagerRef = "domainJpaTransactionManager"
+        transactionManagerRef = "domainJpaTM"
 )
 @RequiredArgsConstructor
 public class DataSourceConfig {
@@ -73,7 +73,6 @@ public class DataSourceConfig {
     }
 
     //JPA 설정
-    @Primary
     @Bean
     public LocalContainerEntityManagerFactoryBean domainJpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
@@ -93,9 +92,10 @@ public class DataSourceConfig {
                 .build();
     }
 
-    //트랜잭션 설정
-    @Primary
-    @Bean
+    //TransactionManager가 여러 개인 경우 트랜잭션에서 알맞게 골라 사용해야 함
+    //@Primary를 붙이면 t.m을 설정하지 않아도 알아서 골라버리므로 잘못된 t.m을 사용할 가능성이 있음
+    //따라서 @Primary를 설정하지 않음으로써 t.m이 2개 이상 등록된 경우에 명시적으로 설정하도록 강제한다.
+    @Bean("domainJpaTM")
     public PlatformTransactionManager domainJpaTransactionManager(
             @Qualifier("domainJpaEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         //필요하면 설정 추가하기
