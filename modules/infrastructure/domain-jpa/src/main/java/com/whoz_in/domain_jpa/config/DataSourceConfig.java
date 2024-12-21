@@ -64,6 +64,7 @@ public class DataSourceConfig {
     @Bean
     public DataSource domainJpaDataSource(DataSourceProperties properties) {
         HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setPoolName("DomainJpaHikariPool");
         dataSource.setJdbcUrl(properties.getUrl());
         dataSource.setUsername(properties.getUsername());
         dataSource.setPassword(properties.getPassword());
