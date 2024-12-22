@@ -1,4 +1,4 @@
-package com.whoz_in.spring.domain.event;
+package com.whoz_in.main_api.shared.domain;
 
 import com.whoz_in.domain.shared.event.DomainEvent;
 import com.whoz_in.domain.shared.event.EventBus;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 /*
 기본적인 이벤트 퍼블리셔
-추후에 카프카나 토끼MQ를 공부하면 새로운 구현체를 만들어봅시다.
+추후에 카프카나 Rabbit MQ를 공부하면 새로운 구현체를 만들어봅시다.
  */
 @Service
 @RequiredArgsConstructor
