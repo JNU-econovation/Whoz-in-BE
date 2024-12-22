@@ -12,24 +12,29 @@ jar.enabled = true
 repositories {
     mavenCentral()
 }
-
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+//    implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    //transaction
+    implementation 'org.springframework:spring-tx'
+
+    //domain
     implementation project(':modules:domain')
+    runtimeOnly project(":modules:infrastructure:domain-jpa") // 구현 모듈
+
+    //logging
     implementation project(":modules:infrastructure:logging")
-    //domain 구현 모듈
-    runtimeOnly project(":modules:infrastructure:domain-jpa")
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
     runtimeOnly project(":modules:infrastructure:spring")
     runtimeOnly project(":modules:infrastructure:api-query-jpa")
 
-    implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-
     testImplementation platform('org.junit:junit-bom:5.9.1')
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
+
 
 test {
     useJUnitPlatform()
