@@ -3,8 +3,10 @@ package com.whoz_in.spring.application.command;
 import com.whoz_in.main_api.shared.application.command.Command;
 import com.whoz_in.main_api.shared.application.command.CommandHandler;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -23,8 +25,9 @@ public final class CommandHandlers {
                 .collect(
                         Collectors.toMap(
                             commandHandler -> {
-                                Class<? extends CommandHandler> handlerClass = commandHandler.getClass();
-                                ParameterizedType paramType = (ParameterizedType) handlerClass.getGenericSuperclass();
+                                //commandHandler의 프록시 객체를 가져옴 (예시 - @Transactional 사용 시)
+                                Class<?> targetClass = AopProxyUtils.ultimateTargetClass(commandHandler);
+                                ParameterizedType paramType = (ParameterizedType) targetClass.getGenericSuperclass();
                                 return (Class<? extends Command>) paramType.getActualTypeArguments()[0];
                             },
                             commandHandler -> commandHandler
