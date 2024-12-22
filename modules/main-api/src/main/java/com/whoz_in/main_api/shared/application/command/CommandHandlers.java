@@ -1,9 +1,6 @@
-package com.whoz_in.spring.application.command;
+package com.whoz_in.main_api.shared.application.command;
 
-import com.whoz_in.main_api.shared.application.command.Command;
-import com.whoz_in.main_api.shared.application.command.CommandHandler;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -11,8 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /*
-Command를 받으면 해당 Command를 처리할 수 있는 CommandHandler를 제공하는 클래스입니다.
-스프링 컨텍스트를 이용하여 구현되었습니다.
+Command를 받아 해당 Command를 처리할 수 있는 CommandHandler를 제공하는 클래스입니다.
  */
 @Component
 public final class CommandHandlers {
