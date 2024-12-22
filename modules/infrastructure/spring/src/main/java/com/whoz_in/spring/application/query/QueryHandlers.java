@@ -5,6 +5,7 @@ import com.whoz_in.main_api.shared.application.query.QueryHandler;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.aop.framework.AopProxyUtils;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,9 @@ public final class QueryHandlers {
                         .collect(
                                 Collectors.toMap(
                                         queryHandler -> {
-                                            Class<? extends QueryHandler> handlerClass = queryHandler.getClass();
-                                            ParameterizedType paramType = (ParameterizedType) handlerClass.getGenericSuperclass();
+                                            //queryHandler의 프록시 객체를 가져옴 (예시 - @Transactional 사용 시)
+                                            Class<?> targetClass = AopProxyUtils.ultimateTargetClass(queryHandler);
+                                            ParameterizedType paramType = (ParameterizedType) targetClass.getGenericSuperclass();
                                             return (Class<? extends Query>) paramType.getActualTypeArguments()[0];
                                         },
                                         queryHandler -> queryHandler
