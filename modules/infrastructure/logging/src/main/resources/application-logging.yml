@@ -1,0 +1,11 @@
+#TODO: 지금은 api 모듈들이 이 모듈을 공용으로 사용하지만 추후에 모듈마다 로깅 설정을 할 수 있도록 할 것
+
+spring:
+  config:
+    import:
+      # @PropertySource는 스프링 컨텍스트가 초기화된 이후 처리되기 때문에
+      # 여기서 env를 미리 로드하여 logback-spring.xml에서 springProperty를 사용할 수 있도록 합니다.
+      - "classpath:env-logging.properties"
+logging:
+  discord:
+    webhook-url: ${DISCORD_WEBHOOK_URL}

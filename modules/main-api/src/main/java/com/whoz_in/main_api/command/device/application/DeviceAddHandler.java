@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Handler
 @RequiredArgsConstructor
-public final class DeviceAddHandler extends CommandHandler<DeviceAdd> {
+public class DeviceAddHandler extends CommandHandler<DeviceAdd> {
     private final RequesterInfo requesterInfo;
     private final DeviceRepository repository;
     private final EventBus eventBus;

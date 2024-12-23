@@ -1,0 +1,7 @@
+spring:
+  config:
+    import:
+      #log-writer 모듈
+      - "classpath:application-log-writer.yml"
+logging:
+  config: "classpath:logback-common.xml"
