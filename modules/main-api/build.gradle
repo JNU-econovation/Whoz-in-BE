@@ -29,9 +29,6 @@ dependencies {
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
     runtimeOnly project(":modules:infrastructure:api-query-jpa")
-
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
 
