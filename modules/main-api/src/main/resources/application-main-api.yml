@@ -1,0 +1,6 @@
+spring:
+  config:
+    #domain-jpa 모듈
+    import: "classpath:application-domain-jpa.yml"
+logging:
+  config: "classpath:logback-common.xml"
