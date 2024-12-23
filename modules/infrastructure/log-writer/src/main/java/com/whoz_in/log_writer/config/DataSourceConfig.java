@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration("logWriterDataSourceConfig")
 @RequiredArgsConstructor
 public class DataSourceConfig {
+    public static final String LOG_WRITER_TRANSACTION_MANAGER = "logWriterTransactionManager";
     @Getter
     @Setter
     public static class DataSourceProperties {
@@ -48,7 +49,7 @@ public class DataSourceConfig {
     }
 
     // 트랜잭션 매니저 - 아직은 쓸모 없는거 같아서 등록 안했음
-    @Bean("logWriterTM")
+    @Bean(LOG_WRITER_TRANSACTION_MANAGER)
     public PlatformTransactionManager logWriterTransactionManager(@Qualifier("logWriterDataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
