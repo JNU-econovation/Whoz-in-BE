@@ -1,0 +1,5 @@
+spring:
+  config:
+    import:
+      - "classpath:application-main-api.yml"
+      - "classpath:application-network-api.yml"

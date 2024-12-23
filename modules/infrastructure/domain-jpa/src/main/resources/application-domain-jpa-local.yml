@@ -1,0 +1,5 @@
+domain-jpa:
+  hibernate:
+    ddl-auto: create
+    show_sql: true
+    format_sql: true

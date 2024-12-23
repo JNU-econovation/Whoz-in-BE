@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 
 //실행시킬 프로세스들이 필요로 하는 정보를 제공하는 역할을 한다.
 //이를 위해 network-<profile>.json에서 설정값을 가져온다.
-//설정된 값들이
+//local 혹은 prod만 지원한다.
 @Getter
 @Component
 public class NetworkConfig {
@@ -25,7 +25,7 @@ public class NetworkConfig {
     private final List<ManagedInfo> arpList;
 
     @SuppressWarnings("unchecked")
-    public NetworkConfig(@Value("${spring.profiles.active:default}") String profile, ResourceLoader loader, ObjectMapper mapper) {
+    public NetworkConfig(@Value("${spring.profiles.active}") String profile, ResourceLoader loader, ObjectMapper mapper) {
         String jsonPath = "classpath:/network-%s.json".formatted(profile);
         Resource resource = loader.getResource(jsonPath);
         Map<String, Object> map;

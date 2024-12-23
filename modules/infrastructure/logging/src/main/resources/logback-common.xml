@@ -1,0 +1,69 @@
+<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
+
+<configuration>
+  <springProfile name="!prod">
+    <root level="INFO">
+      <appender-ref ref="COLOR_CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="prod">
+    <root level="INFO">
+      <appender-ref ref="NO_COLOR_CONSOLE"/>
+      <appender-ref ref="FILE"/>
+      <appender-ref ref="ASYNC_DISCORD_ERROR"/>
+    </root>
+  </springProfile>
+
+
+  <property name="COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] %boldWhite([%15.15thread]) %boldWhite([%36.36logger{36}]) %highlight(%-5level) - %msg%n"/>
+  <appender name="COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %-5level - %msg%n"/>
+  <appender name="NO_COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!-- 작성 완료되기 전의 로그 파일 이름 -->
+    <file>${user.home}/whozin_log/temp.log</file>
+    <!-- 시간과 파일 크기를 기준으로 파일을 관리함 -->
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <!-- 하루 단위(%d)로 log를 남기며 최대 용량을 넘어가면 %i로 구별하여 저장 -->
+      <fileNamePattern>${user.home}/whozin_log/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <!-- 한 파일은 최대 10MB -->
+      <maxFileSize>10MB</maxFileSize>
+      <!-- 로그 파일들은 30일(%d)까지 유지-->
+      <maxHistory>30</maxHistory>
+      <!-- 모든 로그 파일은 5GB를 넘기면 안됨 -->
+      <totalSizeCap>5GB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>[%d{HH:mm:ss}] [%thread] %level %logger{0} - %msg %n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- Web hook url은 외부에 공개하면 안되므로 스프링 설정에서 읽어옴 -->
+  <springProperty name="DISCORD_WEBHOOK_URL" source="logging.discord.webhook-url"/>
+  <!-- 웹훅을 과도하게 사용하면 디스코드에서 제한을 거니까 ERROR 수준만 로깅 -->
+  <appender name="DISCORD_ERROR" class="com.whoz_in.logging.DiscordAppender">
+    <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>ERROR</level>
+    </filter>
+    <encoder>
+      <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+  <!-- AsyncAppender가 Appender를 감싸서 디스코드 로깅을 비동기로 처리할 수 있도록 함. -->
+  <appender name="ASYNC_DISCORD_ERROR" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="DISCORD_ERROR"/>
+  </appender>
+
+</configuration>

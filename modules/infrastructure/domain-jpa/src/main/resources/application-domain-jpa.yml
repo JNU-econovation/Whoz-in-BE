@@ -1,13 +1,18 @@
 spring:
-  config:
-    import:
-      - "classpath:env-log-writer.properties"
+  jpa:
+    open-in-view: false
 
-log-writer:
+domain-jpa:
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: ${DB_DRIVER_CLASS}
+  hibernate:
+    ddl-auto: validate
+    show_sql: false
 
-sudo_password: ${SUDO_PASSWORD}
+logging:
+  level:
+    root: info
+

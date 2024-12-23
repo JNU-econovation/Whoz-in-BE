@@ -1,9 +1,5 @@
+#독립적인 서버로 동작할 때 필요한 yaml
 spring:
   profiles:
-    include: jpa
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
+    active: local
+    include: main-api
