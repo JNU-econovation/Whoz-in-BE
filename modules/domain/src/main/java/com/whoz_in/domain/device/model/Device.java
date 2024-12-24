@@ -11,7 +11,7 @@ import lombok.Getter;
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Device extends AggregateRoot {
-    private Long deviceId;
+    private Long id;
     private Long memberId;
     private MacAddress mac;
     private IpAddress ip;
@@ -28,9 +28,9 @@ public final class Device extends AggregateRoot {
         return device;
     }
 
-    public static Device load(Long deviceId, Long memberId, String mac, String ip, String name){
+    public static Device load(Long id, Long memberId, String mac, String ip, String name){
         return Device.builder()
-                .deviceId(deviceId)
+                .id(id)
                 .memberId(memberId)
                 .mac(MacAddress.load(mac))
                 .ip(IpAddress.load(ip))
