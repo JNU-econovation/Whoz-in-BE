@@ -7,6 +7,7 @@ import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.shared.event.EventBus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
@@ -14,6 +15,7 @@ public class DeviceAddHandler extends CommandHandler<DeviceAdd> {
     private final RequesterInfo requesterInfo;
     private final DeviceRepository repository;
     private final EventBus eventBus;
+    @Transactional
     @Override
     public void handle(DeviceAdd command) {
         Device device = Device.create(
