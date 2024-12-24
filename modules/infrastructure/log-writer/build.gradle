@@ -1,22 +1,7 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.whoz_in'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc:3.3.5'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.17.2'
 
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
-}
-
-test {
-    useJUnitPlatform()
 }
