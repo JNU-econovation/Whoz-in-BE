@@ -9,9 +9,11 @@ import lombok.Getter;
 public final class DeviceAdd implements Command {
     private final MacAddress macAddress;
     private final IpAddress ipAddress;
+    private final String deviceName;
 
-    public DeviceAdd(String macAddress, String ipAddress) {
+    public DeviceAdd(String macAddress, String ipAddress, String deviceName) {
         this.macAddress = MacAddress.create(macAddress);
         this.ipAddress = IpAddress.create(ipAddress);
+        this.deviceName = deviceName;
     }
 }

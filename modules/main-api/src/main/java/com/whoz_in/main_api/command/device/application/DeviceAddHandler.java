@@ -19,7 +19,7 @@ public class DeviceAddHandler extends CommandHandler<DeviceAdd> {
     @Override
     public void handle(DeviceAdd command) {
         Device device = Device.create(
-                requesterInfo.getUserId(), command.getMacAddress(), command.getIpAddress());
+                requesterInfo.getUserId(), command.getMacAddress(), command.getIpAddress(), command.getDeviceName());
         repository.save(device);
         eventBus.publish(device.pullDomainEvents());
     }
