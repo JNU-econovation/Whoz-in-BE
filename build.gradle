@@ -2,11 +2,6 @@ plugins {
     id 'java'
 }
 
-ext {
-    springBootVersion = '3.4.0'
-    springDependencyManagementVersion = '1.1.5'
-}
-
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
@@ -32,11 +27,8 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
     }
 
     dependencies {
-        // spring BOM
-        implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-
         // for DI
-        compileOnly 'org.springframework:spring-context'
+        compileOnly "org.springframework:spring-context:${springVersion}"
 
         //lombok
         compileOnly 'org.projectlombok:lombok:1.18.30'

@@ -1,7 +1,7 @@
 dependencies {
+    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
-
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client:3.1.4'
 }
