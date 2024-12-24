@@ -1,20 +1,5 @@
-plugins {
-    id 'java'
-}
-
-group = 'com.whoz_in'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     compileOnly project(":modules:main-api")
 
     compileOnly 'org.springframework.boot:spring-boot-starter-data-jpa:3.3.5'
-}
-
-test {
-    useJUnitPlatform()
 }
