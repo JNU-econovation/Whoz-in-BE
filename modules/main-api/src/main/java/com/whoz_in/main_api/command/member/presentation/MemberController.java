@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.command.member.presentation;
 
+import com.whoz_in.main_api.command.device.application.DeviceAdd;
 import com.whoz_in.main_api.shared.presentation.CommandQueryController;
 import com.whoz_in.main_api.shared.application.command.CommandBus;
 import com.whoz_in.main_api.shared.application.query.QueryBus;
@@ -19,7 +20,6 @@ public class MemberController extends CommandQueryController {
     String httpXForwardedFor2 = request.getHeader("HTTP_X_Forwarded_For");
     String xRealIp = request.getHeader("X-Real-IP");
     String remoteAddr = request.getRemoteAddr();
-
     StringBuilder result = new StringBuilder();
     result.append("X-Forwarded-For: ").append(xForwardedFor).append("\n");
     result.append("HTTP-X-Forwarded-For: ").append(httpXForwardedFor).append("\n");
@@ -27,6 +27,7 @@ public class MemberController extends CommandQueryController {
     result.append("X-Real-IP: ").append(xRealIp).append("\n");
     result.append("RemoteAddr: ").append(remoteAddr).append("\n");
 
+    dispatch(new DeviceAdd("11:11:11:11:11:11", "111.111.111.111"));
     return result.toString();
   }
 }
