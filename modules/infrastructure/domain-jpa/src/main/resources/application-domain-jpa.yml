@@ -1,6 +1,8 @@
 spring:
   jpa:
     open-in-view: false
+  config:
+    import: "classpath:env-domain-jpa.properties"
 
 domain-jpa:
   datasource:
