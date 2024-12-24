@@ -27,7 +27,7 @@ public class MemberController extends CommandQueryController {
     result.append("X-Real-IP: ").append(xRealIp).append("\n");
     result.append("RemoteAddr: ").append(remoteAddr).append("\n");
 
-    dispatch(new DeviceAdd("11:11:11:11:11:11", "111.111.111.111"));
+    dispatch(new DeviceAdd("11:11:11:11:11:11", "111.111.111.111", "zz"));
     return result.toString();
   }
 }
