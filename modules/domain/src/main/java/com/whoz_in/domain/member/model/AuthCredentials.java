@@ -38,10 +38,9 @@ public final class AuthCredentials {
     }
 
     //아이디와 비밀번호가 맞는지 확인
-    public boolean validate(String loginId, String rawPassword, PasswordEncoder passwordEncoder){
+    public void login(String loginId, String rawPassword, PasswordEncoder passwordEncoder){
         if (!this.loginId.equals(loginId) || !this.encodedPassword.equals(passwordEncoder.encode(rawPassword)))
             throw new InvalidAuthCredentialsException();
-        return false;
     }
 
     AuthCredentials changePassword(String rawOldPassword, String rawNewPassword, PasswordEncoder passwordEncoder){
