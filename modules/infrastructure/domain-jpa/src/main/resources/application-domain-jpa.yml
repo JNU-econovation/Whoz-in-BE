@@ -12,6 +12,7 @@ domain-jpa:
     driver-class-name: ${DB_DRIVER_CLASS}
   hibernate:
     ddl-auto: validate
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show_sql: false
 
 logging:
