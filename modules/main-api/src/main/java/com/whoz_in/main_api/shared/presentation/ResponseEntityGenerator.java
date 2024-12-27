@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.presentation.response;
+package com.whoz_in.main_api.shared.presentation;
 
 //import com.whoz_in.domain.shared.BusinessException;
 import lombok.experimental.UtilityClass;
