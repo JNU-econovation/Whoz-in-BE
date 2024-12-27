@@ -11,7 +11,7 @@ import com.whoz_in.domain_jpa.shared.BaseEntity;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MonitorLog extends BaseEntity {
+public class MonitorLogEntity extends BaseEntity {
     @Id
     private String mac;
 }
