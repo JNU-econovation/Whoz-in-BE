@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.application.query;
+package com.whoz_in.main_api.query.shared.application;
 
 public interface QueryBus {
     <R extends Response> R ask(Query query);

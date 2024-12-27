@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.application.query;
+package com.whoz_in.main_api.query.shared.application;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

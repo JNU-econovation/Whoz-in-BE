@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.application.command.CommandHandler;
+import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
