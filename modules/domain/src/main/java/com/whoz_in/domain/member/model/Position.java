@@ -5,5 +5,6 @@ public enum Position {
     BE,
     DE,
     FE,
-    PM
+    PM,
+    GAME
 }
