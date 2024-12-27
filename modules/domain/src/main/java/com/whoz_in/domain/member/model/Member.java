@@ -1,5 +1,8 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.member.event.MemberCreated;
+import com.whoz_in.domain.member.event.MemberPasswordChanged;
+import com.whoz_in.domain.member.event.MemberStatusMessageChanged;
 import com.whoz_in.domain.member.exception.NotAuthMemberException;
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.domain.shared.AggregateRoot;
@@ -21,9 +24,11 @@ public final class Member extends AggregateRoot {
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
 
+    //일반 로그인이 아닐수도 있으므로 Optional
     public Optional<AuthCredentials> getAuthCredentials(){
         return Optional.ofNullable(authCredentials);
     }
+    //소셜 로그인이 아닐수도 있으므로 Optional
     public Optional<OAuthCredentials> getOAuthCredentials(){
         return Optional.ofNullable(oAuthCredentials);
     }
@@ -40,7 +45,7 @@ public final class Member extends AggregateRoot {
             AuthCredentials authCredentials, OAuthCredentials oAuthCredentials){
         if (authCredentials == null && oAuthCredentials == null)
             throw new IllegalStateException("no auth and oauth");
-        return builder()
+        Member member = builder()
                 .id(new MemberId())
                 .name(name)
                 .mainPosition(mainPosition)
@@ -49,6 +54,8 @@ public final class Member extends AggregateRoot {
                 .authCredentials(authCredentials)
                 .oAuthCredentials(oAuthCredentials)
                 .build();
+        member.register(new MemberCreated(member));
+        return member;
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
@@ -64,13 +71,21 @@ public final class Member extends AggregateRoot {
                 .build();
     }
 
+    //일반 로그인 - 실패 시 예외
+    public void login(String loginId, String password, PasswordEncoder encoder){
+        if (this.authCredentials == null)
+            throw new NotAuthMemberException();
+        this.authCredentials.login(loginId, password, encoder);
+    }
     public void changePassword(String rawOldPassword, String rawNewPassword, PasswordEncoder passwordEncoder){
         if (authCredentials == null)
             throw new NotAuthMemberException();
         this.authCredentials = this.authCredentials.changePassword(rawOldPassword, rawNewPassword, passwordEncoder);
+        this.register(new MemberPasswordChanged(this.getId(), this.authCredentials.getEncodedPassword()));
     }
 
     public void changeStatusMessage(String newStatusMessage){
         this.statusMessage = newStatusMessage;
+        this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
 }
