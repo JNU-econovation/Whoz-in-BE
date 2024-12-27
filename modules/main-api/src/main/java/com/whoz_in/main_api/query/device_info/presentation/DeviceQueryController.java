@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.query.device_info.presentation;
 
 import com.whoz_in.main_api.query.device_info.application.DeviceInfoGet;
-import com.whoz_in.main_api.shared.application.command.CommandBus;
-import com.whoz_in.main_api.shared.application.query.QueryBus;
+import com.whoz_in.main_api.command.shared.application.CommandBus;
+import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.shared.presentation.CommandQueryController;
 import com.whoz_in.main_api.shared.presentation.response.CrudResponseCode;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;

@@ -6,7 +6,7 @@ import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.application.command.CommandHandler;
+import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 

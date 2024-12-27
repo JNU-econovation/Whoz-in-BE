@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.command.device.application;
 
-import com.whoz_in.main_api.shared.application.command.Command;
+import com.whoz_in.main_api.command.shared.application.Command;
 import com.whoz_in.domain.device.model.IpAddress;
 import com.whoz_in.domain.device.model.MacAddress;
 import lombok.Getter;

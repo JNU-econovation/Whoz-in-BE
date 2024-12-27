@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.application.query;
+package com.whoz_in.main_api.query.shared.application;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;

@@ -10,8 +10,8 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
-import com.whoz_in.main_api.shared.application.query.View;
-import com.whoz_in.main_api.shared.application.query.Viewer;
+import com.whoz_in.main_api.query.shared.application.View;
+import com.whoz_in.main_api.query.shared.application.Viewer;
 
 @AnalyzeClasses(packages = "com.whoz_in.main_api", importOptions = ImportOption.DoNotIncludeTests.class)
 class ViewerTest {

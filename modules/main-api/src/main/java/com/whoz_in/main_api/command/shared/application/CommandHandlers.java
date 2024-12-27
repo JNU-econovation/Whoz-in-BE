@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.application.command;
+package com.whoz_in.main_api.command.shared.application;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
