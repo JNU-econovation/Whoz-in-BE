@@ -31,7 +31,7 @@ public final class AuthCredentials {
         return new AuthCredentials(loginId, passwordEncoder.encode(rawPassword));
     }
 
-    static AuthCredentials load(String loginId, String encodedPassword){
+    public static AuthCredentials load(String loginId, String encodedPassword){
         if (loginId == null || encodedPassword == null)
             throw new IllegalStateException("no login id or encoded password");
         return new AuthCredentials(loginId, encodedPassword);

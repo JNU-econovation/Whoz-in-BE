@@ -13,7 +13,7 @@ public final class OAuthCredentials {
     private final SocialProvider socialProvider;
     private final String socialId;
 
-    static OAuthCredentials load(SocialProvider socialProvider, String socialId){
+    public static OAuthCredentials load(SocialProvider socialProvider, String socialId){
         if (socialProvider == null || socialId == null)
             throw new IllegalStateException("no social provider or social id");
         return new OAuthCredentials(socialProvider, socialId);
