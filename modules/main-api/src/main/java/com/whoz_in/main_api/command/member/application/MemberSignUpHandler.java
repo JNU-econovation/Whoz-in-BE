@@ -4,6 +4,7 @@ import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.AuthCredentials;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.service.PasswordEncoder;
+import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.application.command.CommandHandler;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberSignUpHandler extends CommandHandler<MemberSignUp> {
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
+    private final EventBus eventBus;
 
     @Transactional
     @Override
@@ -23,5 +25,6 @@ public class MemberSignUpHandler extends CommandHandler<MemberSignUp> {
                 AuthCredentials.create(cmd.loginId(), cmd.password(), encoder)
         );
         repository.save(member);
+        eventBus.publish(member.pullDomainEvents());
     }
 }
