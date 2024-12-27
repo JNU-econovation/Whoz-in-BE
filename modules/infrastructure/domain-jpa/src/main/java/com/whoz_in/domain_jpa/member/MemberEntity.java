@@ -1,62 +1,62 @@
 package com.whoz_in.domain_jpa.member;
 
-import com.whoz_in.domain_jpa.shared.enums.Position;
+import com.whoz_in.domain.member.model.Position;
+import com.whoz_in.domain.member.model.SocialProvider;
+import com.whoz_in.domain_jpa.shared.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import com.whoz_in.domain_jpa.shared.BaseEntity;
+import java.util.UUID;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 
+@Getter
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberEntity extends BaseEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private UUID id;
 
-  @Column(name = "name", nullable = false)
+  @Column(nullable = false)
   private String name;
 
-  @Column(name = "generation", nullable = false)
+  @Column(nullable = false)
   private int generation;
 
-  @Column(name = "position", nullable = false)
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Position position;
 
-  @Column(name = "status_message", nullable = false)
+  @Column(nullable = false)
   private String statusMessage;
 
-  public MemberEntity(String name, int generation, Position position, String statusMessage) {
+  @Column(unique = true)
+  private String loginId;
+
+  private String password;
+
+  @Enumerated(EnumType.STRING)
+  private SocialProvider socialProvider;
+
+  @Column(unique = true)
+  private String socialId;
+
+  public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
+          String loginId, String password,
+          SocialProvider socialProvider, String socialId) {
+    this.id = id;
     this.name = name;
     this.generation = generation;
     this.position = position;
     this.statusMessage = statusMessage;
-  }
-
-  protected MemberEntity() { }
-
-  public Long getId() {
-    return id;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public int getGeneration() {
-    return generation;
-  }
-
-  public Position getPosition() {
-    return position;
-  }
-
-  public String getStatusMessage() {
-    return statusMessage;
+    this.loginId = loginId;
+    this.password = password;
+    this.socialProvider = socialProvider;
+    this.socialId = socialId;
   }
 }
