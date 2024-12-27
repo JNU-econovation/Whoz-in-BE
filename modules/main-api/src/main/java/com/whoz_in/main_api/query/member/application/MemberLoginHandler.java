@@ -2,7 +2,7 @@ package com.whoz_in.main_api.query.member.application;
 
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.application.query.QueryHandler;
+import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import lombok.RequiredArgsConstructor;
 
 @Handler

@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.command.member.presentation;
 
 import com.whoz_in.main_api.command.member.application.MemberSignUp;
-import com.whoz_in.main_api.shared.application.command.CommandBus;
-import com.whoz_in.main_api.shared.application.query.QueryBus;
+import com.whoz_in.main_api.command.shared.application.CommandBus;
+import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.shared.presentation.CommandQueryController;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
