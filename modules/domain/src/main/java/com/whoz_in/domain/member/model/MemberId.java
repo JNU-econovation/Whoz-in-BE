@@ -6,4 +6,9 @@ public record MemberId(UUID id) {
     public MemberId() {
         this(UUID.randomUUID());
     }
+
+    @Override
+    public String toString() {
+        return id.toString();
+    }
 }
