@@ -42,6 +42,7 @@ public class DataSourceConfig {
     @Setter
     public static class HibernateProperties {
         private String ddlAuto;
+        private String physicalNamingStrategy;
         private boolean formatSql;
         private boolean showSql;
     }
@@ -86,6 +87,7 @@ public class DataSourceConfig {
                 .properties(
                         Map.of(
                             "hibernate.hbm2ddl.auto", hibernateProperties.ddlAuto,
+                            "hibernate.physical_naming_strategy", hibernateProperties.physicalNamingStrategy,
                             "hibernate.show_sql", hibernateProperties.showSql,
                             "hibernate.format_sql", hibernateProperties.formatSql
                         )
