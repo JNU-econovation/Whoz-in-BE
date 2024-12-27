@@ -2,10 +2,11 @@ package com.whoz_in.main_api.command.member.presentation;
 
 import com.whoz_in.main_api.command.member.application.MemberSignUp;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
+import com.whoz_in.main_api.command.shared.application.CommandHandler;
+import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
-import com.whoz_in.main_api.shared.presentation.CommandQueryController;
-import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
-import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
+import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
+import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MemberController extends CommandQueryController {
-  public MemberController(CommandBus commandBus, QueryBus queryBus) {
-    super(commandBus,queryBus);
+public class MemberController extends CommandController {
+  public MemberController(CommandBus commandBus) {
+    super(commandBus);
   }
 
   @PostMapping("/api/v1/signup")

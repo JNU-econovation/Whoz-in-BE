@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.presentation.response;
+package com.whoz_in.main_api.shared.presentation;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

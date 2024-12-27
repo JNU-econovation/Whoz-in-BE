@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.domain;
+package com.whoz_in.main_api.shared.domain;
 
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
