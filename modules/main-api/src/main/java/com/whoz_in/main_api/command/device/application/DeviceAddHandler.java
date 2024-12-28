@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.application.command.CommandHandler;
+import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
@@ -19,7 +19,7 @@ public class DeviceAddHandler extends CommandHandler<DeviceAdd> {
     @Override
     public void handle(DeviceAdd command) {
         Device device = Device.create(
-                requesterInfo.getUserId(), command.getMacAddress(), command.getIpAddress());
+                requesterInfo.getUserId(), command.getMacAddress(), command.getIpAddress(), command.getDeviceName());
         repository.save(device);
         eventBus.publish(device.pullDomainEvents());
     }

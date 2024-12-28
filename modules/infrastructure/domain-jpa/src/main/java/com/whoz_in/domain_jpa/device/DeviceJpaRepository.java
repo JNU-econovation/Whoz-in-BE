@@ -1,9 +1,16 @@
 package com.whoz_in.domain_jpa.device;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.whoz_in.domain.device.DeviceRepository;
+import com.whoz_in.domain.device.model.Device;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DeviceJpaRepository extends JpaRepository<DeviceEntity, Long> {
-
+@RequiredArgsConstructor
+public class DeviceJpaRepository implements DeviceRepository {
+    private final DeviceEntityRepository repository;
+    @Override
+    public void save(Device device) {
+        repository.save(new DeviceEntity());
+    }
 }
