@@ -3,6 +3,8 @@ package com.whoz_in.main_api.architecture;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.domain.JavaType;
+import com.tngtech.archunit.core.domain.JavaTypeVariable;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -12,27 +14,80 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import com.whoz_in.main_api.query.shared.application.View;
 import com.whoz_in.main_api.query.shared.application.Viewer;
+import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AnalyzeClasses(packages = "com.whoz_in.main_api", importOptions = ImportOption.DoNotIncludeTests.class)
 class ViewerTest {
 
     @ArchTest
-    public static void Viewer를_상속했으면_모든_메서드는_View를_반환해야합니다(JavaClasses importedClasses) {
-        ArchCondition<JavaMethod> returnTypeImplementsView = new ArchCondition<>("return a type implementing View") {
+    public static void Viewer를_상속했으면_모든_메서드는_View나_OptionalView를_반환해야합니다(JavaClasses importedClasses) {
+        ArchCondition<JavaMethod> returnTypeIsView = new ArchCondition<>("return a type implementing View") {
             @Override
             public void check(JavaMethod method, ConditionEvents events) {
                 JavaClass returnType = method.getReturnType().toErasure();
-                boolean implementsView = returnType.isAssignableTo(View.class);
-                if (!implementsView) {
-                    String message = String.format("'%s'의 '%s' 는 'View' 구현체를 반환하지 않았습니다.",
+
+                if (!returnType.isAssignableTo(View.class)) {
+                    String message = String.format("'%s'의 '%s' 는 View를 반환하지 않았습니다.",
                             method.getOwner().getName(), method.getName());
                     events.add(SimpleConditionEvent.violated(method, message));
                 }
             }
         };
+
+        ArchCondition<JavaMethod> returnTypeIsOptionalView = new ArchCondition<>("return Optional<T> where T implements View") {
+            @Override
+            public void check(JavaMethod method, ConditionEvents events) {
+                JavaClass returnType = method.getReturnType().toErasure();
+
+                if (returnType.isAssignableTo(Optional.class)) {
+                    try {
+                        Class<?> ownerClass = Class.forName(method.getOwner().getName());
+                        Method reflectedMethod = ownerClass.getDeclaredMethod(method.getName(),
+                                method.getRawParameterTypes().stream()
+                                        .map(param -> {
+                                            try {
+                                                return Class.forName(param.getName());
+                                            } catch (ClassNotFoundException e) {
+                                                throw new RuntimeException("Failed to load parameter type: " + param.getName(), e);
+                                            }
+                                        }).toArray(Class<?>[]::new));
+
+                        Type genericReturnType = reflectedMethod.getGenericReturnType();
+                        if (genericReturnType instanceof ParameterizedType) {
+                            ParameterizedType parameterizedType = (ParameterizedType) genericReturnType;
+                            Type[] typeArguments = parameterizedType.getActualTypeArguments();
+                            for (Type typeArgument : typeArguments) {
+                                if (typeArgument instanceof Class<?>) {
+                                    Class<?> typeClass = (Class<?>) typeArgument;
+                                    if (View.class.isAssignableFrom(typeClass)) {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (ClassNotFoundException | NoSuchMethodException e) {
+                        String error = String.format("리플렉션 실패: '%s'의 '%s': %s",
+                                method.getOwner().getName(), method.getName(), e.getMessage());
+                        events.add(SimpleConditionEvent.violated(method, error));
+                        return;
+                    }
+                }
+
+                String message = String.format("Optional<? extends View>를 반환하지 않았습니다.",
+                        method.getOwner().getName(), method.getName());
+                events.add(SimpleConditionEvent.violated(method, message));
+            }
+        };
+
         ArchRuleDefinition.methods()
                 .that().areDeclaredInClassesThat().areAssignableTo(Viewer.class)
-                .should(returnTypeImplementsView)
+                .should(returnTypeIsView.or(returnTypeIsOptionalView))
                 .check(importedClasses);
     }
 
