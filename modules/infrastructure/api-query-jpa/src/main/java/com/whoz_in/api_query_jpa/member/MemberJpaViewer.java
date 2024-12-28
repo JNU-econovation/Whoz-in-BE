@@ -7,7 +7,7 @@ import java.util.Optional;
 public class MemberJpaViewer implements MemberViewer {
 
     @Override
-    public Optional<MemberAuthInfo> getAuthInfoByLoginId(String loginId) {
+    public Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId) {
         return Optional.empty();
     }
 }
