@@ -14,18 +14,20 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class OAuth2UserInfo implements OAuth2User {
 
     private final boolean isRegistered;
-    private final OAuthCredentials oAuthCredentials;
+    private final SocialProvider socialProvider;
+    private final String socialId;
     private final String email;
 
     public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId, String email) {
         this.isRegistered = isRegistered;
-        this.oAuthCredentials = OAuthCredentials.load(socialProvider, socialId);
+        this.socialProvider = socialProvider;
+        this.socialId = socialId;
         this.email = email;
     }
 
     @Override
     public String getName() {
-        return getOAuthCredentials().getSocialId();
+        return getSocialId();
     }
 
     //없애고 싶다.........
