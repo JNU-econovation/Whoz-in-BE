@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
+import com.whoz_in.domain.member.model.OAuthCredentials;
 import com.whoz_in.domain.member.model.SocialProvider;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,20 +14,18 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 public class OAuth2UserInfo implements OAuth2User {
 
     private final boolean isRegistered;
-    private final SocialProvider socialProvider;
-    private final String socialId;
+    private final OAuthCredentials oAuthCredentials;
     private final String email;
 
     public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId, String email) {
         this.isRegistered = isRegistered;
-        this.socialProvider = socialProvider;
-        this.socialId = socialId;
+        this.oAuthCredentials = OAuthCredentials.load(socialProvider, socialId);
         this.email = email;
     }
 
     @Override
     public String getName() {
-        return getSocialId();
+        return getOAuthCredentials().getSocialId();
     }
 
     //없애고 싶다.........
