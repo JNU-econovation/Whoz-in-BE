@@ -5,12 +5,14 @@ import lombok.Getter;
 
 @Getter
 public enum SocialProvider {
-    KAKAO("kakao");
+    KAKAO("kakao", true);
 
     private String socialProvider;
+    private boolean registerable;
 
-    SocialProvider(String socialProvider) {
+    SocialProvider(String socialProvider, boolean registerable) {
         this.socialProvider = socialProvider;
+        this.registerable = registerable;
     }
 
     public static SocialProvider findSocialProvider(String socialProvider){
@@ -19,6 +21,5 @@ public enum SocialProvider {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("no social provider"));
     }
-
-
+    
 }
