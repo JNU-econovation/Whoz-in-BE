@@ -71,12 +71,6 @@ public final class Member extends AggregateRoot {
                 .build();
     }
 
-    //일반 로그인 - 실패 시 예외
-    public void login(String loginId, String password, PasswordEncoder encoder){
-        if (this.authCredentials == null)
-            throw new NotAuthMemberException();
-        this.authCredentials.login(loginId, password, encoder);
-    }
     public void changePassword(String rawOldPassword, String rawNewPassword, PasswordEncoder passwordEncoder){
         if (authCredentials == null)
             throw new NotAuthMemberException();
