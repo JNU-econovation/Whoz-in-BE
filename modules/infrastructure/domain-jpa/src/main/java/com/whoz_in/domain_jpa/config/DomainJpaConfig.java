@@ -13,19 +13,21 @@ import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableJpaAuditing
 @EnableJpaRepositories(
         basePackages = "com.whoz_in.domain_jpa",
         entityManagerFactoryRef = "domainJpaEntityManagerFactory",
         transactionManagerRef = "domainJpaTM"
 )
 @RequiredArgsConstructor
-public class DataSourceConfig {
+public class DomainJpaConfig {
     //DB 연결 세팅값 객체
     //잠깐쓸거라 밖으로 빼지 않았음
     //설정마다 필드가 다를 수 있으므로 공통 모듈로 빼지 않았음
