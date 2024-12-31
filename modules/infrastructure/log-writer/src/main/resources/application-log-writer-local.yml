@@ -1,0 +1,2 @@
+command:
+  monitor: "sudo -S arp-scan --interface={{interface}} --localnet"

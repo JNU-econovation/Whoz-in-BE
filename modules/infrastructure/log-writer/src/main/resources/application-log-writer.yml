@@ -3,6 +3,12 @@ spring:
     import:
       - "classpath:env-log-writer.properties"
 
+command:
+  managed:
+    mdns: "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
+    arp: "sudo -S arp-scan --interface={{interface}} --localnet"
+  monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
+
 log-writer:
   datasource:
     url: ${DB_URL}
