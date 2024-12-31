@@ -4,5 +4,5 @@ import com.whoz_in.main_api.query.shared.application.Viewer;
 import java.util.Optional;
 
 public interface MemberViewer extends Viewer {
-    Optional<MemberAuthInfo> getAuthInfoByLoginId(String loginId);
+    Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId);
 }
