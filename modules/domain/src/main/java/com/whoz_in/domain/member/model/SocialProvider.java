@@ -7,17 +7,17 @@ import lombok.Getter;
 public enum SocialProvider {
     KAKAO("kakao", true);
 
-    private String socialProvider;
+    private String providerName;
     private boolean registerable;
 
     SocialProvider(String socialProvider, boolean registerable) {
-        this.socialProvider = socialProvider;
+        this.providerName = socialProvider;
         this.registerable = registerable;
     }
 
     public static SocialProvider findSocialProvider(String socialProvider){
         return Arrays.stream(SocialProvider.values())
-                .filter(provider -> provider.getSocialProvider().equals(socialProvider))
+                .filter(provider -> provider.getProviderName().equals(socialProvider))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("no social provider"));
     }
