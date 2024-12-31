@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.member.application;
 
 import com.whoz_in.domain.member.model.Position;
-import com.whoz_in.main_api.shared.application.command.Command;
+import com.whoz_in.main_api.command.shared.application.Command;
 
 public record MemberSignUp(
         String loginId,

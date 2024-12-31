@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.query.device_info.application;
 
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.application.query.QueryHandler;
+import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import lombok.RequiredArgsConstructor;
 
 @Handler
