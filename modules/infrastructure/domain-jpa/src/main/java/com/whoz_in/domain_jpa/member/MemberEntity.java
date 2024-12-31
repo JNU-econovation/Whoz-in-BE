@@ -12,6 +12,7 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UuidGenerator;
 
 
 @Getter
@@ -20,6 +21,8 @@ import lombok.NoArgsConstructor;
 public class MemberEntity extends BaseEntity {
 
   @Id
+  @UuidGenerator
+  @Column(columnDefinition = "BINARY(16)", nullable = false)
   private UUID id;
 
   @Column(nullable = false)
