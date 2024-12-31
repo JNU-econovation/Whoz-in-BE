@@ -9,11 +9,11 @@ command:
     arp: "sudo -S arp-scan --interface={{interface}} --localnet"
   monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
 
+sudo_password: ${LOG_WRITER.SUDO_PASSWORD}
+
 log-writer:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: ${DB_DRIVER_CLASS}
-
-sudo_password: ${SUDO_PASSWORD}
+    url: ${LOG_WRITER.DB_URL}
+    username: ${LOG_WRITER.DB_USERNAME}
+    password: ${LOG_WRITER.DB_PASSWORD}
+    driver-class-name: ${LOG_WRITER.DB_DRIVER_CLASS}
