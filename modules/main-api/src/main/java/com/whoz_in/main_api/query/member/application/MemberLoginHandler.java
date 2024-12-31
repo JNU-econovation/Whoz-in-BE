@@ -13,9 +13,9 @@ public class MemberLoginHandler extends QueryHandler<MemberLogin, MemberLoginRes
 
     @Override
     public MemberLoginResponse handle(MemberLogin query) {
-        MemberAuthInfo authInfo = viewer.getAuthInfoByLoginId(query.loginId()).orElseThrow();
+        MemberAuthInfo authInfo = viewer.findAuthInfoByLoginId(query.loginId()).orElseThrow();
         if (!authInfo.encodedPassword().equals(encoder.encode(query.loginId())))
-            //TODO: query 예외로
+//            //TODO: query 예외로
             throw new IllegalArgumentException("로그인에 실패했습니다.");
         return new MemberLoginResponse(authInfo.memberId());
     }
