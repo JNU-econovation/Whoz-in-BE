@@ -37,12 +37,6 @@ public final class AuthCredentials {
         return new AuthCredentials(loginId, encodedPassword);
     }
 
-    //아이디와 비밀번호가 맞는지 확인
-    public void login(String loginId, String rawPassword, PasswordEncoder passwordEncoder){
-        if (!this.loginId.equals(loginId) || !this.encodedPassword.equals(passwordEncoder.encode(rawPassword)))
-            throw new InvalidAuthCredentialsException();
-    }
-
     AuthCredentials changePassword(String rawOldPassword, String rawNewPassword, PasswordEncoder passwordEncoder){
         String encodedOldPassword = passwordEncoder.encode(rawOldPassword);
         //기존 비밀번호가 같은지 확인
