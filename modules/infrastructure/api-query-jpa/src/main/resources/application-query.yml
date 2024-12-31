@@ -1,7 +1,4 @@
 spring:
-#  config:
-#    activate:
-#      on-profile: local
   config:
     import: "classpath:env-api-query-jpa.properties"
   datasource:
@@ -12,11 +9,3 @@ spring:
 logging:
   level:
     root: info
-    jdbc:
-      sqlonly: off
-      sqltiming: info
-      resultsettable: info
-      audit: off
-      resultset: off
-      connection: off
-
