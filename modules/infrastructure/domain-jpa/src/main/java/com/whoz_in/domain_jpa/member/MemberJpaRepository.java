@@ -28,8 +28,7 @@ public class MemberJpaRepository implements MemberRepository {
 
   @Override
   public boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
-    //TODO: 구현
-    return true;
+    return jpaRepository.existsBySocialProviderAndSocialId(socialProvider, socialId);
   }
 
   @Override
