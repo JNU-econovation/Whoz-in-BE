@@ -23,5 +23,11 @@ public class KakaoResponse implements ProviderResponse{
         return kakaoAccountAttributes.get("email").toString();
     }
 
-
+    @SuppressWarnings("unchecked")
+    @Override
+    public String getName() {
+        // 카카오톡 프로필에 입력된 사용자의 이름
+        Map<String, Object> profle = (Map<String, Object>) kakaoAccountAttributes.get("profile");
+        return profle.get("nickname").toString();
+    }
 }
