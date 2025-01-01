@@ -5,5 +5,6 @@ public interface ProviderResponse {
 
     String getSocialId();
     String getEmail();
+    String getName();
 
 }
