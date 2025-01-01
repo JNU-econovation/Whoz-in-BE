@@ -1,18 +1,16 @@
-package com.whoz_in.domain_jpa.config;
+package com.whoz_in.api_query_jpa.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.Map;
 import javax.sql.DataSource;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -20,12 +18,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.whoz_in.domain_jpa",
-        entityManagerFactoryRef = "domainJpaEntityManagerFactory",
-        transactionManagerRef = "domainJpaTM"
+        basePackages = "com.whoz_in.api_query_jpa",
+        entityManagerFactoryRef = "apiQueryJpaEMF",
+        transactionManagerRef = "apiQueryJpaTM"
 )
-@RequiredArgsConstructor
-public class DataSourceConfig {
+public class ApiQueryJpaConfig {
     //DB 연결 세팅값 객체
     //잠깐쓸거라 밖으로 빼지 않았음
     //설정마다 필드가 다를 수 있으므로 공통 모듈로 빼지 않았음
@@ -41,8 +38,6 @@ public class DataSourceConfig {
     @Getter
     @Setter
     public static class HibernateProperties {
-        private String ddlAuto;
-        private String physicalNamingStrategy;
         private boolean formatSql;
         private boolean showSql;
     }
@@ -50,22 +45,21 @@ public class DataSourceConfig {
     //세팅값 객체를 빈으로 등록함
     //@Bean 메서드를 통해 자동으로 빈 등록이 되기 때문에 @ConfigurationPropertiesScan 없이도 동작함
     @Bean
-    @ConfigurationProperties("domain-jpa.datasource")
-    public DataSourceProperties domainJpaDataSourceProperties(){
+    @ConfigurationProperties("api-query-jpa.datasource")
+    public DataSourceProperties apiQueryJpaDataSourceProperties(){
         return new DataSourceProperties();
     }
     @Bean
-    @ConfigurationProperties("domain-jpa.hibernate")
-    public HibernateProperties domainJpaHibernateProperties(){
+    @ConfigurationProperties("api-query-jpa.hibernate")
+    public HibernateProperties apiQueryJpaHibernateProperties(){
         return new HibernateProperties();
     }
 
     //세팅값을 통해 DataSource 생성
-    @Primary
     @Bean
-    public DataSource domainJpaDataSource(DataSourceProperties properties) {
+    public DataSource apiQueryJpaDataSource(DataSourceProperties properties) {
         HikariDataSource dataSource = new HikariDataSource();
-        dataSource.setPoolName("DomainJpaHikariPool");
+        dataSource.setPoolName("ApiQueryJpaHikariPool");
         dataSource.setJdbcUrl(properties.getUrl());
         dataSource.setUsername(properties.getUsername());
         dataSource.setPassword(properties.getPassword());
@@ -74,32 +68,27 @@ public class DataSourceConfig {
     }
 
     //JPA 설정
-    @Primary
-    @Bean
-    public LocalContainerEntityManagerFactoryBean domainJpaEntityManagerFactory(
+    @Bean("apiQueryJpaEMF")
+    public LocalContainerEntityManagerFactoryBean apiQueryJpaEntityManagerFactory(
             EntityManagerFactoryBuilder builder,
-            @Qualifier("domainJpaDataSource") DataSource dataSource,
-            @Qualifier("domainJpaHibernateProperties") HibernateProperties hibernateProperties) {
+            @Qualifier("apiQueryJpaDataSource") DataSource dataSource,
+            @Qualifier("apiQueryJpaHibernateProperties") HibernateProperties hibernateProperties) {
         return builder
                 .dataSource(dataSource) //DataSource 지정
-                .persistenceUnit("domain_jpa") //이름
-                .packages("com.whoz_in.domain_jpa") //JPA 엔티티가 존재하는 패키지
+                .persistenceUnit("api_query_jpa") //이름
+                .packages("com.whoz_in.api_query_jpa") //JPA 엔티티가 존재하는 패키지
                 .properties(
                         Map.of(
-                            "hibernate.hbm2ddl.auto", hibernateProperties.ddlAuto,
-                            "hibernate.physical_naming_strategy", hibernateProperties.physicalNamingStrategy,
-                            "hibernate.show_sql", hibernateProperties.showSql,
-                            "hibernate.format_sql", hibernateProperties.formatSql
+                                "hibernate.show_sql", hibernateProperties.showSql,
+                                "hibernate.format_sql", hibernateProperties.formatSql
                         )
                 )
                 .build();
     }
 
-    @Primary
-    @Bean("domainJpaTM")
-    public PlatformTransactionManager domainJpaTransactionManager(
-            @Qualifier("domainJpaEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
-        //필요하면 설정 추가하기
+    @Bean("apiQueryJpaTM")
+    public PlatformTransactionManager apiQueryJpaTransactionManager(
+            @Qualifier("apiQueryJpaEMF") EntityManagerFactory entityManagerFactory) {
         return new JpaTransactionManager(entityManagerFactory);
     }
 }

@@ -11,4 +11,9 @@ public class SpringSecurityPasswordEncoder implements PasswordEncoder {
     public String encode(String plainText) {
         return encoder.encode(plainText);
     }
+
+    @Override
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return encoder.matches(rawPassword, encodedPassword);
+    }
 }
