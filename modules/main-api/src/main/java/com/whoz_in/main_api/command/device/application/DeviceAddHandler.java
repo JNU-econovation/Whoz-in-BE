@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
-public class DeviceAddHandler extends CommandHandler<DeviceAdd> {
+public class DeviceAddHandler implements CommandHandler<DeviceAdd> {
     private final RequesterInfo requesterInfo;
     private final DeviceRepository repository;
     private final EventBus eventBus;

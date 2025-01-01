@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.query.shared.application;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -20,7 +21,13 @@ public final class QueryHandlers {
                                         queryHandler -> {
                                             //queryHandler의 프록시 객체를 가져옴 (예시 - @Transactional 사용 시)
                                             Class<?> targetClass = AopProxyUtils.ultimateTargetClass(queryHandler);
-                                            ParameterizedType paramType = (ParameterizedType) targetClass.getGenericSuperclass();
+                                            //QueryHandler의 제네릭 타입을 알아낸다.
+                                            ParameterizedType paramType =
+                                                    (ParameterizedType) Arrays.stream(targetClass.getGenericInterfaces())
+                                                            .filter(ParameterizedType.class::isInstance)
+                                                            .filter(type -> ((ParameterizedType) type).getRawType().equals(QueryHandler.class))
+                                                            .findAny()
+                                                            .orElseThrow(() -> new IllegalStateException("QueryHandler에 제네릭 타입이 존재하지 않음"));
                                             return (Class<? extends Query>) paramType.getActualTypeArguments()[0];
                                         },
                                         queryHandler -> queryHandler

@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
-public class MemberSignUpHandler extends CommandHandler<MemberSignUp> {
+public class MemberSignUpHandler implements CommandHandler<MemberSignUp> {
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
     private final EventBus eventBus;
