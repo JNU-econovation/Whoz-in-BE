@@ -1,8 +1,11 @@
 spring:
   config:
-    #domain-jpa 모듈
     import:
+      #domain-jpa 모듈의 설정 파일
       - "classpath:application-domain-jpa.yml"
+      #api-query-jpa 모듈의 설정 파일
       - "classpath:application-api-query-jpa.yml"
+      #logging 모듈의 설정 파일
+      - "classpath:application-logging.yml"
 logging:
   config: "classpath:logback-common.xml"
