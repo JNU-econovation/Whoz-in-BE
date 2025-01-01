@@ -1,0 +1,23 @@
+package com.whoz_in.main_api.config.security.consts;
+
+public class JwtConst {
+
+    // token
+    public static final String ISSUER = "whozin";
+    public static final String ACCESS_TOKEN = "access-token";
+    public static final String REFRESH_TOKEN = "refresh-token";
+    public static final String OAUTH2_LOGIN_TOKEN = "oauth2-login-token";
+    public static final String TOKEN_TYPE = "token-type";
+    public static final String TOKEN_ID = "token-id";
+
+    // auth
+    public static final String AUTHORIZATION = "Authorization";
+    public static final String SOCIAL_PROVIDER = "social-provider";
+    public static final String SOCIAL_ID = "social-id";
+    public static final String EMAIL = "email";
+    public static final String IS_REGISTERED = "is-registered";
+    public static final String USER_ID = "user-id";
+    public static final String ACCOUNT_TYPE = "account-type";
+    public static final String PERSONAL_AUTHORITY = "personal";
+
+}
