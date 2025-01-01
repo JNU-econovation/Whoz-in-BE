@@ -5,5 +5,7 @@ spring:
       - "classpath:application-log-writer.yml"
       #log-writer 모듈에 제공할 LogWriterConfig 구현체를 만들기 위한 파일
       - "classpath:env-log-writer-setting.yml"
+      #logging 모듈의 설정 파일
+      - "classpath:application-logging.yml"
 logging:
   config: "classpath:logback-common.xml"
