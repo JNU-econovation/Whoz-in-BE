@@ -1,11 +1,17 @@
 spring:
   config:
     import: "classpath:env-api-query-jpa.properties"
+
+api-query-jpa:
   datasource:
     url: ${API_QUERY_JPA.DB_URL}
     username: ${API_QUERY_JPA.DB_USERNAME}
     password: ${API_QUERY_JPA.DB_PASSWORD}
     driver-class-name: ${API_QUERY_JPA.DB_DRIVER_CLASS}
+  hibernate:
+    show_sql: true
+    format_sql: true
+
 logging:
   level:
     root: info
