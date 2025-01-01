@@ -6,10 +6,10 @@ spring:
 
 domain-jpa:
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-    driver-class-name: ${DB_DRIVER_CLASS}
+    url: ${DOMAIN_JPA.DB_URL}
+    username: ${DOMAIN_JPA.DB_USERNAME}
+    password: ${DOMAIN_JPA.DB_PASSWORD}
+    driver-class-name: ${DOMAIN_JPA.DB_DRIVER_CLASS}
   hibernate:
     ddl-auto: validate
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
