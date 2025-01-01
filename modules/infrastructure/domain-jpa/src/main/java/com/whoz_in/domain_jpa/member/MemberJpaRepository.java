@@ -29,4 +29,10 @@ public class MemberJpaRepository implements MemberRepository {
     //TODO: 구현
     return true;
   }
+
+  @Override
+  public Optional<Member> findByName(String name) {
+    Optional<MemberEntity> entity = jpaRepository.findByName(name);
+    return entity.map(converter::to);
+  }
 }

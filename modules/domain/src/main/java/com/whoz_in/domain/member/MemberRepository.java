@@ -9,7 +9,11 @@ public interface MemberRepository {
   void save(Member member);
   Optional<Member> findByLoginId(String loginId);
   boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId);
+  Optional<Member> findByName(String name);
   default Member getByLoginId(String loginId){
     return findByLoginId(loginId).orElseThrow(NoMemberException::new);
+  }
+  default Member getByName(String name){
+    return findByName(name).orElseThrow(NoMemberException::new);
   }
 }
