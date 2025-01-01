@@ -18,4 +18,7 @@ public interface MemberRepository {
   default Member getByName(String name){
     return findByName(name).orElseThrow(NoMemberException::new);
   }
+  default Member getByMemberId(MemberId id){
+    return findByMemberId(id).orElseThrow(NoMemberException::new);
+  }
 }
