@@ -30,7 +30,8 @@ public final class AccessTokenSerializer extends TokenSerializer<AccessToken> {
     @Override
     public Map<String, String> buildClaims(AccessToken accessToken) {
         return Map.of(
-                USER_ID, accessToken.getUserId().toString()
+                USER_ID, accessToken.getMemberId().toString(),
+                ACCOUNT_TYPE, accessToken.getAccountType().toString()
         );
     }
 
