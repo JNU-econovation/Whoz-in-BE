@@ -39,33 +39,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // TODO: 일반 회원가입으로 등록이 되었을 경우에, 카카오 로그인을 시도하면 socialProvider 정보와 socialId 값을 저장해야 함
         // 카카오톡으로부터 사용자의 실명을 가져오면?
 
-        if(!registered) register(name, socialProvider, socialId);
-
         return new OAuth2UserInfo(registered, socialProvider, socialId, email);
     }
-
-    private void register(String name, SocialProvider socialProvider, String socialId) {
-        try {
-            // 이름을 기준으로 사용자 조회 후, OAuth 데이터만 삽입
-            Member member = memberRepository.getByName(name);
-
-            MemberOAuthInfoRegistered event =
-                    new MemberOAuthInfoRegistered(
-                            member.getId(),
-                            OAuthCredentials.load(socialProvider, socialId));
-
-            eventPublisher.publishEvent(event);
-
-        } catch (NoMemberException e) {
-            // 회원가입을 하고 OAuth 데이터를 삽입
-            Member member = Member.create(name, OAuthCredentials.load(socialProvider, socialId));
-            memberRepository.save(member);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Unexpected error occurred", e);
-        }
-
-    }
-
 
 }
