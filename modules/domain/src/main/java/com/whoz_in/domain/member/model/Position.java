@@ -10,7 +10,8 @@ public enum Position {
     DE("de"),
     FE("fe"),
     PM("pm"),
-    GAME("game");
+    GAME("game"),
+    TEMP("temp");
 
     private String position;
 
