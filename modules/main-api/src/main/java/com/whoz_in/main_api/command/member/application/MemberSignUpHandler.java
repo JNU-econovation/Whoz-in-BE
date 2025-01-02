@@ -12,19 +12,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
-public class MemberSignUpHandler extends CommandHandler<MemberSignUp> {
+public class MemberSignUpHandler implements CommandHandler<MemberSignUp, Void> {
     private final MemberRepository repository;
     private final PasswordEncoder encoder;
     private final EventBus eventBus;
 
     @Transactional
     @Override
-    public void handle(MemberSignUp cmd) {
+    public Void handle(MemberSignUp cmd) {
         Member member = Member.create(
                 cmd.name(), cmd.position(), cmd.generation(),
                 AuthCredentials.create(cmd.loginId(), cmd.password(), encoder)
         );
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());
+        return null;
     }
 }
