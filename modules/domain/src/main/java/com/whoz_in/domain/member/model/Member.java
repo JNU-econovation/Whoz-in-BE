@@ -44,7 +44,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member create(String name, OAuthCredentials oAuthCredentials){
-        return create(name, null, 0, null, oAuthCredentials);
+        return create(name, Position.TEMP, 0, null, oAuthCredentials);
     }
 
     private static Member create(String name, Position mainPosition, int generation,
