@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.command.shared.application;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.aop.framework.AopProxyUtils;
@@ -23,7 +24,14 @@ public final class CommandHandlers {
                             commandHandler -> {
                                 //commandHandler의 프록시 객체를 가져옴 (예시 - @Transactional 사용 시)
                                 Class<?> targetClass = AopProxyUtils.ultimateTargetClass(commandHandler);
-                                ParameterizedType paramType = (ParameterizedType) targetClass.getGenericSuperclass();
+                                //CommandHandler의 제네릭 타입을 알아낸다.
+                                ParameterizedType paramType =
+                                        (ParameterizedType) Arrays.stream(targetClass.getGenericInterfaces())
+                                                .filter(ParameterizedType.class::isInstance)
+                                                .filter(type -> ((ParameterizedType) type).getRawType().equals(CommandHandler.class))
+                                                .findAny()
+                                                .orElseThrow(() -> new IllegalStateException("CommandHandler에 제네릭 타입이 존재하지 않음"));
+                                //CommandHandler의 첫 번째 제네릭 타입 반환
                                 return (Class<? extends Command>) paramType.getActualTypeArguments()[0];
                             },
                             commandHandler -> commandHandler

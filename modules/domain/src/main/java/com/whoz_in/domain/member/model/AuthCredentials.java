@@ -1,6 +1,5 @@
 package com.whoz_in.domain.member.model;
 
-import com.whoz_in.domain.member.exception.InvalidAuthCredentialsException;
 import com.whoz_in.domain.member.exception.LoginIdPolicyViolationException;
 import com.whoz_in.domain.member.exception.PasswordPolicyViolationException;
 import com.whoz_in.domain.member.exception.WrongPasswordException;
@@ -12,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 //일반 로그인 정보
+//TODO: PasswordEncoder?
 @Getter
 @EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
