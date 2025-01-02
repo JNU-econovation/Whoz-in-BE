@@ -4,6 +4,7 @@ package com.whoz_in.main_api.shared.jwt.tokens;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.TOKEN_ID;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.USER_ID;
 
+import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import com.whoz_in.main_api.shared.jwt.TokenType;
@@ -21,15 +22,15 @@ public final class RefreshTokenSerializer extends TokenSerializer<RefreshToken> 
 
     @Override
     protected RefreshToken buildToken(Claims claims) {
-        Long userId = Long.parseLong(claims.get(USER_ID, String.class));
+        MemberId memberId = new MemberId(UUID.fromString(claims.get(USER_ID, String.class)));
         UUID tokenId = UUID.fromString(claims.get(TOKEN_ID, String.class));
-        return new RefreshToken(userId, tokenId);
+        return new RefreshToken(memberId, tokenId);
     }
 
     @Override
     protected Map<String, String> buildClaims(RefreshToken refreshToken) {
         return Map.of(
-                USER_ID, refreshToken.getUserId().toString(),
+                USER_ID, refreshToken.getMemberId().toString(),
                 TOKEN_ID, refreshToken.getTokenId().toString()
         );
     }
