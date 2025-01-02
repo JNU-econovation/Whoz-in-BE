@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class AccessToken extends Token {
-    private final MemberId userId;
+    private final MemberId memberId;
     private final AccountType accountType;
 }
