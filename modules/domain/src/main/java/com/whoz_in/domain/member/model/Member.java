@@ -43,10 +43,6 @@ public final class Member extends AggregateRoot {
         return create(name, mainPosition, generation, null, oAuthCredentials);
     }
 
-    public static Member create(String name, OAuthCredentials oAuthCredentials){
-        return create(name, Position.TEMP, 0, null, oAuthCredentials);
-    }
-
     private static Member create(String name, Position mainPosition, int generation,
             AuthCredentials authCredentials, OAuthCredentials oAuthCredentials){
         if (authCredentials == null && oAuthCredentials == null)
@@ -88,9 +84,5 @@ public final class Member extends AggregateRoot {
         this.statusMessage = newStatusMessage;
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
-
-    public void registerOAuthInfo(SocialProvider socialProvider, String socialId){
-        this.oAuthCredentials = OAuthCredentials.load(socialProvider, socialId);
-        this.register(new MemberOAuthInfoRegistered(this.getId(), oAuthCredentials));
-    }
+    
 }
