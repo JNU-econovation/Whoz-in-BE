@@ -1,6 +1,7 @@
 package com.whoz_in.domain.member.model;
 
 import com.whoz_in.domain.member.event.MemberCreated;
+import com.whoz_in.domain.member.event.MemberOAuthInfoRegistered;
 import com.whoz_in.domain.member.event.MemberPasswordChanged;
 import com.whoz_in.domain.member.event.MemberStatusMessageChanged;
 import com.whoz_in.domain.member.exception.NotAuthMemberException;
@@ -41,6 +42,7 @@ public final class Member extends AggregateRoot {
     public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials){
         return create(name, mainPosition, generation, null, oAuthCredentials);
     }
+
     private static Member create(String name, Position mainPosition, int generation,
             AuthCredentials authCredentials, OAuthCredentials oAuthCredentials){
         if (authCredentials == null && oAuthCredentials == null)
@@ -82,4 +84,5 @@ public final class Member extends AggregateRoot {
         this.statusMessage = newStatusMessage;
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
+    
 }
