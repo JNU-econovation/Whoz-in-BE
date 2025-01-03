@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.shared.jwt;
 
 import static com.whoz_in.main_api.config.security.consts.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_LOGIN_TOKEN;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TEMP_TOKEN;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.REFRESH_TOKEN;
 

@@ -3,8 +3,6 @@ package com.whoz_in.main_api.architecture;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
-import com.tngtech.archunit.core.domain.JavaType;
-import com.tngtech.archunit.core.domain.JavaTypeVariable;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
@@ -17,10 +15,7 @@ import com.whoz_in.main_api.query.shared.application.Viewer;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @AnalyzeClasses(packages = "com.whoz_in.main_api", importOptions = ImportOption.DoNotIncludeTests.class)
 class ViewerTest {

@@ -1,11 +1,22 @@
 spring:
   config:
     import:
-      #log-writer 모듈의 설정 파일
-      - "classpath:application-log-writer.yml"
-      #log-writer 모듈에 제공할 LogWriterConfig 구현체를 만들기 위한 파일
-      - "classpath:env-log-writer-setting.yml"
+      #해당 room의 network interface 설정 파일
+      - "classpath:env-network-interface-setting.yml"
       #logging 모듈의 설정 파일
       - "classpath:application-logging.yml"
+      #domain-jpa 모듈의 설정 파일
+      - "classpath:application-domain-jpa.yml"
+      #domain-jpa 모듈의 데이터 소스 설정 파일
+      - "classpath:env-domain-jpa.properties"
+
+command:
+  managed:
+    mdns: "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
+    arp: "sudo -S arp-scan --interface={{interface}} --localnet"
+  monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
+
+sudo_password: ${SUDO_PASSWORD}
+
 logging:
   config: "classpath:logback-common.xml"
