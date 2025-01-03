@@ -24,7 +24,11 @@ public class ManagedLogEntity extends BaseEntity {
     @Column(nullable = false)
     private String ssid;
 
+    @Column(nullable = false)
+    private String room;
+
     private String deviceName;
+
 
     @Getter
     @AllArgsConstructor
