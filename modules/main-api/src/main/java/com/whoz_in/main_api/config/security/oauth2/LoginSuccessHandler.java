@@ -47,7 +47,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             if(userInfo.isRegistered()) {
                 Member member = memberRepository.getBySocialProviderAndSocialId(userInfo.getSocialProvider(), userInfo.getSocialId());
                 addAccessTokenCookie(response,
-                        new AccessToken(member.getId(), AccountType.USER));
+                        new AccessToken(member.getId(), AccountType.USER)); // TODO: account Type, 동적으로 넣을 수 있도록
             } else {
                 String userInfoKey = OAuth2UserInfoStore.save(userInfo);
                 addOAuth2TempTokenCookie(response, new OAuth2TempToken(userInfoKey));
@@ -64,11 +64,11 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     }
 
     private void addAccessTokenCookie(HttpServletResponse response, AccessToken accessToken) {
-        Cookie oAuth2LoginInfoTokenCookie = cookieFactory.create(
+        Cookie accessTokenCookie = cookieFactory.create(
                 ACCESS_TOKEN,
                 accessTokenSerializer.serialize(accessToken)
         );
-        response.addCookie(oAuth2LoginInfoTokenCookie);
+        response.addCookie(accessTokenCookie);
     }
 
     private void addOAuth2TempTokenCookie(HttpServletResponse response, OAuth2TempToken oAuth2TempToken) {
