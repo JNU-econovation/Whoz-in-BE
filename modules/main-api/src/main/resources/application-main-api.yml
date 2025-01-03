@@ -21,3 +21,4 @@ jwt:
   access-token-expiry: 2h
   refresh-token-expiry: 14d
   oauth2-login-token-expiry: 10m
+  o-auth2-temp-token-expiry: 3m
