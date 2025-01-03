@@ -11,35 +11,38 @@ import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 // OAuth 토큰에 담을 소셜 ID 값의 Key를 저장하는 스토어
+// Key : OAuth2TokenKey 의 "{hashedKey}::{expiredTime}"
+// Value : OAuth2LoginToken 객체
 @Component
 public class OAuth2TokenStore {
 
-    private static final Map<OAuth2TokenKey, OAuth2LoginToken> store = new HashMap<>();
+    private static final Map<String, OAuth2LoginToken> store = new HashMap<>();
 
     public OAuth2TokenStore(){}
 
-    public static OAuth2TokenKey save(OAuth2LoginToken token){
-        OAuth2TokenKey key = OAuth2TokenKey.create(token);
+    public static String save(OAuth2LoginToken token){
+        String key = OAuth2TokenKey.create(token).toString();
         store.put(key, token);
         return key;
     }
 
-    public static OAuth2LoginToken getSocialId(OAuth2TokenKey key){
-        validate(key);
-        if(!store.containsKey(key)) throw new IllegalArgumentException("소셜 ID-Key 를 찾을 수 없음");
+    public static OAuth2LoginToken getSocialId(String hashedKey){
+        validate(hashedKey);
+        if(!store.containsKey(hashedKey)) throw new IllegalArgumentException("소셜 ID-Key 를 찾을 수 없음");
 
-        return store.get(key);
+        return store.get(hashedKey);
     }
 
-    private static void validate(OAuth2TokenKey key){
+    private static void validate(String hashedKey){
         try {
-            key.ensureNotExpired();
+            OAuth2TokenKey.ensureNotExpired(hashedKey);
         } catch (IllegalArgumentException e){
-            store.remove(key);
+            store.remove(hashedKey);
             throw e;
         }
     }
@@ -49,11 +52,19 @@ public class OAuth2TokenStore {
     @RequiredArgsConstructor
     public static class OAuth2TokenKey {
 
+        @Getter
         @EqualsAndHashCode.Include
         private final String hashedKey;
 
         @EqualsAndHashCode.Include
         private final long expiredTime;
+
+        public static void ensureNotExpired(String hashedKey){
+            long expiredTime = Long.parseLong(hashedKey.split(OAUTH2_TOKEN_KEY_DELIMITER)[1]);
+
+            if (Instant.now().getEpochSecond() > expiredTime)
+                throw new IllegalArgumentException("만료된 Social Id Key");
+        }
 
         private OAuth2TokenKey(OAuth2LoginToken token) {
             // TODO: 이 random 을 뭘로 사용해야 할까?
@@ -61,11 +72,6 @@ public class OAuth2TokenStore {
                     .plus(Duration.ofMinutes(OAUTH2_TOKEN_KEY_EXPIRATION_MIN))
                     .getEpochSecond();
             this.hashedKey = hashing(token, expiredTime);
-        }
-
-        public void ensureNotExpired(){
-            if (Instant.now().getEpochSecond() > this.expiredTime)
-                throw new IllegalArgumentException("만료된 Social Id Key");
         }
 
         public static OAuth2TokenKey create(OAuth2LoginToken token) {
