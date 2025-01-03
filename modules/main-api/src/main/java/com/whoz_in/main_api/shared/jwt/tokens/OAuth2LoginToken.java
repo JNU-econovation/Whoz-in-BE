@@ -9,5 +9,10 @@ import lombok.RequiredArgsConstructor;
 public final class OAuth2LoginToken extends Token {
     private final SocialProvider socialProvider;
     private final String socialId;
-    private final String email;
+    private final String name;
+
+    @Override
+    public String toString() {
+        return String.format("%s-%s-%s", socialProvider.name(), socialId, name);
+    }
 }

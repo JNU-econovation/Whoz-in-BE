@@ -16,13 +16,13 @@ public class OAuth2UserInfo implements OAuth2User {
     private final boolean isRegistered;
     private final SocialProvider socialProvider;
     private final String socialId;
-    private final String email;
+    private final String name;
 
-    public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId, String email) {
+    public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId, String name) {
         this.isRegistered = isRegistered;
         this.socialProvider = socialProvider;
         this.socialId = socialId;
-        this.email = email;
+        this.name = name;
     }
 
     @Override
