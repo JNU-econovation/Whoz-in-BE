@@ -1,15 +1,14 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TOKEN_KEY;
+import static com.whoz_in.main_api.config.security.consts.JwtConst.NAME;
+import static com.whoz_in.main_api.config.security.consts.JwtConst.SOCIAL_ID;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.SOCIAL_PROVIDER;
 
 import com.whoz_in.domain.member.model.SocialProvider;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import com.whoz_in.main_api.shared.jwt.TokenType;
-import com.whoz_in.main_api.shared.utils.OAuth2TokenStore;
-import com.whoz_in.main_api.shared.utils.OAuth2TokenStore.OAuth2TokenKey;
 import io.jsonwebtoken.Claims;
 import java.util.Map;
 import org.springframework.stereotype.Component;
@@ -25,15 +24,19 @@ public final class OAuth2LoginTokenProvider extends TokenSerializer<OAuth2LoginT
 
     @Override
     protected OAuth2LoginToken buildToken(Claims claims) {
-        String hashedTokenKey = claims.get(OAUTH2_TOKEN_KEY, String.class);
+        SocialProvider socialProvider = SocialProvider.findSocialProvider(claims.get(SOCIAL_PROVIDER, String.class));
+        String socialId = claims.get(SOCIAL_ID, String.class);
+        String name = claims.get(NAME, String.class);
 
-        return OAuth2TokenStore.getSocialId(hashedTokenKey);
+        return new OAuth2LoginToken(socialProvider, socialId, name);
     }
 
     @Override
     public Map<String, String> buildClaims(OAuth2LoginToken oAuth2LoginToken) {
         return Map.of(
-                OAUTH2_TOKEN_KEY, OAuth2TokenStore.save(oAuth2LoginToken)
+                SOCIAL_PROVIDER, oAuth2LoginToken.getSocialProvider().name(),
+                SOCIAL_ID, oAuth2LoginToken.getSocialId(),
+                NAME, oAuth2LoginToken.getName()
         );
     }
 
