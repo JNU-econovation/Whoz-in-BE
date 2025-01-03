@@ -25,16 +25,15 @@ public final class OAuth2LoginTokenProvider extends TokenSerializer<OAuth2LoginT
 
     @Override
     protected OAuth2LoginToken buildToken(Claims claims) {
-        SocialProvider socialProvider = SocialProvider.findSocialProvider(claims.get(SOCIAL_PROVIDER, String.class));
-        OAuth2TokenKey socialIdKey = claims.get(OAUTH2_TOKEN_KEY, OAuth2TokenKey.class);
+        String hashedTokenKey = claims.get(OAUTH2_TOKEN_KEY, String.class);
 
-        return OAuth2TokenStore.getSocialId(socialIdKey);
+        return OAuth2TokenStore.getSocialId(hashedTokenKey);
     }
 
     @Override
     public Map<String, String> buildClaims(OAuth2LoginToken oAuth2LoginToken) {
         return Map.of(
-                OAUTH2_TOKEN_KEY, OAuth2TokenStore.save(oAuth2LoginToken).toString()
+                OAUTH2_TOKEN_KEY, OAuth2TokenStore.save(oAuth2LoginToken)
         );
     }
 
