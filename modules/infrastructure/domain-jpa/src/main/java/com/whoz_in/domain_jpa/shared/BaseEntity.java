@@ -24,18 +24,18 @@ public abstract class BaseEntity {
 
   @Column(name = "created_at", nullable = false, updatable = false)
   @CreatedDate
-  private Timestamp createdAt;
+  private LocalDateTime createdAt;
 
   @Column(name = "updated_at", nullable = false)
   @LastModifiedDate
-  private Timestamp updatedAt;
+  private LocalDateTime updatedAt;
 
   @Column(name = "deleted_at")
-  private Timestamp deletedAt;
+  private LocalDateTime deletedAt;
 
   public void delete() {
     if (this.deletedAt == null) {
-      this.deletedAt = Timestamp.valueOf(LocalDateTime.now());
+      this.deletedAt = LocalDateTime.now();
     }
   }
 
