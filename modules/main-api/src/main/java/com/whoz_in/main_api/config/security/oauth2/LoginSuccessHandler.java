@@ -1,10 +1,14 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
+import static com.whoz_in.main_api.config.security.consts.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.IS_REGISTERED;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_LOGIN_TOKEN;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TEMP_TOKEN;
 
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginToken;
+import com.whoz_in.domain.member.MemberRepository;
+import com.whoz_in.domain.member.model.AccountType;
+import com.whoz_in.domain.member.model.Member;
+import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
+import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginTokenProvider;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
@@ -30,6 +34,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UriBuilderFactory uriBuilderFactory;
     private final OAuth2LoginTokenProvider oAuth2LoginTokenProvider;
     private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
+    private final AccessTokenSerializer accessTokenSerializer;
+    private final MemberRepository memberRepository;
 
     // registered = true 일 경우, OAuth2LoginToken 을 직렬화 한 jwt 토큰 전송
     // registered = false 일 경우, 추가적인 사용자 정보를 입력받아야 하므로, 임시 jwt 토큰 전송
@@ -39,8 +45,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if (authentication.getPrincipal() instanceof OAuth2UserInfo userInfo) {
 
             if(userInfo.isRegistered()) {
-                addOAuth2AccessTokenCookie(response,
-                        new OAuth2LoginToken(userInfo.getSocialProvider(), userInfo.getSocialId(), userInfo.getName()));
+                Member member = memberRepository.getBySocialProviderAndSocialId(userInfo.getSocialProvider(), userInfo.getSocialId());
+                addAccessTokenCookie(response,
+                        new AccessToken(member.getId(), AccountType.USER));
             } else {
                 String userInfoKey = OAuth2UserInfoStore.save(userInfo);
                 addOAuth2TempTokenCookie(response, new OAuth2TempToken(userInfoKey));
@@ -56,10 +63,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         throw new IllegalStateException("이러면 안되는데?");
     }
 
-    private void addOAuth2AccessTokenCookie(HttpServletResponse response, OAuth2LoginToken oAuth2LoginToken) {
+    private void addAccessTokenCookie(HttpServletResponse response, AccessToken accessToken) {
         Cookie oAuth2LoginInfoTokenCookie = cookieFactory.create(
-                OAUTH2_LOGIN_TOKEN,
-                oAuth2LoginTokenProvider.serialize(oAuth2LoginToken)
+                ACCESS_TOKEN,
+                accessTokenSerializer.serialize(accessToken)
         );
         response.addCookie(oAuth2LoginInfoTokenCookie);
     }
