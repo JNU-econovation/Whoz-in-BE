@@ -43,9 +43,7 @@ public class NetworkConfig {
     }
 
     private String generateCommand(String commandTemplate, String interfaceName) {
-        String replace = commandTemplate.replace("{{interface}}", interfaceName);
-        System.out.println("replace = " + replace);
-        return replace;
+        return commandTemplate.replace("{{interface}}", interfaceName);
     }
 
 
