@@ -3,7 +3,7 @@ package com.whoz_in.main_api.shared.utils;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TOKEN_KEY_DELIMITER;
 import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TOKEN_KEY_EXPIRATION_MIN;
 
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginToken;
+import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
@@ -21,17 +21,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class OAuth2TokenStore {
 
-    private static final Map<String, OAuth2LoginToken> store = new HashMap<>();
+    private static final Map<String, OAuth2UserInfo> store = new HashMap<>();
 
     public OAuth2TokenStore(){}
 
-    public static String save(OAuth2LoginToken token){
-        String key = OAuth2TokenKey.create(token).toString();
-        store.put(key, token);
+    public static String save(OAuth2UserInfo userInfo){
+        String key = OAuth2TokenKey.create(userInfo).toString();
+        store.put(key, userInfo);
         return key;
     }
 
-    public static OAuth2LoginToken getSocialId(String hashedKey){
+    public static OAuth2UserInfo getOAuth2UserInfo(String hashedKey){
         validate(hashedKey);
         if(!store.containsKey(hashedKey)) throw new IllegalArgumentException("소셜 ID-Key 를 찾을 수 없음");
 
@@ -66,16 +66,16 @@ public class OAuth2TokenStore {
                 throw new IllegalArgumentException("만료된 Social Id Key");
         }
 
-        private OAuth2TokenKey(OAuth2LoginToken token) {
+        private OAuth2TokenKey(OAuth2UserInfo userInfo) {
             // TODO: 이 random 을 뭘로 사용해야 할까?
             this.expiredTime = Instant.now()
                     .plus(Duration.ofMinutes(OAUTH2_TOKEN_KEY_EXPIRATION_MIN))
                     .getEpochSecond();
-            this.hashedKey = hashing(token, expiredTime);
+            this.hashedKey = hashing(userInfo, expiredTime);
         }
 
-        public static OAuth2TokenKey create(OAuth2LoginToken token) {
-            return new OAuth2TokenKey(token);
+        public static OAuth2TokenKey create(OAuth2UserInfo userInfo) {
+            return new OAuth2TokenKey(userInfo);
         }
 
         @Override
@@ -86,14 +86,14 @@ public class OAuth2TokenStore {
 
         /**
          *
-         * @param token
+         * @param userInfo
          * @param expiredTime
          * @return hashing(socialId + expiredTime)
          */
-        private String hashing(OAuth2LoginToken token, long expiredTime){
+        private String hashing(OAuth2UserInfo userInfo, long expiredTime){
             try {
                 MessageDigest md = MessageDigest.getInstance("SHA-256");
-                byte[] hash = md.digest((token.toString()+expiredTime).getBytes());
+                byte[] hash = md.digest((userInfo.toString()+expiredTime).getBytes());
 
                 StringBuilder hexString = new StringBuilder();
                 for(byte b : hash){
@@ -111,7 +111,6 @@ public class OAuth2TokenStore {
         }
 
     }
-
 
 
 }
