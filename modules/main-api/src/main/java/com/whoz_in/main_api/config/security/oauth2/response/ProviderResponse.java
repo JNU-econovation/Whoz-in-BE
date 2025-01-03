@@ -4,7 +4,7 @@ package com.whoz_in.main_api.config.security.oauth2.response;
 public interface ProviderResponse {
 
     String getSocialId();
-    String getEmail();
+    String getEmail(); // TODO: email 받아오지 않기
     String getName();
 
 }
