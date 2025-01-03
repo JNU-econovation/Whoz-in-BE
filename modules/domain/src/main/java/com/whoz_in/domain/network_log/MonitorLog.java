@@ -9,5 +9,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public final class MonitorLog {
     private final String mac;
+    private final String room;
     private final LocalDateTime updatedAt;
 }
