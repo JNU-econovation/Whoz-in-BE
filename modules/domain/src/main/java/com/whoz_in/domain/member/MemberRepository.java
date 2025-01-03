@@ -16,6 +16,7 @@ public interface MemberRepository {
     return findByLoginId(loginId).orElseThrow(NoMemberException::new);
   }
   default Member getByName(String name){
+    // TODO: 동명이인에 대한 처리, 예외를 던지는 게 좋을까?
     return findByName(name).orElseThrow(NoMemberException::new);
   }
   default Member getByMemberId(MemberId id){
