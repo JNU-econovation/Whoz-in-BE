@@ -26,7 +26,7 @@ public class OAuth2UserInfoStore {
     public OAuth2UserInfoStore(){}
 
     public static String save(OAuth2UserInfo userInfo){
-        String key = OAuth2TokenKey.create(userInfo).toString();
+        String key = OAuth2UserInfoKey.create(userInfo).toString();
         store.put(key, userInfo);
         return key;
     }
@@ -40,7 +40,8 @@ public class OAuth2UserInfoStore {
 
     private static void validate(String hashedKey){
         try {
-            OAuth2TokenKey.ensureNotExpired(hashedKey);
+            OAuth2UserInfoKey.ensureCorrectKey(hashedKey);
+            OAuth2UserInfoKey.ensureNotExpired(hashedKey);
         } catch (IllegalArgumentException e){
             store.remove(hashedKey);
             throw e;
@@ -50,7 +51,7 @@ public class OAuth2UserInfoStore {
     // hashedKey 와 expiredTime 값을 기준으로 키를 구분한다.
     @EqualsAndHashCode(onlyExplicitlyIncluded = true)
     @RequiredArgsConstructor
-    public static class OAuth2TokenKey {
+    public static class OAuth2UserInfoKey {
 
         @Getter
         @EqualsAndHashCode.Include
@@ -66,7 +67,13 @@ public class OAuth2UserInfoStore {
                 throw new IllegalArgumentException("만료된 Social Id Key");
         }
 
-        private OAuth2TokenKey(OAuth2UserInfo userInfo) {
+        public static void ensureCorrectKey(String unknownKey){
+            if(!unknownKey.contains(OAUTH2_TOKEN_KEY_DELIMITER)
+                    || unknownKey.split(OAUTH2_TOKEN_KEY_DELIMITER).length != 2)
+                throw new IllegalArgumentException("유효하지 않은 Key 형식");
+        }
+
+        private OAuth2UserInfoKey(OAuth2UserInfo userInfo) {
             // TODO: 이 random 을 뭘로 사용해야 할까?
             this.expiredTime = Instant.now()
                     .plus(Duration.ofMinutes(OAUTH2_TOKEN_KEY_EXPIRATION_MIN))
@@ -74,8 +81,8 @@ public class OAuth2UserInfoStore {
             this.hashedKey = hashing(userInfo, expiredTime);
         }
 
-        public static OAuth2TokenKey create(OAuth2UserInfo userInfo) {
-            return new OAuth2TokenKey(userInfo);
+        public static OAuth2UserInfoKey create(OAuth2UserInfo userInfo) {
+            return new OAuth2UserInfoKey(userInfo);
         }
 
         @Override
