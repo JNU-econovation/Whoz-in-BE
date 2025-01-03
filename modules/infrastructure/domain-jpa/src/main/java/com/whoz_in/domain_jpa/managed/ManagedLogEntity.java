@@ -13,10 +13,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
-@SuperBuilder(toBuilder = true)
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ManagedLogEntity extends BaseEntity {
 
     @EmbeddedId
