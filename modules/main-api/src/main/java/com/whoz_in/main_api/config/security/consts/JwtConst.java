@@ -6,7 +6,6 @@ public class JwtConst {
     public static final String ISSUER = "whozin";
     public static final String ACCESS_TOKEN = "access-token";
     public static final String REFRESH_TOKEN = "refresh-token";
-    public static final String OAUTH2_LOGIN_TOKEN = "oauth2-login-token";
     public static final String OAUTH2_TEMP_TOKEN = "oauth2-temp-token";
     public static final String TOKEN_TYPE = "token-type";
     public static final String TOKEN_ID = "token-id";

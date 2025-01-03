@@ -2,7 +2,6 @@ package com.whoz_in.main_api.shared;
 
 import com.whoz_in.domain.member.model.SocialProvider;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.utils.OAuth2UserInfoStore;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 public class OAuth2UserInfoStoreTest {
 
-    private final OAuth2LoginToken testAccessToken = new OAuth2LoginToken(SocialProvider.KAKAO, "naver", "testUser");
     private final OAuth2TempToken testTempToken = new OAuth2TempToken("testKey");
     private final OAuth2UserInfo testValue = new OAuth2UserInfo(false, SocialProvider.KAKAO, "12345", "testUser");
 
