@@ -43,4 +43,9 @@ public class MemberJpaRepository implements MemberRepository {
     Optional<MemberEntity> entity = jpaRepository.findById(memberId);
     return entity.map(converter::to);
   }
+
+  @Override
+  public Optional<Member> findBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
+    return jpaRepository.findBySocialProviderAndSocialId(socialProvider, socialId).map(converter::to);
+  }
 }
