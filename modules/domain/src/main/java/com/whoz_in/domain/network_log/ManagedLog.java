@@ -1,10 +1,8 @@
 package com.whoz_in.domain.network_log;
 
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @RequiredArgsConstructor
