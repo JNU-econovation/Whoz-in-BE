@@ -2,7 +2,6 @@ package com.whoz_in.domain_jpa.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import java.security.MessageDigest;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

@@ -1,6 +1,7 @@
 package com.whoz_in.domain_jpa.monitor;
 
 
+import com.whoz_in.domain_jpa.shared.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -8,7 +9,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.whoz_in.domain_jpa.shared.BaseEntity;
 
 @Getter
 @Entity
