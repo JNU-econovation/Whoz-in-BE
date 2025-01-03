@@ -46,7 +46,7 @@ public class JwtUtil {
 
     //TODO: 이걸 여기다 둘 필요가 있을까
     public void ensureTokenTypeMatches(Claims claims, TokenType tokenType) {
-        if (TokenType.findByName(getClaim(claims, ISSUER)) != tokenType)
+        if (TokenType.findByName(getClaim(claims, TOKEN_TYPE)) != tokenType)
             throw new IllegalArgumentException("맞지 않은 토큰 타입");
     }
     
