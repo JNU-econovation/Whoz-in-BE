@@ -9,7 +9,6 @@ import com.whoz_in.domain.member.model.AccountType;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginTokenProvider;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
 import com.whoz_in.main_api.shared.utils.CookieFactory;
@@ -32,7 +31,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Qualifier("basic")
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
-    private final OAuth2LoginTokenProvider oAuth2LoginTokenProvider;
     private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
     private final AccessTokenSerializer accessTokenSerializer;
     private final MemberRepository memberRepository;
