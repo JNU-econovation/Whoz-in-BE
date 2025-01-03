@@ -31,7 +31,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if (authentication.getPrincipal() instanceof OAuth2UserInfo userInfo) {
             Cookie oAuth2LoginInfoTokenCookie = cookieFactory.create(
                     OAUTH2_LOGIN_TOKEN,
-                    oAuth2LoginTokenProvider.serialize(new OAuth2LoginToken(userInfo.getSocialProvider(), userInfo.getSocialId(), userInfo.getEmail()))
+                    oAuth2LoginTokenProvider.serialize(new OAuth2LoginToken(userInfo.getSocialProvider(), userInfo.getSocialId(), userInfo.getName()))
             );
             response.addCookie(oAuth2LoginInfoTokenCookie);
 
