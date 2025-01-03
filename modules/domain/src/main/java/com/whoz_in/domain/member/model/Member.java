@@ -1,7 +1,6 @@
 package com.whoz_in.domain.member.model;
 
 import com.whoz_in.domain.member.event.MemberCreated;
-import com.whoz_in.domain.member.event.MemberOAuthInfoRegistered;
 import com.whoz_in.domain.member.event.MemberPasswordChanged;
 import com.whoz_in.domain.member.event.MemberStatusMessageChanged;
 import com.whoz_in.domain.member.exception.NotAuthMemberException;

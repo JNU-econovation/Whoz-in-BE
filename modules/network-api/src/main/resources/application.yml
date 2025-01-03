@@ -1,4 +1,5 @@
 spring:
   profiles:
     active: local
-    include: network-api
+  config:
+    import: "classpath:application-network-api.yml" # network-api 설정 파일 포함
