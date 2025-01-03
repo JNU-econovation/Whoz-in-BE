@@ -10,4 +10,5 @@ public interface MemberEntityJpaRepository extends JpaRepository<MemberEntity, U
     Optional<MemberEntity> findByName(String name);
     Optional<MemberEntity> findById(UUID id);
     boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId);
+    Optional<MemberEntity> findBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId);
 }
