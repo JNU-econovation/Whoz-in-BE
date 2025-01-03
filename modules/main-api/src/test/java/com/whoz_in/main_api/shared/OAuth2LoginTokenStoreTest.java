@@ -1,25 +1,17 @@
 package com.whoz_in.main_api.shared;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 import com.whoz_in.domain.member.model.SocialProvider;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginToken;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2LoginTokenProvider;
 import com.whoz_in.main_api.shared.utils.OAuth2TokenStore;
 import com.whoz_in.main_api.shared.utils.OAuth2TokenStore.OAuth2TokenKey;
 import java.time.Instant;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
 public class OAuth2LoginTokenStoreTest {
 
     private final OAuth2LoginToken testToken = new OAuth2LoginToken(SocialProvider.KAKAO, "naver", "testUser");
-
-    @Autowired
-    private OAuth2LoginTokenProvider oAuth2LoginTokenProvider;
 
     @Test
     @DisplayName("SocialIdKey 생성 테스트")
