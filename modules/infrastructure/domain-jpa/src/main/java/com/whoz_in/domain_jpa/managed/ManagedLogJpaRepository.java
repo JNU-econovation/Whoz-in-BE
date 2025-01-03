@@ -25,7 +25,7 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
     public void saveAll(Collection<ManagedLog> logs) {
         if (logs.isEmpty()) return;
 
-        String sql = "INSERT INTO managed_log " +
+        String sql = "INSERT INTO managed_log_entity " +
                 "(mac, created_at, updated_at, device_name, ip, ssid) " +
                 "VALUES (?, ?, ?, ?, ?, ?) " +
                 "ON DUPLICATE KEY UPDATE updated_at = ?";
