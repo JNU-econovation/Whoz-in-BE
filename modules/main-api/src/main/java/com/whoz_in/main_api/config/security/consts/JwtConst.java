@@ -9,6 +9,9 @@ public class JwtConst {
     public static final String OAUTH2_LOGIN_TOKEN = "oauth2-login-token";
     public static final String TOKEN_TYPE = "token-type";
     public static final String TOKEN_ID = "token-id";
+    public static final String SOCIAL_ID_KEY = "social-id-key";
+    public static final String SOCIAL_ID_KEY_DELIMITER = "::";
+    public static final long SOCIAL_ID_KEY_EXPIRATION_MIN = 3;
 
     // auth
     public static final String AUTHORIZATION = "Authorization";
