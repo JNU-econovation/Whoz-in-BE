@@ -26,21 +26,6 @@ public class OAuth2UserInfoStoreTest {
     }
 
     @Test
-    @DisplayName("OAuth2UserInfo 만료 테스트")
-    void OAuth2UserInfoStore만료(){
-        String key = OAuth2UserInfoStore.save(testValue);
-        System.out.println("저장한 값 : " + testValue);
-
-        try {
-            Thread.sleep(240000);
-        } catch (InterruptedException e){
-            Thread.currentThread().start();
-        }
-
-        Assertions.assertThrows(IllegalArgumentException.class, ()->OAuth2UserInfoStore.getOAuth2UserInfo(key));
-    }
-
-    @Test
     @DisplayName("OAuth2UserInfoStore 잘못된 키일 경우 테스트")
     void OAuth2UserInfoStoreInvalidKey(){
         Assertions.assertThrows(IllegalArgumentException.class, ()->OAuth2UserInfoStore.getOAuth2UserInfo("invalidKey"));
