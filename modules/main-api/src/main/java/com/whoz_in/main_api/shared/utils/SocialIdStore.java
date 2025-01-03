@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.shared.utils;
 
 import static com.whoz_in.main_api.config.security.consts.JwtConst.SOCIAL_ID_KEY_DELIMITER;
+import static com.whoz_in.main_api.config.security.consts.JwtConst.SOCIAL_ID_KEY_EXPIRATION_MIN;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -59,7 +60,7 @@ public class SocialIdStore {
         private SocialIdKey(String socialId) {
             // TODO: 이 random 을 뭘로 사용해야 할까?
             this.expiredTime = Instant.now()
-                    .plus(Duration.ofMinutes(3))
+                    .plus(Duration.ofMinutes(SOCIAL_ID_KEY_EXPIRATION_MIN))
                     .getEpochSecond();
             this.hashedKey = hashing(socialId, expiredTime);
         }
