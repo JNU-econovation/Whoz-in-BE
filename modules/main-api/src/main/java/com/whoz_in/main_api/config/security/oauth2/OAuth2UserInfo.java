@@ -42,4 +42,10 @@ public class OAuth2UserInfo implements OAuth2User {
         return Collections.emptyList();
     }
 
+    @Override
+    public String toString() {
+        String formatString = "%b-%s-%s-%s";
+        return String.format(formatString, isRegistered, socialProvider, socialId, name);
+    }
+
 }
