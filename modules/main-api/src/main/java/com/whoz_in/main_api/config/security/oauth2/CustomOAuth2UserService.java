@@ -1,12 +1,7 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
 import com.whoz_in.domain.member.MemberRepository;
-import com.whoz_in.domain.member.event.MemberOAuthInfoRegistered;
-import com.whoz_in.domain.member.exception.NoMemberException;
-import com.whoz_in.domain.member.model.Member;
-import com.whoz_in.domain.member.model.OAuthCredentials;
 import com.whoz_in.domain.member.model.SocialProvider;
-import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.config.security.oauth2.response.ProviderResponse;
 import com.whoz_in.main_api.config.security.oauth2.response.ProviderResponseFactory;
 import lombok.RequiredArgsConstructor;

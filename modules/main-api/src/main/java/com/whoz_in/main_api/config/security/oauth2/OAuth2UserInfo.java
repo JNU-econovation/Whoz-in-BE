@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
-import com.whoz_in.domain.member.model.OAuthCredentials;
 import com.whoz_in.domain.member.model.SocialProvider;
 import java.util.Collection;
 import java.util.Collections;

@@ -10,13 +10,11 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Entity
-@SuperBuilder(toBuilder = true)
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class ManagedLogEntity extends BaseEntity {
 
     @EmbeddedId
@@ -25,7 +23,11 @@ public class ManagedLogEntity extends BaseEntity {
     @Column(nullable = false)
     private String ssid;
 
+    @Column(nullable = false)
+    private String room;
+
     private String deviceName;
+
 
     @Getter
     @AllArgsConstructor
