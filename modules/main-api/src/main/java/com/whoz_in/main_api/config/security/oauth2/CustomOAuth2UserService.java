@@ -33,13 +33,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialProvider socialProvider = SocialProvider.findSocialProvider(providerName);
         ProviderResponse providerResponse = ProviderResponseFactory.create(socialProvider, oAuth2User.getAttributes());
         String socialId = providerResponse.getSocialId();
-        String email = providerResponse.getEmail();
+        String email = providerResponse.getEmail(); // TODO: email 받아오지 않기
         String name = providerResponse.getName();
         boolean registered = memberRepository.existsBySocialProviderAndSocialId(socialProvider, socialId);
         // TODO: 일반 회원가입으로 등록이 되었을 경우에, 카카오 로그인을 시도하면 socialProvider 정보와 socialId 값을 저장해야 함
         // 카카오톡으로부터 사용자의 실명을 가져오면?
 
-        return new OAuth2UserInfo(registered, socialProvider, socialId, email);
+        return new OAuth2UserInfo(registered, socialProvider, socialId, name);
     }
 
 }
