@@ -23,11 +23,10 @@ public class JwtProperties {
     }
 
     @ConstructorBinding
-    public JwtProperties(String secret, Duration accessTokenExpiry, Duration refreshTokenExpiry, Duration oAuth2LoginTokenExpiry, Duration oAuth2TempTokenExpiry) {
+    public JwtProperties(String secret, Duration accessTokenExpiry, Duration refreshTokenExpiry, Duration oAuth2TempTokenExpiry) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         tokenExpiryDurations.put(TokenType.ACCESS, accessTokenExpiry);
         tokenExpiryDurations.put(TokenType.REFRESH, refreshTokenExpiry);
-        tokenExpiryDurations.put(TokenType.OAUTH2_LOGIN_INFO, oAuth2LoginTokenExpiry);
         tokenExpiryDurations.put(TokenType.OAUTH2_TEMP, oAuth2TempTokenExpiry);
         Arrays.stream(TokenType.values()).forEach(tokenType -> {
             if (!tokenExpiryDurations.containsKey(tokenType))
