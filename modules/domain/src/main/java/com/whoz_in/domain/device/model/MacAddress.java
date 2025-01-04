@@ -34,4 +34,9 @@ public final class MacAddress {
     private static String normalize(String address){
         return address.toUpperCase().replace("-", ":");
     }
+
+    @Override
+    public String toString() {
+        return this.address;
+    }
 }
