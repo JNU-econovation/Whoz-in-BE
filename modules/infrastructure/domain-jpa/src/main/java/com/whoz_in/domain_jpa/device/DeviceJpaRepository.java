@@ -18,7 +18,7 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
-    public Optional<Device> findByMac(MacAddress mac) {
-        return repository.findByMac(mac.getAddress()).map(converter::to);
+    public Optional<Device> findByMac(String mac) {
+        return repository.findByMac(mac).map(converter::to);
     }
 }
