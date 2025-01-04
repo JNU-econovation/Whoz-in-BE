@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class OAuth2UserInfoStore {
 
+    // TODO: Key를 String으로 하지 말고, OAuth2UserInfoKey 객체 그대로 사용하기
     private static final Map<String, OAuth2UserInfo> store = new HashMap<>();
 
     public OAuth2UserInfoStore(){}
