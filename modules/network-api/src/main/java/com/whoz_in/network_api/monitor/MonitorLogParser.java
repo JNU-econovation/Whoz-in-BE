@@ -14,7 +14,6 @@ public final class MonitorLogParser {
     public Set<String> parse(String log) {
         String[] logParts = log.split("\t");
         Set<String> macs = new HashSet<>();
-        System.out.println("'"+log+"' logParts.length = " + logParts.length);
         if(logParts.length != 2) return macs; //정상적인 로그가 아닌경우
         macs.add(logParts[0]); //출발지 맥
         macs.add(logParts[1]); //도착지 맥

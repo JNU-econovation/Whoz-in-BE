@@ -1,6 +1,8 @@
 package com.whoz_in.main_api.shared.utils;
 
+import com.whoz_in.domain.member.model.MemberId;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 /*
@@ -9,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class StubRequesterInfo implements RequesterInfo {
     @Override
-    public Optional<Long> findUserId() {
-        return Optional.of(1L);
+    public Optional<MemberId> findMemberId() {
+        return Optional.of(new MemberId(UUID.fromString("00000000-0000-0000-0000-000000000000")));
     }
 }
