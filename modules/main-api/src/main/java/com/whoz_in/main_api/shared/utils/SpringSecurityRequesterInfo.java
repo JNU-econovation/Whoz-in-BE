@@ -8,7 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 /*
-인증인가 구현하는 사람이 구현체를 제공하기 전까지 사용하는 스텁 구현체
+SpringSecurity 를 이용한 RequesterInfo
  */
 @Component
 @RequiredArgsConstructor
