@@ -6,5 +6,5 @@ import java.util.Optional;
 public interface ManagedLogRepository {
     void save(ManagedLog log);
     void saveAll(Collection<ManagedLog> logs);
-    Optional<ManagedLog> findLatestByIp(String ip);
+    Optional<ManagedLog> findLatestByRoomAndIp(String room, String ip);
 }
