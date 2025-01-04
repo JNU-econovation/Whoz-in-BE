@@ -24,10 +24,13 @@ public class MonitorLogJpaRepository implements MonitorLogRepository {
         if (logs.isEmpty()) return;
         //monitor 로그는 발생했는지가 중요하기 때문에 ms가 버려지는 CURRENT_TIMESTAMP를 써도 괜찮음
         String sql = "INSERT INTO monitor_log_entity "
-                + "(mac, created_at, updated_at) "
-                + "VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP) "
+                + "(mac, created_at, updated_at, room) "
+                + "VALUES (?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?) "
                 + "ON DUPLICATE KEY UPDATE updated_at = CURRENT_TIMESTAMP";
         jdbcTemplate.batchUpdate(sql, logs, logs.size(),
-                (ps, log) -> ps.setString(1, log.getMac()));
+                (ps, log) -> {
+                    ps.setString(1, log.getMac());
+                    ps.setString(2, log.getRoom());
+                });
     }
 }
