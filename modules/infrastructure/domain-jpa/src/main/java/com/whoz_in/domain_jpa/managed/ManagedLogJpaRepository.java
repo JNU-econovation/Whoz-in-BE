@@ -4,6 +4,7 @@ import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
@@ -17,9 +18,15 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
     private final ManagedLogEntityRepository repository;
     private final JdbcTemplate jdbcTemplate;
     private final ManagedLogConverter managedLogConverter;
+
     @Override
     public void save(ManagedLog log) {
         repository.save(managedLogConverter.from(log));
+    }
+
+    @Override
+    public Optional<ManagedLog> findLatestByIp(String ip) {
+        return repository.findTopByIpOrderByUpdatedAtDesc(ip).map(managedLogConverter::to);
     }
 
     public void saveAll(Collection<ManagedLog> logs) {
