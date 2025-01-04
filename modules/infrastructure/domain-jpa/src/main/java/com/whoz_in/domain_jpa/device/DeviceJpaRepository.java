@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class DeviceJpaRepository implements DeviceRepository {
     private final DeviceEntityRepository repository;
+    private final DeviceEntityConverter converter;
     @Override
     public void save(Device device) {
-        repository.save(new DeviceEntity());
+        repository.save(converter.from(device));
     }
 }
