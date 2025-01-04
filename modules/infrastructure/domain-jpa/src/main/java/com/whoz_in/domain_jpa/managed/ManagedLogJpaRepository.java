@@ -25,8 +25,8 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
     }
 
     @Override
-    public Optional<ManagedLog> findLatestByIp(String ip) {
-        return repository.findTopByIpOrderByUpdatedAtDesc(ip).map(managedLogConverter::to);
+    public Optional<ManagedLog> findLatestByRoomAndIp(String room, String ip) {
+        return repository.findTopByRoomAndIpOrderByUpdatedAtDesc(room, ip).map(managedLogConverter::to);
     }
 
     public void saveAll(Collection<ManagedLog> logs) {
