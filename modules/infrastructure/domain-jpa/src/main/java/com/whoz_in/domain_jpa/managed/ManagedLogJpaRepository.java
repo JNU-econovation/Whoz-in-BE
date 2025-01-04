@@ -3,6 +3,7 @@ package com.whoz_in.domain_jpa.managed;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,11 +23,6 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
     @Override
     public void save(ManagedLog log) {
         repository.save(managedLogConverter.from(log));
-    }
-
-    @Override
-    public Optional<ManagedLog> findLatestByRoomAndIp(String room, String ip) {
-        return repository.findTopByRoomAndIpOrderByUpdatedAtDesc(room, ip).map(managedLogConverter::to);
     }
 
     public void saveAll(Collection<ManagedLog> logs) {
@@ -55,5 +51,10 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
         } catch (Exception e) {
             log.error("Unexpected error: " + e.getMessage());
         }
+    }
+
+    @Override
+    public Optional<ManagedLog> findLatestByRoomAndIpAfter(String room, String ip, LocalDateTime time) {
+        return repository.findTopByRoomAndIpOrderByUpdatedAtDescAfter(room, ip, time).map(managedLogConverter::to);
     }
 }
