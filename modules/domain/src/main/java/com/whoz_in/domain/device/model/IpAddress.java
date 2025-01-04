@@ -32,5 +32,10 @@ public final class IpAddress {
     private static boolean isValid(String address) {
         return pattern.matcher(address).matches();
     }
+
+    @Override
+    public String toString() {
+        return this.address;
+    }
 }
 
