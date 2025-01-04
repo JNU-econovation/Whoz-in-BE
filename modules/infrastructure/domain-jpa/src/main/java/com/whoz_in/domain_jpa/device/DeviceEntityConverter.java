@@ -19,7 +19,6 @@ public class DeviceEntityConverter extends BaseConverter<DeviceEntity, Device> {
                         .mac(deviceInfo.getMac().toString())
                         .build())
                 .toList();
-        System.out.println("device.getMemberId().id() = " + device.getMemberId().id());
         return new DeviceEntity(device.getId().id(), device.getMemberId().id(), device.getName(), deviceInfoEntities);
     }
 
