@@ -21,7 +21,6 @@ import org.hibernate.annotations.UuidGenerator;
 public class MemberEntity extends BaseEntity {
 
   @Id
-  @UuidGenerator
   @Column(columnDefinition = "BINARY(16)", nullable = false)
   private UUID id;
 
