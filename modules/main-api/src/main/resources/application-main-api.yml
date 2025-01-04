@@ -7,6 +7,8 @@ spring:
       - "classpath:application-api-query-jpa.yml"
       #logging 모듈의 설정 파일
       - "classpath:application-logging.yml"
+      # env
+      - "classpath:env-main-api.properties"
 logging:
   config: "classpath:logback-common.xml"
 
