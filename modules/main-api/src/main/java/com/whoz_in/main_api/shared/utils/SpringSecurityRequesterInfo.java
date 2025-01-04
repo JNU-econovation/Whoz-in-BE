@@ -21,7 +21,7 @@ public class SpringSecurityRequesterInfo implements RequesterInfo {
             authentication = (JwtAuthentication) SecurityContextHolder.getContext()
                     .getAuthentication(); // 이 결과가 null 일 경우
         } catch (ClassCastException e){
-            throw new IllegalStateException(e.getMessage());
+            throw new IllegalStateException("Authentication 타입 오류");
         }
 
         return Optional.of(authentication.getPrincipal());
