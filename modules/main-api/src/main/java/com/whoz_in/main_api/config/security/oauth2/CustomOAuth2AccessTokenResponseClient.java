@@ -51,7 +51,7 @@ public class CustomOAuth2AccessTokenResponseClient implements
 
     private OAuth2AccessTokenResponse handle(String registrationId, Map<String, Object> tokenResponse) {
         if(registrationId==null){
-            throw new IllegalArgumentException("등록되지 않은 OAuth 제공자");
+            throw new IllegalStateException("등록되지 않은 OAuth 제공자");
         }
 
         // TODO: OAuth Provider 가 많아지면 Switch-Case 로 가능

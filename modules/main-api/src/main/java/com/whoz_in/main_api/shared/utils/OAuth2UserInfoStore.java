@@ -65,7 +65,7 @@ public class OAuth2UserInfoStore {
             long expiredTime = Long.parseLong(hashedKey.split(OAUTH2_TOKEN_KEY_DELIMITER)[1]);
 
             if (Instant.now().getEpochSecond() > expiredTime)
-                throw new IllegalArgumentException("만료된 Social Id Key");
+                throw new IllegalArgumentException("만료된 UserInfo Key");
         }
 
         public static void ensureCorrectKey(String unknownKey){
@@ -113,7 +113,7 @@ public class OAuth2UserInfoStore {
                 return hexString.toString();
 
             } catch (NoSuchAlgorithmException e){
-                throw new IllegalArgumentException("존재하지 않는 알고리즘");
+                throw new IllegalStateException("존재하지 않는 알고리즘");
             }
 
         }
