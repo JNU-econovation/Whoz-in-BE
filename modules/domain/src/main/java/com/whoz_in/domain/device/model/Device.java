@@ -21,6 +21,7 @@ public final class Device extends AggregateRoot {
 
     public static Device create(MemberId memberId, List<DeviceInfo> deviceInfos, String name){
         Device device = Device.builder()
+                .id(new DeviceId(UUID.randomUUID()))
                 .memberId(memberId)
                 .deviceInfos(deviceInfos)
                 .name(name)
