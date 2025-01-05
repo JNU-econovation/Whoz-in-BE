@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class OAuth2UserInfoStoreTest {
 
     private final OAuth2TempToken testTempToken = new OAuth2TempToken("testKey");
-    private final OAuth2UserInfo testValue = new OAuth2UserInfo(false, SocialProvider.KAKAO, "12345", "testUser");
+    private final OAuth2UserInfo testValue = new OAuth2UserInfo(false, SocialProvider.KAKAO, "12345");
 
     @Test
     @DisplayName("OAuth2UserInfo 저장/추출 테스트")
