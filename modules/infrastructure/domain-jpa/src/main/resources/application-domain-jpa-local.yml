@@ -1,5 +1,5 @@
 domain-jpa:
   hibernate:
-    ddl-auto: create
+    ddl-auto: update
     show_sql: true
     format_sql: true
