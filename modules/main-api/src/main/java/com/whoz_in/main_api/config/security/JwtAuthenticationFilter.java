@@ -1,7 +1,7 @@
-package com.whoz_in.main_api.config.security.oauth2;
+package com.whoz_in.main_api.config.security;
 
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.AUTHORIZATION;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.AUTHORIZATION;
 
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
@@ -14,8 +14,11 @@ import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+//요청에서 jwt를 꺼내어 인증정보를 만들고 SecurityContextHolder에 넣는 필터
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final AccessTokenSerializer accessTokenSerializer;
