@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.USER_INFO_KEY;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH_USER_INFO_KEY;
 
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
@@ -18,7 +18,7 @@ public class OAuth2TempTokenSerializer extends TokenSerializer<OAuth2TempToken> 
 
     @Override
     protected OAuth2TempToken buildToken(Claims claims) {
-        String userInfoKey = claims.get(USER_INFO_KEY, String.class);
+        String userInfoKey = claims.get(OAUTH_USER_INFO_KEY, String.class);
 
         return new OAuth2TempToken(userInfoKey);
     }
@@ -26,7 +26,7 @@ public class OAuth2TempTokenSerializer extends TokenSerializer<OAuth2TempToken> 
     @Override
     protected Map<String, String> buildClaims(OAuth2TempToken jwtInfo) {
         return Map.of(
-                USER_INFO_KEY, jwtInfo.getUserInfoKey()
+                OAUTH_USER_INFO_KEY, jwtInfo.getUserInfoKey()
         );
     }
 

@@ -12,16 +12,14 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @Getter
 public class OAuth2UserInfo implements OAuth2User {
 
-    private final boolean isRegistered;
+    private final boolean isRegistered; //후즈인에 회원가입이 되어있는지
     private final SocialProvider socialProvider;
     private final String socialId;
-    private final String name;
 
-    public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId, String name) {
+    public OAuth2UserInfo(boolean isRegistered, SocialProvider socialProvider, String socialId) {
         this.isRegistered = isRegistered;
         this.socialProvider = socialProvider;
         this.socialId = socialId;
-        this.name = name;
     }
 
     @Override
@@ -43,8 +41,7 @@ public class OAuth2UserInfo implements OAuth2User {
 
     @Override
     public String toString() {
-        String formatString = "%b-%s-%s-%s";
-        return String.format(formatString, isRegistered, socialProvider, socialId, name);
+        return String.format("%b-%s-%s", isRegistered, socialProvider, socialId);
     }
 
 }

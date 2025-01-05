@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.shared.jwt;
 
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.ISSUER;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.TOKEN_TYPE;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.ISSUER;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_TYPE;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
