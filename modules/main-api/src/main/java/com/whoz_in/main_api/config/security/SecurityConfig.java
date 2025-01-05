@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.config.security;
 
-import com.whoz_in.main_api.config.security.oauth2.ClientRegistrationRepositoryFactory;
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
@@ -13,6 +12,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.logout.LogoutFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
-    private final ClientRegistrationRepositoryFactory clientRegistrationRepositoryFactory;
+    private final ClientRegistrationRepository clientRegistrationRepository;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -40,7 +40,7 @@ public class SecurityConfig {
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.oauth2Login(oauth2->
                 oauth2
-                        .clientRegistrationRepository(clientRegistrationRepositoryFactory.create())
+                        .clientRegistrationRepository(clientRegistrationRepository)
                         .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailureHandler)
