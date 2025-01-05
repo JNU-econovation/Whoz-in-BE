@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Order(0)
     public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/login", //TODO: 운용에선 제거
+                //"/login", //시큐리티 기본 로그인 페이지
                 "/oauth2/authorization/*", //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
                 "/login/oauth2/code/*"  //redirect uri
         );
@@ -38,7 +38,6 @@ public class SecurityConfig {
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.oauth2Login(oauth2->
                 oauth2
-                        //.loginPage(null) //TODO: 운영에선 추가
                         .clientRegistrationRepository(clientRegistrationRepositoryFactory.create())
                         .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                         .successHandler(loginSuccessHandler)
