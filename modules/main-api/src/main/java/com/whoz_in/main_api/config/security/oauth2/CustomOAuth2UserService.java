@@ -22,8 +22,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Transactional(readOnly = true)
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        //소셜 프로바이더로부터 받은 액세스 토큰을 이용하여 사용자 정보를 가져오도록 구현되어있다.
         OAuth2User oAuth2User = super.loadUser(userRequest);
 
+        //우리 프로젝트에서 필요한 정보로 재구성하여 반환하도록 한다.
         String providerName = userRequest.getClientRegistration().getRegistrationId();
         SocialProvider socialProvider = SocialProvider.findSocialProvider(providerName);
         ProviderResponse providerResponse = ProviderResponseFactory.create(socialProvider, oAuth2User.getAttributes());

@@ -12,7 +12,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 @Getter
 public class OAuth2UserInfo implements OAuth2User {
 
-    private final boolean isRegistered;
+    private final boolean isRegistered; //후즈인에 회원가입이 되어있는지
     private final SocialProvider socialProvider;
     private final String socialId;
     private final String name;
