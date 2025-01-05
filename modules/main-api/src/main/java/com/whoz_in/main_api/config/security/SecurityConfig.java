@@ -4,27 +4,30 @@ import com.whoz_in.main_api.config.security.oauth2.ClientRegistrationRepositoryF
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
+import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-
     private final CustomOAuth2UserService customOAuth2UserService;
     private final ClientRegistrationRepositoryFactory clientRegistrationRepositoryFactory;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final AccessTokenSerializer accessTokenSerializer;
 
     @Bean
-    @Order(0)
+    @Order(1)
     public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/login", //시큐리티 기본 로그인 페이지
@@ -43,6 +46,34 @@ public class SecurityConfig {
                         .successHandler(loginSuccessHandler)
                         .failureHandler(loginFailureHandler)
         );
+
+        return httpSecurity.build();
+    }
+
+    //인증이 필요하거나 인증 여부에 따라 다른 동작을 하는 메서드
+    //로그아웃, 게시글 작성 등
+    @Bean
+    @Order(3)
+    public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher(
+                "/**"
+        );
+        httpSecurity.authorizeHttpRequests(auth-> {
+            //인증 필요
+            auth.requestMatchers(HttpMethod.POST,
+                    "/api/v1/device"
+            ).authenticated();
+            //인증 여부에 따라 다른 동작
+//            auth.requestMatchers(HttpMethod.GET,
+//            ).permitAll();
+            auth.anyRequest().denyAll();
+        });
+
+        commonConfigurations(httpSecurity);
+
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.addFilterAt(new JwtAuthenticationFilter(accessTokenSerializer), LogoutFilter.class);
+        //TODO: 로그아웃 추가
 
         return httpSecurity.build();
     }
