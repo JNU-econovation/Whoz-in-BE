@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.AUTHORIZATION;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.AUTHORIZATION;
 
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;

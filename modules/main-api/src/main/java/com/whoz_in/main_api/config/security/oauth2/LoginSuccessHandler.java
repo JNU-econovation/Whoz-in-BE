@@ -1,8 +1,7 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.IS_REGISTERED;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TEMP_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.AccountType;
@@ -53,7 +52,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             }
 
             String uri = uriBuilderFactory.uriString( frontendBaseUrl + "/oauth/success")//TODO: Static
-                    .queryParam(IS_REGISTERED, userInfo.isRegistered())
+                    .queryParam("is-registered", userInfo.isRegistered())
                     .build()
                     .toString();
             response.sendRedirect(uri);

@@ -27,7 +27,7 @@ public class SecurityConfig {
     @Order(0)
     public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-//                "/login", //시큐리티 기본 로그인 페이지
+                "/login", //시큐리티 기본 로그인 페이지
                 "/oauth2/authorization/*", //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
                 "/login/oauth2/code/*"  //redirect uri
         );
