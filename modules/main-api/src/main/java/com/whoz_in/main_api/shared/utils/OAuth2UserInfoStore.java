@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.utils;
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TOKEN_KEY_DELIMITER;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TOKEN_KEY_EXPIRATION_MIN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TOKEN_KEY_DELIMITER;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TOKEN_KEY_EXPIRATION_MIN;
 
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import java.security.MessageDigest;
@@ -14,6 +14,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+
+//TODO: 패키지 변경 - OAutheTempToken과 같이 담아서 따로 관리
 
 // OAuth 토큰에 담을 소셜 ID 값의 Key를 저장하는 스토어
 // Key : OAuth2TokenKey 의 "{hashedKey}::{expiredTime}"
