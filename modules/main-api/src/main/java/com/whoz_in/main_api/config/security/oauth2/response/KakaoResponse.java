@@ -18,11 +18,6 @@ public class KakaoResponse implements ProviderResponse{
         return attributes.get("id").toString();
     }
 
-    @Override
-    public String getEmail() {
-        return kakaoAccountAttributes.get("email").toString();
-    }
-
     @SuppressWarnings("unchecked")
     @Override
     public String getName() {
