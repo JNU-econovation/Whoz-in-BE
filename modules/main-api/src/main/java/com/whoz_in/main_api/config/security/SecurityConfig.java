@@ -4,7 +4,6 @@ import com.whoz_in.main_api.config.security.oauth2.ClientRegistrationRepositoryF
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
-import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,7 @@ public class SecurityConfig {
     private final ClientRegistrationRepositoryFactory clientRegistrationRepositoryFactory;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
-    private final AccessTokenSerializer accessTokenSerializer;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     @Order(1)
@@ -64,7 +63,7 @@ public class SecurityConfig {
                     "/api/v1/device"
             ).authenticated();
             //인증 여부에 따라 다른 동작
-//            auth.requestMatchers(HttpMethod.GET,
+//            auth.requestMatchers(
 //            ).permitAll();
             auth.anyRequest().denyAll();
         });
@@ -72,7 +71,7 @@ public class SecurityConfig {
         commonConfigurations(httpSecurity);
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.addFilterAt(new JwtAuthenticationFilter(accessTokenSerializer), LogoutFilter.class);
+        httpSecurity.addFilterAt(jwtAuthenticationFilter, LogoutFilter.class);
         //TODO: 로그아웃 추가
 
         return httpSecurity.build();
