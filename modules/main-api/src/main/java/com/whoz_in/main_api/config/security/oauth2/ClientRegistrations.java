@@ -27,7 +27,7 @@ public class ClientRegistrations {
                 .clientSecret(kakaoSecret)
                 .redirectUri(redirectUri)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("account_email", "profile_nickname", "profile_image")
+                .scope("profile_image")
                 .authorizationUri("https://kauth.kakao.com/oauth/authorize")
                 .tokenUri("https://kauth.kakao.com/oauth/token")
                 .userInfoUri("https://kapi.kakao.com/v2/user/me")

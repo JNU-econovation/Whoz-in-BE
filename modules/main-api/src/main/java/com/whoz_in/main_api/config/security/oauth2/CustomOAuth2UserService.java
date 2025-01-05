@@ -30,9 +30,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialProvider socialProvider = SocialProvider.findSocialProvider(providerName);
         ProviderResponse providerResponse = ProviderResponseFactory.create(socialProvider, oAuth2User.getAttributes());
         String socialId = providerResponse.getSocialId();
-        String name = providerResponse.getName();
         boolean registered = memberRepository.existsBySocialProviderAndSocialId(socialProvider, socialId);
-        return new OAuth2UserInfo(registered, socialProvider, socialId, name);
+        return new OAuth2UserInfo(registered, socialProvider, socialId);
     }
 
 }
