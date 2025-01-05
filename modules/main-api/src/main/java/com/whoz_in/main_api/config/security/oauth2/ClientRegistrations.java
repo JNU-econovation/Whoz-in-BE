@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 public class ClientRegistrations {
 
     @Value("${oauth.kakao.secret}")
-    private String KAKAO_SECRET;
+    private String kakaoSecret;
 
     @Value("${oauth.kakao.clientId}")
-    private String KAKAO_CLIENT_ID;
+    private String kakaoClientId;
 
     @Value("${oauth.redirectUri}")
     private String redirectUri;
@@ -23,8 +23,8 @@ public class ClientRegistrations {
         String providerName = SocialProvider.KAKAO.getProviderName();
 
         return ClientRegistration.withRegistrationId(providerName)
-                .clientId(KAKAO_CLIENT_ID)
-                .clientSecret(KAKAO_SECRET)
+                .clientId(kakaoClientId)
+                .clientSecret(kakaoSecret)
                 .redirectUri(redirectUri)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .scope("account_email", "profile_nickname", "profile_image")
