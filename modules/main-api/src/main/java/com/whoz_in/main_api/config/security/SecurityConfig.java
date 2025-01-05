@@ -28,8 +28,8 @@ public class SecurityConfig {
     public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/login", //TODO: 운용에선 제거
-                "/oauth2/authorization/*",
-                "/login/oauth2/code/*"
+                "/oauth2/authorization/*", //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
+                "/login/oauth2/code/*"  //redirect uri
         );
 
         commonConfigurations(httpSecurity);

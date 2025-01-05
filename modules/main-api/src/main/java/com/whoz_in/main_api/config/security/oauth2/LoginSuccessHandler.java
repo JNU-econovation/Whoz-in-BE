@@ -13,13 +13,13 @@ import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
 import com.whoz_in.main_api.shared.utils.CookieFactory;
 import com.whoz_in.main_api.shared.utils.OAuth2UserInfoStore;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -34,12 +34,13 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
     private final AccessTokenSerializer accessTokenSerializer;
     private final MemberRepository memberRepository;
-
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
     // registered = true 일 경우, OAuth2LoginToken 을 직렬화 한 jwt 토큰 전송
     // registered = false 일 경우, 추가적인 사용자 정보를 입력받아야 하므로, 임시 jwt 토큰 전송
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
         if (authentication.getPrincipal() instanceof OAuth2UserInfo userInfo) {
 
             if(userInfo.isRegistered()) {
@@ -51,7 +52,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 addOAuth2TempTokenCookie(response, new OAuth2TempToken(userInfoKey));
             }
 
-            String uri = uriBuilderFactory.uriString("/oauth/success")//TODO: Static
+            String uri = uriBuilderFactory.uriString( frontendBaseUrl + "/oauth/success")//TODO: Static
                     .queryParam(IS_REGISTERED, userInfo.isRegistered())
                     .build()
                     .toString();
