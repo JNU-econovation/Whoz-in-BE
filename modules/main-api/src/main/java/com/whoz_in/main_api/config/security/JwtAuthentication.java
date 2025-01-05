@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.config.security.oauth2;
+package com.whoz_in.main_api.config.security;
 
 import com.whoz_in.domain.member.model.MemberId;
 import java.util.Collection;
