@@ -4,6 +4,7 @@ import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.model.SocialProvider;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +33,9 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public Optional<Member> findByName(String name) {
-    Optional<MemberEntity> entity = jpaRepository.findByName(name);
-    return entity.map(converter::to);
+  public List<Member> findByName(String name) {
+    List<MemberEntity> entities = jpaRepository.findByName(name);
+    return entities.stream().map(converter::to).toList();
   }
 
   @Override
