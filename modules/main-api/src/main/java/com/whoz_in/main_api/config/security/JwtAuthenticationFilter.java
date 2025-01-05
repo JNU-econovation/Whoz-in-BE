@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.config.security.oauth2;
+package com.whoz_in.main_api.config.security;
 
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.AUTHORIZATION;
