@@ -9,7 +9,8 @@ jar.enabled = true
 
 dependencies {
     implementation project(':modules:infrastructure:logging')
-    implementation project(':modules:infrastructure:log-writer')
+    implementation project(':modules:domain')
+    runtimeOnly project(':modules:infrastructure:domain-jpa')
 
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'org.springframework.boot:spring-boot-starter-web'

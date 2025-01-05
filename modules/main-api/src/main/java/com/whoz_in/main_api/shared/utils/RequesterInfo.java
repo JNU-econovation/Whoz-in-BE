@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.utils;
 
+import com.whoz_in.domain.member.model.MemberId;
 import java.util.Optional;
 
 /*
@@ -8,8 +9,8 @@ import java.util.Optional;
  */
 
 public interface RequesterInfo {
-    Optional<Long> findUserId();
-    default Long getUserId(){
-        return findUserId().orElseThrow(UserNotAuthenticationException::new);
+    Optional<MemberId> findMemberId();
+    default MemberId getMemberId(){
+        return findMemberId().orElseThrow(UserNotAuthenticationException::new);
     }
 }
