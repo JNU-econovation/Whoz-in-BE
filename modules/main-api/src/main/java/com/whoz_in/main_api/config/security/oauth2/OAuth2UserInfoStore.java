@@ -26,7 +26,7 @@ public class OAuth2UserInfoStore {
         return key.toString();
     }
 
-    public OAuth2UserInfo get(String key) {
+    public OAuth2UserInfo takeout(String key) {
         UUID uuidKey = UUID.fromString(key);
         OAuth2UserInfo userInfo = store.getIfPresent(uuidKey);
         store.invalidate(uuidKey);
