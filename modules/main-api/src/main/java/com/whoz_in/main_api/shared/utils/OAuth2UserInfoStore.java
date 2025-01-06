@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,17 +25,15 @@ import org.springframework.stereotype.Component;
 public class OAuth2UserInfoStore {
 
     // TODO: Key를 String으로 하지 말고, OAuth2UserInfoKey 객체 그대로 사용하기
-    private static final Map<String, OAuth2UserInfo> store = new HashMap<>();
+    private static final Map<String, OAuth2UserInfo> store = new ConcurrentHashMap<>();
 
-    public OAuth2UserInfoStore(){}
-
-    public static String save(OAuth2UserInfo userInfo){
+    public String save(OAuth2UserInfo userInfo){
         String key = OAuth2UserInfoKey.create(userInfo).toString();
         store.put(key, userInfo);
         return key;
     }
 
-    public static OAuth2UserInfo getOAuth2UserInfo(String hashedKey){
+    public OAuth2UserInfo getOAuth2UserInfo(String hashedKey){
         validate(hashedKey);
         if(!store.containsKey(hashedKey)) throw new IllegalArgumentException("소셜 ID-Key 를 찾을 수 없음");
 
