@@ -11,7 +11,6 @@ import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
 import com.whoz_in.main_api.shared.utils.CookieFactory;
-import com.whoz_in.main_api.shared.utils.OAuth2UserInfoStore;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -28,15 +27,15 @@ import org.springframework.web.util.UriBuilderFactory;
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
     @Qualifier("basic")
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
-    private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
     private final AccessTokenSerializer accessTokenSerializer;
+    private final OAuth2TempTokenSerializer oAuth2TempTokenSerializer;
     private final MemberRepository memberRepository;
     private final OAuth2UserInfoStore oAuth2UserInfoStore;
-    @Value("${frontend.base-url}")
-    private String frontendBaseUrl;
     // registered = true 일 경우, OAuth2LoginToken 을 직렬화 한 jwt 토큰 전송
     // registered = false 일 경우, 추가적인 사용자 정보를 입력받아야 하므로, 임시 jwt 토큰 전송
 
@@ -74,7 +73,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private void addOAuth2TempTokenCookie(HttpServletResponse response, OAuth2TempToken oAuth2TempToken) {
         Cookie oAuth2TempTokenCookie = cookieFactory.create(
                 OAUTH2_TEMP_TOKEN,
-                oaUth2TempTokenSerializer.serialize(oAuth2TempToken)
+                oAuth2TempTokenSerializer.serialize(oAuth2TempToken)
         );
         response.addCookie(oAuth2TempTokenCookie);
     }

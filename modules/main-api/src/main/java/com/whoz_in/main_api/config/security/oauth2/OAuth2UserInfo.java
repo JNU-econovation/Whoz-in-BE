@@ -27,21 +27,20 @@ public class OAuth2UserInfo implements OAuth2User {
         return getSocialId();
     }
 
-    //없애고 싶다.........
-    @Override
-    public Map<String, Object> getAttributes() {
-        return Map.of();
-    }
-
-    // TODO: 일단 빈 리스트, 추후 권한 기능 생기면 변경
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
-    }
-
     @Override
     public String toString() {
         return String.format("%b-%s-%s", isRegistered, socialProvider, socialId);
     }
 
+    //없애고 싶다.........
+    @Override
+    public Map<String, Object> getAttributes() {
+        return Map.of();
+    }
+    // TODO: 일단 빈 리스트, 추후 권한 기능 생기면 변경
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.emptyList();
+    }
 }
