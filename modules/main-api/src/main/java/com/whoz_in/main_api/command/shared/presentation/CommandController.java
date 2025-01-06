@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 public abstract class CommandController {
     private final CommandBus commandBus;
 
-    protected void dispatch(Command command){
-        commandBus.dispatch(command);
+    protected <R> R dispatch(Command command){
+        return commandBus.dispatch(command);
     }
 }
