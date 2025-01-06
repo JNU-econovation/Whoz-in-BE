@@ -13,4 +13,5 @@ public final class ManagedLog {
     private final String ssid;
     private final String room;
     private final LocalDateTime createdAt;
+    private final LocalDateTime updatedAt;
 }
