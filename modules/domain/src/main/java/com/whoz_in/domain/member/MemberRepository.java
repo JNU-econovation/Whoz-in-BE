@@ -10,10 +10,10 @@ import java.util.Optional;
 public interface MemberRepository {
   void save(Member member);
   Optional<Member> findByLoginId(String loginId);
-  boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId);
+  boolean existsBySocialId(String socialId);
   Optional<Member> findByMemberId(MemberId id);
   List<Member> findByName(String name);
-  Optional<Member> findBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId);
+  Optional<Member> findBySocialId(String socialId);
   default Member getByLoginId(String loginId){
     return findByLoginId(loginId).orElseThrow(NoMemberException::new);
   }
@@ -25,7 +25,7 @@ public interface MemberRepository {
   default Member getByMemberId(MemberId id){
     return findByMemberId(id).orElseThrow(NoMemberException::new);
   }
-  default Member getBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId){
-    return findBySocialProviderAndSocialId(socialProvider, socialId).orElseThrow(NoMemberException::new);
+  default Member getBySocialId(String socialId){
+    return findBySocialId(socialId).orElseThrow(NoMemberException::new);
   }
 }
