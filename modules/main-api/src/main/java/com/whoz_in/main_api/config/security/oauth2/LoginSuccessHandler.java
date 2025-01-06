@@ -44,7 +44,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if (authentication.getPrincipal() instanceof OAuth2UserInfo userInfo) {
 
             if(userInfo.isRegistered()) {
-                Member member = memberRepository.getBySocialProviderAndSocialId(userInfo.getSocialProvider(), userInfo.getSocialId());
+                Member member = memberRepository.getBySocialId(userInfo.getSocialId());
                 addAccessTokenCookie(response,
                         new AccessToken(member.getId(), AccountType.USER)); // TODO: account Type, 동적으로 넣을 수 있도록
             } else {
