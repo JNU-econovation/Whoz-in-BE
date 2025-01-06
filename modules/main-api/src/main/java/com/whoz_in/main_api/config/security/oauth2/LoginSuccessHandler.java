@@ -34,6 +34,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
     private final AccessTokenSerializer accessTokenSerializer;
     private final MemberRepository memberRepository;
+    private final OAuth2UserInfoStore oAuth2UserInfoStore;
     @Value("${frontend.base-url}")
     private String frontendBaseUrl;
     // registered = true 일 경우, OAuth2LoginToken 을 직렬화 한 jwt 토큰 전송
@@ -48,7 +49,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
                 addAccessTokenCookie(response,
                         new AccessToken(member.getId(), AccountType.USER)); // TODO: account Type, 동적으로 넣을 수 있도록
             } else {
-                String userInfoKey = OAuth2UserInfoStore.save(userInfo);
+                String userInfoKey = oAuth2UserInfoStore.save(userInfo);
                 addOAuth2TempTokenCookie(response, new OAuth2TempToken(userInfoKey));
             }
 
