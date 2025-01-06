@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.config.security.oauth2.JwtAuthentication;
+import com.whoz_in.main_api.config.security.JwtAuthentication;
 import com.whoz_in.main_api.shared.utils.SpringSecurityRequesterInfo;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
