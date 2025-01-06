@@ -2,11 +2,9 @@ package com.whoz_in.main_api.config.security.oauth2;
 
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.SocialProvider;
-import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.config.security.oauth2.response.ProviderResponse;
 import com.whoz_in.main_api.config.security.oauth2.response.ProviderResponseFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -30,7 +28,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialProvider socialProvider = SocialProvider.findSocialProvider(providerName);
         ProviderResponse providerResponse = ProviderResponseFactory.create(socialProvider, oAuth2User.getAttributes());
         String socialId = providerResponse.getSocialId();
-        boolean registered = memberRepository.existsBySocialProviderAndSocialId(socialProvider, socialId);
+        boolean registered = memberRepository.existsBySocialId(socialId);
         return new OAuth2UserInfo(registered, socialProvider, socialId);
     }
 
