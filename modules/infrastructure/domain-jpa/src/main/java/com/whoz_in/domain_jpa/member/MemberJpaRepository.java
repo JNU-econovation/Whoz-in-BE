@@ -3,7 +3,6 @@ package com.whoz_in.domain_jpa.member;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.domain.member.model.SocialProvider;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,8 +27,8 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
-    return jpaRepository.existsBySocialProviderAndSocialId(socialProvider, socialId);
+  public boolean existsBySocialId(String socialId) {
+    return jpaRepository.existsBySocialId(socialId);
   }
 
   @Override
@@ -46,7 +45,7 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public Optional<Member> findBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
-    return jpaRepository.findBySocialProviderAndSocialId(socialProvider, socialId).map(converter::to);
+  public Optional<Member> findBySocialId(String socialId) {
+    return jpaRepository.findBySocialId(socialId).map(converter::to);
   }
 }
