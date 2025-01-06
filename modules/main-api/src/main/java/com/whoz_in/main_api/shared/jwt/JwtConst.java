@@ -3,7 +3,7 @@ package com.whoz_in.main_api.shared.jwt;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public class JwtConst {
+public final class JwtConst {
 
     // token
     public static final String ISSUER = "whozin";
@@ -13,8 +13,6 @@ public class JwtConst {
     public static final String TOKEN_TYPE = "token-type";
     public static final String TOKEN_ID = "token-id";
     public static final String OAUTH_USER_INFO_KEY = "oauth-user-info-key";
-    public static final String OAUTH2_TOKEN_KEY_DELIMITER = "::"; //TODO: 제거
-    public static final long OAUTH2_TOKEN_KEY_EXPIRATION_MIN = 5; //TODO: 빼두기
 
     // auth
     public static final String AUTHORIZATION = "Authorization";
