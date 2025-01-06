@@ -55,8 +55,10 @@ public class ArpLogWriter {
 
         String ssid = process.getInfo().ni().getEssid();
         log.info("[managed - arp({})] log to save : {}", ssid, logs.size());
+        //parsedLog를 저장할 수 있는 ManagedLog로 변환
         return logs.stream()
-                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room, log.getCreatedAt()))
+                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room,
+                        log.getCreatedAt(), log.getCreatedAt()))
                 .toList();
     }
 }

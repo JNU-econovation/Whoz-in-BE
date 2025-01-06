@@ -1,8 +1,7 @@
 package com.whoz_in.main_api.shared.utils;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.config.security.oauth2.JwtAuthentication;
-import io.jsonwebtoken.Jwt;
+import com.whoz_in.main_api.config.security.JwtAuthentication;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -49,6 +49,24 @@ public class SecurityConfig {
         return httpSecurity.build();
     }
 
+    //POST, PUT, PATCH, DELETE 중 인증인가 필요 없는 엔드포인트
+    @Bean
+    @Order(2)
+    public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher(
+                "/api/v1/signup/oauth"
+        );
+        httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
+
+        commonConfigurations(httpSecurity);
+
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        //TODO: CORS 설정
+
+        return httpSecurity.build();
+    }
+
     //인증이 필요하거나 인증 여부에 따라 다른 동작을 하는 메서드
     //로그아웃, 게시글 작성 등
     @Bean
