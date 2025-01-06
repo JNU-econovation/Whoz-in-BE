@@ -27,7 +27,9 @@ public class OAuth2UserInfoStore {
     }
 
     public OAuth2UserInfo get(String key) {
-        OAuth2UserInfo userInfo = store.getIfPresent(UUID.fromString(key));
+        UUID uuidKey = UUID.fromString(key);
+        OAuth2UserInfo userInfo = store.getIfPresent(uuidKey);
+        store.invalidate(uuidKey);
         if (userInfo == null) {
             throw new IllegalArgumentException("소셜 로그인 정보를 찾을 수 없습니다.");
         }
