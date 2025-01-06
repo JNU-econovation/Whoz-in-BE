@@ -38,7 +38,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 (entity.getLoginId() != null && entity.getPassword() != null) ?
                         AuthCredentials.load(entity.getLoginId(), entity.getPassword()) : null,
                 (entity.getSocialProvider() != null && entity.getSocialId() != null) ?
-                        OAuthCredentials.load(entity.getSocialProvider(), entity.getSocialId()) : null
+                        OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()) : null
         );
     }
 }
