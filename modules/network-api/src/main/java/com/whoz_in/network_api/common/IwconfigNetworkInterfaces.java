@@ -19,7 +19,7 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
         List<String> iwconfigOutput = new TransientProcess("iwconfig").resultList();
 
         String currentName = null;
-        String currentEssid = null;
+        String currentSsid = null;
         String currentMode = null;
 
         for (String line : iwconfigOutput) {
@@ -29,15 +29,15 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
                     "unassociated"))) {
                 if (currentName != null) {
                     // 첫 인터페이스가 아니면 모아둔 이전 인터페이스의 정보 저장
-                    interfaces.add(new NetworkInterface(currentName, currentEssid, currentMode));
+                    interfaces.add(new NetworkInterface(currentName, currentSsid, currentMode));
                 }
                 // 새 인터페이스 정보 모으기 & 초기화
                 currentName = line.split("\\s+")[0];
                 if (line.contains("ESSID:"))
-                    currentEssid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "")
+                    currentSsid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "")
                             .trim();
                 else
-                    currentEssid = "";
+                    currentSsid = "";
                 currentMode = null; // 초기화
             }
             // Mode 추출
@@ -48,7 +48,7 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
 
         // 마지막 인터페이스 추가
         if (currentName != null) {
-            interfaces.add(new NetworkInterface(currentName, currentEssid, currentMode));
+            interfaces.add(new NetworkInterface(currentName, currentSsid, currentMode));
         }
         return interfaces;
     }
