@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, UUID> {
     Optional<Member> findByLoginId(String loginId);
-    Optional<Member> findByMemberId(UUID memberId);
 
     @Query("SELECT m FROM Member m WHERE m.id IN (SELECT d.memberId FROM Device d WHERE d.deviceId = :deviceId)")
     Optional<Member> findByDeviceId(UUID deviceId);
