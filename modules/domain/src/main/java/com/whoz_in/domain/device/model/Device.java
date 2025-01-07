@@ -19,6 +19,10 @@ public final class Device extends AggregateRoot {
     private String name;
     private final List<DeviceInfo> deviceInfos;
 
+    public boolean isOwnedBy(MemberId memberId){
+        return this.getMemberId().equals(memberId);
+    }
+
     public static Device create(MemberId memberId, List<DeviceInfo> deviceInfos, String name){
         Device device = Device.builder()
                 .id(new DeviceId(UUID.randomUUID()))
