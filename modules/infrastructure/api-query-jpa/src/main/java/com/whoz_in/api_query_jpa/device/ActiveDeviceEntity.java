@@ -1,6 +1,5 @@
 package com.whoz_in.api_query_jpa.device;
 
-import com.whoz_in.domain.device.model.DeviceId;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,8 +39,8 @@ public class ActiveDeviceEntity {
         this.totalActiveTime = this.totalActiveTime.plus(Duration.between(this.activeTime, this.inactiveTime));
     }
 
-    public static ActiveDeviceEntity create(DeviceId deviceId, LocalDateTime activeTime){
-        return new ActiveDeviceEntity(deviceId.id(), activeTime);
+    public static ActiveDeviceEntity create(UUID deviceId, LocalDateTime activeTime){
+        return new ActiveDeviceEntity(deviceId, activeTime);
     }
 
 }
