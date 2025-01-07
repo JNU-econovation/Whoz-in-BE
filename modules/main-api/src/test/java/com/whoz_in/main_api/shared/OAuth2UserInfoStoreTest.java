@@ -17,7 +17,7 @@ public class OAuth2UserInfoStoreTest {
         String key = oAuth2UserInfoStore.save(testValue);
         System.out.println("저장한 값 : " + testValue);
         System.out.println("저장한 키 : " + key);
-        OAuth2UserInfo poped = oAuth2UserInfoStore.get(key);
+        OAuth2UserInfo poped = oAuth2UserInfoStore.takeout(key);
         System.out.println("꺼낸 값 : " + poped);
 
         Assertions.assertEquals(testValue, poped);
@@ -26,7 +26,7 @@ public class OAuth2UserInfoStoreTest {
     @Test
     @DisplayName("OAuth2UserInfoStore 잘못된 키일 경우 테스트")
     void OAuth2UserInfoStoreInvalidKey(){
-        Assertions.assertThrows(IllegalArgumentException.class, ()->oAuth2UserInfoStore.get("invalidKey"));
+        Assertions.assertThrows(IllegalArgumentException.class, ()->oAuth2UserInfoStore.takeout("invalidKey"));
     }
 
 }

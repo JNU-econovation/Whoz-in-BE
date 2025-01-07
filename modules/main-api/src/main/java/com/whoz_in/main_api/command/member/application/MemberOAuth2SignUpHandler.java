@@ -25,7 +25,7 @@ public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2Sig
     @Override
     public Void handle(MemberOAuth2SignUp cmd) {
         OAuth2TempToken token = oAuth2TempTokenSerializer.deserialize(cmd.oAuth2TempToken()); //Token 역직렬화
-        OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.get(token.getUserInfoKey()); //Token이 가지는 key로 사용자의 정보를 꺼냄
+        OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey()); //Token이 가지는 key로 사용자의 정보를 꺼냄
 
         if (oAuth2UserInfo.isRegistered()) {
             throw new IllegalArgumentException("이미 가입된 사용자입니다.");
