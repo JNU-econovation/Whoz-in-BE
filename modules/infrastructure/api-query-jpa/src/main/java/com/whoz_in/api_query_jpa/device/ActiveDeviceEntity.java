@@ -35,9 +35,9 @@ public class ActiveDeviceEntity {
         this.activeTime = activeTime;
     }
 
-    public void isActiveOn(LocalDateTime inactiveTime){
+    public void inActiveOn(LocalDateTime inactiveTime){
         this.inactiveTime = inactiveTime;
-        this.totalActiveTime = Duration.between(this.activeTime, this.inactiveTime);
+        this.totalActiveTime = this.totalActiveTime.plus(Duration.between(this.activeTime, this.inactiveTime));
     }
 
     public static ActiveDeviceEntity create(DeviceId deviceId, LocalDateTime activeTime){
