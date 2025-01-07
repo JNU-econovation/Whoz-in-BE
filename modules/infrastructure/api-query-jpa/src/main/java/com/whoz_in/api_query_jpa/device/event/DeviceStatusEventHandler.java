@@ -1,7 +1,7 @@
 package com.whoz_in.api_query_jpa.device.event;
 
 import com.whoz_in.api_query_jpa.device.ActiveDeviceEntity;
-import com.whoz_in.api_query_jpa.device.ActiveDeviceRepository;
+import com.whoz_in.api_query_jpa.device.InMemoryActiveDeviceRepository;
 import com.whoz_in.main_api.query.device.application.active.event.ActiveDeviceFinded;
 import com.whoz_in.main_api.query.device.application.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeviceStatusEventHandler {
 
-    private final ActiveDeviceRepository activeDeviceRepository;
+//    private final ActiveDeviceRepository activeDeviceRepository;
+    private final InMemoryActiveDeviceRepository activeDeviceRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(ActiveDeviceFinded.class)
