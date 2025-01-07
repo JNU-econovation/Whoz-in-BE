@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeviceStatusEventHandler {
 
 //    private final ActiveDeviceRepository activeDeviceRepository;
+    // TODO: JPA 적용
     private final InMemoryActiveDeviceRepository activeDeviceRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
