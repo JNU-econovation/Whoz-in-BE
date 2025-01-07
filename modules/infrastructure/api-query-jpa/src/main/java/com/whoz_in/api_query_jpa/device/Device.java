@@ -1,5 +1,6 @@
 package com.whoz_in.api_query_jpa.device;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.UUID;
@@ -11,17 +12,16 @@ import org.hibernate.annotations.Subselect;
 
 @Entity
 @Getter
-@Subselect("SELECT "
-        + "device.id as deviceId, "
-        + "device.memberId as onwer "
-        + "FROM DeviceEntity device "
-)
+@Subselect("SELECT id , member_id FROM device_entity")
 @Immutable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Device {
 
     @Id
-    private UUID deviceId;
+    @Column(name = "id", nullable = false)
+    private UUID id;
+
+    @Column(name ="member_id", nullable = false)
     private UUID memberId;
 
 }
