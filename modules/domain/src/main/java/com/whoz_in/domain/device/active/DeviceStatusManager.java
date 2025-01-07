@@ -5,7 +5,7 @@ package com.whoz_in.domain.device.active;
  * void find() : Active 상태인 Device 를 찾아서 ActiveDeviceRepository 에 저장
  * Active 상태인지 판별하는 로직이 들어가 있다.
  */
-public interface ActiveDeviceFinder {
+public interface DeviceStatusManager {
 
     void activeDeviceFind();
     void inActiveDeviceFind();
