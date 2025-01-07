@@ -2,9 +2,10 @@ package com.whoz_in.api_query_jpa.device;
 
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import com.whoz_in.main_api.query.device.application.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
                     if (member == null) return null;
                     return createOptionalActiveDevice(entity, member).orElse(null);
                 })
+                .filter(Objects::nonNull)
                 .toList();
     }
 
