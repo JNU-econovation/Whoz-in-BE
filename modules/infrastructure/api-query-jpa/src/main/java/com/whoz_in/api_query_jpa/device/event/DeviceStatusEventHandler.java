@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class ActiveDeviceEventHandler {
+public class DeviceStatusEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
 
