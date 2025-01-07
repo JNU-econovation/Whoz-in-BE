@@ -2,7 +2,7 @@ spring:
   config:
     import:
       #해당 room의 network interface 설정 파일
-      - "classpath:env-network-interface-setting.yml"
+      - "classpath:env-room-setting.yml"
       #logging 모듈의 설정 파일
       - "classpath:application-logging.yml"
       #domain-jpa 모듈의 설정 파일
