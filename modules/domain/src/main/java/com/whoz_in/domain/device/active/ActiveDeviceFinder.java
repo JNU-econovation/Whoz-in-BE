@@ -7,6 +7,7 @@ package com.whoz_in.domain.device.active;
  */
 public interface ActiveDeviceFinder {
 
-    void find();
+    void activeDeviceFind();
+    void inActiveDeviceFind();
 
 }
