@@ -48,7 +48,7 @@ public class NetworkConfig {
 
 
     @Getter
-    @ConfigurationProperties(prefix = "log-writer-setting")
+    @ConfigurationProperties(prefix = "room-setting")
     public static class NetworkConfigProperties {
 
         private final String room;
