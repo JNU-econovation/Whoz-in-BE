@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
 
-    private final ActiveDeviceRepository activeDeviceRepository;
+    private final InMemoryActiveDeviceRepository activeDeviceRepository;
     private final DeviceRepository deviceRepository;
     private final MemberRepository memberRepository;
 
@@ -38,7 +38,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
 
         return entities.stream()
                 .map(entity-> {
-                    Device device = devices.stream().filter(d -> d.getDeviceId().equals(entity.getDeviceId())).findFirst().orElse(null);
+                    Device device = devices.stream().filter(d -> d.getId().equals(entity.getDeviceId())).findFirst().orElse(null);
                     if(device == null) return null;
                     Member member = members.stream().filter(m -> m.getId().equals(device.getMemberId())).findFirst().orElse(null);
                     if (member == null) return null;
