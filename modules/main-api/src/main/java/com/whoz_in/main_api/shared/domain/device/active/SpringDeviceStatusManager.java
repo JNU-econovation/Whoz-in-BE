@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.domain.device.active;
 
 import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.active.ActiveDeviceFinder;
+import com.whoz_in.domain.device.active.DeviceStatusManager;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
@@ -28,8 +28,8 @@ import org.springframework.stereotype.Component;
 // 이 클래스는 ActiveDevice 를 찾기보단, ActiveDevice 와 InActiveDevice 를 모두 찾고 판별한다.
 // 그리고 찾은 기기들을 저장하는 이벤트를 발생시킨다.
 // View 랑 Aggregate 를 같이 사용하는 게 맞을까
-@Component("SpringActiveDeviceFinder")
-public class SpringActiveDeviceFinder implements ActiveDeviceFinder {
+@Component("SpringDeviceStatusManager")
+public class SpringDeviceStatusManager implements DeviceStatusManager {
 
     private final DeviceRepository deviceRepository;
     private final MonitorLogRepository monitorLogRepository;
@@ -37,9 +37,9 @@ public class SpringActiveDeviceFinder implements ActiveDeviceFinder {
     private final Map<String, Device> deviceByMac;
     private final Map<UUID, Device> deviceById;
 
-    private static final Duration MEASURE = Duration.ofMinutes(10); // 측정 시간 5분
+    private static final Duration MEASURE = Duration.ofMinutes(10); // 측정 시간 10분
 
-    public SpringActiveDeviceFinder(
+    public SpringDeviceStatusManager(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
             ActiveDeviceViewer activeDeviceViewer
