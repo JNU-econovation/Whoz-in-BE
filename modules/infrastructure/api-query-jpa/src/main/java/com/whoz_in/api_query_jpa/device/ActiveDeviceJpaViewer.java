@@ -11,6 +11,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+// TODO : JPA 적용
 @Component
 @RequiredArgsConstructor
 public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {

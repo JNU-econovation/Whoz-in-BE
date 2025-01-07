@@ -9,6 +9,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+// TODO: JPA 적용
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActiveDeviceEntity {
