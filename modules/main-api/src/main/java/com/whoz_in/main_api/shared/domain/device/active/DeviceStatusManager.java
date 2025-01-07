@@ -1,4 +1,4 @@
-package com.whoz_in.domain.device.active;
+package com.whoz_in.main_api.shared.domain.device.active;
 
 /**
  * 주기적으로 Active 상태인 Device 들을 찾는 친구
