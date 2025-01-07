@@ -1,106 +1,28 @@
 package com.whoz_in.main_api.config.security;
 
-import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
-import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
-import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+//security와 관련된 빈을 등록하는 클래스
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig {
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final ClientRegistrationRepository clientRegistrationRepository;
-    private final LoginSuccessHandler loginSuccessHandler;
-    private final LoginFailureHandler loginFailureHandler;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    // Filter를 구현한 클래스가 빈으로 등록되면 전역 필터로 동작하기 때문에 모든 요청에 대해 jwt 검증을 수행하게 됩니다.
+    // 따라서 필요한 경우에만 jwt 필터를 사용할 수 있도록 FilterRegistrationBean을 사용하여 전역 필터에서 제외합니다.
     @Bean
-    @Order(1)
-    public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/login", //시큐리티 기본 로그인 페이지
-                "/oauth2/authorization/*", //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
-                "/login/oauth2/code/*"  //redirect uri
-        );
-
-        commonConfigurations(httpSecurity);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.logout(AbstractHttpConfigurer::disable);
-        httpSecurity.oauth2Login(oauth2->
-                oauth2
-                        .clientRegistrationRepository(clientRegistrationRepository)
-                        .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailureHandler)
-        );
-
-        return httpSecurity.build();
-    }
-
-    //POST, PUT, PATCH, DELETE 중 인증인가 필요 없는 엔드포인트
-    @Bean
-    @Order(2)
-    public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/api/v1/signup/oauth"
-        );
-        httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
-
-        commonConfigurations(httpSecurity);
-
-        httpSecurity.logout(AbstractHttpConfigurer::disable);
-        httpSecurity.securityContext(AbstractHttpConfigurer::disable);
-        //TODO: CORS 설정
-
-        return httpSecurity.build();
-    }
-
-    //인증이 필요하거나 인증 여부에 따라 다른 동작을 하는 메서드
-    //로그아웃, 게시글 작성 등
-    @Bean
-    @Order(3)
-    public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/**"
-        );
-        httpSecurity.authorizeHttpRequests(auth-> {
-            //인증 필요
-            auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/device"
-            ).authenticated();
-            //인증 여부에 따라 다른 동작
-//            auth.requestMatchers(
-//            ).permitAll();
-            auth.anyRequest().denyAll();
-        });
-
-        commonConfigurations(httpSecurity);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.addFilterAt(jwtAuthenticationFilter, LogoutFilter.class);
-        //TODO: 로그아웃 추가
-
-        return httpSecurity.build();
-    }
-
-    private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
-        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
-        httpSecurity.sessionManagement(AbstractHttpConfigurer::disable);
-        httpSecurity.requestCache(AbstractHttpConfigurer::disable);
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistration(
+            JwtAuthenticationFilter jwtAuthenticationFilter) {
+        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
     }
 
     @Bean
@@ -108,5 +30,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //security에서 사용할 Cors 설정을 정의합니다
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl));
+        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
 }
-
