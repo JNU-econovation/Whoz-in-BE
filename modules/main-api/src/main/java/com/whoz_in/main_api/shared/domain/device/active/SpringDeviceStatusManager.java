@@ -63,9 +63,10 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
         if (!uniqueLogs.isEmpty()) {
             // 실제 판별 로직
             // 판별 로직이 허술하다. 판별하는 decider 를 구현해야 하나
-            List<Device> activeDevices = uniqueLogs.stream()
+            List<UUID> activeDevices = uniqueLogs.stream()
                     .map(log -> deviceByMac.get(log.getMac()))
                     .filter(Objects::nonNull)
+                    .map(device -> device.getId().id())
                     .toList();
 
             Events.raise(new ActiveDeviceFinded(activeDevices, uniqueLogs.stream().toList()));
@@ -104,11 +105,12 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
                 })// 모니터 로그에 없는 Device 만 추출 (InActive 후보)
                 .toList();
 
-        List<Device> inActiveDevices = activeDevices.stream()
+        List<UUID> inActiveDevices = activeDevices.stream()
                 .map(activeDevice -> {
                     UUID id = activeDevice.deviceId();
                     return deviceById.get(id);
                 })
+                .map(device -> device.getId().id())
                 .toList();
 
         Events.raise(new InActiveDeviceFinded(inActiveDevices));
