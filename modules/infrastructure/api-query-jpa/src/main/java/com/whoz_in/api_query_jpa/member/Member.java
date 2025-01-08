@@ -16,12 +16,14 @@ import org.hibernate.annotations.UuidGenerator;
         + "m.id AS id, "
         + "m.login_id AS loginId, "
         + "m.password AS encodedPassword "
+        + "m.name as name"
         + "FROM member_entity m")
 @Synchronize({"member_entity"})
 public class Member {
     @Id
     @UuidGenerator
     private UUID id;
+    private String name;
     private String loginId;
     private String encodedPassword;
 }
