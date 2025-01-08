@@ -70,8 +70,9 @@ public final class DeviceInfoStore {
 
     //반환 전 제거
     public List<DeviceInfo> takeout(MemberId ownerId){
+        List<DeviceInfo> deviceInfos = get(ownerId);
         remove(ownerId);
-        return get(ownerId);
+        return deviceInfos;
     }
 
     //같은 방, 같은 와이파이에 대해 저장된 정보인지 확인
