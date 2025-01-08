@@ -21,6 +21,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,7 @@ import org.springframework.stereotype.Component;
 // 그리고 찾은 기기들을 저장하는 이벤트를 발생시킨다.
 // View 랑 Aggregate 를 같이 사용하는 게 맞을까
 @Component("SpringDeviceStatusManager")
+@Slf4j
 public class SpringDeviceStatusManager implements DeviceStatusManager {
 
     private final DeviceRepository deviceRepository;
@@ -61,6 +63,10 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     @Override
     @Scheduled(fixedRate = 5000)
     public void activeDeviceFind() {
+        if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty()){
+            log.info("[DeviceStatusManager] 처리할 정보 없음");
+            return;
+        }
         LocalDateTime todayMidnight = LocalDate.now().atTime(LocalTime.of(0, 0, 0));
 
         List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(todayMidnight); // 오늘 자정 이후의 로그들 , 현재 시간으로 바꿔야 할까?
@@ -82,6 +88,10 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     @Override
     @Scheduled(fixedRate = 5000)
     public void inActiveDeviceFind() {
+        if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty()){
+            log.info("[DeviceStatusManager] 처리할 정보 없음");
+            return;
+        }
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
 
         List<MonitorLog> logs = monitorLogRepository.findAll();
@@ -91,8 +101,9 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
                 .map(device -> device.getId().id())
                 .toList();
         Map<UUID, LocalDateTime> logTimeByDeviceId = logs.stream()
+                .filter(log -> deviceByMac.containsKey(log.getMac()))
                 .collect(Collectors.toMap(
-                        log->deviceByMac.get(log.getMac()).getId().id(),
+                        log-> deviceByMac.get(log.getMac()).getId().id(),
                         MonitorLog::getUpdatedAt
                         ));
 
