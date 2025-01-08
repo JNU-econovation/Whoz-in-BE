@@ -1,19 +1,23 @@
 spring:
   config:
     import:
+      # env
+      - "classpath:env-main-api.properties"
+      # 에코노베이션 동방들과 와이파이 세팅
+      - "classpath:env-rooms-setting.yml"
       #domain-jpa 모듈의 설정 파일
       - "classpath:application-domain-jpa.yml"
       #api-query-jpa 모듈의 설정 파일
       - "classpath:application-api-query-jpa.yml"
       #logging 모듈의 설정 파일
       - "classpath:application-logging.yml"
-      # env
-      - "classpath:env-main-api.properties"
 logging:
   config: "classpath:logback-common.xml"
 
 frontend:
   base-url: ${FRONTEND_URL}
+
+https-enabled: ${HTTPS-ENABLED}
 
 oauth:
   redirectUri: ${OAUTH_REDIRECT_URL}
