@@ -11,7 +11,20 @@ public record ActiveDevice(
     UUID deviceId,
     UUID memberId,
     LocalDateTime connectedTime,
-    LocalDateTime disconnectedTime,
+    LocalDateTime disConnectedTime,
     Duration totalConnectedTime
 ) implements View {
+
+    public Duration totalConnectedTime(){
+        if(totalConnectedTime!=null){
+            return totalConnectedTime.plus(continuousTime());
+        }
+        return continuousTime();
+    }
+
+    public Duration continuousTime(){
+        if(disConnectedTime!=null) return Duration.between(connectedTime,disConnectedTime);
+        return Duration.between(connectedTime, LocalDateTime.now());
+    }
+
 }
