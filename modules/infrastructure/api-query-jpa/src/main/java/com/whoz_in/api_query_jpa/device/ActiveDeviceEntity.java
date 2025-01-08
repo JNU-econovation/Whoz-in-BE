@@ -24,16 +24,20 @@ public class ActiveDeviceEntity {
 
     private Duration totalActiveTime;
 
+    private boolean isActive;
+
     private ActiveDeviceEntity(UUID deviceId, LocalDateTime activeTime) {
         this.deviceId = deviceId;
         this.activeTime = activeTime;
     }
 
     public void activeOn(LocalDateTime activeTime){
+        this.isActive = true;
         this.activeTime = activeTime;
     }
 
     public void inActiveOn(LocalDateTime inactiveTime){
+        this.isActive = false;
         this.inactiveTime = inactiveTime;
         this.totalActiveTime = this.totalActiveTime.plus(Duration.between(this.activeTime, this.inactiveTime));
     }

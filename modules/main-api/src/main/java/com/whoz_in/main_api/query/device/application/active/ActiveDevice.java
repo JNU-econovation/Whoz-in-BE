@@ -12,7 +12,8 @@ public record ActiveDevice(
     UUID memberId,
     LocalDateTime connectedTime,
     LocalDateTime disConnectedTime,
-    Duration totalConnectedTime
+    Duration totalConnectedTime,
+    boolean isActive
 ) implements View {
 
     public Duration totalConnectedTime(){
