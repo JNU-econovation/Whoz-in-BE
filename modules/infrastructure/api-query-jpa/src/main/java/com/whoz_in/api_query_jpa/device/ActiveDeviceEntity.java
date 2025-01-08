@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,7 +41,12 @@ public class ActiveDeviceEntity {
     public void inActiveOn(LocalDateTime inactiveTime){
         this.isActive = false;
         this.inactiveTime = inactiveTime;
-        this.totalActiveTime = this.totalActiveTime.plus(Duration.between(this.activeTime, this.inactiveTime));
+        addTotalActiveTime();
+    }
+
+    private void addTotalActiveTime(){
+        Duration add = Duration.between(activeTime, inactiveTime);
+        this.totalActiveTime = Objects.nonNull(totalActiveTime) ? totalActiveTime.plus(add) :  add;
     }
 
     public static ActiveDeviceEntity create(UUID deviceId, LocalDateTime activeTime){
