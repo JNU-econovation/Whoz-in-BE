@@ -5,9 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class InMemoryActiveDeviceRepository {
 
     private final Map<UUID, ActiveDeviceEntity> repository;
@@ -18,7 +20,7 @@ public class InMemoryActiveDeviceRepository {
 
     public UUID save(ActiveDeviceEntity device){
         UUID id = device.getDeviceId();
-        repository.put(id, device);
+        repository.putIfAbsent(id, device);
         return device.getDeviceId();
     }
 
