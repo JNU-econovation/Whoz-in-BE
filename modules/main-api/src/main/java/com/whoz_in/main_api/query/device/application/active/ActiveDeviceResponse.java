@@ -7,6 +7,7 @@ public record ActiveDeviceResponse(
     String memberId,
     String memberName,
     String continuousActiveTime,
-    String totalActiveTime
+    String totalActiveTime,
+    boolean isActive
 ) implements Response {
 }
