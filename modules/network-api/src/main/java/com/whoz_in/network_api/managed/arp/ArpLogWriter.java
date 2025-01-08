@@ -53,11 +53,11 @@ public class ArpLogWriter {
                 .map(parser::parse)
                 .collect(Collectors.toSet());//Set으로 중복 제거
 
-        String ssid = process.getInfo().ni().getEssid();
-        log.info("[managed - arp({})] log to save : {}", ssid, logs.size());
+        String altSsid = process.getInfo().ni().getAltSsid();
+        log.info("[managed - arp({})] log to save : {}", altSsid, logs.size());
         //parsedLog를 저장할 수 있는 ManagedLog로 변환
         return logs.stream()
-                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room,
+                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), altSsid, room,
                         log.getCreatedAt(), log.getCreatedAt()))
                 .toList();
     }
