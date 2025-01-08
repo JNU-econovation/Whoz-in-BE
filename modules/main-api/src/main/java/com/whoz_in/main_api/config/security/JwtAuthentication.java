@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.config.security.oauth2;
+package com.whoz_in.main_api.config.security;
 
 import com.whoz_in.domain.member.model.MemberId;
 import java.util.Collection;
@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
+//SecurityContextHolder에 저장할 인증 객체로, jwt(AccessToken)로 만들어진다.
 @RequiredArgsConstructor
 public class JwtAuthentication implements Authentication {
     private final MemberId memberId;

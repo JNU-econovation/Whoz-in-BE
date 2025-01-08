@@ -1,59 +1,28 @@
 package com.whoz_in.main_api.config.security;
 
-import com.whoz_in.main_api.config.security.oauth2.ClientRegistrationRepositoryFactory;
-import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
-import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
-import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+//security와 관련된 빈을 등록하는 클래스
 @Configuration
-@RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final CustomOAuth2UserService customOAuth2UserService;
-    private final ClientRegistrationRepositoryFactory clientRegistrationRepositoryFactory;
-    private final LoginSuccessHandler loginSuccessHandler;
-    private final LoginFailureHandler loginFailureHandler;
-
+    // Filter를 구현한 클래스가 빈으로 등록되면 전역 필터로 동작하기 때문에 모든 요청에 대해 jwt 검증을 수행하게 됩니다.
+    // 따라서 필요한 경우에만 jwt 필터를 사용할 수 있도록 FilterRegistrationBean을 사용하여 전역 필터에서 제외합니다.
     @Bean
-    @Order(0)
-    public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/login", //TODO: 운용에선 제거
-                "/oauth2/authorization/*",
-                "/login/oauth2/code/*"
-        );
-
-        commonConfigurations(httpSecurity);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.logout(AbstractHttpConfigurer::disable);
-        httpSecurity.oauth2Login(oauth2->
-                oauth2
-                        //.loginPage(null) //TODO: 운영에선 추가
-                        .clientRegistrationRepository(clientRegistrationRepositoryFactory.create())
-                        .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler(loginFailureHandler)
-        );
-
-        return httpSecurity.build();
-    }
-
-    private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
-        httpSecurity.formLogin(AbstractHttpConfigurer::disable);
-        httpSecurity.sessionManagement(AbstractHttpConfigurer::disable);
-        httpSecurity.requestCache(AbstractHttpConfigurer::disable);
+    public FilterRegistrationBean<JwtAuthenticationFilter> jwtAuthenticationFilterRegistration(
+            JwtAuthenticationFilter jwtAuthenticationFilter) {
+        FilterRegistrationBean<JwtAuthenticationFilter> registrationBean = new FilterRegistrationBean<>(jwtAuthenticationFilter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
     }
 
     @Bean
@@ -61,5 +30,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    //security에서 사용할 Cors 설정을 정의합니다
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl));
+        corsConfiguration.setAllowedMethods(List.of("*"));
+        corsConfiguration.setAllowedHeaders(List.of("*"));
+        corsConfiguration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+        return source;
+    }
 }
-

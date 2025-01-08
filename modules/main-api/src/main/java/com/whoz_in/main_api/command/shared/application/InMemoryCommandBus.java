@@ -9,9 +9,9 @@ public final class InMemoryCommandBus implements CommandBus {
     private final CommandHandlers handlers;
 
     @Override
-    public void dispatch(Command command){
-        CommandHandler handler = handlers.findBy(command);
-        handler.handle(command);
+    public <R> R dispatch(Command command){
+        CommandHandler<Command, R> handler = handlers.findBy(command);
+        return handler.handle(command);
     }
 }
 
