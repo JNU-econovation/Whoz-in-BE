@@ -7,7 +7,6 @@ import com.whoz_in.main_api.shared.application.Handler;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -39,16 +38,15 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
                 String deviceId = activeDevice.deviceId().toString();
                 String memberId = activeDevice.memberId().toString();
                 String memberName = getMemberName(activeDevice.memberId().toString());
-                LocalDateTime connectedTime = activeDevice.connectedTime();
-                LocalDateTime disConnectedTime = activeDevice.disconnectedTime() == null ? LocalDateTime.now() : activeDevice.disconnectedTime();
-                Duration totalConnectedTime = activeDevice.totalConnectedTime() == null ? Duration.between(LocalDateTime.now(), connectedTime) : activeDevice.totalConnectedTime();
+                Duration continuousTime = activeDevice.continuousTime();
+                Duration totalConnectedTime = activeDevice.totalConnectedTime();
 
                 ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
                         deviceId,
                         memberId,
                         memberName,
-                        Duration.between(disConnectedTime, connectedTime).toString(),
-                        totalConnectedTime.toString()
+                        String.format("%s시간 %s분", continuousTime.toHours(), continuousTime.toMinutes()),
+                        String.format("%s시간 %s분", totalConnectedTime.toHours(), totalConnectedTime.toMinutes())
                 );
                 responses.add(oneResponse);
             }
