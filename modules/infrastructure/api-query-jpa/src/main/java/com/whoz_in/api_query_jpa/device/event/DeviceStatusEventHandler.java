@@ -21,7 +21,7 @@ public class DeviceStatusEventHandler {
     // TODO: JPA 적용
     private final InMemoryActiveDeviceRepository activeDeviceRepository;
 
-    @Transactional(isolation = Isolation.DEFAULT)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(ActiveDeviceFinded.class)
     public void saveActiveDevices(ActiveDeviceFinded event) {
         List<UUID> devices = event.getDevices();
@@ -33,7 +33,7 @@ public class DeviceStatusEventHandler {
     }
 
     // 바로 위의 이벤트 핸들러에서 데이터를 수정할 수 있지만, ConcurrentHashMap 사용하므로 격리 수준을 default로 설정
-    @Transactional(isolation = Isolation.DEFAULT)
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(InActiveDeviceFinded.class)
     public void processInActiveDevices(InActiveDeviceFinded event) {
         // InActiveDevice 찾는 로직
