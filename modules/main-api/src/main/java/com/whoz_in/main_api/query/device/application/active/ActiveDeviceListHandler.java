@@ -20,7 +20,7 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
 
     @Override
     public ActiveDeviceListResponse handle(ActiveDeviceList query) {
-        int page = query.page();
+        int page = query.page() - 1;
         int size = query.size();
         String sortType = query.sortType();
 
