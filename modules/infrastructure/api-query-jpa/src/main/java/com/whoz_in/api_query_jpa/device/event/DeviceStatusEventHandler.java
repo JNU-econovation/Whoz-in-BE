@@ -34,7 +34,7 @@ public class DeviceStatusEventHandler {
 
     // 바로 위의 이벤트 핸들러에서 데이터를 수정할 수 있으므로, 격리 수준을 가장 강하게 설정
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    @EventListener(ActiveDeviceFinded.class)
+    @EventListener(InActiveDeviceFinded.class)
     public void processInActiveDevices(InActiveDeviceFinded event) {
         // InActiveDevice 찾는 로직
         List<UUID> devices = event.getDevices();
