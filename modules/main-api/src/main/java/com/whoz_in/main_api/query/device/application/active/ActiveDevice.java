@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.query.device.application.active;
 
 import com.whoz_in.main_api.query.shared.application.View;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -10,5 +11,7 @@ public record ActiveDevice(
     UUID deviceId,
     UUID memberId,
     LocalDateTime connectedTime,
-    LocalDateTime disconnectedTime
-) implements View { }
+    LocalDateTime disconnectedTime,
+    Duration totalConnectedTime
+) implements View {
+}
