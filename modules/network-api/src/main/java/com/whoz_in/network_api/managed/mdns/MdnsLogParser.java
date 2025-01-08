@@ -17,7 +17,6 @@ public final class MdnsLogParser {
     public Optional<ParsedLog> parse(String logLine) {
         String[] logParts = logLine.split("\t");
         if(logParts.length < 2 || logParts[0].isEmpty() || logParts[1].isEmpty()) {
-            log.warn("[managed] failed to parse this : {}", logLine);
             return Optional.empty();
         }
 
