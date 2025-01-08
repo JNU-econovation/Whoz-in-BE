@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +16,7 @@ public class InMemoryActiveDeviceRepository {
     private final Map<UUID, ActiveDeviceEntity> repository;
 
     public InMemoryActiveDeviceRepository(){
-        this.repository = new HashMap<>();
+        this.repository = new ConcurrentHashMap<>();
     }
 
     public UUID save(ActiveDeviceEntity device){
