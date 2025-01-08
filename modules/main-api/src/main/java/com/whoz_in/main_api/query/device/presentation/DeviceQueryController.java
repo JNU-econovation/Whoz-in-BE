@@ -4,7 +4,6 @@ import com.whoz_in.main_api.query.device.application.active.ActiveDeviceList;
 import com.whoz_in.main_api.query.device.application.active.ActiveDeviceListResponse;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
-import com.whoz_in.main_api.shared.presentation.ApiResponseCode;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/devices")
-public class DeviceController extends QueryController {
+public class DeviceQueryController extends QueryController {
 
-    protected DeviceController(QueryBus queryBus) {
+    protected DeviceQueryController(QueryBus queryBus) {
         super(queryBus);
     }
 
