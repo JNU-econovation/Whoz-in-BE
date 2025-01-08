@@ -16,30 +16,30 @@ import lombok.Getter;
 public final class Device extends AggregateRoot {
     private final DeviceId id;
     private final MemberId memberId; //양도 기능 생기면 final 제거
-    private String name;
+    private String deviceName;
     private final List<DeviceInfo> deviceInfos;
 
     public boolean isOwnedBy(MemberId memberId){
         return this.getMemberId().equals(memberId);
     }
 
-    public static Device create(MemberId memberId, List<DeviceInfo> deviceInfos, String name){
+    public static Device create(MemberId memberId, List<DeviceInfo> deviceInfos, String deviceName){
         Device device = Device.builder()
                 .id(new DeviceId(UUID.randomUUID()))
                 .memberId(memberId)
                 .deviceInfos(deviceInfos)
-                .name(name)
+                .deviceName(deviceName)
                 .build();
         device.register(new DeviceCreated());
         return device;
     }
 
-    public static Device load(DeviceId id, MemberId memberId, List<DeviceInfo> deviceInfos, String name){
+    public static Device load(DeviceId id, MemberId memberId, List<DeviceInfo> deviceInfos, String deviceName){
         return Device.builder()
                 .id(id)
                 .memberId(memberId)
                 .deviceInfos(deviceInfos)
-                .name(name)
+                .deviceName(deviceName)
                 .build();
     }
 }
