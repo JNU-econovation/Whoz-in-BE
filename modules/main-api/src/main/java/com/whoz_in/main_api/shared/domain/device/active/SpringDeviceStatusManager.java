@@ -67,9 +67,9 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
             log.info("[DeviceStatusManager] 처리할 정보 없음");
             return;
         }
-        LocalDateTime todayMidnight = LocalDate.now().atTime(LocalTime.of(0, 0, 0));
+        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
 
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(todayMidnight); // 오늘 자정 이후의 로그들 , 현재 시간으로 바꿔야 할까?
+        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
         Set<MonitorLog> uniqueLogs = new HashSet<>(logs); // 중복 제거
 
         if (!uniqueLogs.isEmpty()) {
@@ -92,9 +92,10 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
             log.info("[DeviceStatusManager] 처리할 정보 없음");
             return;
         }
-        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
+        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
 
-        List<MonitorLog> logs = monitorLogRepository.findAll();
+        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
+        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute);
         List<UUID> monitorLogDeviceIds = logs.stream()
                 .map(log -> deviceByMac.get(log.getMac()))
                 .filter(Objects::nonNull)
