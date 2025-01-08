@@ -29,6 +29,7 @@ public class ActiveDeviceEntity {
     private ActiveDeviceEntity(UUID deviceId, LocalDateTime activeTime) {
         this.deviceId = deviceId;
         this.activeTime = activeTime;
+        this.isActive = true;
     }
 
     public void activeOn(LocalDateTime activeTime){

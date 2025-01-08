@@ -57,6 +57,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
                 member.getId(),
                 entity.getActiveTime(),
                 entity.getInactiveTime(),
-                entity.getTotalActiveTime()));
+                entity.getTotalActiveTime(),
+                entity.isActive()));
     }
 }
