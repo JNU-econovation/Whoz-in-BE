@@ -2,6 +2,7 @@ package com.whoz_in.domain_jpa.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class MonitorLogJpaRepository implements MonitorLogRepository {
     }
 
     @Override
-    public boolean existsLatestByMacAfter(String mac, LocalDateTime time) {
-        return repository.existsTopByMacOrderByUpdatedAtDescAfter(mac, time);
+    public boolean existsAfter(String mac, LocalDateTime time) {
+        return repository.existsByMacAndUpdatedAtAfter(mac, time);
     }
 }
