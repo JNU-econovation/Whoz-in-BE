@@ -5,6 +5,7 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceInfo;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
+import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
@@ -19,6 +20,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
     private final DeviceInfoStore deviceInfoStore;
     private final MemberFinderService memberFinderService;
     private final DeviceRepository deviceRepository;
+    private final EventBus eventBus;
 
     @Transactional
     @Override
@@ -32,6 +34,8 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
 
         Device device = Device.create(requesterId, deviceInfos, cmd.deviceName());
         deviceRepository.save(device);
+
+        eventBus.publish(device.pullDomainEvents());
         return null;
     }
 }
