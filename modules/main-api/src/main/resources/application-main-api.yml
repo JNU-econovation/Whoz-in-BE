@@ -17,6 +17,8 @@ logging:
 frontend:
   base-url: ${FRONTEND_URL}
 
+https-enabled: ${HTTPS-ENABLED}
+
 oauth:
   redirectUri: ${OAUTH_REDIRECT_URL}
   kakao:
