@@ -32,6 +32,11 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
+  public boolean existsByMemberId(MemberId memberId) {
+    return jpaRepository.existsById(memberId.id());
+  }
+
+  @Override
   public List<Member> findByName(String name) {
     List<MemberEntity> entities = jpaRepository.findByName(name);
     return entities.stream().map(converter::to).toList();
