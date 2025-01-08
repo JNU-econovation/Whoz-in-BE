@@ -5,6 +5,7 @@ import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -30,17 +31,24 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
         if(!activeDevices.isEmpty()) {
 
             int start = page * size;
-            int end = start + size;
+            int end = Math.min((start + size), activeDevices.size());
 
             for (int i = start; i < end; i++) {
                 ActiveDevice activeDevice = activeDevices.get(i);
+
+                String deviceId = activeDevice.deviceId().toString();
+                String memberId = activeDevice.memberId().toString();
                 String memberName = getMemberName(activeDevice.memberId().toString());
+                LocalDateTime connectedTime = activeDevice.connectedTime();
+                LocalDateTime disConnectedTime = activeDevice.disconnectedTime() == null ? LocalDateTime.now() : activeDevice.disconnectedTime();
+                Duration totalConnectedTime = activeDevice.totalConnectedTime() == null ? Duration.between(LocalDateTime.now(), connectedTime) : activeDevice.totalConnectedTime();
+
                 ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
-                        activeDevice.deviceId().toString(),
-                        activeDevice.memberId().toString(),
+                        deviceId,
+                        memberId,
                         memberName,
-                        Duration.between(activeDevice.disconnectedTime(), activeDevice.connectedTime()).toString(),
-                        activeDevice.totalConnectedTime().toString()
+                        Duration.between(disConnectedTime, connectedTime).toString(),
+                        totalConnectedTime.toString()
                 );
                 responses.add(oneResponse);
             }
@@ -55,6 +63,10 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
         }
 
         return new ActiveDeviceListResponse(responses);
+    }
+
+    private String calculateContinuousTime(ActiveDevice activeDevice){
+        return "";
     }
 
     private String getMemberName(String memberId){
