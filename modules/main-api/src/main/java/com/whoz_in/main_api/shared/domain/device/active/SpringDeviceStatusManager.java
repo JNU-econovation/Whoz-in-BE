@@ -69,7 +69,7 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
         Set<MonitorLog> uniqueLogs = new HashSet<>(logs); // 중복 제거
 
         if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty() || uniqueLogs.isEmpty()){
-            log.info("[DeviceStatusManager] 처리할 정보 없음");
+            log.info("[ActiveDeviceFind] 처리할 정보 없음");
             return;
         }
         // 실제 판별 로직
@@ -131,7 +131,7 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
 
             Events.raise(new InActiveDeviceFinded(inActiveDevices));
         } else {
-            log.info("[DeviceStatusManager] 처리할 정보 없음");
+            log.info("[InActiveDeviceFind] 처리할 정보 없음");
         }
     }
 
