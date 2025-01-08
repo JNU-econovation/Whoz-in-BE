@@ -1,16 +1,19 @@
 package com.whoz_in.main_api.config.security;
 
 
-import static com.whoz_in.main_api.shared.jwt.JwtConst.AUTHORIZATION;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,20 +29,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        String token = request.getHeader(AUTHORIZATION);
+        extractAccessToken(request)
+                .map(this::createAuthentication)
+                .ifPresent(this::setAuthentication);
+        filterChain.doFilter(request, response);
+    }
 
-        if (token == null) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    private Optional<AccessToken> extractAccessToken(HttpServletRequest request){
+        return Optional.ofNullable(request.getCookies())
+                .stream()
+                .flatMap(Arrays::stream)
+                .filter(cookie -> ACCESS_TOKEN.equals(cookie.getName()))
+                .findAny()
+                .map(Cookie::getValue)
+                .map(accessTokenSerializer::deserialize);
+    }
 
-        AccessToken accessToken = accessTokenSerializer.deserialize(token.substring(7));
-
-        JwtAuthentication authentication = new JwtAuthentication(
+    private JwtAuthentication createAuthentication(AccessToken accessToken){
+        return new JwtAuthentication(
                 accessToken.getMemberId(),
                 Collections.singletonList(new SimpleGrantedAuthority(accessToken.getAccountType().name()))
         ); //TODO: ROLE
+    }
+    private void setAuthentication(JwtAuthentication authentication){
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
     }
 }

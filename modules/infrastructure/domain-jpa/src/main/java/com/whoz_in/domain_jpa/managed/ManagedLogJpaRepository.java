@@ -44,7 +44,7 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
                 ps.setString(5, log.getIp());
                 ps.setString(6, log.getSsid());
                 ps.setString(7, log.getRoom());
-                ps.setTimestamp(7, updatedAt);
+                ps.setTimestamp(8, updatedAt);
             });
         } catch (DuplicateKeyException e) {
             log.error("Duplicate key: " + e.getMessage());
