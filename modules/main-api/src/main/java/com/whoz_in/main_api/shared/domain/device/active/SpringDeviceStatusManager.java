@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.shared.domain.device.active;
 
 import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.active.DeviceStatusManager;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
@@ -37,16 +36,23 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     private final Map<String, Device> deviceByMac;
     private final Map<UUID, Device> deviceById;
 
+    private final InActiveDeviceFilter inActiveDeviceFilter;
+    private final ActiveDeviceFilter activeDeviceFilter;
+
     private static final Duration MEASURE = Duration.ofMinutes(10); // 측정 시간 10분
 
     public SpringDeviceStatusManager(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer
+            ActiveDeviceViewer activeDeviceViewer,
+            InActiveDeviceFilter inActiveDeviceFilter,
+            ActiveDeviceFilter activeDeviceFilter
     ){
         this.deviceRepository = deviceRepository;
         this.monitorLogRepository = monitorLogRepository;
         this.activeDeviceViewer = activeDeviceViewer;
+        this.inActiveDeviceFilter = inActiveDeviceFilter;
+        this.activeDeviceFilter = activeDeviceFilter;
         this.deviceByMac = createDeviceMapByMac();
         this.deviceById = createDeviceMapById();
     }
