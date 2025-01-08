@@ -30,7 +30,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
 
         List<DeviceInfo> deviceInfos = deviceInfoStore.takeout(requesterId);
 
-        Device device = Device.create(requesterId, deviceInfos, cmd.room());
+        Device device = Device.create(requesterId, deviceInfos, cmd.deviceName());
         deviceRepository.save(device);
         return null;
     }
