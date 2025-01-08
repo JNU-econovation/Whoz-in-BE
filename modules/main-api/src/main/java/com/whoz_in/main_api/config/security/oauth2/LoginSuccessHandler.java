@@ -39,6 +39,9 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final MemberOAuth2LoginHandler handler;
     private final OAuth2UserInfoStore oAuth2UserInfoStore;
 
+    //이미 회원가입한 회원이면 Access/Refresh를 제공
+    //아니면 OAuthTempToken을 제공
+    //(모두 쿠키로 전달합니다)
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
         OAuth2UserInfo userInfo = (OAuth2UserInfo) authentication.getPrincipal();
