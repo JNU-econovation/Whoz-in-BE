@@ -11,4 +11,9 @@ public interface MonitorLogRepository {
     List<MonitorLog> findAll();
     List<MonitorLog> findByUpdatedAtAfterOrderByUpdatedAtDesc(LocalDateTime updatedAt); // 해당 시간 이후의 로그를 가져오기
     // TODO: 이전 로그까지 가져와야 할까?
+    boolean existsAfter(String mac, LocalDateTime time);
+    default void mustExistAfter(String mac, LocalDateTime time){
+        if (!existsAfter(mac, time))
+            throw new IllegalArgumentException("monitor log가 없습니다");
+    }
 }
