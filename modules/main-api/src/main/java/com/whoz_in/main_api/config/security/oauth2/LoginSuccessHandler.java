@@ -31,7 +31,6 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final String ENDPOINT = "/oauth/success";
     @Value("${frontend.base-url}")
     private String frontendBaseUrl;
-    @Qualifier("basic")
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
     private final JwtProperties jwtProperties;
