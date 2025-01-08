@@ -30,9 +30,4 @@ public class DeviceController extends CommandController{
         dispatch(request);
         return null;
     }
-
-    //사용자 정보 조회 (filter가 많아. 예를 들어, 가입순, 최근 동방나온순, ....)
-
-    //뱃지 정보를 조회 (List<memberid>)
-    //자세한 뱃지 정보 조회 (memberId) -
 }
