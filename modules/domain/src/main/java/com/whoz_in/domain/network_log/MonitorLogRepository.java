@@ -6,5 +6,9 @@ import java.util.Collection;
 public interface MonitorLogRepository {
     void save(MonitorLog log);
     void saveAll(Collection<MonitorLog> logs);
-    boolean existsLatestByMacAfter(String mac, LocalDateTime time);
+    boolean existsAfter(String mac, LocalDateTime time);
+    default void mustExistAfter(String mac, LocalDateTime time){
+        if (!existsAfter(mac, time))
+            throw new IllegalArgumentException("monitor log가 없습니다");
+    }
 }

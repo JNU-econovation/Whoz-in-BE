@@ -60,11 +60,11 @@ public class MdnsLogWriter {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
-        String ssid = process.getInfo().ni().getEssid();
-        log.info("[managed - mdns({})] log to save : {}", ssid,  logs.size()); //이거 여기 있는건 좀 그러긴 함
+        String altSsid = process.getInfo().ni().getAltSsid();
+        log.info("[managed - mdns({})] log to save : {}", altSsid,  logs.size()); //이거 여기 있는건 좀 그러긴 함
         //parsedLog를 저장할 수 있는 ManagedLog로 변환
         return logs.stream()
-                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room,
+                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), altSsid, room,
                         log.getCreatedAt(), log.getCreatedAt()))
                 .toList();
     }
@@ -80,18 +80,18 @@ public class MdnsLogWriter {
                     //프로세스가 죽었다는 것을 인지했을때만 아래 로직을 실행
                     if (dead.get(managedInfo).equals(Boolean.FALSE)) {
                         dead.put(managedInfo, true);
-                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", managedInfo.ni().getEssid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
+                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", managedInfo.ni().getRealSsid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
                     }
                     startProcess(managedInfo);
                 });
     }
 
     private void startProcess(ManagedInfo info){
-        String ssid = info.ni().getEssid();
-        log.info("[managed - mdns({})] 프로세스를 실행합니다.", ssid);
+        String altSsid = info.ni().getAltSsid();
+        log.info("[managed - mdns({})] 프로세스를 실행합니다.", altSsid);
 
         if (!systemNIs.exists(info.ni())){
-            log.error("[managed - mdns({})] 설정된 mdns 네트워크 인터페이스가 시스템에 존재하지 않습니다.", ssid);
+            log.error("[managed - mdns({})] 설정된 mdns 네트워크 인터페이스가 시스템에 존재하지 않습니다.", altSsid);
             return;
         }
         Optional.ofNullable(this.processes.get(info)).ifPresent(MdnsLogProcess::terminate);
@@ -99,7 +99,7 @@ public class MdnsLogWriter {
         this.processes.put(info, process);
         this.dead.put(info, false);
 
-        log.info("[managed - mdns({})] 프로세스 실행 완료", ssid);
+        log.info("[managed - mdns({})] 프로세스 실행 완료", altSsid);
     }
 
 

@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -66,7 +67,7 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //인증이 필요하거나 인증 여부에 따라 다른 동작을 하는 메서드
+    //인증이 필요한 엔드포인트나 인증 여부에 따라 다른 동작을 하는 엔드포인트
     //로그아웃, 게시글 작성 등
     @Bean
     @Order(3)
@@ -77,7 +78,8 @@ public class SecurityFilterChainConfig {
         httpSecurity.authorizeHttpRequests(auth-> {
             //인증 필요
             auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/device"
+                    "/api/v1/device",
+                    "/api/v1/device/info"
             ).authenticated();
             //인증 여부에 따라 다른 동작
 //            auth.requestMatchers(
@@ -98,7 +100,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
-        httpSecurity.sessionManagement(AbstractHttpConfigurer::disable);
+        httpSecurity.sessionManagement(config-> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); //세션을 생성 및 사용하지 않는다.
         httpSecurity.requestCache(AbstractHttpConfigurer::disable);
     }
 }
