@@ -19,6 +19,6 @@ public class ManagedLogConverter extends BaseConverter<ManagedLogEntity, Managed
         return new ManagedLog(
                 entity.getLogId().getMac(), entity.getLogId().getIp(),
                 entity.getSsid(), entity.getRoom(),
-                entity.getDeviceName(), entity.getCreatedAt());
+                entity.getDeviceName(), entity.getCreatedAt(), entity.getUpdatedAt());
     }
 }

@@ -1,80 +1,70 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.IS_REGISTERED;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TEMP_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
-import com.whoz_in.domain.member.MemberRepository;
-import com.whoz_in.domain.member.model.AccountType;
-import com.whoz_in.domain.member.model.Member;
-import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
-import com.whoz_in.main_api.shared.jwt.tokens.AccessTokenSerializer;
+import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2LoginHandler;
+import com.whoz_in.main_api.shared.jwt.JwtProperties;
+import com.whoz_in.main_api.shared.jwt.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.utils.CookieFactory;
-import com.whoz_in.main_api.shared.utils.OAuth2UserInfoStore;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriBuilderFactory;
 
+//사용자가 소셜 로그인에 성공했을 경우 처리하는 핸들러
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
+    private static final String ENDPOINT = "/oauth/success";
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
     @Qualifier("basic")
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
-    private final OAuth2TempTokenSerializer oaUth2TempTokenSerializer;
-    private final AccessTokenSerializer accessTokenSerializer;
-    private final MemberRepository memberRepository;
-
-    // registered = true 일 경우, OAuth2LoginToken 을 직렬화 한 jwt 토큰 전송
-    // registered = false 일 경우, 추가적인 사용자 정보를 입력받아야 하므로, 임시 jwt 토큰 전송
+    private final JwtProperties jwtProperties;
+    private final TokenSerializer<OAuth2TempToken> oAuth2TempTokenSerializer;
+    private final MemberOAuth2LoginHandler handler;
+    private final OAuth2UserInfoStore oAuth2UserInfoStore;
 
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        if (authentication.getPrincipal() instanceof OAuth2UserInfo userInfo) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException{
+        OAuth2UserInfo userInfo = (OAuth2UserInfo) authentication.getPrincipal();
 
-            if(userInfo.isRegistered()) {
-                Member member = memberRepository.getBySocialProviderAndSocialId(userInfo.getSocialProvider(), userInfo.getSocialId());
-                addAccessTokenCookie(response,
-                        new AccessToken(member.getId(), AccountType.USER)); // TODO: account Type, 동적으로 넣을 수 있도록
-            } else {
-                String userInfoKey = OAuth2UserInfoStore.save(userInfo);
-                addOAuth2TempTokenCookie(response, new OAuth2TempToken(userInfoKey));
-            }
-
-            String uri = uriBuilderFactory.uriString("/oauth/success")//TODO: Static
-                    .queryParam(IS_REGISTERED, userInfo.isRegistered())
-                    .build()
-                    .toString();
-            response.sendRedirect(uri);
-            return;
+        if(userInfo.isRegistered()) {
+            //이미 소셜 회원이 존재할 때
+            //소셜 로그인 핸들러를 호출하여 AccessToken과 RefreshToken을 받고 클라이언트로 전송합니다.
+            LoginSuccessTokens tokens = handler.handle(new MemberOAuth2Login(userInfo));
+            response.addCookie(cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS)));
+            response.addCookie(cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH)));
+        } else {
+            //소셜 회원이 없을 때
+            //소셜 정보를 저장하고, 정보를 찾을 수 있는 키를 반환한다.
+            //이후 키를 통해 회원가입이나 소셜 계정 등록에 필요한 소셜 정보를 찾는다.
+            String userInfoKey = oAuth2UserInfoStore.save(userInfo);
+            Cookie oAuth2TempTokenCookie = cookieFactory.create(
+                    OAUTH2_TEMP_TOKEN,
+                    oAuth2TempTokenSerializer.serialize(new OAuth2TempToken(userInfoKey))
+            );
+            response.addCookie(oAuth2TempTokenCookie);
         }
-        throw new IllegalStateException("이러면 안되는데?");
-    }
 
-    private void addAccessTokenCookie(HttpServletResponse response, AccessToken accessToken) {
-        Cookie accessTokenCookie = cookieFactory.create(
-                ACCESS_TOKEN,
-                accessTokenSerializer.serialize(accessToken)
-        );
-        response.addCookie(accessTokenCookie);
+        String uri = uriBuilderFactory.uriString( frontendBaseUrl + ENDPOINT)
+                .queryParam("is-registered", userInfo.isRegistered())
+                .build()
+                .toString();
+        response.sendRedirect(uri);
     }
-
-    private void addOAuth2TempTokenCookie(HttpServletResponse response, OAuth2TempToken oAuth2TempToken) {
-        Cookie oAuth2TempTokenCookie = cookieFactory.create(
-                OAUTH2_TEMP_TOKEN,
-                oaUth2TempTokenSerializer.serialize(oAuth2TempToken)
-        );
-        response.addCookie(oAuth2TempTokenCookie);
-    }
-
 }

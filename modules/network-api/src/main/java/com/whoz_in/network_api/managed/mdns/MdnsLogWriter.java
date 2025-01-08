@@ -62,8 +62,10 @@ public class MdnsLogWriter {
                 .collect(Collectors.toSet());
         String ssid = process.getInfo().ni().getEssid();
         log.info("[managed - mdns({})] log to save : {}", ssid,  logs.size()); //이거 여기 있는건 좀 그러긴 함
+        //parsedLog를 저장할 수 있는 ManagedLog로 변환
         return logs.stream()
-                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room, log.getCreatedAt()))
+                .map(log -> new ManagedLog(log.getMac(), log.getIp(), log.getDeviceName(), ssid, room,
+                        log.getCreatedAt(), log.getCreatedAt()))
                 .toList();
     }
 

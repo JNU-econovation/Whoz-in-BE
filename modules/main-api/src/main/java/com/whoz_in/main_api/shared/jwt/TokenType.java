@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.shared.jwt;
 
-import static com.whoz_in.main_api.config.security.consts.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.OAUTH2_TEMP_TOKEN;
-import static com.whoz_in.main_api.config.security.consts.JwtConst.REFRESH_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
@@ -20,7 +20,7 @@ public enum TokenType {
     OAUTH2_TEMP(OAuth2TempToken.class, OAUTH2_TEMP_TOKEN);
 
     private final Class<? extends Token> tokenClass;
-    //TODO: 웹에 종속되었다! 더 깔끔한 방법이 없을까..
+    //TODO: 토큰 타입은 쿠키를 몰라야 한다.
     private final String cookieName;
 
     public static TokenType findByName(String tokenTypeName){
