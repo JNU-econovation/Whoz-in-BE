@@ -6,6 +6,7 @@ import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.member.event.MemberCreated;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
+import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.shared.application.Handler;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BadgeHandler {
     private final BadgeRepository repository;
+    private final EventBus eventBus;
 
     @Transactional
     @EventListener
@@ -29,6 +31,7 @@ public class BadgeHandler {
                 List.of(new MemberId(member.getId().id()))
         );
         repository.register(newBadge);
+        eventBus.publish(newBadge.pullDomainEvents());
         return null;
     }
 }

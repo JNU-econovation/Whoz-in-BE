@@ -24,7 +24,7 @@ public final class Badge extends AggregateRoot {
                 .badgeInfo(badgeInfo)
                 .owners(owners)
                 .build();
-        badge.register(new BadgeCreated());
+        badge.register(new BadgeCreated(badge));
         return badge;
     }
 
