@@ -15,6 +15,7 @@ import com.whoz_in.main_api.query.shared.application.Viewer;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Optional;
 
 @AnalyzeClasses(packages = "com.whoz_in.main_api", importOptions = ImportOption.DoNotIncludeTests.class)
@@ -31,6 +32,50 @@ class ViewerTest {
                     String message = String.format("'%s'의 '%s' 는 View를 반환하지 않았습니다.",
                             method.getOwner().getName(), method.getName());
                     events.add(SimpleConditionEvent.violated(method, message));
+                }
+            }
+        };
+
+        ArchCondition<JavaMethod> returnTypeIsCollectionView = new ArchCondition<JavaMethod>("return a type collection of view") {
+            @Override
+            public void check(JavaMethod method, ConditionEvents events) {
+                JavaClass returnType = method.getReturnType().toErasure();
+
+                if (!returnType.isAssignableTo(Collection.class)) {
+                    try {
+
+                        // 순수 자바 표준으로만 구현된 클래스와 메소드 찾기
+                        Class<?> onwerClass = Class.forName(method.getOwner().getName());
+                        Method reflectedMethod = onwerClass.getDeclaredMethod(method.getName(),
+                                method.getRawParameterTypes().stream()
+                                        .map(param -> {
+                                            try {
+                                                return Class.forName(param.getName());
+                                            } catch (ClassNotFoundException e) {
+                                                throw new RuntimeException(
+                                                        "Failed to load parameter type: " + param.getName(), e);
+                                            }
+                                        })
+                                        .toArray(Class<?>[]::new));
+
+                        Type genericReturnType = reflectedMethod.getGenericReturnType();
+                        if (genericReturnType instanceof ParameterizedType parameterizedType) {
+                            Type[] typeArguments = parameterizedType.getActualTypeArguments();
+                            for (Type typeArgument : typeArguments) {
+                                if (typeArgument instanceof Class<?>) {
+                                    Class<?> typeClass = (Class<?>) typeArgument;
+                                    if (View.class.isAssignableFrom(typeClass)) {
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    } catch (ClassNotFoundException | NoSuchMethodException e) {
+                        String error = String.format("리플렉션 실패: '%s'의 '%s': %s",
+                                method.getOwner().getName(), method.getName(), e.getMessage());
+                        events.add(SimpleConditionEvent.violated(method, error));
+                        return;
+                    }
                 }
             }
         };
@@ -82,7 +127,7 @@ class ViewerTest {
 
         ArchRuleDefinition.methods()
                 .that().areDeclaredInClassesThat().areAssignableTo(Viewer.class)
-                .should(returnTypeIsView.or(returnTypeIsOptionalView))
+                .should(returnTypeIsView.or(returnTypeIsOptionalView).or(returnTypeIsCollectionView))
                 .check(importedClasses);
     }
 
