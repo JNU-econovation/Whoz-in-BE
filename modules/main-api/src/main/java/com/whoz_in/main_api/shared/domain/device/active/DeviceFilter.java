@@ -34,11 +34,12 @@ public abstract class DeviceFilter {
         this.deviceById = createDeviceMapById();
     }
 
-    public List<Device> execute(){
+    public void execute(){
         List<Device> devices = find();
-        return devices.stream()
+        devices = devices.stream()
                 .filter(this::judge)
                 .toList();
+        raiseEvent(devices);
     }
 
     private Map<UUID, Device> createDeviceMapById() {
