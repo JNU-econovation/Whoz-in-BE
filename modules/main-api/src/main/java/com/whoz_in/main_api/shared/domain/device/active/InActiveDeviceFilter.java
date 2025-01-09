@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class InActiveDeviceFilter extends DeviceFilter{
 
     // MonitorLog 가 마지막으로 뜬지 10분이 되도록 발생하지 않을경우 InActive 처리하는 기준
-    private static final Duration MEASURE = Duration.ofMinutes(10);
+    private static final Duration MEASURE = Duration.ofMinutes(1);
 
     public InActiveDeviceFilter(
             DeviceRepository deviceRepository,
@@ -72,15 +72,23 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
 
+        // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
+        if(!activeDevice.isActive()) return false;
+
         Map<UUID, LocalDateTime> logTimeByDeviceId = createLogTimeByDeviceIdMap();
 
-        LocalDateTime logCreatedTime = logTimeByDeviceId.get(deviceId);
+        LocalDateTime now = LocalDateTime.now();
         LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
 
-        Duration term = Duration.between(activeDeviceActiveTime, logCreatedTime).abs();
+        Duration term = Duration.between(activeDeviceActiveTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-        return term.compareTo(MEASURE) > 0;
+
+        if(term.compareTo(MEASURE) > 0){
+            log.info("[InActiveDeviceFind] InActive 전환 {}", deviceId);
+            return true;
+        }
+        return false;
     }
 
     @Override
