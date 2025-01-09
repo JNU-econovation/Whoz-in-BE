@@ -73,10 +73,4 @@ public class ActiveDeviceFilter extends DeviceFilter {
         List<UUID> deviceIds = devices.stream().map(Device::getId).map(DeviceId::id).toList();
         Events.raise(new ActiveDeviceFinded(deviceIds));
     }
-
-    private Set<MonitorLog> getUniqueMonitorLogs(){
-        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
-        return new HashSet<>(logs); // 중복 제거
-    }
 }
