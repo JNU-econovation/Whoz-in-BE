@@ -36,7 +36,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
         Set<MonitorLog> uniqueLogs = getUniqueMonitorLogs();
 
         if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty() || uniqueLogs.isEmpty()){
-            log.info("[ActiveDeviceFind] 처리할 정보 없음");
+            log.info("[ActiveDeviceFilter] 처리할 정보 없음");
             return List.of();
         }
 
@@ -46,7 +46,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
                 .toList();
 
         if(devices.isEmpty()){
-            log.info("[ActiveDeviceFind] 처리할 정보 없음");
+            log.info("[ActiveDeviceFilter] 처리할 정보 없음");
             return List.of();
         }
 
@@ -66,13 +66,13 @@ public class ActiveDeviceFilter extends DeviceFilter {
         try {
             activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         } catch (IllegalArgumentException e){
-            log.error("[ActiveDeviceFind] 처음 Active 상태가 된 기기 {}", deviceId);
+            log.error("[ActiveDeviceFilter] 처음 Active 상태가 된 기기 {}", deviceId);
             return true;
         }
 
 
         if(!activeDevice.isActive()) {
-            log.info("[ActiveDeviceFind] Active 전환 : {}", deviceId);
+            log.info("[ActiveDeviceFilter] Active 전환 : {}", deviceId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
         }
 
