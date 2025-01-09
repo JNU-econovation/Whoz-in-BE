@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 // Device 들을 받으면, 정해진 기준에 맞춰 거르는 역할이라는 뜻
+// TODO: 아래의 Map 들을 주기적으로 최신화 하거나, DB에서 직접 가져오기
 @Component
 public abstract class DeviceFilter {
 
