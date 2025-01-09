@@ -21,12 +21,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public final class DeviceInfoStore {
-    private final RoomSsidConfig ssidConfig;
-
     private static final Cache<MemberId, CopyOnWriteArrayList<DeviceInfo>> store = CacheBuilder.newBuilder()
             .expireAfterAccess(5, TimeUnit.MINUTES) // 5분 동안 접근이 없으면 만료
-            .maximumSize(10) // 최대 10개 항목 저장
             .build();
+
+    private final RoomSsidConfig ssidConfig;
+
 
     //이전에 등록되지 않은 DeviceInfo인지 검증
     public void mustNotExist(MemberId ownerId, DeviceInfo deviceInfo){
