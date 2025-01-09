@@ -41,7 +41,7 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     private final InActiveDeviceFilter inActiveDeviceFilter;
     private final ActiveDeviceFilter activeDeviceFilter;
 
-    private static final Duration MEASURE = Duration.ofMinutes(1); // 측정 시간 10분
+    private static final Duration MEASURE = Duration.ofMinutes(5); // 측정 시간 10분
 
     public SpringDeviceStatusManager(
             DeviceRepository deviceRepository,
@@ -84,6 +84,11 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
 
     }
 
+    // inactive 판별 다시 설계하기
+    // 고려해야할 것
+    // 1. monitorLog 조회 크기 (10분 등)
+    // 2. 모니터 로그에 없는 맥을 제외할 것이냐 아니냐
+
     @Override
     @Scheduled(fixedRate = 5000)
     public void inActiveDeviceFind() {
@@ -107,17 +112,15 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
                     ));
 
             activeDevices = activeDevices.stream()
-                    .filter(activeDevice -> !monitorLogDeviceIds.contains(
-                            activeDevice.deviceId())) // 모니터 로그에 없는 Device 만 추출 (InActive 후보)
+                    .filter(activeDevice -> !monitorLogDeviceIds.contains(activeDevice.deviceId())) // 모니터 로그에 없는 Device 만 추출 (InActive 후보)
                     .filter(activeDevice -> {
                         LocalDateTime logCreatedTime = logTimeByDeviceId.get(activeDevice.deviceId());
                         LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
 
-                        Duration term = Duration.between(logCreatedTime, activeDeviceActiveTime);
+                        Duration term = Duration.between(activeDeviceActiveTime, logCreatedTime).abs();
 
-                        boolean isInActive = term.compareTo(MEASURE) > 0; // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-
-                        return isInActive;
+                        // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
+                        return term.compareTo(MEASURE) > 0;
                     })
                     .toList();
 
