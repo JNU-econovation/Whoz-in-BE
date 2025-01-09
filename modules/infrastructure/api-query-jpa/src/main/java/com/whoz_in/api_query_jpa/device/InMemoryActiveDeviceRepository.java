@@ -21,7 +21,7 @@ public class InMemoryActiveDeviceRepository {
 
     public UUID save(ActiveDeviceEntity device){
         UUID id = device.getDeviceId();
-        repository.putIfAbsent(id, device);
+        repository.put(id, device); // 갱신된 데이터가 삽입될 수 있도록
         return device.getDeviceId();
     }
 
