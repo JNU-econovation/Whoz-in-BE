@@ -36,6 +36,7 @@ public class ActiveDeviceEntity {
     public void activeOn(LocalDateTime activeTime){
         this.isActive = true;
         this.activeTime = activeTime;
+        this.inactiveTime = null;
     }
 
     public void inActiveOn(LocalDateTime inactiveTime){
