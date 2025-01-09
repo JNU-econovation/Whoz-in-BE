@@ -46,7 +46,7 @@ public class ActiveDeviceEntity {
     }
 
     private void addTotalActiveTime(){
-        Duration add = Duration.between(activeTime, inactiveTime);
+        Duration add = Duration.between(activeTime, inactiveTime).abs();
         this.totalActiveTime = Objects.nonNull(totalActiveTime) ? totalActiveTime.plus(add) :  add;
     }
 
