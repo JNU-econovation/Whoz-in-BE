@@ -41,8 +41,6 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     private final InActiveDeviceFilter inActiveDeviceFilter;
     private final ActiveDeviceFilter activeDeviceFilter;
 
-    private static final Duration MEASURE = Duration.ofMinutes(5); // 측정 시간 10분
-
     public SpringDeviceStatusManager(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
@@ -63,79 +61,14 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     @Override
     @Scheduled(fixedRate = 5000)
     public void activeDeviceFind() {
-
-        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
-        Set<MonitorLog> uniqueLogs = new HashSet<>(logs); // 중복 제거
-
-        if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty() || uniqueLogs.isEmpty()){
-            log.info("[ActiveDeviceFind] 처리할 정보 없음");
-            return;
-        }
-        // 실제 판별 로직
-        // 판별 로직이 허술하다. 판별하는 decider 를 구현해야 하나
-        List<UUID> activeDevices = uniqueLogs.stream()
-                .map(log -> deviceByMac.get(log.getMac()))
-                .filter(Objects::nonNull)
-                .map(device -> device.getId().id())
-                .toList();
-
-        Events.raise(new ActiveDeviceFinded(activeDevices));
-
+        activeDeviceFilter.execute();
     }
 
-    // inactive 판별 다시 설계하기
-    // 고려해야할 것
-    // 1. monitorLog 조회 크기 (10분 등)
-    // 2. 모니터 로그에 없는 맥을 제외할 것이냐 아니냐
 
     @Override
     @Scheduled(fixedRate = 5000)
     public void inActiveDeviceFind() {
-        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
-
-        if(!activeDevices.isEmpty()) {
-
-            LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
-
-            List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute);
-            List<UUID> monitorLogDeviceIds = logs.stream()
-                    .map(log -> deviceByMac.get(log.getMac()))
-                    .filter(Objects::nonNull)
-                    .map(device -> device.getId().id())
-                    .toList();
-            Map<UUID, LocalDateTime> logTimeByDeviceId = logs.stream()
-                    .filter(log -> deviceByMac.containsKey(log.getMac()))
-                    .collect(Collectors.toMap(
-                            log -> deviceByMac.get(log.getMac()).getId().id(),
-                            MonitorLog::getUpdatedAt
-                    ));
-
-            activeDevices = activeDevices.stream()
-                    .filter(activeDevice -> !monitorLogDeviceIds.contains(activeDevice.deviceId())) // 모니터 로그에 없는 Device 만 추출 (InActive 후보)
-                    .filter(activeDevice -> {
-                        LocalDateTime logCreatedTime = logTimeByDeviceId.get(activeDevice.deviceId());
-                        LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
-
-                        Duration term = Duration.between(activeDeviceActiveTime, logCreatedTime).abs();
-
-                        // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-                        return term.compareTo(MEASURE) > 0;
-                    })
-                    .toList();
-
-            List<UUID> inActiveDevices = activeDevices.stream()
-                    .map(activeDevice -> {
-                        UUID id = activeDevice.deviceId();
-                        return deviceById.get(id);
-                    })
-                    .map(device -> device.getId().id())
-                    .toList();
-
-            Events.raise(new InActiveDeviceFinded(inActiveDevices));
-        } else {
-            log.info("[InActiveDeviceFind] 처리할 정보 없음");
-        }
+        inActiveDeviceFilter.execute();
     }
 
     private Map<UUID, Device> createDeviceMapById() {
