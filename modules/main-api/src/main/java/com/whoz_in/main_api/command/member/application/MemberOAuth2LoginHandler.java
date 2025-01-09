@@ -25,7 +25,7 @@ public class MemberOAuth2LoginHandler implements CommandHandler<MemberOAuth2Logi
     @Transactional(readOnly = true) //아직은 readOnly
     @Override
     public LoginSuccessTokens handle(MemberOAuth2Login cmd) {
-        Member member = repository.getBySocialId(cmd.oAuth2UserInfo().getSocialId());
+        Member member = repository.getBySocialId(cmd.socialId());
 
         String accessToken = accessTokenSerializer.serialize(
                 new AccessToken(member.getId(), AccountType.USER));
