@@ -70,9 +70,14 @@ public class ActiveDeviceFilter extends DeviceFilter {
             return true;
         }
 
-        if(!activeDevice.isActive()) return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
 
-        return true;
+        if(!activeDevice.isActive()) {
+            log.info("[ActiveDeviceFind] Active 전환 : {}", deviceId);
+            return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
+        }
+
+        // 이미 active 인 경우 이벤트에서 제외
+        return false;
     }
 
     @Override
