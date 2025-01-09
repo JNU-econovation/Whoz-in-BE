@@ -34,6 +34,7 @@ public abstract class DeviceFilter {
         this.deviceRepository = deviceRepository;
         this.monitorLogRepository = monitorLogRepository;
         this.activeDeviceViewer = activeDeviceViewer;
+        // TODO: 이 Map 들은, Active, InActive 판별에 아주 중요한 요소인데 메모리로만 유지하면, 최신화된 데이터를 받아올 수 없다.
         this.deviceByMac = createDeviceMapByMac();
         this.deviceById = createDeviceMapById();
     }
@@ -47,7 +48,7 @@ public abstract class DeviceFilter {
     }
 
     protected Set<MonitorLog> getUniqueMonitorLogs(){
-        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
+        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(1);
         List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
         return new HashSet<>(logs); // 중복 제거
     }
