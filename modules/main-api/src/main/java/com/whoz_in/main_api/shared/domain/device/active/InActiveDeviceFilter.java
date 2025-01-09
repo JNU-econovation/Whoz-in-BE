@@ -38,10 +38,9 @@ public class InActiveDeviceFilter extends DeviceFilter{
     protected List<Device> find() {
 
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
+        Set<MonitorLog> logs = getUniqueMonitorLogs();
 
-        if(!activeDevices.isEmpty()) {
-            Set<MonitorLog> logs = getUniqueMonitorLogs();
-
+        if(!activeDevices.isEmpty() && !logs.isEmpty()) {
             List<UUID> monitorLogDeviceIds = logs.stream()
                     .map(log -> deviceByMac.get(log.getMac()))
                     .filter(Objects::nonNull)
