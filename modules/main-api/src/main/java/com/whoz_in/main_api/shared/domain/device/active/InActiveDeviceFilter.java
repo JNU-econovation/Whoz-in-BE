@@ -40,7 +40,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
         Set<MonitorLog> logs = getUniqueMonitorLogs();
 
-        if(!activeDevices.isEmpty() && !logs.isEmpty()) {
+        if(!activeDevices.isEmpty()) {
             List<UUID> monitorLogDeviceIds = logs.stream()
                     .map(log -> deviceByMac.get(log.getMac()))
                     .filter(Objects::nonNull)
@@ -57,7 +57,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
                     .toList();
 
         }
-        log.info("[InActiveDeviceFind] 처리할 정보 없음");
+        log.info("[InActiveDeviceFilter] 처리할 정보 없음");
         return List.of();
     }
 
@@ -84,7 +84,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
 
         if(term.compareTo(MEASURE) > 0){
-            log.info("[InActiveDeviceFind] InActive 전환 {}", deviceId);
+            log.info("[InActiveDeviceFilter] InActive 전환 {}", deviceId);
             return true;
         }
         return false;
