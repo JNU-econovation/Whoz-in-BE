@@ -54,9 +54,6 @@ public class ActiveDeviceFilter extends DeviceFilter {
     }
 
 
-    // 1. isActive = false 인 경우 -> true
-    // 2. isActive = true 인 경우 -> true
-    // 3. 어떤 상황에 false 일까?
     @Override
     protected boolean judge(Device device) {
         // 이미 MonitorLog 에 존재하는 기기이다.
