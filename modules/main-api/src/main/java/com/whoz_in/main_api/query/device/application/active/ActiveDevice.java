@@ -3,6 +3,7 @@ package com.whoz_in.main_api.query.device.application.active;
 import com.whoz_in.main_api.query.shared.application.View;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 // Active 상태인 기기를 나타내는 View
@@ -18,10 +19,12 @@ public record ActiveDevice(
 
     // TODO: ActiveTime Calculator 로 이동
     public Duration totalConnectedTime(){
-        if(totalConnectedTime!=null){
+        if(isActive && Objects.nonNull(totalConnectedTime)){ // 한 번 이상 접속을 끊었다 연결한 경우
             return totalConnectedTime.plus(continuousTime());
+        } else if (isActive){ // 처음 접속했는데, 안 끊은 경우
+            return continuousTime();
         }
-        return continuousTime();
+        return totalConnectedTime; // 접속을 종료한 경우
     }
 
     public Duration continuousTime(){
