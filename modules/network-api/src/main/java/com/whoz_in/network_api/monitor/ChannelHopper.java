@@ -42,7 +42,7 @@ public final class ChannelHopper {
         }
         //hop channel
         Integer channel = channelsToHop.iterator().next();
-        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getName(), channel);
+        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getInterfaceName(), channel);
         new TransientProcess(hopCommand, sudoPassword);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);

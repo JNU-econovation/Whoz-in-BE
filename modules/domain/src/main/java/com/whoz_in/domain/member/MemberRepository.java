@@ -11,6 +11,7 @@ public interface MemberRepository {
   void save(Member member);
   Optional<Member> findByLoginId(String loginId);
   boolean existsBySocialId(String socialId);
+  boolean existsByMemberId(MemberId memberId);
   Optional<Member> findByMemberId(MemberId id);
   List<Member> findByName(String name);
   Optional<Member> findBySocialId(String socialId);

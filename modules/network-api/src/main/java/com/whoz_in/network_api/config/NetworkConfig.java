@@ -33,12 +33,12 @@ public class NetworkConfig {
         this.room = properties.getRoom();
         this.sudoPassword = sudoPassword;
         this.networkInterfaces = properties.getNIs();
-        this.monitorInfo = new MonitorInfo(properties.getMonitorNI(), generateCommand(monitorCommandTemplate, properties.getMonitorNI().getName()));
+        this.monitorInfo = new MonitorInfo(properties.getMonitorNI(), generateCommand(monitorCommandTemplate, properties.getMonitorNI().getInterfaceName()));
         this.mdnsList=properties.getMdnsNIs().stream()
-                .map(ni-> new ManagedInfo(ni, generateCommand(mdnsCommandTemplate, ni.getName())))
+                .map(ni-> new ManagedInfo(ni, generateCommand(mdnsCommandTemplate, ni.getInterfaceName())))
                 .toList();
         this.arpList=properties.getArpNIs().stream()
-                .map(ni-> new ManagedInfo(ni, generateCommand(arpCommandTemplate, ni.getName())))
+                .map(ni-> new ManagedInfo(ni, generateCommand(arpCommandTemplate, ni.getInterfaceName())))
                 .toList();
     }
 
@@ -48,7 +48,7 @@ public class NetworkConfig {
 
 
     @Getter
-    @ConfigurationProperties(prefix = "log-writer-setting")
+    @ConfigurationProperties(prefix = "room-setting")
     public static class NetworkConfigProperties {
 
         private final String room;
@@ -58,8 +58,8 @@ public class NetworkConfig {
 
         public record Monitor(String interfaceName) {}
         public record Managed(List<Mdns> mdns, List<Arp> arp) {
-            public record Mdns(String ssid, String interfaceName) {}
-            public record Arp(String name, String ssid, String interfaceName) {}
+            public record Mdns(String altSsid, String realSsid, String interfaceName) {}
+            public record Arp(String altSsid, String realSsid, String interfaceName) {}
         }
 
         public List<NetworkInterface> getNIs() {
@@ -77,12 +77,18 @@ public class NetworkConfig {
                 Managed managed
         ) {
             this.room = roomName;
-            this.monitorNI = new NetworkInterface(monitor.interfaceName, null, "monitor");
+            this.monitorNI = new NetworkInterface(null, monitor.interfaceName, null, "monitor");
             this.mdnsNIs = managed.mdns.stream()
-                    .map(ni -> new NetworkInterface(ni.interfaceName, ni.ssid, "managed"))
+                    .map(ni -> {
+                        String altSsid = (ni.altSsid != null) ? ni.altSsid : ni.realSsid;
+                        return new NetworkInterface(altSsid, ni.interfaceName, ni.realSsid, "managed");
+                    })
                     .toList();
             this.arpNIs = managed.arp.stream()
-                    .map(ni -> new NetworkInterface(ni.interfaceName, ni.ssid, "managed"))
+                    .map(ni -> {
+                        String altSsid = (ni.altSsid != null) ? ni.altSsid : ni.realSsid;
+                        return new NetworkInterface(altSsid, ni.interfaceName, ni.realSsid, "managed");
+                    })
                     .toList();
         }
     }
