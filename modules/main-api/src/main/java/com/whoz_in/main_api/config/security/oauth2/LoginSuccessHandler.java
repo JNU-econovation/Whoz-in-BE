@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -48,7 +47,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if(userInfo.isRegistered()) {
             //이미 소셜 회원이 존재할 때
             //소셜 로그인 핸들러를 호출하여 AccessToken과 RefreshToken을 받고 클라이언트로 전송합니다.
-            LoginSuccessTokens tokens = handler.handle(new MemberOAuth2Login(userInfo));
+            LoginSuccessTokens tokens = handler.handle(new MemberOAuth2Login(userInfo.getSocialId()));
             response.addCookie(cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS)));
             response.addCookie(cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH)));
         } else {
