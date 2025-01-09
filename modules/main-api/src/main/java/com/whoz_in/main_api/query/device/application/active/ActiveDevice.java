@@ -16,6 +16,7 @@ public record ActiveDevice(
     boolean isActive
 ) implements View {
 
+    // TODO: ActiveTime Calculator 로 이동
     public Duration totalConnectedTime(){
         if(totalConnectedTime!=null){
             return totalConnectedTime.plus(continuousTime());
@@ -24,8 +25,8 @@ public record ActiveDevice(
     }
 
     public Duration continuousTime(){
-        if(disConnectedTime!=null) return Duration.between(connectedTime,disConnectedTime);
-        return Duration.between(connectedTime, LocalDateTime.now());
+        if(isActive) Duration.between(connectedTime, LocalDateTime.now()).abs();
+        return Duration.between(connectedTime,disConnectedTime).abs();
     }
 
 }
