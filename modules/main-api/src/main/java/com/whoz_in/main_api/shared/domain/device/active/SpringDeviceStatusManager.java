@@ -80,7 +80,7 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
                 .map(device -> device.getId().id())
                 .toList();
 
-        Events.raise(new ActiveDeviceFinded(activeDevices, uniqueLogs.stream().toList()));
+        Events.raise(new ActiveDeviceFinded(activeDevices));
 
     }
 

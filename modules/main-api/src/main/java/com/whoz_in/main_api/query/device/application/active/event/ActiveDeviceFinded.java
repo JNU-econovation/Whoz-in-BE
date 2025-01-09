@@ -10,11 +10,11 @@ import lombok.Getter;
 public class ActiveDeviceFinded implements Event {
 
     private final List<UUID> devices;
-    private final List<MonitorLog> logs;
+    // 모니터 로그는 ActiveDevice 가 언제 Active 되었는지 시간을 삽입하기 위해 필요하다.
+//    private final List<MonitorLog> logs;
 
-    public ActiveDeviceFinded(List<UUID> devices, List<MonitorLog> logs) {
+    public ActiveDeviceFinded(List<UUID> devices) {
         this.devices = devices;
-        this.logs = logs;
     }
 
 }
