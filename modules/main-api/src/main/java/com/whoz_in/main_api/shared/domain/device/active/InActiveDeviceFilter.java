@@ -61,10 +61,6 @@ public class InActiveDeviceFilter extends DeviceFilter{
         return List.of();
     }
 
-    // inactive 판별 다시 설계하기
-    // 고려해야할 것
-    // 1. monitorLog 조회 크기 (10분 등)
-    // 2. 모니터 로그에 없는 맥을 제외할 것이냐 아니냐
     @Override
     protected boolean judge(Device device) {
         UUID deviceId = device.getId().id();
