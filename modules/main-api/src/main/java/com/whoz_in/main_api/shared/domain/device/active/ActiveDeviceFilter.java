@@ -40,10 +40,17 @@ public class ActiveDeviceFilter extends DeviceFilter {
             return List.of();
         }
 
-        return uniqueLogs.stream()
+        List<Device> devices = uniqueLogs.stream()
                 .map(log -> deviceByMac.get(log.getMac()))
-                .filter(Objects::nonNull)
+                .filter(Objects::nonNull) // MonitorLog 에 있는 mac 주소 중, WhozIn에 등록되지 않은 mac 제거
                 .toList();
+
+        if(devices.isEmpty()){
+            log.info("[ActiveDeviceFind] 처리할 정보 없음");
+            return List.of();
+        }
+
+        return devices;
     }
 
 
@@ -59,8 +66,8 @@ public class ActiveDeviceFilter extends DeviceFilter {
         try {
             activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         } catch (IllegalArgumentException e){
-            log.error("[Active - judge] 예상치 못한 에러 발생");
-            throw new IllegalStateException(e.getMessage());
+            log.error("[ActiveDeviceFind] 처음 Active 상태가 된 기기 {}", deviceId);
+            return true;
         }
 
         if(!activeDevice.isActive()) return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
