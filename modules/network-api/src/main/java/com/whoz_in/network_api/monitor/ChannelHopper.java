@@ -30,21 +30,26 @@ public final class ChannelHopper {
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)
     public void hop(){
         //hopping할 채널이 없을경우 채널 불러오기
-        if (!channelsToHop.iterator().hasNext()) {
-            Set<Integer> channels = new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
-                    .stream()
-                    .map(line -> line.trim().split("\\s+"))
-                    .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
-                    .map(split -> Integer.parseInt(split[1]))
-                    .collect(Collectors.toSet());
-            log.info("channels to hop : "+channels);
-            channelsToHop.addAll(channels);
+        if (channelsToHop.isEmpty()) {
+            channelsToHop.addAll(loadChannelsToHop());
+            log.info("channels to hop : "+channelsToHop);
         }
+
         //hop channel
         Integer channel = channelsToHop.iterator().next();
         String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getInterfaceName(), channel);
         new TransientProcess(hopCommand, sudoPassword);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);
+    }
+
+    //주변 채널을 가져옵니다
+    private Set<Integer> loadChannelsToHop(){
+        return new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
+                .stream()
+                .map(line -> line.trim().split("\\s+"))
+                .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
+                .map(split -> Integer.parseInt(split[1]))
+                .collect(Collectors.toSet());
     }
 }
