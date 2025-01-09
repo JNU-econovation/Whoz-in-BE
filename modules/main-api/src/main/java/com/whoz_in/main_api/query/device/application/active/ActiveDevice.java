@@ -25,7 +25,7 @@ public record ActiveDevice(
     }
 
     public Duration continuousTime(){
-        if(isActive) Duration.between(connectedTime, LocalDateTime.now()).abs();
+        if(isActive) return Duration.between(connectedTime, LocalDateTime.now()).abs();
         return Duration.between(connectedTime,disConnectedTime).abs();
     }
 
