@@ -38,16 +38,16 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
                 String deviceId = activeDevice.deviceId().toString();
                 String memberId = activeDevice.memberId().toString();
                 String memberName = getMemberName(activeDevice.memberId().toString());
-                Duration continuousTime = activeDevice.continuousTime();
-                Duration totalConnectedTime = activeDevice.totalConnectedTime();
+                Long continuousMinute = activeDevice.continuousTime().toMinutes();
+                Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
                 boolean isActive = activeDevice.isActive();
 
                 ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
                         deviceId,
                         memberId,
                         memberName,
-                        String.format("%s시간 %s분", continuousTime.toHours(), continuousTime.toMinutes()),
-                        String.format("%s시간 %s분", totalConnectedTime.toHours(), totalConnectedTime.toMinutes()),
+                        String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
+                        String.format("%s시간 %s분", totalConnectedMinute / 60, totalConnectedMinute % 60),
                         isActive
                 );
                 responses.add(oneResponse);
