@@ -45,8 +45,8 @@ public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Void>
         //이미 등록된 DeviceInfo가 아닌지 미리 확인
         deviceInfoStore.mustNotExist(requesterId, deviceInfo);
 
-        //모니터 로그에서 시간 내에 존재하는 맥이 있는지 확인
-        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusDays(1));
+        //모니터 로그에서 현재 접속 중인 맥이 있는지 확인 (넉넉하게 15분)
+        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
 
         //해당 맥으로 이미 등록된 기기가 있을경우
         deviceRepository.findByMac(mac).ifPresent(device -> {
