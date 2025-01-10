@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public final class MonitorLogProcess extends ContinuousProcess {
 
-    public MonitorLogProcess(MonitorInfo info, String sudoPassword) {
-        super(info.command(), sudoPassword);
+    public MonitorLogProcess(String command, String sudoPassword) {
+        super(command, sudoPassword);
     }
 }
