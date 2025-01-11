@@ -3,6 +3,7 @@ package com.whoz_in.domain_jpa.member;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
+import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.model.SocialProvider;
 import com.whoz_in.domain_jpa.badge.BadgeConverter;
 import com.whoz_in.domain_jpa.badge.BadgeEntity;
@@ -23,6 +24,7 @@ public class MemberJpaRepository implements MemberRepository {
   private final BadgeMemberEntityRepository badgeMemberRepo;
   private final BadgeConverter badgeConverter;
   private final BadgeEntityRepository badgeRepo;
+
   @Override
   public void addBadge(MemberId memberId, BadgeId badgeId) {
     MemberEntity memberEntity = memberRepo.findById(memberId.id()).orElseThrow();
@@ -42,8 +44,13 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public boolean existsBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
-    return memberRepo.existsBySocialProviderAndSocialId(socialProvider, socialId);
+  public boolean existsBySocialId(String socialId) {
+    return memberRepo.existsBySocialId(socialId);
+  }
+
+  @Override
+  public boolean existsByMemberId(MemberId memberId) {
+    return memberRepo.existsById(memberId.id());
   }
 
   @Override
@@ -60,7 +67,7 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public Optional<Member> findBySocialProviderAndSocialId(SocialProvider socialProvider, String socialId) {
-    return memberRepo.findBySocialProviderAndSocialId(socialProvider, socialId).map(memberConverter::to);
+  public Optional<Member> findBySocialId(String socialId) {
+    return memberRepo.findBySocialId(socialId).map(memberConverter::to);
   }
 }
