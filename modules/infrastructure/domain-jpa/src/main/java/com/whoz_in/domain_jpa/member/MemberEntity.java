@@ -2,17 +2,22 @@ package com.whoz_in.domain_jpa.member;
 
 import com.whoz_in.domain.member.model.Position;
 import com.whoz_in.domain.member.model.SocialProvider;
+import com.whoz_in.domain_jpa.badge.BadgeMemberEntity;
 import com.whoz_in.domain_jpa.shared.BaseEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import java.util.Set;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.UuidGenerator;
 
 
 @Getter
@@ -47,6 +52,10 @@ public class MemberEntity extends BaseEntity {
 
   @Column(unique = true)
   private String socialId;
+
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JoinColumn(name = "member_id")
+  private Set<BadgeMemberEntity> badgeMembers;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
           String loginId, String password,
