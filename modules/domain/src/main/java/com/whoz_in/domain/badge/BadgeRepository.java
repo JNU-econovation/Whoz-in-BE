@@ -6,5 +6,4 @@ import java.util.Optional;
 public interface BadgeRepository {
     void save(Badge badge);
     Optional<Badge> findByName(String name);
-    void register(Badge badge);
 }

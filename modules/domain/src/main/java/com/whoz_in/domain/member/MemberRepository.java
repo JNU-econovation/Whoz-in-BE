@@ -1,5 +1,6 @@
 package com.whoz_in.domain.member;
 
+import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.exception.NoMemberException;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
@@ -29,4 +30,5 @@ public interface MemberRepository {
   default Member getBySocialId(String socialId){
     return findBySocialId(socialId).orElseThrow(NoMemberException::new);
   }
+  void addBadge(MemberId memberId, BadgeId badgeId);
 }
