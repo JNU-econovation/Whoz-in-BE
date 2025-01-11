@@ -5,7 +5,6 @@ import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.badge.model.BadgeInfo;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain_jpa.shared.BaseConverter;
-import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -30,14 +29,9 @@ public class BadgeConverter extends BaseConverter<BadgeEntity, Badge> {
                 entity.getColorCode()
         );
 
-        List<MemberId> owners = entity.getBadgeMembers().stream()
-                .map(badgeMember -> new MemberId(badgeMember.getMemberId()))
-                .toList();
-
         return Badge.load(
                 new BadgeId(entity.getId()),
-                badgeInfo,
-                owners
+                badgeInfo
         );
     }
 }
