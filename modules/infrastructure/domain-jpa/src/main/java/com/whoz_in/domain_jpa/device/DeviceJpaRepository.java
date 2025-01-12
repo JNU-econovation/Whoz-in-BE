@@ -2,7 +2,6 @@ package com.whoz_in.domain_jpa.device;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
-import com.whoz_in.domain.device.model.MacAddress;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

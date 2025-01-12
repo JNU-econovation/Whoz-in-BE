@@ -5,11 +5,7 @@ import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.OAuthCredentials;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
-import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfoStore;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempTokenSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
