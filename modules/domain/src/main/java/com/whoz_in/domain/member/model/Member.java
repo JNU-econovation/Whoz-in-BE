@@ -26,7 +26,7 @@ public final class Member extends AggregateRoot {
     @Getter private String statusMessage; //상태 메세지
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
-    @Nullable private Set<BadgeId> badges;
+    private final Set<BadgeId> badges;
 
     //일반 로그인이 아닐수도 있으므로 Optional
     public Optional<AuthCredentials> getAuthCredentials(){
