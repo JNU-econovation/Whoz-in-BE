@@ -3,7 +3,6 @@ package com.whoz_in.domain.member;
 import com.whoz_in.domain.member.exception.NoMemberException;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.domain.member.model.SocialProvider;
 import java.util.List;
 import java.util.Optional;
 
