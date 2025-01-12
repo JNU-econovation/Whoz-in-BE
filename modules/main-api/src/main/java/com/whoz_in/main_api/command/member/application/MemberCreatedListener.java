@@ -8,8 +8,11 @@ import com.whoz_in.domain.member.event.MemberCreated;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.shared.event.EventBus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
@@ -18,7 +21,8 @@ public class MemberCreatedListener {
     private final MemberRepository memberRepo;
     private final EventBus eventBus;
 
-    @EventListener
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Void handleMemberCreatedEvent(MemberCreated event) {
         Member member = event.getMember();
         String position = member.getMainPosition().getPosition();
@@ -28,4 +32,3 @@ public class MemberCreatedListener {
         return null;
     }
 }
-
