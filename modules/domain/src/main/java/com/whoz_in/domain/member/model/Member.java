@@ -1,5 +1,6 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.member.event.MemberBadgeAdded;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.event.MemberCreated;
 import com.whoz_in.domain.member.event.MemberPasswordChanged;
@@ -88,5 +89,10 @@ public final class Member extends AggregateRoot {
     public void changeStatusMessage(String newStatusMessage){
         this.statusMessage = newStatusMessage;
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
+    }
+
+    public void addBadge(BadgeId badgeId) {
+        this.badges.add(badgeId);
+        this.register(new MemberBadgeAdded(this.getId(),this.badges));
     }
 }
