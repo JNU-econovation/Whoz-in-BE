@@ -17,7 +17,7 @@ public final class Badge extends AggregateRoot {
 
     public static Badge create(BadgeInfo badgeInfo) {
         Badge badge = Badge.builder()
-                .id(new BadgeId(UUID.randomUUID()))
+                .id(new BadgeId())
                 .badgeInfo(badgeInfo)
                 .build();
         badge.register(new BadgeCreated(badge));
