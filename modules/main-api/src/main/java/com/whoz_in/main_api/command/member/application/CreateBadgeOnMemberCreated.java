@@ -16,7 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class MemberCreatedListener {
+public class CreateBadgeOnMemberCreated {
     private final BadgeRepository badgeRepo;
     private final MemberRepository memberRepo;
     private final EventBus eventBus;
