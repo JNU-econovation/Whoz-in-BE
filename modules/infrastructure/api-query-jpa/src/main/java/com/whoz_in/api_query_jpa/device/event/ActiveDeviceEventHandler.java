@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ActiveDeviceEventHandler {
 
 //    private final ActiveDeviceRepository activeDeviceRepository;
@@ -36,7 +38,7 @@ public class ActiveDeviceEventHandler {
 
 
         List<ActiveDeviceEntity> nonFirstActiveDevice = deviceIds.stream()
-                .filter(deviceIdFromDB::contains)
+                .filter(deviceId -> deviceIdFromDB.stream().anyMatch(idFromDB -> idFromDB.equals(deviceId)))
                 .map(deviceId -> {
                         return activeDeviceEntities.stream()
                                     .filter(active -> active.getDeviceId().equals(deviceId))
