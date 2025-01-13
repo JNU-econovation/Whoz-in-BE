@@ -63,7 +63,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
         try {
             activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         } catch (IllegalArgumentException e){
-            log.error("[ActiveDeviceFilter] 처음 Active 상태가 된 기기 {}", deviceId);
+            log.info("[ActiveDeviceFilter] 처음 Active 상태가 된 기기 {}", deviceId);
             return true;
         }
 
