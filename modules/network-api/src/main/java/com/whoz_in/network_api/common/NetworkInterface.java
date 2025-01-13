@@ -3,8 +3,10 @@ package com.whoz_in.network_api.common;
 import jakarta.annotation.Nullable;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 @EqualsAndHashCode
 public final class NetworkInterface{
     private final String interfaceName;
