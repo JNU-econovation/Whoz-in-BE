@@ -33,11 +33,14 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
                 }
                 // 새 인터페이스 정보 모으기 & 초기화
                 currentName = line.split("\\s+")[0];
-                if (line.contains("ESSID:"))
+                if (line.contains("ESSID:")) {
                     currentSsid = line.split("ESSID:")[1].split("\\s+")[0].replace("\"", "")
                             .trim();
-                else
-                    currentSsid = "";
+                    currentSsid = currentSsid.isEmpty() ? null : currentSsid;
+                }
+                else {
+                    currentSsid = null;
+                }
                 currentMode = null; // 초기화
             }
             // Mode 추출
