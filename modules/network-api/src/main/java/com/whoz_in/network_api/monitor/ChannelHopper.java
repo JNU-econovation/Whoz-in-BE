@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Profile("prod")
 @Component
 public final class ChannelHopper {
-    private final NetworkInterface monitor;
+    private final NetworkInterface monitorNI;
     private final String sudoPassword;
     private final Set<Integer> channelsToHop = new HashSet<>();
 
     public ChannelHopper(NetworkConfig config, @Value("${sudo_password}") String sudoPassword) {
         this.sudoPassword = sudoPassword;
-        this.monitor = config.getMonitorInfo().ni();
+        this.monitorNI = config.getMonitorNI();
     }
 
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)
@@ -37,7 +37,7 @@ public final class ChannelHopper {
 
         //hop channel
         Integer channel = channelsToHop.iterator().next();
-        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitor.getInterfaceName(), channel);
+        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitorNI.getInterfaceName(), channel);
         new TransientProcess(hopCommand, sudoPassword);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);

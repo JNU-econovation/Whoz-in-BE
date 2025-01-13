@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.device.presentation;
 
-import com.whoz_in.main_api.command.device.application.DeviceRegister;
 import com.whoz_in.main_api.command.device.application.DeviceInfoAdd;
+import com.whoz_in.main_api.command.device.application.DeviceRegister;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
