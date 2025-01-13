@@ -34,7 +34,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
 
         List<DeviceInfo> deviceInfos = tempDeviceInfoStore.takeout(requesterId.id())
                 .stream()
-                .map(cdi-> DeviceInfo.create(cdi.getRoom(), cdi.getSsid(), MacAddress.create(cdi.getMac())))
+                .map(tempDI-> DeviceInfo.create(tempDI.getRoom(), tempDI.getSsid(), MacAddress.create(tempDI.getMac())))
                 .toList();
 
         Device device = Device.create(requesterId, deviceInfos, cmd.deviceName());
