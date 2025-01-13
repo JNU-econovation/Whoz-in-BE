@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @EqualsAndHashCode
 public class BadgeMemberId implements Serializable {
-    private UUID memberEntity;
-    private UUID badgeEntity;
+    private UUID memberId;
+    private UUID badgeId;
 }

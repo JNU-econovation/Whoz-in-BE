@@ -27,9 +27,7 @@ public class MemberJpaRepository implements MemberRepository {
 
   @Override
   public void addBadge(MemberId memberId, BadgeId badgeId) {
-    MemberEntity memberEntity = memberRepo.findById(memberId.id()).orElseThrow();
-    BadgeEntity badgeEntity = badgeRepo.findById(badgeId.id()).orElseThrow();
-    badgeMemberRepo.save(new BadgeMemberEntity(memberEntity,badgeEntity));
+    badgeMemberRepo.save(new BadgeMemberEntity(memberId.id(),badgeId.id()));
   }
 
   @Override

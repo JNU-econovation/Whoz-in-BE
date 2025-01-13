@@ -33,7 +33,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
     @Override
     public Member to(MemberEntity entity) {
         Set<BadgeId> badgeIds = entity.getBadgeMembers().stream()
-                .map(badgeMember -> new BadgeId(badgeMember.getBadgeEntity().getId()))
+                .map(badgeMember -> new BadgeId(badgeMember.getBadgeId()))
                 .collect(Collectors.toSet());
         return Member.load(
                 new MemberId(entity.getId()),
