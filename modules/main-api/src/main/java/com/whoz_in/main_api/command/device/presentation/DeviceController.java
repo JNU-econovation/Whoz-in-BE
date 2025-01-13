@@ -4,7 +4,9 @@ import com.whoz_in.main_api.command.device.application.DeviceInfoAdd;
 import com.whoz_in.main_api.command.device.application.DeviceRegister;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
+import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +24,12 @@ public class DeviceController extends CommandController{
     @PostMapping("/device/info")
     public ResponseEntity<SuccessBody<Void>> addDeviceInfo(@RequestBody DeviceInfoAdd request) {
         dispatch(request);
-        return null;
+        return ResponseEntityGenerator.success("기기 정보 등록 완료", HttpStatus.CREATED);
     }
 
     @PostMapping("/device")
     public ResponseEntity<SuccessBody<Void>> registerDevice(@RequestBody DeviceRegister request) {
         dispatch(request);
-        return null;
+        return ResponseEntityGenerator.success("기기 등록 완료", HttpStatus.CREATED);
     }
 }
