@@ -56,7 +56,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
 
     @Override
     protected boolean judge(Device device) {
-        // 이미 MonitorLog 에 존재하는 기기이다.
+        // 이미 MonitorLog 에 존재하고 WhozIn에 등록된 기기이다.
 
         UUID deviceId = device.getId().id();
         ActiveDevice activeDevice;
