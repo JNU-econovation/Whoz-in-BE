@@ -23,8 +23,24 @@ public class SecurityFilterChainConfig {
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
+    private final ServerAuthenticationFilter serverAuthenticationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
+
+    @Bean
+    @Order(0)
+    public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher(
+                "/api/v1/private-ip"
+        );
+
+        commonConfigurations(httpSecurity);
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        //TODO: ip 화이트 리스트
+        httpSecurity.addFilterAt(serverAuthenticationFilter, LogoutFilter.class);
+
+        return httpSecurity.build();
+    }
 
     @Bean
     @Order(1)
@@ -50,7 +66,7 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //POST, PUT, PATCH, DELETE 중 인증인가 필요 없는 엔드포인트
+    //인증인가 필요 없는 엔드포인트
     @Bean
     @Order(2)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -78,7 +94,8 @@ public class SecurityFilterChainConfig {
         httpSecurity.authorizeHttpRequests(auth-> {
             //인증 필요
             auth.requestMatchers(HttpMethod.GET,
-                    "/api/v1/device/info-status"
+                    "/api/v1/device/info-status",
+                    "/api/v1/private-ip/*"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
