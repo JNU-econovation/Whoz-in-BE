@@ -77,6 +77,9 @@ public class SecurityFilterChainConfig {
         );
         httpSecurity.authorizeHttpRequests(auth-> {
             //인증 필요
+            auth.requestMatchers(HttpMethod.GET,
+                    "/api/v1/device/info-status"
+            ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
                     "/api/v1/device/info"
