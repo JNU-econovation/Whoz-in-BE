@@ -49,7 +49,7 @@ public abstract class DeviceFilter {
     }
 
     protected Set<MonitorLog> getUniqueMonitorLogs(){
-        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(1);
+        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
         List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
         return new HashSet<>(logs); // 중복 제거
     }
