@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 public class InActiveDeviceFilter extends DeviceFilter{
 
     // MonitorLog 가 마지막으로 뜬지 10분이 되도록 발생하지 않을경우 InActive 처리하는 기준
-    private static final Duration MEASURE = Duration.ofMinutes(1);
+    private static final Duration MEASURE = Duration.ofMinutes(10);
 
     public InActiveDeviceFilter(
             DeviceRepository deviceRepository,
