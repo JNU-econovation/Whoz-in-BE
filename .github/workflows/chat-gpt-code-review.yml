@@ -1,0 +1,24 @@
+name: Code Review
+
+permissions:
+  content: read
+  pull-requests: write
+
+# Pull Request ? ?? ? ??
+# Pull Request ? ??? ??? ???? ??? ? ?
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  code-review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anc95/Chat-GPT-CodeReview@main
+        env:
+          GITHUB_TOKEN : ${{secrets.GITHUB_TOKEN}}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          LANGUAGE: Korean
+          MODEL: gpt-4
