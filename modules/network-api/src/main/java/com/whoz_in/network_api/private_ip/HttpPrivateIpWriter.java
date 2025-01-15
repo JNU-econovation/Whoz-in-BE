@@ -43,7 +43,7 @@ public final class HttpPrivateIpWriter implements PrivateIpWriter {
 
         try {
             restTemplate.exchange(
-                    mainApiBaseUrl + "/api/v1/private-ip",
+                    mainApiBaseUrl + "/internal/api/v1/private-ip",
                     HttpMethod.PUT,
                     requestEntity,
                     Void.class
