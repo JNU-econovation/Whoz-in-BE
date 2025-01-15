@@ -83,7 +83,7 @@ public class ApiQueryJpaConfig {
                         Map.of(
                                 "hibernate.show_sql", hibernateProperties.showSql,
                                 "hibernate.format_sql", hibernateProperties.formatSql,
-                                "hibernate.ddl.auto", hibernateProperties.ddlAuto,
+                                "hibernate.hbm2ddl.auto", hibernateProperties.ddlAuto,
                                 "hibernate.physical_naming_strategy", hibernateProperties.physicalNamingStrategy
                         )
                 )
