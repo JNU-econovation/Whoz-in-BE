@@ -58,7 +58,8 @@ public class SecurityFilterChainConfig {
                 "/api/v1/signup/oauth",
                 "/api/v1/signup",
                 "/api/v1/badges",
-                "/api/v1/badges/whozin"
+                "/api/v1/badges/whozin",
+                "/api/v1/badges/members"
         );
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
