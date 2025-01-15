@@ -1,7 +1,7 @@
-package com.whoz_in.main_api.shared.utils;
+package com.whoz_in.main_api.config.security;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.config.security.JwtAuthentication;
+import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
