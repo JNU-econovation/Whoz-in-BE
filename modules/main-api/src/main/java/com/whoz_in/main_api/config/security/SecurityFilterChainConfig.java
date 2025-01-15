@@ -57,7 +57,8 @@ public class SecurityFilterChainConfig {
         httpSecurity.securityMatcher(
                 "/api/v1/signup/oauth",
                 "/api/v1/signup",
-                "/api/v1/badges"
+                "/api/v1/badges",
+                "/api/v1/badges/whozin"
         );
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
