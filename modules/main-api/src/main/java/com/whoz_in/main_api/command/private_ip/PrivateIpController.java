@@ -1,0 +1,22 @@
+package com.whoz_in.main_api.command.private_ip;
+
+import com.whoz_in.main_api.command.shared.application.CommandBus;
+import com.whoz_in.main_api.command.shared.presentation.CommandController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1")
+public class PrivateIpController extends CommandController {
+
+    public PrivateIpController(CommandBus commandBus) {
+        super(commandBus);
+    }
+
+    @PutMapping("/private-ip")
+    public void updatePrivateIp(@RequestBody PrivateIpUpdate req){
+        dispatch(req);
+    }
+}

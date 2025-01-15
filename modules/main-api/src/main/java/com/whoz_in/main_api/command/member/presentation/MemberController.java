@@ -14,7 +14,6 @@ import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfoStore;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.TokenType;
-import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
