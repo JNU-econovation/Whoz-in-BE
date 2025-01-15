@@ -56,7 +56,8 @@ public class SecurityFilterChainConfig {
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/api/v1/signup/oauth",
-                "/api/v1/signup"
+                "/api/v1/signup",
+                "/api/v1/badges"
         );
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
