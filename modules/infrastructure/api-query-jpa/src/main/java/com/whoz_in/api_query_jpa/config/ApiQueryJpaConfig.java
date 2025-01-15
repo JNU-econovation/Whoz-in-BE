@@ -38,6 +38,8 @@ public class ApiQueryJpaConfig {
     @Getter
     @Setter
     public static class HibernateProperties {
+        private String ddlAuto;
+        private String physicalNamingStrategy;
         private boolean formatSql;
         private boolean showSql;
     }
@@ -80,7 +82,9 @@ public class ApiQueryJpaConfig {
                 .properties(
                         Map.of(
                                 "hibernate.show_sql", hibernateProperties.showSql,
-                                "hibernate.format_sql", hibernateProperties.formatSql
+                                "hibernate.format_sql", hibernateProperties.formatSql,
+                                "hibernate.ddl.auto", hibernateProperties.ddlAuto,
+                                "hibernate.physical_naming_strategy", hibernateProperties.physicalNamingStrategy
                         )
                 )
                 .build();
