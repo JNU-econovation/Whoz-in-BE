@@ -31,7 +31,7 @@ public class SecurityFilterChainConfig {
     @Order(0)
     public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/api/v1/private-ip"
+                "/internal/**"
         );
 
         commonConfigurations(httpSecurity);
