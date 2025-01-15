@@ -95,7 +95,8 @@ public class SecurityFilterChainConfig {
             //인증 필요
             auth.requestMatchers(HttpMethod.GET,
                     "/api/v1/device/info-status",
-                    "/api/v1/private-ip"
+                    "/api/v1/private-ip",
+                    "/api/v1/ssid"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
