@@ -7,11 +7,11 @@ import lombok.RequiredArgsConstructor;
 @Handler
 @RequiredArgsConstructor
 public class BadgeInfoViewHandler implements QueryHandler<BadgeId, BadgeInfoResponse> {
-    private final BadgeViewer viewr;
+    private final BadgeViewer viewer;
 
     @Override
     public BadgeInfoResponse handle(BadgeId query) {
-        BadgeInfo badgeInfo = viewr.findBadgeInfoByBadgeId(query.badgeId()).orElseThrow();
+        BadgeInfo badgeInfo = viewer.findBadgeInfoByBadgeId(query.badgeId()).orElseThrow();
         return new BadgeInfoResponse(badgeInfo.name(), badgeInfo.colorCode());
     }
 }
