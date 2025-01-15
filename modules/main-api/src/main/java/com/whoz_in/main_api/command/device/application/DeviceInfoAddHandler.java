@@ -1,8 +1,6 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.model.DeviceInfo;
-import com.whoz_in.domain.device.model.MacAddress;
 import com.whoz_in.domain.device.service.DeviceOwnershipService;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
@@ -11,6 +9,8 @@ import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.caching.device.TempDeviceInfo;
+import com.whoz_in.main_api.shared.caching.device.TempDeviceInfoStore;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Void> {
     private final RequesterInfo requesterInfo;
-    private final DeviceInfoStore deviceInfoStore;
+    private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
     private final DeviceOwnershipService deviceOwnershipService;
     private final DeviceRepository deviceRepository;
@@ -41,9 +41,9 @@ public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Void>
         String mac = managedLog.getMac();
 
         //등록할 DeviceInfo 생성
-        DeviceInfo deviceInfo = DeviceInfo.create(req.room(), managedLog.getSsid(), MacAddress.create(mac));
+        TempDeviceInfo deviceInfo = new TempDeviceInfo(req.room(), managedLog.getSsid(), mac);
         //이미 등록된 DeviceInfo가 아닌지 미리 확인
-        deviceInfoStore.mustNotExist(requesterId, deviceInfo);
+        tempDeviceInfoStore.mustNotExist(requesterId.id(), deviceInfo);
 
         //모니터 로그에서 현재 접속 중인 맥이 있는지 확인 (넉넉하게 15분)
         monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
@@ -56,7 +56,7 @@ public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Void>
         });
 
         //마침내! DeviceInfo를 추가한다.
-        deviceInfoStore.add(requesterId, deviceInfo);
+        tempDeviceInfoStore.add(requesterId.id(), deviceInfo);
 
         return null;
     }

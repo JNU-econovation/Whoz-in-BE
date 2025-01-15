@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 public class NetworkConfig {
     private final String room;
     private final String sudoPassword;
-    private final List<NetworkInterface> networkInterfaces;
+    private final List<NetworkInterface> allNIs;
+    private final List<NetworkInterface> managedNIs;
     private final NetworkInterface monitorNI;
     private final List<NetworkInterface> mdnsNIs;
     private final List<NetworkInterface> arpNIs;
@@ -45,7 +46,10 @@ public class NetworkConfig {
                             generateCommand(arpCommandTemplate, arp.interfaceName()));
                 })
                 .toList();
-        this.networkInterfaces = Stream.of(monitorNI, mdnsNIs, arpNIs)
+        this.managedNIs = Stream.of(mdnsNIs, arpNIs)
+                .flatMap(Collection::stream)
+                .toList();
+        this.allNIs = Stream.of(monitorNI, this.managedNIs)
                 .flatMap(list -> list instanceof Collection<?> ?
                         ((Collection<NetworkInterface>) list).stream() : Stream.of((NetworkInterface) list))
                 .toList();
