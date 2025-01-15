@@ -12,7 +12,9 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding;
 public class RoomSsidConfig {
     private final Map<String, List<String>> rooms;
 
-
+    public List<String> getRooms(){
+        return rooms.keySet().stream().toList();
+    }
     public List<String> getSsids(String room){
         List<String> ssids = this.rooms.get(room);
         if (ssids == null)
