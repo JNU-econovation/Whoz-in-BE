@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.config;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,6 +15,9 @@ public class RoomSsidConfig {
 
     public List<String> getRooms(){
         return rooms.keySet().stream().toList();
+    }
+    public List<String> getSsids(){
+        return getRooms().stream().map(this::getSsids).flatMap(Collection::stream).toList();
     }
     public List<String> getSsids(String room){
         List<String> ssids = this.rooms.get(room);
