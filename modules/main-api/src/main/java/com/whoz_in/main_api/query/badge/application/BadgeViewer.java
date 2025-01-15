@@ -6,4 +6,5 @@ import java.util.UUID;
 
 public interface BadgeViewer extends Viewer {
     Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId);
+    BadgeIds findAllBadgeIds();
 }
