@@ -40,7 +40,7 @@ public final class SystemValidator {
 
         //네트워크 인터페이스 정보
         List<NetworkInterface> system = systemNIs.getLatest();
-        List<NetworkInterface> setting = config.getNetworkInterfaces();
+        List<NetworkInterface> setting = config.getAllNIs();
 
         //네트워크 인터페이스 출력
         log.info("\n시스템 네트워크 인터페이스 - \n{}\n설정된 네트워크 인터페이스 - \n{}",
@@ -64,7 +64,7 @@ public final class SystemValidator {
         log.info("시스템 검증 시작..");
         //네트워크 인터페이스 상태 검증
         ValidationResult result = networkInterfaceValidator.getValidationResult(
-                systemNIs.getLatest(), config.getNetworkInterfaces());
+                systemNIs.getLatest(), config.getAllNIs());
         //더 많은 검증하면 result에 추가하기..
 
         if (result.hasErrors()) {
