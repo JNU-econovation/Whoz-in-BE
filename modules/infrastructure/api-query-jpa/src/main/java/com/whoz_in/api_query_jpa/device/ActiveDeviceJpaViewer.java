@@ -11,12 +11,11 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-// TODO : JPA 적용
 @Component
 @RequiredArgsConstructor
 public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
 
-    private final InMemoryActiveDeviceRepository activeDeviceRepository;
+    private final ActiveDeviceRepository activeDeviceRepository;
     private final DeviceRepository deviceRepository;
     private final MemberRepository memberRepository;
 
