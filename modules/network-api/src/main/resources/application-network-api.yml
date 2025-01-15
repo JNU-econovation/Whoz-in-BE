@@ -18,5 +18,9 @@ command:
 
 sudo_password: ${SUDO_PASSWORD}
 
+main-api:
+  base-url: ${MAIN_API_BASE_URL}
+  api-key: ${MAIN_API_API_KEY}
+
 logging:
   config: "classpath:logback-common.xml"

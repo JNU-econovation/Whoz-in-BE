@@ -13,4 +13,6 @@ include 'modules:infrastructure:logging'
 findProject(':modules:infrastructure:logging')?.name = 'logging'
 include 'modules:master-api'
 findProject(':modules:master-api')?.name = 'master-api'
+include 'modules:infrastructure:api-redis'
+findProject(':modules:infrastructure:api-redis')?.name = 'api-redis'
 

@@ -2,6 +2,7 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
+import com.whoz_in.network_api.common.NetworkInterface;
 import com.whoz_in.network_api.common.SystemNetworkInterfaces;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ public class MonitorLogWriter {
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
     private final String sudoPassword;
-    private final MonitorInfo monitorInfo;
+    private final NetworkInterface monitorNI;
     private final SystemNetworkInterfaces systemNIs;
 
     public MonitorLogWriter(MonitorLogParser parser, MonitorLogRepository repository, NetworkConfig config,
@@ -28,7 +29,7 @@ public class MonitorLogWriter {
         this.parser = parser;
         this.repository = repository;
         this.room = config.getRoom();
-        this.monitorInfo = config.getMonitorInfo();
+        this.monitorNI = config.getMonitorNI();
         this.sudoPassword = config.getSudoPassword();
         this.systemNIs = systemNIs;
         startProcess();
@@ -65,12 +66,12 @@ public class MonitorLogWriter {
         log.info("[monitor] 프로세스를 실행합니다.");
 
         //TODO: validator
-        if (!systemNIs.exists(monitorInfo.ni())){
+        if (!systemNIs.exists(monitorNI)){
             log.error("[monitor] 실행 실패 : 설정된 모니터 네트워크 인터페이스가 시스템에 존재하지 않습니다.");
             return;
         }
         Optional.ofNullable(this.process).ifPresent(MonitorLogProcess::terminate);
-        this.process = new MonitorLogProcess(monitorInfo, sudoPassword);
+        this.process = new MonitorLogProcess(monitorNI.getCommand(), sudoPassword);
         this.isProcDead = false;
 
         log.info("[monitor] 프로세스 실행 완료");

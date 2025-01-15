@@ -3,11 +3,13 @@ package com.whoz_in.main_api.command.device.application;
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceInfo;
+import com.whoz_in.domain.device.model.MacAddress;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.caching.device.TempDeviceInfoStore;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Void> {
     private final RequesterInfo requesterInfo;
-    private final DeviceInfoStore deviceInfoStore;
+    private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
     private final DeviceRepository deviceRepository;
     private final EventBus eventBus;
@@ -28,9 +30,12 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
         MemberId requesterId = requesterInfo.getMemberId();
         memberFinderService.mustExist(requesterId);
 
-        deviceInfoStore.verifyAllAdded(requesterId, cmd.room());
+        tempDeviceInfoStore.verifyAllAdded(requesterId.id(), cmd.room());
 
-        List<DeviceInfo> deviceInfos = deviceInfoStore.takeout(requesterId);
+        List<DeviceInfo> deviceInfos = tempDeviceInfoStore.takeout(requesterId.id())
+                .stream()
+                .map(cdi-> DeviceInfo.create(cdi.getRoom(), cdi.getSsid(), MacAddress.create(cdi.getMac())))
+                .toList();
 
         Device device = Device.create(requesterId, deviceInfos, cmd.deviceName());
         deviceRepository.save(device);

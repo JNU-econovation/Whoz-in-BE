@@ -19,6 +19,6 @@ public final class StubNetworkInterfaces implements SystemNetworkInterfaces{
 
     @Override
     public List<NetworkInterface> getLatest() {
-        return networkConfig.getNetworkInterfaces();
+        return networkConfig.getAllNIs();
     }
 }
