@@ -14,21 +14,31 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BadgeJpaViewer implements BadgeViewer {
-    private final BadgeRepository repository;
+    private final BadgeRepository bageRepo;
+    private final BadgeMemberRepository badgeMemberRepo;
 
     @Override
     public Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId) {
-        return repository.findById(badgeId)
+        return bageRepo.findById(badgeId)
                 .map(badge -> new BadgeInfo(badge.getName(),badge.getColorCode()));
     }
 
     @Override
     public BadgeIds findAllBadgeIds() {
-        Set<BadgeId> badgeIdSet = repository.findAllIds()
+        Set<BadgeId> badgeIdSet = bageRepo.findAllIds()
                 .stream()
                 .map(badgeId -> new BadgeId(badgeId))
                 .collect(Collectors.toSet());
 
+        return new BadgeIds(badgeIdSet);
+    }
+
+    @Override
+    public BadgeIds findBadgesByMemberId(UUID memberId) {
+        Set<BadgeId> badgeIdSet = badgeMemberRepo.findByMemberId(memberId)
+                .stream()
+                .map(bageId -> new BadgeId(bageId))
+                .collect(Collectors.toSet());
         return new BadgeIds(badgeIdSet);
     }
 }
