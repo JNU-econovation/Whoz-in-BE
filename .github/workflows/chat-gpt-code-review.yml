@@ -1,7 +1,7 @@
 name: Code Review
 
 permissions:
-  content: read
+  contents: read
   pull-requests: write
 
 # Pull Request ? ?? ? ??
@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: anc95/Chat-GPT-CodeReview@main
         env:
-          GITHUB_TOKEN : ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN : ${{secrets.BELLMIN_GITHUB_TOKEN}}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LANGUAGE: Korean
           MODEL: gpt-4
