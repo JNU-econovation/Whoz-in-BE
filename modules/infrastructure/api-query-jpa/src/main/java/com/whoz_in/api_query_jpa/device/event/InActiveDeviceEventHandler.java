@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.device.event;
 
 import com.whoz_in.api_query_jpa.device.ActiveDeviceEntity;
+import com.whoz_in.api_query_jpa.device.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.device.InMemoryActiveDeviceRepository;
 import com.whoz_in.main_api.query.device.application.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class InActiveDeviceEventHandler {
 
-    private final InMemoryActiveDeviceRepository activeDeviceRepository;
+    private final ActiveDeviceRepository activeDeviceRepository;
 
     // ActiveDeviceEvent 핸들러에서 데이터를 수정할 수 있으므로 격리 수준을 serializable 로 설정
     @Transactional(isolation = Isolation.SERIALIZABLE)
