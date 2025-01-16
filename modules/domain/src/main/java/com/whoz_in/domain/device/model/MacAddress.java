@@ -18,7 +18,7 @@ public final class MacAddress {
 
     public static MacAddress create(String address){
         if (!isValid(address)) {
-            throw new InvalidMacAddressException();
+            throw InvalidMacAddressException.EXCEPTION;
         }
         return new MacAddress(normalize(address));
     }
