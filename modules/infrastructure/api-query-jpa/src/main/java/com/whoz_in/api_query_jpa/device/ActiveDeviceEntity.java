@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.device;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -10,7 +11,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// TODO: JPA 적용
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ActiveDeviceEntity {
@@ -19,39 +20,39 @@ public class ActiveDeviceEntity {
     private UUID deviceId;
 
     @Column(nullable = false)
-    private LocalDateTime activeTime;
+    private LocalDateTime connectedTime;
 
-    private LocalDateTime inactiveTime;
+    private LocalDateTime disConnectedTime;
 
     private Duration totalActiveTime;
 
     private boolean isActive;
 
-    private ActiveDeviceEntity(UUID deviceId, LocalDateTime activeTime) {
+    private ActiveDeviceEntity(UUID deviceId, LocalDateTime connectedTime) {
         this.deviceId = deviceId;
-        this.activeTime = activeTime;
+        this.connectedTime = connectedTime;
         this.isActive = true;
     }
 
-    public void activeOn(LocalDateTime activeTime){
+    public void activeOn(LocalDateTime connectedTime){
         this.isActive = true;
-        this.activeTime = activeTime;
-        this.inactiveTime = null;
+        this.connectedTime = connectedTime;
+        this.disConnectedTime = null;
     }
 
-    public void inActiveOn(LocalDateTime inactiveTime){
+    public void inActiveOn(LocalDateTime disConnectedTime){
         this.isActive = false;
-        this.inactiveTime = inactiveTime;
+        this.disConnectedTime = disConnectedTime;
         addTotalActiveTime();
     }
 
     private void addTotalActiveTime(){
-        Duration add = Duration.between(activeTime, inactiveTime).abs();
+        Duration add = Duration.between(connectedTime, disConnectedTime).abs();
         this.totalActiveTime = Objects.nonNull(totalActiveTime) ? totalActiveTime.plus(add) :  add;
     }
 
-    public static ActiveDeviceEntity create(UUID deviceId, LocalDateTime activeTime){
-        return new ActiveDeviceEntity(deviceId, activeTime);
+    public static ActiveDeviceEntity create(UUID deviceId, LocalDateTime connectedTime){
+        return new ActiveDeviceEntity(deviceId, connectedTime);
     }
 
 }
