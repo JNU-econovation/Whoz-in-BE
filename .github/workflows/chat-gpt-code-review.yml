@@ -21,4 +21,4 @@ jobs:
           GITHUB_TOKEN : ${{secrets.BELLMIN_GITHUB_TOKEN}}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           LANGUAGE: Korean
-          MODEL: gpt-4
+          MODEL: gpt-3.5-turbo
