@@ -22,9 +22,8 @@ public class DeviceController extends CommandController{
     }
 
     @PostMapping("/device/info")
-    public ResponseEntity<SuccessBody<Void>> addDeviceInfo(@RequestBody DeviceInfoAdd request) {
-        dispatch(request);
-        return ResponseEntityGenerator.success("기기 정보 등록 완료", HttpStatus.CREATED);
+    public ResponseEntity<SuccessBody<String>> addDeviceInfo(@RequestBody DeviceInfoAdd request) {
+        return ResponseEntityGenerator.success(dispatch(request), "기기 정보 등록 완료", HttpStatus.CREATED);
     }
 
     @PostMapping("/device")

@@ -10,7 +10,4 @@ public interface DeviceRepository {
     //해당 mac을 포함하는 device를 찾는 메서드
     Optional<Device> findByMac(String mac);
     Optional<Device> findByDeviceId(DeviceId deviceId);
-    default Device getByDeviceId(DeviceId deviceId){
-        return findByDeviceId(deviceId).orElseThrow(()->new IllegalArgumentException("device가 없음"));
-    }
 }
