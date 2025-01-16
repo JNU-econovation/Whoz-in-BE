@@ -14,18 +14,7 @@ public interface MemberRepository {
   Optional<Member> findByMemberId(MemberId id);
   List<Member> findByName(String name);
   Optional<Member> findBySocialId(String socialId);
-  default Member getByLoginId(String loginId){
-    return findByLoginId(loginId).orElseThrow(NoMemberException::new);
-  }
-  default List<Member> getByName(String name){
-    List<Member> members = findByName(name);
-    if(members.isEmpty()) throw new NoMemberException();
-    return members;
-  }
-  default Member getByMemberId(MemberId id){
-    return findByMemberId(id).orElseThrow(NoMemberException::new);
-  }
   default Member getBySocialId(String socialId){
-    return findBySocialId(socialId).orElseThrow(NoMemberException::new);
+    return findBySocialId(socialId).orElseThrow(()->NoMemberException.EXCEPTION);
   }
 }
