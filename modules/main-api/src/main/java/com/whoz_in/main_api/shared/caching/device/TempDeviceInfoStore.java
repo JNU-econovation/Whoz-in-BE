@@ -2,7 +2,6 @@ package com.whoz_in.main_api.shared.caching.device;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.whoz_in.main_api.config.RoomSsidConfig;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -25,26 +24,11 @@ public final class TempDeviceInfoStore {
             .expireAfterAccess(5, TimeUnit.MINUTES) // 5분 동안 접근이 없으면 만료
             .build();
 
-    private final RoomSsidConfig ssidConfig;
-
 
     //이전에 등록되지 않은 TempDeviceInfo인지 검증
-    public void mustNotExist(UUID ownerId, TempDeviceInfo deviceInfo){
+    public boolean exists(UUID ownerId, TempDeviceInfo deviceInfo){
         List<TempDeviceInfo> deviceInfos = store.getIfPresent(ownerId);
-        if (deviceInfos != null && deviceInfos.stream().anyMatch(di->di.equals(deviceInfo)))
-            throw new IllegalArgumentException("이미 등록됨");
-    }
-
-    //TODO: deviceInfo들에 room이 있는데 room을 굳이 받아야 하나
-    //room의 모든 와이파이에 대해 CachedDevice가 추가되었는지 검증
-    public void verifyAllAdded(UUID ownerId, String room){
-        List<TempDeviceInfo> deviceInfos = get(ownerId);
-        List<String> unregisteredSsids = ssidConfig.getSsids(room).stream()
-                .filter(ssid -> deviceInfos.stream().noneMatch(di -> di.getSsid().equals(ssid)))
-                .toList();
-        if (!unregisteredSsids.isEmpty()) {
-            throw new IllegalArgumentException("다음 wifi에 대해 맥을 등록하지 않았습니다. " + String.join(", ", unregisteredSsids));
-        }
+        return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.equals(deviceInfo));
     }
 
     //DeviceInfo 추가
