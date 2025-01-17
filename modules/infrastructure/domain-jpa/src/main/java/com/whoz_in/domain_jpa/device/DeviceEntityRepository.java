@@ -12,5 +12,5 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
     @Query("SELECT d FROM DeviceEntity d JOIN d.deviceInfoEntity di WHERE di.mac = :mac")
     Optional<DeviceEntity> findByMac(@Param("mac") String mac);
 
-    Optional<DeviceEntity> findById(UUID memberId);
+    Optional<DeviceEntity> findById(UUID deviceId);
 }
