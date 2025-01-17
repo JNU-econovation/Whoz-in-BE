@@ -20,7 +20,7 @@ public final class IpAddress {
 
     public static IpAddress create(String address){
         if (!isValid(address)) {
-            throw new InvalidIPv4AddressException();
+            throw InvalidIPv4AddressException.EXCEPTION;
         }
         return new IpAddress(address);
     }

@@ -1,8 +1,7 @@
-package com.whoz_in.main_api.shared.domain;
+package com.whoz_in.main_api.shared.infrastructure.domain;
 
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
