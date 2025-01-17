@@ -1,8 +1,6 @@
 spring:
   jpa:
     open-in-view: false
-  config:
-    import: "classpath:env-domain-jpa.properties"
 
 domain-jpa:
   datasource:
@@ -11,7 +9,7 @@ domain-jpa:
     password: ${DOMAIN_JPA.DB_PASSWORD}
     driver-class-name: ${DOMAIN_JPA.DB_DRIVER_CLASS}
   hibernate:
-    ddl-auto: validate
+    ddl-auto: ${DOMAIN_JPA.DDL_AUTO}
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show_sql: false
 
