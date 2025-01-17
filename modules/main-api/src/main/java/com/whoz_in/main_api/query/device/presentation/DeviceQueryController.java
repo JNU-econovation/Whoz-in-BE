@@ -24,17 +24,6 @@ public class DeviceQueryController extends QueryController {
     protected DeviceQueryController(QueryBus queryBus) {
         super(queryBus);
     }
-
-    @GetMapping("/members")
-    public ResponseEntity<SuccessBody<ActiveDeviceListResponse>> getActiveDevices(
-            @RequestParam("size") int size,
-            @RequestParam("page") int page,
-            @RequestParam("sortType") String sortType
-    ) {
-        ActiveDeviceList query = new ActiveDeviceList(page, size, sortType);
-        ActiveDeviceListResponse response = ask(query);
-        return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
-    }
   
     @GetMapping("/devices")
     public ResponseEntity<SuccessBody<DevicesStatus>> getDeviceStatus(){
