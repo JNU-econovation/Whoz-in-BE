@@ -33,7 +33,7 @@ public final class HttpPrivateIpWriter implements PrivateIpWriter {
 
     //TODO: 다른 요청도 하게 되면 공통 로직 묶기
     @Override
-    public boolean write(String room, Map<String, String> privateIps) {
+    public void write(String room, Map<String, String> privateIps) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", mainApiKey);
@@ -48,7 +48,6 @@ public final class HttpPrivateIpWriter implements PrivateIpWriter {
                     requestEntity,
                     Void.class
             );
-            return true;
         } catch (ResourceAccessException e){
             log.error("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
         } catch (HttpClientErrorException.Forbidden e) {
@@ -56,7 +55,6 @@ public final class HttpPrivateIpWriter implements PrivateIpWriter {
         } catch (Exception e) {
             log.error("알 수 없는 예외 : {}", e.getMessage());
         }
-        return false;
     }
 
     private String createRequestBody(String room, Map<String, String> privateIps) {
