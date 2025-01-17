@@ -18,6 +18,11 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
+    public void delete(DeviceId deviceId) {
+        repository.deleteById(deviceId.id());
+    }
+
+    @Override
     public Optional<Device> findByMac(String mac) {
         return repository.findByMac(mac).map(converter::to);
     }
