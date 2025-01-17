@@ -58,8 +58,8 @@ public class MemberEntity extends BaseEntity {
   private Set<BadgeMemberEntity> badgeMembers;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
-          String loginId, String password,
-          SocialProvider socialProvider, String socialId) {
+                      String loginId, String password,
+                      SocialProvider socialProvider, String socialId, Set<BadgeMemberEntity> badgeMembers) {
     this.id = id;
     this.name = name;
     this.generation = generation;
@@ -69,5 +69,6 @@ public class MemberEntity extends BaseEntity {
     this.password = password;
     this.socialProvider = socialProvider;
     this.socialId = socialId;
+    this.badgeMembers = badgeMembers;
   }
 }

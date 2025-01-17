@@ -30,11 +30,6 @@ public class BadgeMemberEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private IsBadgeShown isBadgeShown = IsBadgeShown.Y;
 
-    public BadgeMemberEntity(UUID memberId, UUID badgeId) {
-        this.memberId = memberId;
-        this.badgeId = badgeId;
-    }
-
     public BadgeMemberEntity(UUID memberId, UUID badgeId, IsBadgeShown isBadgeShown) {
         this.memberId = memberId;
         this.badgeId = badgeId;

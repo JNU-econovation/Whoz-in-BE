@@ -10,6 +10,7 @@ import com.whoz_in.domain.member.exception.NotAuthMemberException;
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.domain.shared.Nullable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -107,5 +108,9 @@ public final class Member extends AggregateRoot {
             badges.put(badgeId, IsBadgeShown.Y);
             this.register(new MemberBadgeAdded(this.getId(), this.badges));
         }
+    }
+
+    public Map<BadgeId, IsBadgeShown> getBadges() {
+        return Collections.unmodifiableMap(this.badges);
     }
 }

@@ -6,8 +6,10 @@ import com.whoz_in.domain.member.model.IsBadgeShown;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.model.OAuthCredentials;
+import com.whoz_in.domain_jpa.badge.BadgeMemberEntity;
 import com.whoz_in.domain_jpa.shared.BaseConverter;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,13 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
     public MemberEntity from(Member member) {
         AuthCredentials auth = member.getAuthCredentials().orElse(null);
         OAuthCredentials oAuth = member.getOAuthCredentials().orElse(null);
+        Set<BadgeMemberEntity> badgeMembers = member.getBadges().entrySet().stream()
+                .map(entry -> new BadgeMemberEntity(
+                        member.getId().id(),
+                        entry.getKey().id(),
+                        entry.getValue()
+                ))
+                .collect(Collectors.toSet());
         return new MemberEntity(
                 member.getId().id(),
                 member.getName(),
@@ -27,7 +36,8 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 auth != null ? auth.getLoginId() : null,
                 auth != null ? auth.getEncodedPassword() : null,
                 oAuth != null ? oAuth.getSocialProvider() : null,
-                oAuth != null ? oAuth.getSocialId() : null
+                oAuth != null ? oAuth.getSocialId() : null,
+                badgeMembers
         );
     }
 
