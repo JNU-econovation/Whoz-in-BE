@@ -1,22 +1,30 @@
 package com.whoz_in.main_api.shared.presentation;
 
+import com.whoz_in.domain.shared.BusinessException;
+import com.whoz_in.main_api.shared.application.ApplicationException;
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
-@ControllerAdvice
+@RestControllerAdvice
+@RequiredArgsConstructor
 public class MainApiGlobalExceptionHandler {
-    // 사용자 예외
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<FailureBody> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntityGenerator.fail("USER_ERROR", e.getMessage(), HttpStatus.BAD_REQUEST);
+    //TODO: mapper
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<FailureBody> handle(ApplicationException e, HttpServletRequest request) {
+        return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
-    // 개발자 예외
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<FailureBody> handleIllegalStateException(IllegalStateException e) {
-        return ResponseEntityGenerator.fail("SYSTEM_ERROR", e.getMessage(), HttpStatus.BAD_REQUEST);
+    //TODO: ApplicationException과 합쳐야 할듯
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<FailureBody> handle(BusinessException e) {
+        return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // 나머지 예외
@@ -24,5 +32,4 @@ public class MainApiGlobalExceptionHandler {
     public ResponseEntity<FailureBody> handleException(Exception e) {
         return ResponseEntityGenerator.fail("UNEXPECTED_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }

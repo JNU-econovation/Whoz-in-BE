@@ -24,10 +24,10 @@ public final class AuthCredentials {
     public static AuthCredentials create(String loginId, String rawPassword, PasswordEncoder passwordEncoder){
         //아이디가 정책에 맞는지 확인
         if (!Pattern.matches(LOGIN_ID_REGEX, loginId))
-            throw new LoginIdPolicyViolationException();
+            throw LoginIdPolicyViolationException.EXCEPTION;
         //비밀번호가 정책에 맞는지 확인
         if (!Pattern.matches(PASSWORD_REGEX, rawPassword))
-            throw new PasswordPolicyViolationException();
+            throw PasswordPolicyViolationException.EXCEPTION;
         return new AuthCredentials(loginId, passwordEncoder.encode(rawPassword));
     }
 
@@ -41,10 +41,10 @@ public final class AuthCredentials {
         String encodedOldPassword = passwordEncoder.encode(rawOldPassword);
         //기존 비밀번호가 같은지 확인
         if (!encodedPassword.equals(encodedOldPassword))
-            throw new WrongPasswordException();
+            throw WrongPasswordException.EXCEPTION;
         //새로운 비밀번호가 정책에 맞는지 확인
         if (!Pattern.matches(PASSWORD_REGEX, rawNewPassword))
-            throw new PasswordPolicyViolationException();
+            throw PasswordPolicyViolationException.EXCEPTION;
         return new AuthCredentials(this.loginId, passwordEncoder.encode(rawNewPassword));
     }
 }
