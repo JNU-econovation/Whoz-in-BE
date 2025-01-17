@@ -20,7 +20,7 @@ public class BadgeAttachHandler implements CommandHandler<BadgeAttach, Void> {
     @Override
     public Void handle(BadgeAttach req) {
         Member member = repository.findByMemberId(new MemberId(req.memberId())).orElseThrow();
-        repository.addBadge(new MemberId(req.memberId()),new BadgeId(req.badgeId()));
+        member.addBadge(new BadgeId(req.badgeId()));
         eventBus.publish(member.pullDomainEvents());
         return null;
     }

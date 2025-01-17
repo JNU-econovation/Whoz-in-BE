@@ -101,4 +101,11 @@ public final class Member extends AggregateRoot {
     public Optional<IsBadgeShown> getBadgeStatus(BadgeId badgeId) {
         return Optional.ofNullable(this.badges.get(badgeId));
     }
+
+    public void addBadge(BadgeId badgeId) {
+        if (!badges.containsKey(badgeId)) {
+            badges.put(badgeId, IsBadgeShown.Y);
+            this.register(new MemberBadgeAdded(this.getId(), this.badges));
+        }
+    }
 }
