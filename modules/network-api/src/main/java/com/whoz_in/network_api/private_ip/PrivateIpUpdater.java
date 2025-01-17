@@ -15,19 +15,14 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PrivateIpUpdater {
-    private Map<String, String> sent = Map.of();
     private final NetworkConfig networkConfig;
     private final PrivateIpWriter writer;
 
     @Scheduled(fixedRate = 30000)
     private void update() {
         Map<String, String> privateIp = getPrivateIpPerSsid();
-        if (sent.equals(privateIp))
-            return;
-        if (writer.write(networkConfig.getRoom(), privateIp)) {
-            sent = privateIp;
-            log.info("[private ip] updated");
-        }
+        writer.write(networkConfig.getRoom(), privateIp);
+        log.info("[private ip] updated");
     }
 
     private Map<String, String> getPrivateIpPerSsid(){
