@@ -104,6 +104,9 @@ public class SecurityFilterChainConfig {
                     "/api/v1/device",
                     "/api/v1/device/info"
             ).authenticated();
+            auth.requestMatchers(HttpMethod.DELETE,
+                    "/api/v1/device"
+            ).authenticated();
             //인증 여부에 따라 다른 동작
 //            auth.requestMatchers(
 //            ).permitAll();
