@@ -4,6 +4,7 @@ import com.whoz_in.main_api.query.badge.application.BadgeId;
 import com.whoz_in.main_api.query.badge.application.BadgeIds;
 import com.whoz_in.main_api.query.badge.application.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
@@ -25,7 +26,8 @@ public class BadgeJpaViewer implements BadgeViewer {
 
     @Override
     public BadgeIds findAllBadgeIds() {
-        Set<BadgeId> badgeIdSet = bageRepo.findAllIds()
+        LocalDateTime threshold = LocalDateTime.now().minusHours(12);
+        Set<BadgeId> badgeIdSet = bageRepo.findAllActivatedBadgeIds(threshold)
                 .stream()
                 .map(badgeId -> new BadgeId(badgeId))
                 .collect(Collectors.toSet());

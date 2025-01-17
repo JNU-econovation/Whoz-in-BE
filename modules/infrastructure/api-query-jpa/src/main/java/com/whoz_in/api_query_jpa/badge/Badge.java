@@ -15,7 +15,8 @@ import org.hibernate.annotations.UuidGenerator;
 @Subselect("SELECT "
         + "b.id AS id, "
         + "b.name AS name, "
-        + "b.color_code AS colorCode "
+        + "b.color_code AS colorCode, "
+        + "b.created_at AS createdAt "
         + "FROM badge_entity b")
 @Synchronize({"badge_entity"})
 public class Badge {
