@@ -74,7 +74,7 @@ public final class Member extends AggregateRoot {
 
     public void changePassword(String rawOldPassword, String rawNewPassword, PasswordEncoder passwordEncoder){
         if (authCredentials == null)
-            throw new NotAuthMemberException();
+            throw NotAuthMemberException.EXCEPTION;
         this.authCredentials = this.authCredentials.changePassword(rawOldPassword, rawNewPassword, passwordEncoder);
         this.register(new MemberPasswordChanged(this.getId(), this.authCredentials.getEncodedPassword()));
     }
