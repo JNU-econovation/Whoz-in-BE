@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
 
-import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
