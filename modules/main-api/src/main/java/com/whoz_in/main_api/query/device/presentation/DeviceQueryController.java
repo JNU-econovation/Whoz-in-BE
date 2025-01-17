@@ -1,5 +1,7 @@
 package com.whoz_in.main_api.query.device.presentation;
 
+import com.whoz_in.main_api.query.device.application.DevicesStatus;
+import com.whoz_in.main_api.query.device.application.DevicesStatusGet;
 import com.whoz_in.main_api.query.device.application.TempDeviceInfosStatus;
 import com.whoz_in.main_api.query.device.application.TempDeviceInfosStatusGet;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
@@ -19,6 +21,11 @@ public class DeviceQueryController extends QueryController {
 
     public DeviceQueryController(QueryBus queryBus) {
         super(queryBus);
+    }
+
+    @GetMapping("/devices")
+    public ResponseEntity<SuccessBody<DevicesStatus>> getDeviceStatus(){
+        return ResponseEntityGenerator.success(ask(new DevicesStatusGet()), CrudResponseCode.READ);
     }
 
     @GetMapping("/device/info-status")
