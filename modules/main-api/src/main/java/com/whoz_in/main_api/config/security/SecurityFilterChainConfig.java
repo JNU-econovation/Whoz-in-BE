@@ -31,7 +31,7 @@ public class SecurityFilterChainConfig {
     @Order(0)
     public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/api/v1/private-ip"
+                "/internal/**"
         );
 
         commonConfigurations(httpSecurity);
@@ -96,7 +96,9 @@ public class SecurityFilterChainConfig {
             //인증 필요
             auth.requestMatchers(HttpMethod.GET,
                     "/api/v1/device/info-status",
-                    "/api/v1/private-ip/*"
+                    "/api/v1/devices",
+                    "/api/v1/private-ip",
+                    "/api/v1/ssid"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
