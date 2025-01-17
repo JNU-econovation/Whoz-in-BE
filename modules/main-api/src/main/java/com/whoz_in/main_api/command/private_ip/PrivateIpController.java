@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+//server to server
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/internal/api/v1")
 public class PrivateIpController extends CommandController {
 
     public PrivateIpController(CommandBus commandBus) {

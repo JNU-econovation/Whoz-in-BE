@@ -11,4 +11,5 @@ public interface DeviceRepository extends JpaRepository<Device, UUID> {
             value = "SELECT id , member_id FROM device_entity")
     List<Device> findAll();
 
+    List<Device> findAllByMemberId(UUID ownerId);
 }
