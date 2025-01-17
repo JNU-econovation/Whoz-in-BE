@@ -31,4 +31,5 @@ public interface MemberRepository {
     return findBySocialId(socialId).orElseThrow(NoMemberException::new);
   }
   void addBadge(MemberId memberId, BadgeId badgeId);
+  void changeBadgeShowOrHide(MemberId memberId, BadgeId badgeId);
 }
