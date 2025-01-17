@@ -1,12 +1,10 @@
 package com.whoz_in.domain_jpa.member;
 
-import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain_jpa.badge.BadgeConverter;
 import com.whoz_in.domain_jpa.badge.BadgeEntityRepository;
-import com.whoz_in.domain_jpa.badge.BadgeMemberEntity;
 import com.whoz_in.domain_jpa.badge.BadgeMemberEntityRepository;
 import java.util.List;
 import java.util.Optional;
@@ -60,12 +58,5 @@ public class MemberJpaRepository implements MemberRepository {
   @Override
   public Optional<Member> findBySocialId(String socialId) {
     return memberRepo.findBySocialId(socialId).map(memberConverter::to);
-  }
-
-  @Override
-  public void changeBadgeShowOrHide(MemberId memberId,BadgeId badgeId) {
-    Member member = findByMemberId(memberId).orElseThrow();
-    member.changeBadgeShowOrHide(badgeId);
-    badgeMemberRepo.save(new BadgeMemberEntity(memberId.id(),badgeId.id(),member.getBadgeStatus(badgeId).orElseThrow()));
   }
 }
