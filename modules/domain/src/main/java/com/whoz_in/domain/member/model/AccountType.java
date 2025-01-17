@@ -17,7 +17,7 @@ public enum AccountType {
         return Arrays.stream(AccountType.values())
                 .filter(at -> at.name().equals(accountType))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("no account type"));
+                .orElseThrow(() -> new IllegalStateException("no account type"));
     }
 
 }

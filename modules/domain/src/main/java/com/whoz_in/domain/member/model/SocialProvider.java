@@ -19,7 +19,7 @@ public enum SocialProvider {
         return Arrays.stream(SocialProvider.values())
                 .filter(provider -> provider.getProviderName().equals(socialProvider))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("no social provider"));
+                .orElseThrow(() -> new IllegalStateException("no social provider"));
     }
     
 }
