@@ -3,7 +3,7 @@ package com.whoz_in.main_api.query.device.application;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.main_api.config.RoomSsidConfig;
-import com.whoz_in.main_api.query.device.view.DeviceInfoViewer;
+import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.caching.device.TempDeviceInfo;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 public class TempDeviceInfosStatusHandler implements QueryHandler<TempDeviceInfosStatusGet, TempDeviceInfosStatus> {
     private final RoomSsidConfig ssidConfig;
     private final RequesterInfo requesterInfo;
-    private final DeviceInfoViewer deviceInfoViewer;
+    private final DeviceViewer deviceViewer;
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final ManagedLogRepository managedLogRepository;
 
@@ -35,7 +35,7 @@ public class TempDeviceInfosStatusHandler implements QueryHandler<TempDeviceInfo
         // 방에 존재하는 와이파이들
         List<String> roomSsids = ssidConfig.getSsids(query.room());
         // 사용자가 이전에 등록한 기기 정보를 가져옴
-        List<String> registeredSsids = deviceInfoViewer
+        List<String> registeredSsids = deviceViewer
                 .findRegisteredSsids(requesterId, query.room(), log.getMac())
                 .ssids();
         // 임시로 등록한 기기 정보를 가져옴
