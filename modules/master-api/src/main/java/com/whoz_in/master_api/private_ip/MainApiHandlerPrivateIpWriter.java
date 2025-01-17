@@ -15,8 +15,7 @@ import org.springframework.stereotype.Component;
 public class MainApiHandlerPrivateIpWriter implements PrivateIpWriter {
     private final PrivateIpUpdateHandler privateIpUpdateHandler;
     @Override
-    public boolean write(String room, Map<String, String> privateIps) {
+    public void write(String room, Map<String, String> privateIps) {
         privateIpUpdateHandler.handle(new PrivateIpUpdate(room, privateIps));
-        return true;
     }
 }
