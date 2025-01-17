@@ -25,7 +25,7 @@ public class DeviceQueryController extends QueryController {
         super(queryBus);
     }
 
-    @GetMapping("/devices/active")
+    @GetMapping("/members")
     public ResponseEntity<SuccessBody<ActiveDeviceListResponse>> getActiveDevices(
             @RequestParam("size") int size,
             @RequestParam("page") int page,
