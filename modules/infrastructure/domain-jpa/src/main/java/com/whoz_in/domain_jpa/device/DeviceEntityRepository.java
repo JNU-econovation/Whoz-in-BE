@@ -13,4 +13,6 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
     Optional<DeviceEntity> findByMac(@Param("mac") String mac);
 
     Optional<DeviceEntity> findById(UUID deviceId);
+
+    void deleteById(UUID deviceId);
 }
