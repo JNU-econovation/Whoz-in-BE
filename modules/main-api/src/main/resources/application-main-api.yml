@@ -7,6 +7,8 @@ spring:
       - "classpath:env-rooms-setting.yml"
       #domain-jpa 모듈의 설정 파일
       - "classpath:application-domain-jpa.yml"
+      #domain-jpa가 사용할 환경 변수
+      - "classpath:env-domain-jpa.properties"
       #api-query-jpa 모듈의 설정 파일
       - "classpath:application-api-query-jpa.yml"
       #logging 모듈의 설정 파일
