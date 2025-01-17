@@ -30,6 +30,8 @@ public class MainApiGlobalExceptionHandler {
     // 나머지 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<FailureBody> handleException(Exception e) {
+        log.error("[UNEXPECTED_ERROR] {}", e.getMessage());
+        e.printStackTrace();
         return ResponseEntityGenerator.fail("UNEXPECTED_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
