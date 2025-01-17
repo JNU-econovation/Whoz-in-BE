@@ -21,7 +21,7 @@ public class BadgeJpaViewer implements BadgeViewer {
     @Override
     public Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId) {
         return bageRepo.findById(badgeId)
-                .map(badge -> new BadgeInfo(badge.getName(),badge.getColorCode()));
+                .map(badge -> new BadgeInfo(badge.getName(),badge.getColor_code()));
     }
 
     @Override

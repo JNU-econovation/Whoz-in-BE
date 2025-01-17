@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BadgeRepository extends JpaRepository<Badge, UUID> {
     Optional<Badge> findById(UUID id);
-    @Query("SELECT b.id FROM Badge b WHERE b.createdAt <= :threshold")
+    @Query("SELECT b.id FROM Badge b WHERE b.created_at <= :threshold")
     Set<UUID> findAllActivatedBadgeIds(@Param("threshold") LocalDateTime threshold);
 }
