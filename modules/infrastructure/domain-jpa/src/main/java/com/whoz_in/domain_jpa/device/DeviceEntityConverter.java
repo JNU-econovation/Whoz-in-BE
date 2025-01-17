@@ -6,6 +6,7 @@ import com.whoz_in.domain.device.model.DeviceInfo;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain_jpa.shared.BaseConverter;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -32,7 +33,7 @@ public class DeviceEntityConverter extends BaseConverter<DeviceEntity, Device> {
                                 deviceInfoEntity.getRoom(),
                                 deviceInfoEntity.getSsid(),
                                 deviceInfoEntity.getMac()))
-                        .toList(),
+                        .collect(Collectors.toSet()),
                 entity.getName()
         );
     }
