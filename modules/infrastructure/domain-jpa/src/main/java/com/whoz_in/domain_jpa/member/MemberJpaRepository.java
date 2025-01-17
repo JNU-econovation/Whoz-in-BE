@@ -17,9 +17,6 @@ import org.springframework.stereotype.Repository;
 public class MemberJpaRepository implements MemberRepository {
   private final MemberConverter memberConverter;
   private final MemberEntityJpaRepository memberRepo;
-  private final BadgeMemberEntityRepository badgeMemberRepo;
-  private final BadgeConverter badgeConverter;
-  private final BadgeEntityRepository badgeRepo;
 
   @Override
   public void save(Member member) {
