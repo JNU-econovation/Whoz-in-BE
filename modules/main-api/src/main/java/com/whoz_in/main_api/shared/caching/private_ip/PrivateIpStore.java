@@ -6,6 +6,7 @@ import com.whoz_in.main_api.config.RoomSsidConfig;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -30,16 +31,14 @@ public final class PrivateIpStore {
         }
         return privateIps;
     }
-
-    public List<String> getIpList(String room) {
-        return get(room).values().stream().toList();
-    }
-
-    //캐싱
-    public List<String> getIpList() {
+    public Map<String, String> get(){
         return ssidConfig.getRooms().stream()
-                .map(this::getIpList)
-                .flatMap(Collection::stream)
-                .toList();
+                .map(this::get)
+                .flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (existing, replacement) -> replacement
+                ));
     }
 }
