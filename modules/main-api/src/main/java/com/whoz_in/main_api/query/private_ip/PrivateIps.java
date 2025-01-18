@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.query.private_ip;
 
 import com.whoz_in.main_api.query.shared.application.Response;
-import java.util.List;
+import java.util.Map;
 
-public record PrivateIpList(
-        List<String> ipList
+public record PrivateIps(
+        Map<String, String> ipList //Map<SSID, private ip>
 ) implements Response {}
