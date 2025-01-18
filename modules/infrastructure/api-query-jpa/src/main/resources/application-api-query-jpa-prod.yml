@@ -1,0 +1,4 @@
+api-query-jpa:
+  hibernate:
+    show_sql: false
+    format_sql: false
