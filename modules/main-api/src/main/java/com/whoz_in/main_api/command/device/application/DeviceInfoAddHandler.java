@@ -1,9 +1,6 @@
 package com.whoz_in.main_api.command.device.application;
 
-import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.exception.DeviceAlreadyRegisteredException;
 import com.whoz_in.domain.device.service.DeviceFinderService;
-import com.whoz_in.domain.device.service.DeviceOwnershipService;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.network_log.ManagedLog;
@@ -37,10 +34,10 @@ public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Strin
         memberFinderService.mustExist(requesterId);
 
         //해당 룸에서 발생한 아이피로 ManagedLog를 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 무시한다.
-        ManagedLog managedLog = managedLogRepository.getLatestByRoomAndIpAfter(req.room(), req.ip().toString(), LocalDateTime.now().minusDays(1));
+        ManagedLog managedLog = managedLogRepository.getLatestByIpAfter(req.ip().toString(), LocalDateTime.now().minusDays(1));
         String mac = managedLog.getMac();
         //등록할 TempDeviceInfo 생성
-        TempDeviceInfo deviceInfo = new TempDeviceInfo(req.room(), managedLog.getSsid(), mac);
+        TempDeviceInfo deviceInfo = new TempDeviceInfo(managedLog.getRoom(), managedLog.getSsid(), mac);
         //이미 등록된 TempDeviceInfo면 완료로 취급한다. (예외를 띄워야 할수도)
         if (tempDeviceInfoStore.exists(requesterId.id(), deviceInfo)) return managedLog.getSsid();
         //모니터 로그에서 현재 접속 중인 맥이 있어야 한다. (넉넉하게 15분)
