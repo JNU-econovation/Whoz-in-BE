@@ -4,6 +4,7 @@ import com.whoz_in.domain.badge.BadgeRepository;
 import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeInfo;
 import com.whoz_in.domain.badge.model.BadgeType;
+import com.whoz_in.domain.badge.service.BadgeFinderService;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
@@ -15,11 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class BadgeRegisterHandler implements CommandHandler<BadgeRegister, Void> {
     private final BadgeRepository repository;
+    private final BadgeFinderService badgeFinderService;
     private final EventBus eventBus;
 
     @Transactional
     @Override
     public Void handle(BadgeRegister req) {
+        badgeFinderService.mustNotExist(req.name());
         Badge badge = Badge.create(
                 BadgeInfo.create(req.name(),BadgeType.USERMADE,req.colorCode(),new MemberId(req.creator()))
         );
