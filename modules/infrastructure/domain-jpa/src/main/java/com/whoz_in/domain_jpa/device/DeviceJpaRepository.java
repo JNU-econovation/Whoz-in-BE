@@ -23,6 +23,11 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
+    public void delete(DeviceId deviceId) {
+        repository.deleteById(deviceId.id());
+    }
+
+    @Override
     public List<Device> findAll() {
         return repository.findAll().stream().map(converter::to).toList();
     }
