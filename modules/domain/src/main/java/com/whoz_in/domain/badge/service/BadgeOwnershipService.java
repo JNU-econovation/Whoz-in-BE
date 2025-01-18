@@ -12,9 +12,8 @@ import lombok.RequiredArgsConstructor;
 public class BadgeOwnershipService {
     private final BadgeFinderService badgeFinderService;
 
-    public void validateType(BadgeId badgeId) {
-        Badge badge = badgeFinderService.find(badgeId);
-        if (badge.getBadgeInfo().getBadgeType() != BadgeType.USERMADE) {
+    public void validateType(BadgeType badgeType) {
+        if (badgeType != BadgeType.USERMADE) {
             throw InvalidBadgeRegisterException.EXCEPTION;
         }
     }
