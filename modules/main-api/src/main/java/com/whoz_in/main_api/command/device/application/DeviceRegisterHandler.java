@@ -62,7 +62,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
         Device device = optionalDevice
                 .map(d->{
                     //기존 Device에 DeviceInfo 추가
-                    d.registerDeviceInfo(deviceInfos);
+                    deviceInfos.forEach(d::registerDeviceInfo);
                     return d;
                 })
                 .orElseGet(() -> Device.create(requesterId, deviceInfos, cmd.deviceName()));
