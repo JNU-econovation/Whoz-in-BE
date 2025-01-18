@@ -96,7 +96,7 @@ public class SecurityFilterChainConfig {
             auth.requestMatchers(HttpMethod.GET,
                     "/api/v1/device/info-status",
                     "/api/v1/devices",
-                    "/api/v1/private-ip",
+                    "/api/v1/private-ips",
                     "/api/v1/ssid",
                     "/api/v1/members"
             ).authenticated();
