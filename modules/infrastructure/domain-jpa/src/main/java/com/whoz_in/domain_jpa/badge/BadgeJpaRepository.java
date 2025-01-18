@@ -2,6 +2,7 @@ package com.whoz_in.domain_jpa.badge;
 
 import com.whoz_in.domain.badge.BadgeRepository;
 import com.whoz_in.domain.badge.model.Badge;
+import com.whoz_in.domain.badge.model.BadgeId;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -19,5 +20,10 @@ public class BadgeJpaRepository implements BadgeRepository {
     @Override
     public Optional<Badge> findByName(String name) {
         return badgeRepo.findByName(name).map(converter::to);
+    }
+
+    @Override
+    public Optional<Badge> findByBadgeId(BadgeId badgeId) {
+        return badgeRepo.findById(badgeId.id()).map(converter::to);
     }
 }

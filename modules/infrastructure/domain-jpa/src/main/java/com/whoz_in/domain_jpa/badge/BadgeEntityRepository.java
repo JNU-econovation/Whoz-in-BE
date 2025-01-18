@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BadgeEntityRepository extends JpaRepository<BadgeEntity, Long> {
     Optional<BadgeEntity> findByName(String name);
+    Optional<BadgeEntity> findById(UUID id);
 }
