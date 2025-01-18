@@ -1,5 +1,6 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.badge.exception.AlreadyHasBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.event.MemberBadgeAdded;
 import com.whoz_in.domain.member.event.MemberBadgeChanged;
@@ -104,6 +105,9 @@ public final class Member extends AggregateRoot {
     }
 
     public void addBadge(BadgeId badgeId) {
+        if (badges.containsKey(badgeId)) {
+            throw AlreadyHasBadgeException.EXCEPTION;
+        }
         if (!badges.containsKey(badgeId)) {
             badges.put(badgeId, IsBadgeShown.Y);
             this.register(new MemberBadgeAdded(this.getId(), this.badges));
