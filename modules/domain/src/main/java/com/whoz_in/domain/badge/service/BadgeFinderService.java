@@ -26,4 +26,10 @@ public class BadgeFinderService {
     public Badge find(BadgeId badgeId) {
         return badgeRepository.findByBadgeId(badgeId).orElseThrow(()-> NoBadgeException.EXCEPTION);
     }
+
+    public void isExist(BadgeId badgeId) {
+        if (!(badgeRepository.findByBadgeId(badgeId).isPresent())) {
+            throw NoBadgeException.EXCEPTION;
+        }
+    }
 }
