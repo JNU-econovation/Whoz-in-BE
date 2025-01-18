@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.member.application;
 
 import com.whoz_in.domain.badge.BadgeRepository;
-import com.whoz_in.domain.badge.exception.NotFoundBadgeException;
+import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.event.MemberCreated;
@@ -26,7 +26,7 @@ public class CreateBadgeOnMemberCreated {
     public Void handleMemberCreatedEvent(MemberCreated event) {
         Member member = event.getMember();
         String position = member.getMainPosition().getPosition();
-        Badge badge = badgeRepo.findByName(position).orElseThrow(()-> new NotFoundBadgeException());
+        Badge badge = badgeRepo.findByName(position).orElseThrow(()-> new NoBadgeException());
         member.addBadge(badge.getId());
         eventBus.publish(member.pullDomainEvents());
         return null;
