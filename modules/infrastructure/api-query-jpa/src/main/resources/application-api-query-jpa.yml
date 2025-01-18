@@ -11,7 +11,7 @@ api-query-jpa:
   hibernate:
     show_sql: true
     format_sql: true
-    ddl-auto: validate
+    ddl-auto: ${API_QUERY_JPA.DDL_AUTO}
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 
 logging:

@@ -77,7 +77,8 @@ public class SecurityFilterChainConfig {
                 "/api/v1/badges/whozin",
                 "/api/v1/badges/members",
                 "/api/v1/badges/members",
-                "/api/v1/devices/active"
+                "/api/v1/devices/active",
+                "/api/v1/signup/oauth"
         );
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
@@ -102,12 +103,16 @@ public class SecurityFilterChainConfig {
             auth.requestMatchers(HttpMethod.GET,
                     "/api/v1/device/info-status",
                     "/api/v1/devices",
-                    "/api/v1/private-ip",
-                    "/api/v1/ssid"
+                    "/api/v1/private-ips",
+                    "/api/v1/ssid",
+                    "/api/v1/members"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
                     "/api/v1/device/info"
+            ).authenticated();
+            auth.requestMatchers(HttpMethod.DELETE,
+                    "/api/v1/device"
             ).authenticated();
             //인증 여부에 따라 다른 동작
 //            auth.requestMatchers(
