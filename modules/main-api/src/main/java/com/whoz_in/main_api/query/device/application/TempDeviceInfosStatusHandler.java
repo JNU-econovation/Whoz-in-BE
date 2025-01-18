@@ -30,8 +30,7 @@ public class TempDeviceInfosStatusHandler implements QueryHandler<TempDeviceInfo
         UUID requesterId = requesterInfo.getMemberId().id();
 
         // 사용자의 기기를 맥으로 찾기 위해 로그를 가져옴
-        ManagedLog log = managedLogRepository.getLatestByRoomAndIpAfter(
-                query.room(), query.ip(), LocalDateTime.now().minusDays(1)); //이거 managed log가 판단해야 함
+        ManagedLog log = managedLogRepository.getLatestByIpAfter(query.ip(), LocalDateTime.now().minusDays(1)); //이거 managed log가 판단해야 함
         // 방에 존재하는 와이파이들
         List<String> roomSsids = ssidConfig.getSsids(query.room());
         // 사용자가 이전에 등록한 기기 정보를 가져옴

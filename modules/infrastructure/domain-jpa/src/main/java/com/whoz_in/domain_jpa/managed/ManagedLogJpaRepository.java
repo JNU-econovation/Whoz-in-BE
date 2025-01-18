@@ -53,8 +53,7 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
         }
     }
 
-    @Override
-    public Optional<ManagedLog> findLatestByRoomAndIpAfter(String room, String ip, LocalDateTime time) {
-        return repository.findTopByRoomAndIpOrderByUpdatedAtDescAfter(room, ip, time).map(managedLogConverter::to);
+    public Optional<ManagedLog> findLatestByIpAfter(String ip, LocalDateTime time) {
+        return repository.findTopByIpOrderByUpdatedAtDescAfter(ip, time).map(managedLogConverter::to);
     }
 }
