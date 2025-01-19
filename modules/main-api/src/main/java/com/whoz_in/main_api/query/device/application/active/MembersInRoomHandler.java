@@ -81,8 +81,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         Long totalConnectedMinute = devices.stream()
                 .map(ActiveDevice::totalConnectedTime)
                 .max(Duration::compareTo)
-                                .orElse(Duration.ZERO)
-                                        .toMinutes();
+                .orElse(Duration.ZERO)
+                .toMinutes();
 
         boolean isActive = devices.stream()
                 .anyMatch(ActiveDevice::isActive);
