@@ -35,7 +35,7 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
                 MemberName ownerInfo = getMemberName(activeDevice.memberId().toString());
 
                 String memberId = activeDevice.memberId().toString();
-                int generation = ownerInfo.geration();
+                int generation = ownerInfo.generation();
                 String memberName = ownerInfo.memberName();
                 Long continuousMinute = activeDevice.continuousTime().toMinutes();
                 Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
