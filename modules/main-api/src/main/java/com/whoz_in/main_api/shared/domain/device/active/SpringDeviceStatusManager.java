@@ -2,23 +2,10 @@ package com.whoz_in.main_api.shared.domain.device.active;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
-import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.device.application.active.event.ActiveDeviceFinded;
-import com.whoz_in.main_api.query.device.application.active.event.InActiveDeviceFinded;
-import com.whoz_in.main_api.shared.event.Events;
-import java.time.Duration;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +22,6 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     private final DeviceRepository deviceRepository;
     private final MonitorLogRepository monitorLogRepository;
     private final ActiveDeviceViewer activeDeviceViewer;
-    private final Map<String, Device> deviceByMac;
-    private final Map<UUID, Device> deviceById;
 
     private final InActiveDeviceFilter inActiveDeviceFilter;
     private final ActiveDeviceFilter activeDeviceFilter;
@@ -53,8 +38,6 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
         this.activeDeviceViewer = activeDeviceViewer;
         this.inActiveDeviceFilter = inActiveDeviceFilter;
         this.activeDeviceFilter = activeDeviceFilter;
-        this.deviceByMac = createDeviceMapByMac();
-        this.deviceById = createDeviceMapById();
     }
 
 
@@ -69,26 +52,6 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
     @Scheduled(fixedRate = 5000)
     public void inActiveDeviceFind() {
         inActiveDeviceFilter.execute();
-    }
-
-    private Map<UUID, Device> createDeviceMapById() {
-        return deviceRepository.findAll().stream()
-                .collect(Collectors.toMap(device -> device.getId().id(), device -> device));
-    }
-
-    private Map<String, Device> createDeviceMapByMac(){
-        return deviceRepository.findAll().stream()
-                .map(this::oneDeviceToMap)
-                .reduce(new HashMap<>(), (identity, deviceMap) -> {
-                    identity.putAll(deviceMap);
-                    return identity;
-                });
-    }
-
-    // Mac 주소를 Key 로 사용한 Device Map
-    private Map<String, Device> oneDeviceToMap(Device device) {
-        return device.getDeviceInfos().stream()
-                .collect(Collectors.toMap(deviceInfo -> deviceInfo.getMac().toString(), deviceInfo -> device));
     }
 
 }
