@@ -3,7 +3,7 @@ package com.whoz_in.main_api.query.device.application.active;
 import com.whoz_in.main_api.query.shared.application.Response;
 import java.util.List;
 
-public record ActiveDeviceListResponse(
-        List<ActiveDeviceResponse> responses
+public record MemberListResponse(
+        List<MemberResponse> responses
 ) implements Response {
 }
