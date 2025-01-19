@@ -3,6 +3,8 @@ package com.whoz_in.main_api.shared.domain.device.active;
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
+import com.whoz_in.domain.device.model.DeviceInfo;
+import com.whoz_in.domain.device.model.MacAddress;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
@@ -42,7 +44,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
         if(!activeDevices.isEmpty()) {
             List<UUID> monitorLogDeviceIds = logs.stream()
-                    .map(log -> deviceByMac.get(log.getMac()))
+                    .map(log -> deviceRepository.findByMac(log.getMac()).orElse(null))
                     .filter(Objects::nonNull)
                     .map(Device::getId)
                     .map(DeviceId::id)
@@ -52,10 +54,9 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
             return deviceIds.stream()
                     .filter(deviceId -> !monitorLogDeviceIds.contains(deviceId))
-                    .map(deviceById::get)
+                    .map(deviceId -> deviceRepository.findByDeviceId(new DeviceId(deviceId)).orElse(null))
                     .filter(Objects::nonNull)
                     .toList();
-
         }
         log.info("[InActiveDeviceFilter] 처리할 정보 없음");
         return List.of();
@@ -99,11 +100,26 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
     private Map<UUID, LocalDateTime> createLogTimeByDeviceIdMap(){
         Set<MonitorLog> logs = getUniqueMonitorLogs();
+        List<Device> devices = deviceRepository.findAll();
+
+        List<Map<MacAddress, DeviceId>> deviceInfoMap = devices.stream()
+                .map(device -> {
+                    return device.getDeviceInfos().stream()
+                            .collect(Collectors.toMap(
+                                    DeviceInfo::getMac,
+                                    deviceInfo -> device.getId()
+                            ));
+                })
+                .toList();
 
         return logs.stream() // 이 기기가 언제 MonitorLog를 발생시켰는지 알기위한 맵
-                .filter(log -> deviceByMac.containsKey(log.getMac()))
+                .filter(log -> deviceInfoMap.stream()
+                        .flatMap(map -> map.keySet().stream())
+                        .map(MacAddress::toString)
+                        .anyMatch(mac -> mac.equals(log.getMac())) // 모니터 로그에 찍힌 mac 중에 WhozIn에 등록된 기기
+                )
                 .collect(Collectors.toMap(
-                        log -> deviceByMac.get(log.getMac()).getId().id(),
+                        log -> deviceRepository.findByMac(log.getMac()).get().getId().id(), // TODO: Optional null 처리
                         MonitorLog::getUpdatedAt
                 ));
     }
