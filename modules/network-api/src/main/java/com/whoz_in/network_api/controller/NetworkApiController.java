@@ -13,16 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class NetworkApiController {
     private final IpHolder ipHolder;
+    private final GatewayIpList gatewayIpList;
     private final String room;
 
-    public NetworkApiController(IpHolder ipHolder, @Value("${room-setting.room-name}") String room) {
+    public NetworkApiController(IpHolder ipHolder, @Value("${room-setting.room-name}") String room, GatewayIpList gatewayIpList) {
         this.ipHolder = ipHolder;
         this.room = room;
+        this.gatewayIpList = gatewayIpList;
     }
 
     @GetMapping("/ip")
     public ResponseEntity<String> getIp() {
         String ip = ipHolder.getIp();
+        if (gatewayIpList.isGatewayIp(ip))
+            throw new IllegalArgumentException("외부 아이피로 요청됨");
         log.info("Requester Info : " + ip);
         return ResponseEntity.ok(ip);
     }
