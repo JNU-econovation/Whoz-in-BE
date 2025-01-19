@@ -4,6 +4,6 @@ import com.whoz_in.main_api.query.shared.application.Response;
 import java.util.List;
 
 public record MembersInRoomResponse(
-        List<MemberInRoomResponse> responses
+        List<MemberInRoomResponse> members
 ) implements Response {
 }
