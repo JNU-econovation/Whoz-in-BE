@@ -58,10 +58,11 @@ public class ActiveDeviceEventHandler {
     }
 
     private void saveNonFirstActive(List<ActiveDeviceEntity> entities){
-        // 참조를 이용한 JPA 변경 감지 짝퉁
         entities.forEach(activeDevice -> {
                     if(!activeDevice.isActive()) activeDevice.activeOn(LocalDateTime.now());
                 });
+
+        activeDeviceRepository.saveAll(entities); // TODO: 변경 감지 적용
     }
 
 }
