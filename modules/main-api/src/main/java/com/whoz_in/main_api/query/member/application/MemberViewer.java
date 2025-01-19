@@ -5,5 +5,5 @@ import java.util.Optional;
 
 public interface MemberViewer extends Viewer {
     Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId);
-    Optional<MemberName> findNameByMemberId(String memberId);
+    Optional<MemberInfo> findNameByMemberId(String memberId);
 }
