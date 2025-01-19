@@ -17,6 +17,7 @@ import org.hibernate.annotations.UuidGenerator;
         + "m.id,"
         + "m.login_id,"
         + "m.password,"
+        + "m.generation,"
         + "m.name "
         + "FROM member_entity m")
 @Synchronize({"member_entity"})
@@ -34,4 +35,7 @@ public class Member {
 
     @Column(name = "password")
     private String encodedPassword;
+
+    @Column(name = "generation")
+    private int generation;
 }

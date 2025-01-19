@@ -22,7 +22,6 @@ public class MemberJpaViewer implements MemberViewer {
     @Override
     public Optional<MemberName> findNameByMemberId(String memberId) {
         return repository.findById(UUID.fromString(memberId))
-                .map(member -> new MemberName(member.getName()));
-
+                .map(member -> new MemberName(member.getGeneration(), member.getName()));
     }
 }
