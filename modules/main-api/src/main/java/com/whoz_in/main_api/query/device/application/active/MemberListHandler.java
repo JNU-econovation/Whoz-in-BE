@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.query.device.application.active;
 
+import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberInfo;
@@ -9,23 +10,27 @@ import com.whoz_in.main_api.shared.application.Handler;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
 @Handler
 @RequiredArgsConstructor
-public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, ActiveDeviceListResponse> {
+public class MemberListHandler implements QueryHandler<MemberList, MemberListResponse> {
 
     private final ActiveDeviceViewer activeDeviceViewer;
     private final MemberViewer memberViewer;
 
     @Override
-    public ActiveDeviceListResponse handle(ActiveDeviceList query) {
+    public MemberListResponse handle(MemberList query) {
         int page = query.page() - 1;
         int size = query.size();
         String sortType = query.sortType();
 
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
-        List<ActiveDeviceResponse> responses = new ArrayList<>();
+        List<MemberResponse> responses = new ArrayList<>();
+
+        Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
         if(!activeDevices.isEmpty()) {
 
@@ -43,7 +48,7 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
                 Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
                 boolean isActive = activeDevice.isActive();
 
-                ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
+                MemberResponse oneResponse = new MemberResponse(
                         generation,
                         memberId,
                         memberName,
@@ -56,18 +61,29 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
 
             // TODO : 정렬 자동화
             if (sortType.equals("asc"))
-                responses.sort(Comparator.comparing(ActiveDeviceResponse::memberName));
+                responses.sort(Comparator.comparing(MemberResponse::memberName));
             else
-                responses.sort(Comparator.comparing(ActiveDeviceResponse::totalActiveTime));
+                responses.sort(Comparator.comparing(MemberResponse::totalActiveTime));
 
-            return new ActiveDeviceListResponse(responses);
+            return new MemberListResponse(responses);
         }
 
-        return new ActiveDeviceListResponse(responses);
+        return new MemberListResponse(responses);
     }
 
-    private String calculateContinuousTime(ActiveDevice activeDevice){
-        return "";
+    private Map<MemberId, List<ActiveDevice>> createMemberDeviceMap(List<ActiveDevice> activeDevices) {
+        Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = activeDevices.stream()
+                .collect(Collectors.toMap(
+                        activeDevice -> new MemberId(activeDevice.memberId()),
+                        activeDevice -> {
+                            MemberId memberId = new MemberId(activeDevice.memberId());
+                            return activeDevices.stream()
+                                    .filter(device -> device.memberId().equals(memberId.id()))
+                                    .collect(Collectors.toList());
+                        }
+                ));
+
+        return activeDevicesByMemberId;
     }
 
     private MemberInfo getMemberName(String memberId){
