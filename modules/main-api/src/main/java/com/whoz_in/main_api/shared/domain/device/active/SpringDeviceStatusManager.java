@@ -37,14 +37,14 @@ public class SpringDeviceStatusManager implements DeviceStatusManager {
 
 
     @Override
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000 * 60)
     public void activeDeviceFind() {
         activeDeviceFilter.execute();
     }
 
 
     @Override
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 1000 * 60)
     public void inActiveDeviceFind() {
         inActiveDeviceFilter.execute();
     }
