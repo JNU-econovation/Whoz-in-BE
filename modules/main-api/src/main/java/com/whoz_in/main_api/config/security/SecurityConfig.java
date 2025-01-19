@@ -41,9 +41,9 @@ public class SecurityConfig {
 
     //security에서 사용할 Cors 설정을 정의합니다
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
+    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-urls}") List<String> frontendBaseUrls) {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl));
+        corsConfiguration.setAllowedOrigins(frontendBaseUrls);
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
