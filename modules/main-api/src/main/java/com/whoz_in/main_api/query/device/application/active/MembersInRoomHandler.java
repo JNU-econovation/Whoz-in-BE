@@ -31,9 +31,9 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         int size = query.size();
         String sortType = query.sortType();
 
-        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
         List<MemberInRoomResponse> responses = new ArrayList<>();
 
+        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
         Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
         if(!activeDevices.isEmpty()) {
@@ -58,7 +58,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             else
                 responses.sort(Comparator.comparing(MemberInRoomResponse::totalActiveTime));
 
-            return new MembersInRoomResponse(responses, responses.size());
+            return new MembersInRoomResponse(responses, (int)responses.stream().filter(MemberInRoomResponse::isActive).count());
         }
 
         return new MembersInRoomResponse(responses, 0);
