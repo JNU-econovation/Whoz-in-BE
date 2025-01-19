@@ -9,6 +9,6 @@ public interface ManagedLogRepository {
     void saveAll(Collection<ManagedLog> logs);
     Optional<ManagedLog> findLatestByIpAfter(String ip, LocalDateTime time);
     default ManagedLog getLatestByIpAfter(String ip, LocalDateTime time){
-        return findLatestByIpAfter(ip, time).orElseThrow(() -> new IllegalArgumentException("로그가 없습니다"));
+        return findLatestByIpAfter(ip, time).orElseThrow(() -> new IllegalArgumentException("managed 로그가 없습니다"));
     }
 }

@@ -5,14 +5,10 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.application.active.event.ActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -35,13 +31,13 @@ public class ActiveDeviceFilter extends DeviceFilter {
     protected List<Device> find() {
         Set<MonitorLog> uniqueLogs = getUniqueMonitorLogs();
 
-        if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty() || uniqueLogs.isEmpty()){
+        if(uniqueLogs.isEmpty()){
             log.info("[ActiveDeviceFilter] 처리할 정보 없음");
             return List.of();
         }
 
         List<Device> devices = uniqueLogs.stream()
-                .map(log -> deviceByMac.get(log.getMac()))
+                .map(log -> deviceRepository.findByMac(log.getMac()).orElse(null))
                 .filter(Objects::nonNull) // MonitorLog 에 있는 mac 주소 중, WhozIn에 등록되지 않은 mac 제거
                 .toList();
 

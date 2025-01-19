@@ -2,8 +2,8 @@ package com.whoz_in.api_query_jpa.device;
 
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
