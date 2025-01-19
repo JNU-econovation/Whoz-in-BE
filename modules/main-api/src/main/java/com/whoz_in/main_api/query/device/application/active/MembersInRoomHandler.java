@@ -16,19 +16,19 @@ import lombok.RequiredArgsConstructor;
 
 @Handler
 @RequiredArgsConstructor
-public class MemberListHandler implements QueryHandler<MemberList, MemberListResponse> {
+public class MembersInRoomHandler implements QueryHandler<MembersInRoom, MembersInRoomResponse> {
 
     private final ActiveDeviceViewer activeDeviceViewer;
     private final MemberViewer memberViewer;
 
     @Override
-    public MemberListResponse handle(MemberList query) {
+    public MembersInRoomResponse handle(MembersInRoom query) {
         int page = query.page() - 1;
         int size = query.size();
         String sortType = query.sortType();
 
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
-        List<MemberResponse> responses = new ArrayList<>();
+        List<MemberInRoomResponse> responses = new ArrayList<>();
 
         Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
@@ -48,7 +48,7 @@ public class MemberListHandler implements QueryHandler<MemberList, MemberListRes
                 Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
                 boolean isActive = activeDevice.isActive();
 
-                MemberResponse oneResponse = new MemberResponse(
+                MemberInRoomResponse oneResponse = new MemberInRoomResponse(
                         generation,
                         memberId,
                         memberName,
@@ -61,14 +61,14 @@ public class MemberListHandler implements QueryHandler<MemberList, MemberListRes
 
             // TODO : 정렬 자동화
             if (sortType.equals("asc"))
-                responses.sort(Comparator.comparing(MemberResponse::memberName));
+                responses.sort(Comparator.comparing(MemberInRoomResponse::memberName));
             else
-                responses.sort(Comparator.comparing(MemberResponse::totalActiveTime));
+                responses.sort(Comparator.comparing(MemberInRoomResponse::totalActiveTime));
 
-            return new MemberListResponse(responses);
+            return new MembersInRoomResponse(responses);
         }
 
-        return new MemberListResponse(responses);
+        return new MembersInRoomResponse(responses);
     }
 
     private Map<MemberId, List<ActiveDevice>> createMemberDeviceMap(List<ActiveDevice> activeDevices) {
