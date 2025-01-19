@@ -4,15 +4,11 @@ import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 // Device 들을 받으면, 정해진 기준에 맞춰 거르는 역할이라는 뜻

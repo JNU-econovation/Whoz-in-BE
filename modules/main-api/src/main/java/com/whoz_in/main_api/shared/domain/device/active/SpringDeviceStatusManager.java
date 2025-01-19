@@ -1,13 +1,8 @@
 package com.whoz_in.main_api.shared.domain.device.active;
 
 import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
