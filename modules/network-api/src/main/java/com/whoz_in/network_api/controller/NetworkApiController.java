@@ -26,7 +26,7 @@ public class NetworkApiController {
     public ResponseEntity<String> getIp() {
         String ip = ipHolder.getIp();
         if (gatewayIpList.isGatewayIp(ip))
-            throw new IllegalArgumentException("외부 아이피로 요청됨");
+            return ResponseEntity.badRequest().body("외부 아이피로 요청됨");
         log.info("Requester Info : " + ip);
         return ResponseEntity.ok(ip);
     }
