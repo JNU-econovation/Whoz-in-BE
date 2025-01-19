@@ -27,7 +27,9 @@ import org.springframework.web.util.UriBuilderFactory;
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-    private static final String ENDPOINT = "/oauth/success"; //로그인 성공 시 이동시킬 엔드포인트임. 프론트가 이 페이지를 구현해야 한다.
+    private static final String ENDPOINT = "/oauth/success";
+    @Value("${frontend.base-url}")
+    private String frontendBaseUrl;
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
     private final JwtProperties jwtProperties;
@@ -59,8 +61,8 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             );
             response.addCookie(oAuth2TempTokenCookie);
         }
-        String frontUrl = request.getHeader("Referer");
-        String uri = uriBuilderFactory.uriString( frontUrl + ENDPOINT)
+
+        String uri = uriBuilderFactory.uriString( frontendBaseUrl + ENDPOINT)
                 .queryParam("is-registered", userInfo.isRegistered())
                 .build()
                 .toString();

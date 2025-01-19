@@ -17,7 +17,7 @@ logging:
   config: "classpath:logback-common.xml"
 
 frontend:
-  base-urls: ${FRONTEND_URLS}
+  base-url: ${FRONTEND_URL}
 
 api-key: ${API_KEY}
 
