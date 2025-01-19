@@ -32,16 +32,17 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
 
             for (int i = start; i < end; i++) {
                 ActiveDevice activeDevice = activeDevices.get(i);
+                MemberName ownerInfo = getMemberName(activeDevice.memberId().toString());
 
-                String deviceId = activeDevice.deviceId().toString();
                 String memberId = activeDevice.memberId().toString();
-                String memberName = getMemberName(activeDevice.memberId().toString());
+                int generation = ownerInfo.geration();
+                String memberName = ownerInfo.memberName();
                 Long continuousMinute = activeDevice.continuousTime().toMinutes();
                 Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
                 boolean isActive = activeDevice.isActive();
 
                 ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
-                        deviceId,
+                        generation,
                         memberId,
                         memberName,
                         String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
@@ -67,9 +68,8 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
         return "";
     }
 
-    private String getMemberName(String memberId){
+    private MemberName getMemberName(String memberId){
         return memberViewer.findNameByMemberId(memberId)
-                .map(MemberName::memberName)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 기기와 사용자 이름 매핑 중 예상치 못한 에러 발생"));
     }
 }
