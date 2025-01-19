@@ -27,10 +27,13 @@ public class InActiveDeviceEventHandler {
         List<UUID> devices = event.getDevices();
         List<ActiveDeviceEntity> entities = activeDeviceRepository.findAll();
 
-        entities.stream()
+        List<ActiveDeviceEntity> inActiveDevices =entities.stream()
                 .filter(activeDevice -> devices.stream()
                         .anyMatch(device -> device.equals(activeDevice.getDeviceId())))
-                .forEach(activeDevice -> activeDevice.inActiveOn(LocalDateTime.now()));
+                .peek(activeDevice -> activeDevice.inActiveOn(LocalDateTime.now()))
+                .toList();
+
+        activeDeviceRepository.saveAll(inActiveDevices); // TODO: 변경 감지 적용
     }
 
 }
