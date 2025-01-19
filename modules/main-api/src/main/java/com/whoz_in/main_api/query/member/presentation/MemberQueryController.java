@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.query.member.presentation;
 
-import com.whoz_in.main_api.query.device.application.active.MemberList;
-import com.whoz_in.main_api.query.device.application.active.MemberListResponse;
+import com.whoz_in.main_api.query.device.application.active.MembersInRoom;
+import com.whoz_in.main_api.query.device.application.active.MembersInRoomResponse;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
@@ -23,13 +23,13 @@ public class MemberQueryController extends QueryController {
 
     //TODO: Response 클래스 이름 Member 기준으로 변경
     @GetMapping("/members")
-    public ResponseEntity<SuccessBody<MemberListResponse>> getActiveDevices(
+    public ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveDevices(
             @RequestParam("size") int size,
             @RequestParam("page") int page,
             @RequestParam("sortType") String sortType
     ) {
-        MemberList query = new MemberList(page, size, sortType);
-        MemberListResponse response = ask(query);
+        MembersInRoom query = new MembersInRoom(page, size, sortType);
+        MembersInRoomResponse response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }
 
