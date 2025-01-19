@@ -2,7 +2,7 @@ package com.whoz_in.main_api.query.device.application.active;
 
 import com.whoz_in.main_api.query.shared.application.Query;
 
-public record ActiveDeviceList(
+public record MembersInRoom(
         int page,
         int size,
         String sortType
