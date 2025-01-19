@@ -1,11 +1,9 @@
 package com.whoz_in.main_api.query.device.application.active;
 
-import com.whoz_in.main_api.query.member.application.MemberName;
+import com.whoz_in.main_api.query.member.application.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -34,16 +32,17 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
 
             for (int i = start; i < end; i++) {
                 ActiveDevice activeDevice = activeDevices.get(i);
+                MemberInfo ownerInfo = getMemberName(activeDevice.memberId().toString());
 
-                String deviceId = activeDevice.deviceId().toString();
                 String memberId = activeDevice.memberId().toString();
-                String memberName = getMemberName(activeDevice.memberId().toString());
+                int generation = ownerInfo.generation();
+                String memberName = ownerInfo.memberName();
                 Long continuousMinute = activeDevice.continuousTime().toMinutes();
                 Long totalConnectedMinute = activeDevice.totalConnectedTime().toMinutes();
                 boolean isActive = activeDevice.isActive();
 
                 ActiveDeviceResponse oneResponse = new ActiveDeviceResponse(
-                        deviceId,
+                        generation,
                         memberId,
                         memberName,
                         String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
@@ -69,9 +68,8 @@ public class ActiveDeviceListHandler implements QueryHandler<ActiveDeviceList, A
         return "";
     }
 
-    private String getMemberName(String memberId){
+    private MemberInfo getMemberName(String memberId){
         return memberViewer.findNameByMemberId(memberId)
-                .map(MemberName::memberName)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 기기와 사용자 이름 매핑 중 예상치 못한 에러 발생"));
     }
 }
