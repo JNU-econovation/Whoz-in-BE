@@ -9,8 +9,11 @@ import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +38,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         if(!activeDevices.isEmpty()) {
 
             int start = page * size;
-            int end = Math.min((start + size), activeDevices.size());
+            int end = Math.min((start + size), activeDevicesByMemberId.keySet().size());
 
             for (int i = start; i < end; i++) {
                 ActiveDevice activeDevice = activeDevices.get(i);
@@ -72,18 +75,17 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private Map<MemberId, List<ActiveDevice>> createMemberDeviceMap(List<ActiveDevice> activeDevices) {
-        Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = activeDevices.stream()
+        Set<UUID> memberIds = new HashSet<>();
+        activeDevices.forEach(activeDevice -> memberIds.add(activeDevice.memberId()));
+        return memberIds.stream()
                 .collect(Collectors.toMap(
-                        activeDevice -> new MemberId(activeDevice.memberId()),
-                        activeDevice -> {
-                            MemberId memberId = new MemberId(activeDevice.memberId());
+                        MemberId::new,
+                        memberId -> {
                             return activeDevices.stream()
-                                    .filter(device -> device.memberId().equals(memberId.id()))
+                                    .filter(device -> device.memberId().equals(memberId))
                                     .collect(Collectors.toList());
                         }
                 ));
-
-        return activeDevicesByMemberId;
     }
 
     private MemberInfo getMemberName(String memberId){
