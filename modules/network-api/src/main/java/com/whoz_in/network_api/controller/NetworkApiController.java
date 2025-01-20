@@ -1,6 +1,8 @@
 package com.whoz_in.network_api.controller;
 
 import com.whoz_in.network_api.common.util.IpHolder;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +25,9 @@ public class NetworkApiController {
     }
 
     @GetMapping("/ip")
-    public ResponseEntity<String> getIp() {
+    public ResponseEntity<String> getIp() throws UnknownHostException {
         String ip = ipHolder.getIp();
-        if (gatewayIpList.isGatewayIp(ip))
+        if (gatewayIpList.isGatewayIp(ip) || !InetAddress.getByName(ip).isSiteLocalAddress())
             return ResponseEntity.badRequest().body("외부 아이피로 요청됨");
         log.info("Requester Info : " + ip);
         return ResponseEntity.ok(ip);
