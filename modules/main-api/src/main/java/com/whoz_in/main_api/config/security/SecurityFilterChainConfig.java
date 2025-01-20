@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -27,6 +28,7 @@ public class SecurityFilterChainConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UnknownEndpointFilter unknownEndpointFilter;
 
     @Bean
     @Order(0)
@@ -89,7 +91,6 @@ public class SecurityFilterChainConfig {
     @Bean
     @Order(3)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-
         httpSecurity.securityMatcher(
                 "/**"
         );
@@ -112,16 +113,20 @@ public class SecurityFilterChainConfig {
             auth.requestMatchers(HttpMethod.DELETE,
                     "/api/v1/device"
             ).authenticated();
-            //인증 여부에 따라 다른 동작
+            //인증 여부에 따라 다른 동작하는 api
 //            auth.requestMatchers(
 //            ).permitAll();
-            auth.anyRequest().denyAll();
         });
 
         commonConfigurations(httpSecurity);
-        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
+        httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
+        //jwt(access token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(jwtAuthenticationFilter, LogoutFilter.class);
+        //인증 실패 핸들러
+        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+
         //TODO: 로그아웃 추가
 
         return httpSecurity.build();
