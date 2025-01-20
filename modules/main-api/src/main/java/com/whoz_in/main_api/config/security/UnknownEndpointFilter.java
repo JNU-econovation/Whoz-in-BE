@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExecutionChain;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /*
@@ -27,12 +29,9 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            if (mapping.getHandler(request) == null) {
-                response404(response);
-                return;
-            }
+            if (mapping.getHandler(request) == null) response404(response);
         } catch (Exception e) {
-            throw new ServletException(e);
+            response404(response);
         }
         filterChain.doFilter(request, response);
     }
@@ -42,6 +41,7 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.getWriter().write("{\"message\": \"존재하지 않는 API입니다.\"}");
+        response.getWriter().flush();
     }
 }
 
