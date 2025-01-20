@@ -56,4 +56,9 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
     public Optional<ManagedLog> findLatestByIpAfter(String ip, LocalDateTime time) {
         return repository.findTopByIpOrderByUpdatedAtDescAfter(ip, time).map(managedLogConverter::to);
     }
+
+    @Override
+    public Optional<ManagedLog> findBySsidAndMac(String ssid, String mac) {
+        return repository.findBySsidAndMac(ssid, mac).map(managedLogConverter::to);
+    }
 }

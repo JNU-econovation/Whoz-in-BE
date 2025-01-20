@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
         extractAccessToken(request)
                 .map(this::createAuthentication)
-                .ifPresent(this::setAuthentication);
+                .ifPresentOrElse(this::setAuthentication, SecurityContextHolder::clearContext);
         filterChain.doFilter(request, response);
     }
 

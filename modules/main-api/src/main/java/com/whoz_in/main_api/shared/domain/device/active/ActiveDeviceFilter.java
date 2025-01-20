@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -31,17 +32,16 @@ public class ActiveDeviceFilter extends DeviceFilter {
 
     @Override
     protected List<Device> find() {
-        Set<MonitorLog> uniqueLogs = getUniqueMonitorLogs();
+        Set<String> macs = getUniqueMonitorLogs().stream()
+                .map(MonitorLog::getMac)
+                .collect(Collectors.toSet());
 
-        if(uniqueLogs.isEmpty()){
+        if(macs.isEmpty()){
             log.info("[ActiveDeviceFilter] 처리할 정보 없음");
             return List.of();
         }
 
-        List<Device> devices = uniqueLogs.stream()
-                .map(log -> deviceRepository.findByMac(log.getMac()).orElse(null))
-                .filter(Objects::nonNull) // MonitorLog 에 있는 mac 주소 중, WhozIn에 등록되지 않은 mac 제거
-                .toList();
+        List<Device> devices = deviceRepository.findByMacs(macs);
 
         if(devices.isEmpty()){
             log.info("[ActiveDeviceFilter] 처리할 정보 없음");
