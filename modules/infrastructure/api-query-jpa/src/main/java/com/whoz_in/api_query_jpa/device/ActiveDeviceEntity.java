@@ -19,7 +19,6 @@ public class ActiveDeviceEntity {
     @Id
     private UUID deviceId;
 
-    @Column(nullable = false)
     private LocalDateTime connectedTime;
 
     private LocalDateTime disConnectedTime;
@@ -28,10 +27,8 @@ public class ActiveDeviceEntity {
 
     private boolean isActive;
 
-    private ActiveDeviceEntity(UUID deviceId, LocalDateTime connectedTime) {
+    private ActiveDeviceEntity(UUID deviceId) {
         this.deviceId = deviceId;
-        this.connectedTime = connectedTime;
-        this.isActive = true;
     }
 
     public void activeOn(LocalDateTime connectedTime){
@@ -51,8 +48,8 @@ public class ActiveDeviceEntity {
         this.totalActiveTime = Objects.nonNull(totalActiveTime) ? totalActiveTime.plus(add) :  add;
     }
 
-    public static ActiveDeviceEntity create(UUID deviceId, LocalDateTime connectedTime){
-        return new ActiveDeviceEntity(deviceId, connectedTime);
+    public static ActiveDeviceEntity create(UUID deviceId){
+        return new ActiveDeviceEntity(deviceId);
     }
 
 }
