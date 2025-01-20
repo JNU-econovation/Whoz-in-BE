@@ -12,17 +12,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Device extends AggregateRoot {
-    private final DeviceId id;
-    private final MemberId memberId; //양도 기능 생기면 final 제거
-    private String deviceName;
+    @Getter private final DeviceId id;
+    @Getter private final MemberId memberId; //양도 기능 생기면 final 제거
+    @Getter private String deviceName;
     private final Set<DeviceInfo> deviceInfos;
 
+    public Set<DeviceInfo> getDeviceInfos(){
+        return Set.copyOf(deviceInfos);
+    }
+
     public boolean isOwnedBy(MemberId memberId){
-        return this.getMemberId().equals(memberId);
+        return this.memberId.equals(memberId);
     }
 
     public void registerDeviceInfo(DeviceInfo deviceInfo){
