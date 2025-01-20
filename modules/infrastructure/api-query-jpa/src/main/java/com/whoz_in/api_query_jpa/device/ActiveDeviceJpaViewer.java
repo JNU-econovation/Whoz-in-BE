@@ -39,7 +39,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
     private ActiveDevice createOptionalActiveDevice(ActiveDeviceEntity entity){
         return new ActiveDevice(
                 entity.getDeviceId(),
-                entity.getConnectedTime(),
-                entity.getDisConnectedTime());
+                entity.getConnectedAt(),
+                entity.getDisConnectedAt());
     }
 }
