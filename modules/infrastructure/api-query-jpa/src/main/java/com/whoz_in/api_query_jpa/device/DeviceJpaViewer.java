@@ -28,7 +28,7 @@ public class DeviceJpaViewer implements DeviceViewer {
     public DevicesStatus findDevicesStatus(UUID ownerId) {
         List<DeviceStatus> devicesStatus = deviceRepository.findAllByMemberId(ownerId)
                 .stream()
-                .map(device -> new DeviceStatus(device.getId(), device.getDeviceInfos()
+                .map(device -> new DeviceStatus(device.getId(), device.getName(), device.getDeviceInfos()
                         .stream()
                         .collect(Collectors.toMap(
                                 DeviceInfo::getSsid,
