@@ -1,28 +1,18 @@
 package com.whoz_in.main_api.config.security;
 
-import com.whoz_in.domain.device.exception.NoDeviceException;
-import com.whoz_in.domain.shared.BusinessException;
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -99,6 +89,7 @@ public class SecurityFilterChainConfig {
     @Bean
     @Order(3)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity.securityMatcher(
                 "/**"
         );
@@ -109,8 +100,9 @@ public class SecurityFilterChainConfig {
                     "/api/v1/devices",
                     "/api/v1/private-ips",
                     "/api/v1/ssid",
-                    "/api/v1/members"
-                    //
+                    "/api/v1/members",
+                    "/api/v1/member"
+                    //network-api TODO: main-api에서 분리
                     ,"/api/v1/ip"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,

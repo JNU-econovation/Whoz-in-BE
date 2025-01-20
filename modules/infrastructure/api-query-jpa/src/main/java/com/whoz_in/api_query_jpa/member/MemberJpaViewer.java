@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.member;
 
 import com.whoz_in.main_api.query.member.application.MemberAuthInfo;
+import com.whoz_in.main_api.query.member.application.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.application.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import java.util.Optional;
@@ -23,5 +24,10 @@ public class MemberJpaViewer implements MemberViewer {
     public Optional<MemberInfo> findNameByMemberId(String memberId) {
         return repository.findById(UUID.fromString(memberId))
                 .map(member -> new MemberInfo(member.getGeneration(), member.getName()));
+    }
+
+    @Override
+    public Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId) {
+        return repository.findById(memberId).map(member -> new MemberDetailInfo(memberId, member.getName(), member.getGeneration(), member.getPosition(), member.getStatusMessage()));
     }
 }
