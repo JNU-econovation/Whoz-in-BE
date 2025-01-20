@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -17,7 +19,14 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
 public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
-    private final CloseableHttpClient httpClient = HttpClients.createDefault();
+    private final CloseableHttpClient httpClient = HttpClients.custom()
+            .setConnectionTimeToLive(10, TimeUnit.SECONDS)
+            .setDefaultRequestConfig(RequestConfig.custom()
+                    .setConnectTimeout(5000)
+                    .setSocketTimeout(5000)
+                    .build())
+            .build();
+
     //null인 필드는 body에 추가하지 않도록 함
     private final ObjectMapper objectMapper = new ObjectMapper().setSerializationInclusion(
             JsonInclude.Include.NON_NULL);
