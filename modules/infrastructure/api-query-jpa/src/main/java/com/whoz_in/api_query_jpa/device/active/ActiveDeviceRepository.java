@@ -1,4 +1,4 @@
-package com.whoz_in.api_query_jpa.device;
+package com.whoz_in.api_query_jpa.device.active;
 
 import java.util.Optional;
 import java.util.UUID;

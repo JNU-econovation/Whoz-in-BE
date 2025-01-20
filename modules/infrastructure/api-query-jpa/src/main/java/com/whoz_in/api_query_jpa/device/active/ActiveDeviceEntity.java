@@ -1,6 +1,5 @@
-package com.whoz_in.api_query_jpa.device;
+package com.whoz_in.api_query_jpa.device.active;
 
-import com.whoz_in.main_api.shared.event.Events;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
