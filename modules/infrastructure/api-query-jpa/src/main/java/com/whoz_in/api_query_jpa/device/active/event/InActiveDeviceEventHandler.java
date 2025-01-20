@@ -29,7 +29,7 @@ public class InActiveDeviceEventHandler {
         List<ActiveDeviceEntity> inActiveDevices =entities.stream()
                 .filter(activeDevice -> devices.stream()
                         .anyMatch(device -> device.equals(activeDevice.getDeviceId())))
-                .peek(activeDevice -> activeDevice.inActiveOn(LocalDateTime.now()))
+                .peek(activeDevice -> activeDevice.disConnect(LocalDateTime.now()))
                 .toList();
 
         activeDeviceRepository.saveAll(inActiveDevices); // TODO: 변경 감지 적용
