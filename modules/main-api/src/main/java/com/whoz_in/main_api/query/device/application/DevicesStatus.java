@@ -12,6 +12,7 @@ public record DevicesStatus(
 ) implements Response, View {
     public record DeviceStatus(
             UUID deviceId,
+            String deviceName,
             Map<String, String> macPerSsid, //Map<SSID, MAC>
             @Nullable String connectedSsid
     ) {}

@@ -16,7 +16,7 @@ import org.hibernate.annotations.Subselect;
 
 @Entity
 @Getter
-@Subselect("SELECT d.id , d.member_id "
+@Subselect("SELECT d.id , d.member_id, d.name "
         + "FROM device_entity d")
 @Immutable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,6 +28,9 @@ public class Device {
 
     @Column(name ="member_id", nullable = false)
     private UUID memberId;
+
+    @Column(name = "name", nullable = false)
+    private String name;
 
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "device_id", referencedColumnName = "id")
