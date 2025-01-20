@@ -2,6 +2,9 @@ package com.whoz_in.domain.device.model;
 
 import com.whoz_in.domain.device.event.DeviceCreated;
 import com.whoz_in.domain.device.event.DeviceInfoRegistered;
+import com.whoz_in.domain.device.event.DeviceInfoUpdated;
+import com.whoz_in.domain.device.exception.DeviceInfoAlreadyRegisteredException;
+import com.whoz_in.domain.device.exception.NoDeviceInfoException;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import java.util.HashSet;
@@ -12,26 +15,35 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Device extends AggregateRoot {
-    private final DeviceId id;
-    private final MemberId memberId; //양도 기능 생기면 final 제거
-    private String deviceName;
+    @Getter private final DeviceId id;
+    @Getter private final MemberId memberId; //양도 기능 생기면 final 제거
+    @Getter private String deviceName;
     private final Set<DeviceInfo> deviceInfos;
 
+    public Set<DeviceInfo> getDeviceInfos(){
+        return Set.copyOf(deviceInfos);
+    }
+
     public boolean isOwnedBy(MemberId memberId){
-        return this.getMemberId().equals(memberId);
+        return this.memberId.equals(memberId);
     }
 
     public void registerDeviceInfo(DeviceInfo deviceInfo){
+        if (this.deviceInfos.contains(deviceInfo)) //이미 존재하면 예외
+            throw DeviceInfoAlreadyRegisteredException.of(deviceInfo.getSsid());
         this.deviceInfos.add(deviceInfo);
         this.register(new DeviceInfoRegistered());
     }
 
-    public void registerDeviceInfo(Set<DeviceInfo> deviceInfos){
-        deviceInfos.forEach(this::registerDeviceInfo);
+    public void updateDeviceInfo(DeviceInfo deviceInfo){
+        if (!deviceInfos.remove(deviceInfo)) { // 제거를 시도함. 존재하지 않으면 예외
+            throw NoDeviceInfoException.of(deviceInfo.getSsid());
+        }
+        this.deviceInfos.add(deviceInfo);
+        this.register(new DeviceInfoUpdated());
     }
 
     public static Device create(MemberId memberId, Set<DeviceInfo> deviceInfos, String deviceName){
