@@ -2,6 +2,7 @@ package com.whoz_in.domain.device.model;
 
 import com.whoz_in.domain.device.event.DeviceCreated;
 import com.whoz_in.domain.device.event.DeviceInfoRegistered;
+import com.whoz_in.domain.device.exception.DeviceInfoAlreadyRegisteredException;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import java.util.HashSet;
@@ -29,6 +30,8 @@ public final class Device extends AggregateRoot {
     }
 
     public void registerDeviceInfo(DeviceInfo deviceInfo){
+        if (this.deviceInfos.contains(deviceInfo))
+            throw DeviceInfoAlreadyRegisteredException.of(deviceInfo.getSsid());
         this.deviceInfos.add(deviceInfo);
         this.register(new DeviceInfoRegistered());
     }
