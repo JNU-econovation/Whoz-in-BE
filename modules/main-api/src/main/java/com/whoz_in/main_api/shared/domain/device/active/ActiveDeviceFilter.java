@@ -5,8 +5,9 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
 import java.util.List;
@@ -23,8 +24,9 @@ public class ActiveDeviceFilter extends DeviceFilter {
     public ActiveDeviceFilter(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer) {
-        super(deviceRepository, monitorLogRepository, activeDeviceViewer);
+            ActiveDeviceViewer activeDeviceViewer,
+            MemberViewer memberViewer) {
+        super(deviceRepository, monitorLogRepository, activeDeviceViewer, memberViewer);
     }
 
     @Override
@@ -49,23 +51,21 @@ public class ActiveDeviceFilter extends DeviceFilter {
         return devices;
     }
 
-
+    // 이미 MonitorLog 에 존재하고 WhozIn에 등록된 기기를 Active 상태인지 아닌지 판별
     @Override
     protected boolean judge(Device device) {
-        // 이미 MonitorLog 에 존재하고 WhozIn에 등록된 기기이다.
-
         UUID deviceId = device.getId().id();
-        ActiveDevice activeDevice;
-        try {
-            activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
-        } catch (IllegalArgumentException e){
-            log.info("[ActiveDeviceFilter] 존재하지 않는 기기 {}", deviceId);
-            return false;
+        UUID ownerId = device.getMemberId().id();
+
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString())
+                .orElse(null);
+s
+        if(connectionInfo==null){
+            return false; // connectionInfo 는 Member 생성시 자동으로 만들어준다. null 수가 없다.
         }
 
-
-        if(!activeDevice.isActive()) {
-            log.info("[ActiveDeviceFilter] Active 전환 : {}", deviceId);
+        if(!connectionInfo.isActive()) {
+            log.info("[ActiveDeviceFilter] Active 전환 (memberId) : {}", ownerId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
         }
 
