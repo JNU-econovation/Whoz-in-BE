@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.member;
 
 import com.whoz_in.main_api.query.member.application.MemberAuthInfo;
+import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import java.util.Optional;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberJpaViewer implements MemberViewer {
     private final MemberRepository repository;
+    private final MemberConnectionInfoRepository connectionInfoRepository;
 
     @Override
     public Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId) {
@@ -23,5 +25,18 @@ public class MemberJpaViewer implements MemberViewer {
     public Optional<MemberInfo> findNameByMemberId(String memberId) {
         return repository.findById(UUID.fromString(memberId))
                 .map(member -> new MemberInfo(member.getGeneration(), member.getName()));
+    }
+
+    @Override
+    public Optional<MemberConnectionInfo> findConnectionInfo(String memberId) {
+        return connectionInfoRepository.findByMemberId(UUID.fromString(memberId))
+                .map(connectInfo ->
+                        new MemberConnectionInfo(
+                        connectInfo.getMemberId(),
+                        connectInfo.getContinuousTime(),
+                        connectInfo.getDailyTime(),
+                        connectInfo.getTotalTime(),
+                        connectInfo.isActive())
+                );
     }
 }
