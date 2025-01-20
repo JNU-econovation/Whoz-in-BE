@@ -20,4 +20,8 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
 
     @Query("SELECT d FROM DeviceEntity d JOIN d.deviceInfoEntity di WHERE di.mac IN :macs")
     List<DeviceEntity> findByMacs(@Param("macs") Set<String> macs);
+
+    @Query("SELECT d FROM DeviceEntity d WHERE d.id IN :deviceIds")
+    List<DeviceEntity> findByDeviceIds(@Param("deviceIds") List<UUID> deviceIds);
+
 }
