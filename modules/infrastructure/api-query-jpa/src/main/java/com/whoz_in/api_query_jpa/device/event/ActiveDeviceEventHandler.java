@@ -2,8 +2,7 @@ package com.whoz_in.api_query_jpa.device.event;
 
 import com.whoz_in.api_query_jpa.device.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.device.InMemoryActiveDeviceRepository;
-import com.whoz_in.main_api.query.device.application.active.event.ActiveDeviceFinded;
+import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
