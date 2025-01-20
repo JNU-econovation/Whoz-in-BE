@@ -9,6 +9,8 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
 import java.time.Duration;
@@ -32,8 +34,9 @@ public class InActiveDeviceFilter extends DeviceFilter{
     public InActiveDeviceFilter(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer) {
-        super(deviceRepository, monitorLogRepository, activeDeviceViewer);
+            ActiveDeviceViewer activeDeviceViewer,
+            MemberViewer memberViewer) {
+        super(deviceRepository, monitorLogRepository, activeDeviceViewer, memberViewer);
     }
 
     @Override
@@ -65,11 +68,14 @@ public class InActiveDeviceFilter extends DeviceFilter{
     @Override
     protected boolean judge(Device device) {
         UUID deviceId = device.getId().id();
+        UUID ownerId = device.getMemberId().id();
 
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString())
+                .orElse(null);
 
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
-        if(!activeDevice.isActive()) return false;
+        if(connectionInfo==null || !connectionInfo.isActive()) return false;
 
         Map<UUID, LocalDateTime> logTimeByDeviceId = createLogTimeByDeviceIdMap();
 
