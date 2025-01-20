@@ -1,6 +1,8 @@
 package com.whoz_in.domain_jpa.device;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +17,7 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
     Optional<DeviceEntity> findById(UUID deviceId);
 
     void deleteById(UUID deviceId);
+
+    @Query("SELECT d FROM DeviceEntity d JOIN d.deviceInfoEntity di WHERE di.mac IN :macs")
+    List<DeviceEntity> findByMacs(@Param("macs") Set<String> macs);
 }
