@@ -32,7 +32,8 @@ public class ActiveDeviceEventHandler {
 
         List<ActiveDeviceEntity> firstActiveDevices = deviceIds.stream()
                 .filter(deviceId -> deviceIdFromDB.stream().noneMatch(idFromDB -> idFromDB.equals(deviceId)))
-                .map(deviceId -> ActiveDeviceEntity.create(deviceId, LocalDateTime.now())) // TODO: active Time 을 이 시점으로 설정해도 될까?
+                .map(ActiveDeviceEntity::create)
+                .peek(activeDevice -> activeDevice.activeOn(LocalDateTime.now()))// TODO: active Time 을 이 시점으로 설정해도 될까?
                 .toList();
 
 
@@ -65,4 +66,14 @@ public class ActiveDeviceEventHandler {
         activeDeviceRepository.saveAll(entities); // TODO: 변경 감지 적용
     }
 
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @EventListener(ActiveDeviceFinded.class)
+    public void createEmptyActiveDevice(ActiveDeviceFinded event) {
+
+        List<UUID> deviceIds = event.getDevices();
+        List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findAll();
+
+    }
 }
+

@@ -1,6 +1,5 @@
 package com.whoz_in.api_query_jpa.device;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
@@ -23,6 +22,8 @@ public class ActiveDeviceEntity {
 
     private LocalDateTime disConnectedTime;
 
+    private Duration dailyActiveTime;
+
     private Duration totalActiveTime;
 
     private boolean isActive;
@@ -40,12 +41,12 @@ public class ActiveDeviceEntity {
     public void inActiveOn(LocalDateTime disConnectedTime){
         this.isActive = false;
         this.disConnectedTime = disConnectedTime;
-        addTotalActiveTime();
+        addDailyActiveTime();
     }
 
-    private void addTotalActiveTime(){
+    private void addDailyActiveTime(){
         Duration add = Duration.between(connectedTime, disConnectedTime).abs();
-        this.totalActiveTime = Objects.nonNull(totalActiveTime) ? totalActiveTime.plus(add) :  add;
+        this.dailyActiveTime = Objects.nonNull(dailyActiveTime) ? dailyActiveTime.plus(add) :  add;
     }
 
     public static ActiveDeviceEntity create(UUID deviceId){
