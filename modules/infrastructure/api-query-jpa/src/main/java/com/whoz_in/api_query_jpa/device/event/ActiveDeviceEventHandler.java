@@ -27,52 +27,32 @@ public class ActiveDeviceEventHandler {
         List<UUID> deviceIds = event.getDevices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findAll();
 
-        List<UUID> deviceIdFromDB = activeDeviceEntities.stream().map(ActiveDeviceEntity::getDeviceId).toList();
+        List<ActiveDeviceEntity> firstActiveDevices = findFirstActiveDevices(deviceIds);
+        List<ActiveDeviceEntity> nonFirstActiveDevice = findNonFirstActiveDevices(deviceIds);
 
-        List<ActiveDeviceEntity> firstActiveDevices = deviceIds.stream()
-                .filter(deviceId -> deviceIdFromDB.stream().noneMatch(idFromDB -> idFromDB.equals(deviceId)))
-                .map(ActiveDeviceEntity::create)
-                .peek(activeDevice -> activeDevice.activeOn(LocalDateTime.now()))// TODO: active Time 을 이 시점으로 설정해도 될까?
-                .toList();
-
-
-        List<ActiveDeviceEntity> nonFirstActiveDevice = deviceIds.stream()
-                .filter(deviceId -> deviceIdFromDB.stream().anyMatch(idFromDB -> idFromDB.equals(deviceId)))
-                .map(deviceId -> {
-                        return activeDeviceEntities.stream()
-                                    .filter(active -> active.getDeviceId().equals(deviceId))
-                                    .findAny()
-                                    .orElse(null);
-                        })
-                .filter(Objects::nonNull)
-                .toList();
-
-
-        saveFirstActive(firstActiveDevices);
-        saveNonFirstActive(nonFirstActiveDevice);
+        save(firstActiveDevices);
+        save(nonFirstActiveDevice);
     }
 
-    private void saveFirstActive(List<ActiveDeviceEntity> entities){
-        // 처음으로 Active 된 Device 는 그냥 저장 가능
+    private List<ActiveDeviceEntity> findFirstActiveDevices(List<UUID> deviceIds){
+        return deviceIds.stream()
+                .filter(activeDeviceRepository::existsByDeviceId)
+                .map(ActiveDeviceEntity::create)
+                .toList();
+    }
+
+    private List<ActiveDeviceEntity> findNonFirstActiveDevices(List<UUID> deviceIds){
+        return deviceIds.stream()
+                .map(activeDeviceRepository::findByDeviceId)
+                .map(opt -> opt.orElse(null))
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private void save(List<ActiveDeviceEntity> entities){
+        entities.forEach(activeDevice -> activeDevice.connect(LocalDateTime.now()));
         activeDeviceRepository.saveAll(entities);
     }
 
-    private void saveNonFirstActive(List<ActiveDeviceEntity> entities){
-        entities.forEach(activeDevice -> {
-                    if(!activeDevice.isActive()) activeDevice.activeOn(LocalDateTime.now());
-                });
-
-        activeDeviceRepository.saveAll(entities); // TODO: 변경 감지 적용
-    }
-
-
-    @Transactional(isolation = Isolation.SERIALIZABLE)
-    @EventListener(ActiveDeviceFinded.class)
-    public void createEmptyActiveDevice(ActiveDeviceFinded event) {
-
-        List<UUID> deviceIds = event.getDevices();
-        List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findAll();
-
-    }
 }
 
