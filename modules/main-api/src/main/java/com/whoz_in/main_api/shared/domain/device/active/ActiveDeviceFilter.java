@@ -59,7 +59,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
 
         MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString())
                 .orElse(null);
-s
+
         if(connectionInfo==null){
             return false; // connectionInfo 는 Member 생성시 자동으로 만들어준다. null 수가 없다.
         }
