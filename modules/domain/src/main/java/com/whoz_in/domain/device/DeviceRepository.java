@@ -14,4 +14,5 @@ public interface DeviceRepository {
     Optional<Device> findByMac(String mac);
     Optional<Device> findByDeviceId(DeviceId deviceId);
     List<Device> findByMacs(Set<String> macs);
+    List<Device> findByDeviceIds(List<DeviceId> deviceIds);
 }

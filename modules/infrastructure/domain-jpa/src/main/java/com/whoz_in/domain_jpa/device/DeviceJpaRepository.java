@@ -10,6 +10,7 @@ import com.whoz_in.domain.device.model.MacAddress;
 import com.whoz_in.domain.device.model.DeviceId;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -46,5 +47,11 @@ public class DeviceJpaRepository implements DeviceRepository {
     @Override
     public List<Device> findByMacs(Set<String> macs) {
         return repository.findByMacs(macs).stream().map(converter::to).toList();
+    }
+
+    @Override
+    public List<Device> findByDeviceIds(List<DeviceId> deviceIds) {
+        List<UUID> ids = deviceIds.stream().map(DeviceId::id).toList();
+        return repository.findByDeviceIds(ids).stream().map(converter::to).toList();
     }
 }
