@@ -40,23 +40,22 @@ public class InActiveDeviceFilter extends DeviceFilter{
     protected List<Device> find() {
 
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
-        Set<MonitorLog> logs = getUniqueMonitorLogs();
+        Set<String> macs = getUniqueMonitorLogs().stream()
+                .map(MonitorLog::getMac)
+                .collect(Collectors.toSet());
 
         if(!activeDevices.isEmpty()) {
-            List<UUID> monitorLogDeviceIds = logs.stream()
-                    .map(log -> deviceRepository.findByMac(log.getMac()).orElse(null))
-                    .filter(Objects::nonNull)
+            List<UUID> monitorLogDeviceIds = deviceRepository.findByMacs(macs).stream()
                     .map(Device::getId)
                     .map(DeviceId::id)
                     .toList();
 
-            List<UUID> deviceIds = activeDevices.stream().map(ActiveDevice::deviceId).toList();
-
-            return deviceIds.stream()
+            List<DeviceId> notInMonitorLog = activeDevices.stream().map(ActiveDevice::deviceId)
                     .filter(deviceId -> !monitorLogDeviceIds.contains(deviceId))
-                    .map(deviceId -> deviceRepository.findByDeviceId(new DeviceId(deviceId)).orElse(null))
-                    .filter(Objects::nonNull)
+                    .map(DeviceId::new)
                     .toList();
+
+            return deviceRepository.findByDeviceIds(notInMonitorLog);
         }
         log.info("[InActiveDeviceFilter] 처리할 정보 없음");
         return List.of();
