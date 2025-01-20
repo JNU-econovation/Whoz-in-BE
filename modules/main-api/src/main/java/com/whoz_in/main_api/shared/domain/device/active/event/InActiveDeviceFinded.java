@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.query.device.application.active.event;
+package com.whoz_in.main_api.shared.domain.device.active.event;
 
 import com.whoz_in.main_api.shared.event.Event;
 import java.util.List;
