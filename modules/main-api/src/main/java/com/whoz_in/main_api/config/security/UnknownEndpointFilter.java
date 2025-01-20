@@ -29,9 +29,13 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            if (mapping.getHandler(request) == null) response404(response);
+            if (mapping.getHandler(request) == null) {
+                response404(response);
+                return;
+            }
         } catch (Exception e) {
             response404(response);
+            return;
         }
         filterChain.doFilter(request, response);
     }
@@ -40,7 +44,7 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
         // 엔드포인트가 존재하지 않으면 404 반환
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-        response.getWriter().write("{\"message\": \"존재하지 않는 API입니다.\"}");
+        response.getWriter().write("{\"message\": \"존재하지 않는 엔드포인트입니다.\"}");
         response.getWriter().flush();
     }
 }
