@@ -1,29 +1,20 @@
 package com.whoz_in.main_api.config.security;
 
-import com.whoz_in.domain.device.exception.NoDeviceException;
-import com.whoz_in.domain.shared.BusinessException;
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.session.DisableEncodeUrlFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
@@ -37,6 +28,7 @@ public class SecurityFilterChainConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final CorsConfigurationSource corsConfigurationSource;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final UnknownEndpointFilter unknownEndpointFilter;
 
     @Bean
     @Order(0)
@@ -109,27 +101,35 @@ public class SecurityFilterChainConfig {
                     "/api/v1/devices",
                     "/api/v1/private-ips",
                     "/api/v1/ssid",
-                    "/api/v1/members"
-                    //
+                    "/api/v1/members",
+                    "/api/v1/member"
+                    //network-api TODO: main-api에서 분리
                     ,"/api/v1/ip"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
                     "/api/v1/device/info"
             ).authenticated();
+            auth.requestMatchers(HttpMethod.PATCH,
+                    "/api/v1/device/info"
+            ).authenticated();
             auth.requestMatchers(HttpMethod.DELETE,
                     "/api/v1/device"
             ).authenticated();
-            //인증 여부에 따라 다른 동작
+            //인증 여부에 따라 다른 동작하는 api
 //            auth.requestMatchers(
 //            ).permitAll();
-            auth.anyRequest().denyAll();
         });
 
         commonConfigurations(httpSecurity);
-        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
+        httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
+        //jwt(access token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(jwtAuthenticationFilter, LogoutFilter.class);
+        //인증 실패 핸들러
+        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+
         //TODO: 로그아웃 추가
 
         return httpSecurity.build();
