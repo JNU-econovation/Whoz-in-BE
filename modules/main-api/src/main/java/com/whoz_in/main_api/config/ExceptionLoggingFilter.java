@@ -12,6 +12,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+//필터에서 발생하는 예외를 기록합니다
 @Slf4j
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -30,8 +31,6 @@ public class ExceptionLoggingFilter implements Filter {
     }
 
     private void logRequestDetails(HttpServletRequest request) {
-        log.error("요청 URL: {}", request.getRequestURL());
-        log.error("요청 메서드: {}", request.getMethod());
-        log.error("User-Agent: {}", request.getHeader("User-Agent"));
+        log.error("[요청 정보] {} {}\n{}", request.getMethod(), request.getRequestURL(), request.getHeader("User-Agent"));
     }
 }
