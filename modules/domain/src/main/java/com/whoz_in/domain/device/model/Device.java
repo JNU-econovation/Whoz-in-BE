@@ -2,7 +2,9 @@ package com.whoz_in.domain.device.model;
 
 import com.whoz_in.domain.device.event.DeviceCreated;
 import com.whoz_in.domain.device.event.DeviceInfoRegistered;
+import com.whoz_in.domain.device.event.DeviceInfoUpdated;
 import com.whoz_in.domain.device.exception.DeviceInfoAlreadyRegisteredException;
+import com.whoz_in.domain.device.exception.NoDeviceInfoException;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import java.util.HashSet;
@@ -30,14 +32,18 @@ public final class Device extends AggregateRoot {
     }
 
     public void registerDeviceInfo(DeviceInfo deviceInfo){
-        if (this.deviceInfos.contains(deviceInfo))
+        if (this.deviceInfos.contains(deviceInfo)) //이미 존재하면 예외
             throw DeviceInfoAlreadyRegisteredException.of(deviceInfo.getSsid());
         this.deviceInfos.add(deviceInfo);
         this.register(new DeviceInfoRegistered());
     }
 
-    public void registerDeviceInfo(Set<DeviceInfo> deviceInfos){
-        deviceInfos.forEach(this::registerDeviceInfo);
+    public void updateDeviceInfo(DeviceInfo deviceInfo){
+        if (!deviceInfos.remove(deviceInfo)) { // 제거를 시도함. 존재하지 않으면 예외
+            throw NoDeviceInfoException.of(deviceInfo.getSsid());
+        }
+        this.deviceInfos.add(deviceInfo);
+        this.register(new DeviceInfoUpdated());
     }
 
     public static Device create(MemberId memberId, Set<DeviceInfo> deviceInfos, String deviceName){
