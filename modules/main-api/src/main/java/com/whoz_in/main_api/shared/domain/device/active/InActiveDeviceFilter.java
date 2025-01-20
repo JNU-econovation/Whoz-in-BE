@@ -76,8 +76,6 @@ public class InActiveDeviceFilter extends DeviceFilter{
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
         if(connectionInfo==null || !connectionInfo.isActive()) return false;
 
-        Map<UUID, LocalDateTime> logTimeByDeviceId = createLogTimeByDeviceIdMap();
-
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
 
@@ -101,31 +99,5 @@ public class InActiveDeviceFilter extends DeviceFilter{
                 .toList();
 
         Events.raise(new InActiveDeviceFinded(deviceIds));
-    }
-
-    private Map<UUID, LocalDateTime> createLogTimeByDeviceIdMap(){
-        Set<MonitorLog> logs = getUniqueMonitorLogs();
-        List<Device> devices = deviceRepository.findAll();
-
-        List<Map<MacAddress, DeviceId>> deviceInfoMap = devices.stream()
-                .map(device -> {
-                    return device.getDeviceInfos().stream()
-                            .collect(Collectors.toMap(
-                                    DeviceInfo::getMac,
-                                    deviceInfo -> device.getId()
-                            ));
-                })
-                .toList();
-
-        return logs.stream() // 이 기기가 언제 MonitorLog를 발생시켰는지 알기위한 맵
-                .filter(log -> deviceInfoMap.stream()
-                        .flatMap(map -> map.keySet().stream())
-                        .map(MacAddress::toString)
-                        .anyMatch(mac -> mac.equals(log.getMac())) // 모니터 로그에 찍힌 mac 중에 WhozIn에 등록된 기기
-                )
-                .collect(Collectors.toMap(
-                        log -> deviceRepository.findByMac(log.getMac()).get().getId().id(), // TODO: Optional null 처리
-                        MonitorLog::getUpdatedAt
-                ));
     }
 }
