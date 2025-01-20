@@ -2,6 +2,8 @@ package com.whoz_in.main_api.query.member.presentation;
 
 import com.whoz_in.main_api.query.device.application.active.MembersInRoom;
 import com.whoz_in.main_api.query.device.application.active.MembersInRoomResponse;
+import com.whoz_in.main_api.query.member.application.MemberDetailInfo;
+import com.whoz_in.main_api.query.member.application.MemberDetailInfoGet;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
@@ -31,6 +33,11 @@ public class MemberQueryController extends QueryController {
         MembersInRoom query = new MembersInRoom(page, size, sortType);
         MembersInRoomResponse response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
+    }
+
+    @GetMapping("/member")
+    public ResponseEntity<SuccessBody<MemberDetailInfo>> getDetailInfo(){
+        return ResponseEntityGenerator.success(ask(new MemberDetailInfoGet()), CrudResponseCode.READ);
     }
 
 }
