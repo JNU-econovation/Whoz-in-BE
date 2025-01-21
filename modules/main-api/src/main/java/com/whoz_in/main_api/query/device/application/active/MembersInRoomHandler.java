@@ -34,7 +34,6 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final MemberViewer memberViewer;
     private final DeviceViewer deviceViewer;
     private final RequesterInfo requesterInfo;
-    private final DeviceViewer deviceViewer;
 
     @Override
     public MembersInRoomResponse handle(MembersInRoom query) {
