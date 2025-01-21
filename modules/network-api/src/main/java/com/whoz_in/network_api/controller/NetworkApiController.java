@@ -27,7 +27,7 @@ public class NetworkApiController {
     @GetMapping("/ip")
     public ResponseEntity<String> getIp() throws UnknownHostException {
         String ip = ipHolder.getIp();
-        if (gatewayIpList.isGatewayIp(ip) || !InetAddress.getByName(ip).isSiteLocalAddress())
+        if (gatewayIpList.isGatewayIp(ip) || !InetAddress.getByName(ip).isSiteLocalAddress()) // 루프백도 외부 아이피로 간주된다.
             return ResponseEntity.badRequest().body("외부 아이피로 요청됨");
         log.info("Requester Info : " + ip);
         return ResponseEntity.ok(ip);
