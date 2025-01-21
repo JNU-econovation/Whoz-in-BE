@@ -36,7 +36,7 @@ public class ActiveDeviceEventHandler {
 
     private List<ActiveDeviceEntity> findFirstActiveDevices(List<UUID> deviceIds){
         return deviceIds.stream()
-                .filter(activeDeviceRepository::existsByDeviceId)
+                .filter(deviceId -> !activeDeviceRepository.existsByDeviceId(deviceId))
                 .map(ActiveDeviceEntity::create)
                 .toList();
     }
