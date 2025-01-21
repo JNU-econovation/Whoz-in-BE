@@ -2,14 +2,19 @@ package com.whoz_in.main_api.query.device.application.active;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.device.application.DeviceOwner;
+import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.device.application.DevicesStatus;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountException;
+import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -28,9 +33,13 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final ActiveDeviceViewer activeDeviceViewer;
     private final MemberViewer memberViewer;
     private final DeviceViewer deviceViewer;
+    private final RequesterInfo requesterInfo;
+    private final DeviceViewer deviceViewer;
 
     @Override
     public MembersInRoomResponse handle(MembersInRoom query) {
+        validateRegisteredDeviceCount(requesterInfo.getMemberId());
+
         int page = query.page() - 1;
         int size = query.size();
         String sortType = query.sortType();
@@ -70,6 +79,11 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         return new MembersInRoomResponse(responses, 0);
     }
 
+    private void validateRegisteredDeviceCount(MemberId memberId) {
+        DeviceCount count = deviceViewer.findDeviceCount(memberId.id());
+        if(count.value()<1) throw RegisteredDeviceCountException.EXCEPTION;
+    }
+
     private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo){
         MemberInfo ownerInfo = getMemberName(memberId.id().toString());
 
@@ -88,6 +102,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         boolean isActive = connectionInfo.isActive();
 
         // 1. 여러 기기 중, 연속 접속 시간, 누적 접속 시간을 합한 정보를 보여준다.
+
         return new MemberInRoomResponse(
                 generation,
                 memberId.id().toString(),

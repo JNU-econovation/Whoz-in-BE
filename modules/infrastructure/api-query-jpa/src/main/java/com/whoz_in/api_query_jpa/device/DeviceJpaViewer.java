@@ -3,6 +3,7 @@ package com.whoz_in.api_query_jpa.device;
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.main_api.query.device.application.DeviceOwner;
+import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DevicesStatus;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
@@ -32,7 +33,7 @@ public class DeviceJpaViewer implements DeviceViewer {
     public DevicesStatus findDevicesStatus(UUID ownerId) {
         List<DeviceStatus> devicesStatus = deviceRepository.findAllByMemberId(ownerId)
                 .stream()
-                .map(device -> new DeviceStatus(device.getId(), device.getDeviceInfos()
+                .map(device -> new DeviceStatus(device.getId(), device.getName(), device.getDeviceInfos()
                         .stream()
                         .collect(Collectors.toMap(
                                 DeviceInfo::getSsid,
@@ -48,5 +49,11 @@ public class DeviceJpaViewer implements DeviceViewer {
                 .map(Member::getId)
                 .map(DeviceOwner::new)
                 .orElse(null);
+    }
+
+    @Override
+    public DeviceCount findDeviceCount(UUID ownerId) {
+        List<Device> devices = deviceRepository.findAllByMemberId(ownerId);
+        return new DeviceCount(devices.size());
     }
 }
