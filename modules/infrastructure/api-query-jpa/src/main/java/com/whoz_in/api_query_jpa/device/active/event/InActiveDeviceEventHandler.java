@@ -22,7 +22,7 @@ public class InActiveDeviceEventHandler {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(InActiveDeviceFinded.class)
     public void processInActiveDevices(InActiveDeviceFinded event) {
-        // InActiveDevice 찾는 로직
+        // 찾은 InActiveDevice 들을 처리하는 로직
         // Event 에 담기는 Device 의 ID 들은, 반드시 후즈인에 등록된 디바이들이다.
         List<UUID> devices = event.getDevices();
         List<ActiveDeviceEntity> entities = activeDeviceRepository.findAll();
