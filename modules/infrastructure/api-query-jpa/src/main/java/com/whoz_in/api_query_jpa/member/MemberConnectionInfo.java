@@ -7,6 +7,7 @@ import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 // Member 가 생성될 때 생성되어야 한다.
 @Entity
@@ -17,8 +18,6 @@ public class MemberConnectionInfo {
     @Id
     private UUID memberId;
 
-    private Duration continuousTime;
-
     private Duration dailyTime;
 
     private Duration totalTime;
@@ -27,22 +26,17 @@ public class MemberConnectionInfo {
 
     public MemberConnectionInfo(UUID memberId){
         this.memberId = memberId;
-        this.continuousTime = null;
         this.dailyTime = null;
         this.totalTime = null;
         this.isActive = false;
-    }
-
-    public void resetContinuousTime(){
-        this.continuousTime = Duration.ZERO;
     }
 
     public void resetDailyTime(){
         this.dailyTime = Duration.ZERO;
     }
 
-    public void addDailyTime(){
-        this.dailyTime = this.dailyTime.plus(this.continuousTime);
+    public void addDailyTime(Duration continuousTime){
+        this.dailyTime = this.dailyTime.plus(continuousTime);
     }
 
     public void addTotalTime(){
