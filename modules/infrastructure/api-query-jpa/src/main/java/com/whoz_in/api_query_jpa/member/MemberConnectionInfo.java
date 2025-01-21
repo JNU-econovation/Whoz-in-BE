@@ -33,6 +33,22 @@ public class MemberConnectionInfo {
         this.isActive = false;
     }
 
+    public void resetContinuousTime(){
+        this.continuousTime = Duration.ZERO;
+    }
+
+    public void resetDailyTime(){
+        this.dailyTime = Duration.ZERO;
+    }
+
+    public void addDailyTime(){
+        this.dailyTime = this.dailyTime.plus(this.continuousTime);
+    }
+
+    public void addTotalTime(){
+        this.totalTime = totalTime.plus(this.dailyTime);
+    }
+
     public static MemberConnectionInfo create(UUID memberId){
         return new MemberConnectionInfo(memberId);
     }
