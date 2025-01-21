@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface DeviceRepository extends JpaRepository<Device, UUID> {
 
-    @Query(nativeQuery = true,
-            value = "SELECT id , member_id FROM device_entity")
     List<Device> findAll();
 
     List<Device> findAllByMemberId(UUID ownerId);
