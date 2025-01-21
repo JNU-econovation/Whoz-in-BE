@@ -32,6 +32,8 @@ public class ActiveDeviceEventHandler {
 
         save(firstActiveDevices);
         save(nonFirstActiveDevice);
+
+        // TODO: MemberConnectionInfo active 활성화하기
     }
 
     private List<ActiveDeviceEntity> findFirstActiveDevices(List<UUID> deviceIds){
