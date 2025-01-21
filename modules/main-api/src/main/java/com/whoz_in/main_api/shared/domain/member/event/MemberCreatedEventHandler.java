@@ -6,7 +6,7 @@ import java.util.UUID;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("MainApiMemberCreatedEventHandler")
 public class MemberCreatedEventHandler {
 
     // Domain 이벤트를 Query 구현 모듈로 전달
