@@ -26,7 +26,6 @@ public class SecurityFilterChainConfig {
     private final LoginFailureHandler loginFailureHandler;
     private final ServerAuthenticationFilter serverAuthenticationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
 
@@ -79,7 +78,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
         commonConfigurations(httpSecurity);
-        httpSecurity.cors(config->config.configurationSource(corsConfigurationSource));
+
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
 
@@ -136,6 +135,7 @@ public class SecurityFilterChainConfig {
     }
 
     private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
+        //CorsConfigurationSource이 빈으로 등록되었기 때문에 cors는 자동으로 적용된다.
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
