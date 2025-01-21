@@ -87,14 +87,23 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         String memberName = ownerInfo.memberName();
 
         // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
-        Long continuousMinute = devices.stream()
+        Long continuousMinute;
+
+        if(devices.size()>1) continuousMinute = devices.stream()
                 .filter(ActiveDevice::isActive)
                 .map(ActiveDevice::continuousTime)
                 .max(Duration::compareTo)
                 .orElse(Duration.ZERO)
                 .toMinutes();
 
-        Long dailyConnectedMinute = connectionInfo.dailyTime().toMinutes();
+        else continuousMinute = devices.stream()
+                .map(ActiveDevice::continuousTime)
+                .findAny()
+                .orElse(Duration.ZERO)
+                .toMinutes();
+
+        Long dailyConnectedMinute = connectionInfo.dailyTime().toMinutes() + continuousMinute;
+
         boolean isActive = connectionInfo.isActive();
 
         // 1. 여러 기기 중, 연속 접속 시간, 누적 접속 시간을 합한 정보를 보여준다.
