@@ -48,6 +48,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
                 .collect(Collectors.toSet());
 
         if(!activeDevices.isEmpty()) {
+            // DeviceFilter 는 무조건, 후즈인에 등록된 Device 만을 넘겨야 한다.
             List<UUID> monitorLogDeviceIds = deviceRepository.findByMacs(macs).stream()
                     .map(Device::getId)
                     .map(DeviceId::id)
