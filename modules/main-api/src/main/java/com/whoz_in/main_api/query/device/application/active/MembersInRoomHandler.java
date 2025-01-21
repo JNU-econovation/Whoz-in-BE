@@ -86,6 +86,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         int generation = ownerInfo.generation();
         String memberName = ownerInfo.memberName();
 
+
+        // TODO: 리팩토링
         // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
         Long continuousMinute;
 
