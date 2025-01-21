@@ -1,5 +1,8 @@
 package com.whoz_in.api_query_jpa.device;
 
+import com.whoz_in.api_query_jpa.member.Member;
+import com.whoz_in.api_query_jpa.member.MemberRepository;
+import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DevicesStatus;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeviceJpaViewer implements DeviceViewer {
     private final DeviceRepository deviceRepository;
+    private final MemberRepository memberRepository;
     private final DeviceInfoRepository deviceInfoRepository;
     @Override
     public RegisteredSsids findRegisteredSsids(UUID ownerId, String room, String mac) {
@@ -36,5 +40,13 @@ public class DeviceJpaViewer implements DeviceViewer {
                         null))//TODO: connected된 ssid는 기기 현황 구현 후 리팩토링하면서 구현하기
                 .toList();
         return new DevicesStatus(devicesStatus);
+    }
+
+    @Override
+    public DeviceOwner findDeviceOwner(UUID deviceId) {
+        return memberRepository.findByDeviceId(deviceId)
+                .map(Member::getId)
+                .map(DeviceOwner::new)
+                .orElse(null);
     }
 }
