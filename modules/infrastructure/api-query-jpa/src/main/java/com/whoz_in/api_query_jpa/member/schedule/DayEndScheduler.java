@@ -1,4 +1,4 @@
-package com.whoz_in.api_query_jpa.device.schedule;
+package com.whoz_in.api_query_jpa.member.schedule;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
