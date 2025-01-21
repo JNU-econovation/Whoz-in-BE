@@ -34,6 +34,11 @@ public class ActiveDeviceEntity {
         this.disConnectedAt = time;
     }
 
+    public boolean isActive(){
+        // null 이면 active
+        return Objects.isNull(disConnectedAt);
+    }
+
     public static ActiveDeviceEntity create(UUID deviceId){
         return new ActiveDeviceEntity(deviceId);
     }
