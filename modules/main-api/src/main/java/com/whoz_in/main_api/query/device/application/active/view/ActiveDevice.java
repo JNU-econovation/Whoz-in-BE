@@ -1,7 +1,10 @@
 package com.whoz_in.main_api.query.device.application.active.view;
 
+import com.whoz_in.domain.shared.Nullable;
 import com.whoz_in.main_api.query.shared.application.View;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 // Active 상태인 기기를 나타내는 View
@@ -9,6 +12,16 @@ import java.util.UUID;
 public record ActiveDevice(
     UUID deviceId,
     LocalDateTime connectedTime,
-    LocalDateTime disConnectedTime
+    @Nullable LocalDateTime disConnectedTime
 ) implements View {
+
+    public boolean isActive(){
+        return Objects.isNull(disConnectedTime);
+    }
+
+    public Duration continuousTime(){
+        if(Objects.isNull(disConnectedTime)) return Duration.between(connectedTime, LocalDateTime.now()).abs();
+        return Duration.between(connectedTime, disConnectedTime);
+    }
+
 }
