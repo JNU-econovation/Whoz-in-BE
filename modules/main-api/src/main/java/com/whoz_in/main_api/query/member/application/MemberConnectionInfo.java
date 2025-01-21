@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public record MemberConnectionInfo(
         UUID memberId,
-        Duration continuousTime,
         Duration dailyTime,
         Duration totalTime,
         boolean isActive
