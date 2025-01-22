@@ -60,10 +60,6 @@ public class ActiveDeviceFilter extends DeviceFilter {
 
         ActiveDevice activeDevice = activeDeviceViewer.findByDeviceId(deviceId.toString()).orElse(null);
 
-        if(activeDevice==null){
-            return false; // connectionInfo 는 Member 생성시 자동으로 만들어준다. null 수가 없다.
-        }
-
         if(!activeDevice.isActive()) {
             log.info("[ActiveDeviceFilter] Active 전환 (deviceId) : {}", deviceId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
