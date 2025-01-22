@@ -2,10 +2,15 @@ package com.whoz_in.api_query_jpa.device.active.event;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
+import com.whoz_in.api_query_jpa.member.Member;
+import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
+import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
+import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.util.ActiveTimeUpdateWriter;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -18,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class InActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
+    private final MemberConnectionInfoRepository connectionInfoRepository;
+    private final MemberRepository memberRepository;
     private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
 
     // ActiveDeviceEvent 핸들러에서 데이터를 수정할 수 있으므로 격리 수준을 serializable 로 설정
@@ -35,6 +42,8 @@ public class InActiveDeviceEventHandler {
         save(inActives);
         // DailyTime 업데이트
         updateDailyTime(inActives);
+
+        inActiveOn(inActives);
     }
 
     private void disConnect(List<ActiveDeviceEntity> entities){
@@ -49,6 +58,20 @@ public class InActiveDeviceEventHandler {
     private void updateDailyTime(List<ActiveDeviceEntity> activeDevices){
         List<UUID> deviceIds = activeDevices.stream().map(ActiveDeviceEntity::getDeviceId).toList();
         deviceIds.forEach(activeTimeUpdateWriter::updateDailyTime);
+    }
+
+    private void inActiveOn(List<ActiveDeviceEntity> entities) {
+        List<MemberConnectionInfo> connectionInfos = entities.stream()
+                .map(ActiveDeviceEntity::getDeviceId)
+                .map(memberRepository::findByDeviceId)
+                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
+                .map(Member::getId)
+                .map(connectionInfoRepository::findByMemberId)
+                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
+                .peek(MemberConnectionInfo::inActiveOn)
+                .toList();
+
+        connectionInfoRepository.saveAll(connectionInfos);
     }
 
 }
