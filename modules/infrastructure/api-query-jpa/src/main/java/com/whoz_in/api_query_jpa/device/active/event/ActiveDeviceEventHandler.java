@@ -2,6 +2,10 @@ package com.whoz_in.api_query_jpa.device.active.event;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
+import com.whoz_in.api_query_jpa.member.Member;
+import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
+import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
+import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
+    private final MemberRepository memberRepository;
+    private final MemberConnectionInfoRepository connectionInfoRepository;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(ActiveDeviceFinded.class)
@@ -33,7 +39,8 @@ public class ActiveDeviceEventHandler {
         save(firstActiveDevices);
         save(nonFirstActiveDevice);
 
-        // TODO: MemberConnectionInfo active 활성화하기
+        activeOn(firstActiveDevices);
+        activeOn(nonFirstActiveDevice);
     }
 
     private List<ActiveDeviceEntity> findFirstActiveDevices(List<UUID> deviceIds){
@@ -54,6 +61,26 @@ public class ActiveDeviceEventHandler {
     private void save(List<ActiveDeviceEntity> entities){
         entities.forEach(activeDevice -> activeDevice.connect(LocalDateTime.now()));
         activeDeviceRepository.saveAll(entities);
+    }
+
+    private void activeOn(List<ActiveDeviceEntity> entities) {
+        List<MemberConnectionInfo> connectionInfos = entities.stream()
+                .map(ActiveDeviceEntity::getDeviceId)
+                .map(memberRepository::findByDeviceId)
+                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
+                .map(Member::getId)
+                .map(connectionInfoRepository::findByMemberId)
+                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
+                .peek(MemberConnectionInfo::activeOn)
+                .toList();
+
+        connectionInfoRepository.saveAll(connectionInfos);
+    }
+
+    private Member findOwner(ActiveDeviceEntity activeDevice){
+        UUID deviceId = activeDevice.getDeviceId();
+
+        return memberRepository.findByDeviceId(deviceId).orElse(null);
     }
 
 }
