@@ -65,7 +65,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
 
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
-        if(connectionInfo==null || !connectionInfo.isActive()) return false;
+        if(connectionInfo==null || !activeDevice.isActive()) return false;
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
