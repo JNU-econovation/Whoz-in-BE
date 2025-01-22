@@ -1,11 +1,8 @@
 package com.whoz_in.network_api.controller;
 
 import com.whoz_in.network_api.common.util.IpHolder;
-import jakarta.servlet.http.HttpServletRequest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
