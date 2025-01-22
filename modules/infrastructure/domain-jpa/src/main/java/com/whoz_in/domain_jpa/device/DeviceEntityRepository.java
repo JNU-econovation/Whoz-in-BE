@@ -18,7 +18,7 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
 
     void deleteById(UUID deviceId);
 
-    @Query("SELECT d FROM DeviceEntity d JOIN d.deviceInfoEntity di WHERE di.mac IN :macs")
+    @Query(nativeQuery = true, value = "SELECT * FROM device_entity d WHERE d.id IN (SELECT di.device_id FROM device_info_entity di WHERE di.mac IN :macs)")
     List<DeviceEntity> findByMacs(@Param("macs") Set<String> macs);
 
     @Query("SELECT d FROM DeviceEntity d WHERE d.id IN :deviceIds")
