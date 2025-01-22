@@ -43,6 +43,14 @@ public class MemberConnectionInfo {
         this.totalTime = totalTime.plus(this.dailyTime);
     }
 
+    public void activeOn(){
+        this.isActive = true;
+    }
+
+    public void inActiveOn(){
+        this.isActive = false;
+    }
+
     public static MemberConnectionInfo create(UUID memberId){
         return new MemberConnectionInfo(memberId);
     }
