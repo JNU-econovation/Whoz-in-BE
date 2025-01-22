@@ -5,6 +5,7 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
@@ -57,15 +58,14 @@ public class ActiveDeviceFilter extends DeviceFilter {
         UUID deviceId = device.getId().id();
         UUID ownerId = device.getMemberId().id();
 
-        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString())
-                .orElse(null);
+        ActiveDevice activeDevice = activeDeviceViewer.findByDeviceId(deviceId.toString()).orElse(null);
 
-        if(connectionInfo==null){
+        if(activeDevice==null){
             return false; // connectionInfo 는 Member 생성시 자동으로 만들어준다. null 수가 없다.
         }
 
-        if(!connectionInfo.isActive()) {
-            log.info("[ActiveDeviceFilter] Active 전환 (memberId) : {}", ownerId);
+        if(!activeDevice.isActive()) {
+            log.info("[ActiveDeviceFilter] Active 전환 (deviceId) : {}", deviceId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
         }
 
