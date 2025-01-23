@@ -85,31 +85,11 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
         int generation = ownerInfo.generation();
         String memberName = ownerInfo.memberName();
-
-
-        // TODO: 리팩토링
-        // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
-        Long continuousMinute;
-
-        if(devices.size()>1) continuousMinute = devices.stream()
-                .filter(ActiveDevice::isActive)
-                .map(ActiveDevice::continuousTime)
-                .max(Duration::compareTo)
-                .orElse(Duration.ZERO)
-                .toMinutes();
-
-        else continuousMinute = devices.stream()
-                .map(ActiveDevice::continuousTime)
-                .findAny()
-                .orElse(Duration.ZERO)
-                .toMinutes();
-
+        Long continuousMinute = getContinuousMinute(devices); // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
+        Long dailyConnectedMinute = getDailyConnectedTime(connectionInfo, continuousMinute);
         boolean isActive = connectionInfo.isActive();
 
-        Long dailyConnectedMinute = isActive ? connectionInfo.dailyTime().toMinutes() + continuousMinute : connectionInfo.dailyTime().toMinutes();
-
         // 1. 여러 기기 중, 연속 접속 시간, 누적 접속 시간을 합한 정보를 보여준다.
-
         return new MemberInRoomResponse(
                 generation,
                 memberId.id().toString(),
@@ -118,6 +98,30 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 String.format("%s시간 %s분", dailyConnectedMinute / 60, dailyConnectedMinute % 60),
                 isActive
         );
+    }
+
+    private Long getContinuousMinute(List<ActiveDevice> activeDevices){
+        Long continuousMinute;
+        if(activeDevices.size()>1)
+            return activeDevices.stream()
+                .filter(ActiveDevice::isActive)
+                .map(ActiveDevice::continuousTime)
+                .max(Duration::compareTo)
+                .orElse(Duration.ZERO)
+                .toMinutes();
+
+        else
+            return activeDevices.stream()
+                .map(ActiveDevice::continuousTime)
+                .findAny()
+                .orElse(Duration.ZERO)
+                .toMinutes();
+
+    }
+
+    private Long getDailyConnectedTime(MemberConnectionInfo connectionInfo, Long continuousMinute){
+        boolean isActive = connectionInfo.isActive();
+        return isActive ? connectionInfo.dailyTime().toMinutes() + continuousMinute : connectionInfo.dailyTime().toMinutes();
     }
 
     private Map<MemberId, List<ActiveDevice>> createMemberDeviceMap(List<ActiveDevice> activeDevices) {
