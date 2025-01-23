@@ -3,6 +3,7 @@ package com.whoz_in.api_query_jpa.member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -26,8 +27,8 @@ public class MemberConnectionInfo {
 
     public MemberConnectionInfo(UUID memberId){
         this.memberId = memberId;
-        this.dailyTime = null;
-        this.totalTime = null;
+        this.dailyTime = Duration.ZERO;
+        this.totalTime = Duration.ZERO;
         this.isActive = false;
     }
 
@@ -36,10 +37,12 @@ public class MemberConnectionInfo {
     }
 
     public void addDailyTime(Duration continuousTime){
+        if(Objects.isNull(this.dailyTime)) this.dailyTime = Duration.from(continuousTime);
         this.dailyTime = this.dailyTime.plus(continuousTime);
     }
 
     public void addTotalTime(){
+        if(Objects.isNull(this.totalTime)) this.totalTime = Duration.from(dailyTime);
         this.totalTime = totalTime.plus(this.dailyTime);
     }
 
