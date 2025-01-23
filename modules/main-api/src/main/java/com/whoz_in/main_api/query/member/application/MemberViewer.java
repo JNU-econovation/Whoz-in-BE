@@ -7,5 +7,6 @@ import java.util.UUID;
 public interface MemberViewer extends Viewer {
     Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId);
     Optional<MemberInfo> findNameByMemberId(String memberId);
+    Optional<MemberConnectionInfo> findConnectionInfo(String memberId);
     Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId);
 }

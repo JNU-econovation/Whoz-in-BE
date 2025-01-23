@@ -10,7 +10,7 @@ public class Events {
         publisher = context;
     }
 
-    public static void raise(Event event) {
+    public static void raise(ApplicationEvent event) {
         if(publisher!=null)
             publisher.publishEvent(event);
     }
