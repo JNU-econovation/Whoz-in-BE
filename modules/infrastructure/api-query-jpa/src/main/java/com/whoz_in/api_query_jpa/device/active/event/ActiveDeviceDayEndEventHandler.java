@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -31,7 +32,7 @@ public class ActiveDeviceDayEndEventHandler {
     private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
 
     @EventListener(DayEndEvent.class)
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public void shutDownDevice(){
         List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findAll();
 
