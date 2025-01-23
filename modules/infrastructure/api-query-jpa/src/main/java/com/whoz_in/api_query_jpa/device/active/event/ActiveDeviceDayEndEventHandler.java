@@ -69,7 +69,7 @@ public class ActiveDeviceDayEndEventHandler {
     private void updateActiveTime(List<ActiveDeviceEntity> activeDevices) {
         List<UUID> deviceIds = activeDevices.stream().map(ActiveDeviceEntity::getDeviceId).toList();
 
-        // TODO: SQL 최적화
+        // TODO: SQL 최적화, stream 원소 하나하나마다 save 를 하고 있으므로, 단일 쿼리가 여러번 날아간다.
         deviceIds.stream()
                 .peek(activeTimeUpdateWriter::updateDailyTime)
                 .forEach(activeTimeUpdateWriter::updateTotalActiveTime);
