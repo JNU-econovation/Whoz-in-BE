@@ -35,8 +35,8 @@ public class ActiveDeviceEntity {
     }
 
     public boolean isActive(){
-        // null 이면 active
-        return Objects.isNull(disConnectedAt);
+        // connectedAt 이 null 이 아니고, disConnectedAt 이 null 이면 active
+        return Objects.nonNull(connectedAt) && Objects.isNull(disConnectedAt);
     }
 
     public static ActiveDeviceEntity create(UUID deviceId){
