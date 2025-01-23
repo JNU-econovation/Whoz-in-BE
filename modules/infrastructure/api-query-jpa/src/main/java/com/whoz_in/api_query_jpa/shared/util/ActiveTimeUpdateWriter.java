@@ -12,6 +12,8 @@ import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 이 클래스의 메소드는 모두 UUID deviceId 를 인자로 받는다.
@@ -31,6 +33,7 @@ public class ActiveTimeUpdateWriter {
     // deviceId를 넘겨주고, 이 기기에 대해서 접속 정보를 업데이트 해도 되는지 판별해주는 클래스가 있어야 한다.
 
     // 해당 기기 주인의 dailyTime 을 update
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateDailyTime(UUID deviceId){
         if(updateDeterminer.isUpdatable(deviceId)){
             ActiveDeviceEntity activeDevice = activeDeviceRepository.findByDeviceId(deviceId).orElse(null);
@@ -44,6 +47,7 @@ public class ActiveTimeUpdateWriter {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateTotalActiveTime(UUID deviceId){
         if(updateDeterminer.isUpdatable(deviceId)){
             MemberConnectionInfo connectionInfo = findOwnerConnectionInfoByDeviceId(deviceId);
@@ -58,6 +62,7 @@ public class ActiveTimeUpdateWriter {
 
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void clearDailyTime(UUID deviceId){
         Member owner = memberRepository.findByDeviceId(deviceId).orElse(null);
         if(owner==null) return;
