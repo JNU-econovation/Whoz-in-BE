@@ -16,7 +16,7 @@ public record ActiveDevice(
 ) implements View {
 
     public boolean isActive(){
-        return !Objects.isNull(connectedTime) && !Objects.isNull(disConnectedTime);
+        return Objects.nonNull(connectedTime) && Objects.nonNull(disConnectedTime);
     }
 
     public Duration continuousTime(){
