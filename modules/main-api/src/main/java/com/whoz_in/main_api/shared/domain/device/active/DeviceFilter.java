@@ -5,6 +5,8 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.MemberViewer;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -18,16 +20,18 @@ public abstract class DeviceFilter {
     protected final DeviceRepository deviceRepository;
     protected final MonitorLogRepository monitorLogRepository;
     protected final ActiveDeviceViewer activeDeviceViewer;
+    protected final MemberViewer memberViewer;
 
     public DeviceFilter(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer
+            ActiveDeviceViewer activeDeviceViewer,
+            MemberViewer memberViewer
     ) {
         this.deviceRepository = deviceRepository;
         this.monitorLogRepository = monitorLogRepository;
         this.activeDeviceViewer = activeDeviceViewer;
-        // TODO: 이 Map 들은, Active, InActive 판별에 아주 중요한 요소인데 메모리로만 유지하면, 최신화된 데이터를 받아올 수 없다.
+        this.memberViewer = memberViewer;
     }
 
     public void execute(){
@@ -39,8 +43,8 @@ public abstract class DeviceFilter {
     }
 
     protected Set<MonitorLog> getUniqueMonitorLogs(){
-        LocalDateTime before10Minute = LocalDateTime.now().minusMinutes(10);
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before10Minute); // 10분 전 로그 조회
+        LocalDateTime before1Minute = LocalDateTime.now().minusMinutes(1);
+        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before1Minute); // 1분 전 로그 조회
         return new HashSet<>(logs); // TODO: 중복 제거
     }
 

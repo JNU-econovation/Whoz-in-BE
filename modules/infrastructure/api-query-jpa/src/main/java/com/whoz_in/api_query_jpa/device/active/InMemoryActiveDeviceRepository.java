@@ -1,6 +1,5 @@
-package com.whoz_in.api_query_jpa.device;
+package com.whoz_in.api_query_jpa.device.active;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
