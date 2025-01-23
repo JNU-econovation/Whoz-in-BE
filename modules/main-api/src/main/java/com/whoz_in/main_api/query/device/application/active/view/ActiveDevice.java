@@ -20,6 +20,7 @@ public record ActiveDevice(
     }
 
     public Duration continuousTime(){
+        if(Objects.isNull(connectedTime)) return Duration.ZERO;
         if(Objects.isNull(disConnectedTime)) return Duration.between(connectedTime, LocalDateTime.now()).abs();
         return Duration.between(connectedTime, disConnectedTime);
     }
