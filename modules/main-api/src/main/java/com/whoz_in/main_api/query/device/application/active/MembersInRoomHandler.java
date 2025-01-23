@@ -104,9 +104,9 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 .orElse(Duration.ZERO)
                 .toMinutes();
 
-        Long dailyConnectedMinute = connectionInfo.dailyTime().toMinutes() + continuousMinute;
-
         boolean isActive = connectionInfo.isActive();
+
+        Long dailyConnectedMinute = isActive ? connectionInfo.dailyTime().toMinutes() + continuousMinute : connectionInfo.dailyTime().toMinutes();
 
         // 1. 여러 기기 중, 연속 접속 시간, 누적 접속 시간을 합한 정보를 보여준다.
 
