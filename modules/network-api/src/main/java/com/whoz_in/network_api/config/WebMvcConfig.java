@@ -35,7 +35,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                         "http://localhost:3000",
                         "http://localhost:8080",
-                        frontendBaseUrl
+                        "http://192.168.0.6:3000",
+                        frontendBaseUrl //TODO: 없애도 될듯?
                         )
                 .exposedHeaders("Set-Cookie")
                 .allowCredentials(true);
