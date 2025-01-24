@@ -20,6 +20,10 @@ command:
 
 sudo_password: ${SUDO_PASSWORD}
 
+#TODO: main-api랑 같이 공동으로 관리해야 할듯
+frontend:
+  base-url: ${FRONTEND_URL}
+
 main-api:
   base-url: ${MAIN_API_BASE_URL}
   api-key: ${MAIN_API_API_KEY}
