@@ -28,6 +28,7 @@ public class SecurityFilterChainConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(0)
@@ -122,6 +123,8 @@ public class SecurityFilterChainConfig {
 
         commonConfigurations(httpSecurity);
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        //쿠키를 받기 위한 설정
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
         httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터
@@ -135,7 +138,6 @@ public class SecurityFilterChainConfig {
     }
 
     private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
-        //CorsConfigurationSource이 빈으로 등록되었기 때문에 cors는 자동으로 적용된다.
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
