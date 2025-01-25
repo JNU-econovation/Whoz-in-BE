@@ -49,11 +49,10 @@ public class SecurityConfig {
     }
 
     //security에서 사용할 Cors 설정을 정의합니다
-    //security는 UrlBasedCorsConfigurationSource 빈이 등록되어있을경우 각 필터 체인에 CorsFilter를 자동으로 추가함.
     @Bean
     public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://192.168.0.6:3000", frontendBaseUrl));
+        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl)); //TODO: 내부 아이피 추가
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
