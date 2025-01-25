@@ -28,6 +28,7 @@ public class SecurityFilterChainConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(0)
@@ -135,7 +136,7 @@ public class SecurityFilterChainConfig {
     }
 
     private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
-        //CorsConfigurationSource이 빈으로 등록되었기 때문에 cors는 자동으로 적용된다.
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
