@@ -123,6 +123,8 @@ public class SecurityFilterChainConfig {
 
         commonConfigurations(httpSecurity);
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        //쿠키를 받기 위한 설정
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
         httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터
@@ -136,7 +138,6 @@ public class SecurityFilterChainConfig {
     }
 
     private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.httpBasic(AbstractHttpConfigurer::disable);
         httpSecurity.formLogin(AbstractHttpConfigurer::disable);
