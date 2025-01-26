@@ -26,9 +26,9 @@ public class SecurityFilterChainConfig {
     private final LoginFailureHandler loginFailureHandler;
     private final ServerAuthenticationFilter serverAuthenticationFilter;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
+    private final CorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(0)
@@ -79,7 +79,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
         commonConfigurations(httpSecurity);
-        httpSecurity.cors(config->config.configurationSource(corsConfigurationSource));
+
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
 
@@ -123,6 +123,8 @@ public class SecurityFilterChainConfig {
 
         commonConfigurations(httpSecurity);
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        //쿠키를 받기 위한 설정
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
         httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터

@@ -1,6 +1,7 @@
 package com.whoz_in.network_api.private_ip;
 
 import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.util.SystemPrivateIpResolver;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashMap;
 import java.util.List;

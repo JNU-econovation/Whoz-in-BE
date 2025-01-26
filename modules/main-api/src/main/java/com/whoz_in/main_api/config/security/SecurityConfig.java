@@ -52,7 +52,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl));
+        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl)); //TODO: 내부 아이피 추가
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);

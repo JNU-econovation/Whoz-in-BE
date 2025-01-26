@@ -53,7 +53,7 @@ public final class Device extends AggregateRoot {
                 .deviceInfos(deviceInfos)
                 .deviceName(deviceName)
                 .build();
-        device.register(new DeviceCreated());
+        device.register(new DeviceCreated(device.getId().id()));
         return device;
     }
 
