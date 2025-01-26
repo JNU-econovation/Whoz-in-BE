@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.private_ip;
+package com.whoz_in.network_api.common.util;
 
 import java.net.InetAddress;
 import java.net.SocketException;
