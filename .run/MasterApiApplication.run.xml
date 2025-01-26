@@ -1,9 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="MasterApiApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-    <module name="whoz_in.modules.master-api.main" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="com.whoz_in.master_api.MasterApiApplication" />
-    <method v="2">
-      <option name="MakeProject" enabled="true" />
-    </method>
-  </configuration>
-</component>
