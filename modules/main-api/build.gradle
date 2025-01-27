@@ -3,9 +3,9 @@ plugins {
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 }
 
-version = '0.0.1-SNAPSHOT'
+version = '1'
 
-jar.enabled = true
+jar.enabled = false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
