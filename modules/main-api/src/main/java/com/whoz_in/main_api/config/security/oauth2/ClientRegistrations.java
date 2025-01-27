@@ -16,7 +16,7 @@ public class ClientRegistrations {
     @Value("${oauth.kakao.clientId}")
     private String kakaoClientId;
 
-    @Value("${oauth.redirectUri}")
+    @Value("${oauth.redirect-uri}")
     private String redirectUri;
 
     public ClientRegistration kakaoClientRegistration() {
