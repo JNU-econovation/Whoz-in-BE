@@ -9,11 +9,16 @@ java {
 }
 
 subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
-
     group 'com.whoz_in'
 
     apply plugin: 'java'
     apply plugin: 'java-library'
+
+    ext {
+        springBootVersion='3.3.5'
+        springDependencyManagementVersion='1.1.5'
+        springVersion='6.1.14'
+    }
 
     configurations {
         compileOnly {
