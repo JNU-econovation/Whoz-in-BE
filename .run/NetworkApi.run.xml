@@ -2,7 +2,13 @@
   <configuration default="false" name="NetworkApi" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/modules/network-api/src/main/resources/.env" />
+    </option>
     <module name="whoz_in.modules.network-api.main" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.whoz_in.network_api.NetworkApiApplication" />
     <method v="2">
       <option name="MakeProject" enabled="true" />
