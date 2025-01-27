@@ -1,5 +1,27 @@
 spring:
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE}
   config:
-    import: "classpath:application-network-api.yml" # network-api 설정 파일 포함
+    import:
+      #해당 room의 network interface 설정 파일
+      - "classpath:env-room-setting.yml"
+      #logging 모듈
+      - "classpath:application-logging.yml"
+      #domain-jpa 모듈
+      - "classpath:application-domain-jpa.yml"
+
+command:
+  managed:
+    mdns: "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
+    arp: "sudo -S arp-scan --interface={{interface}} --localnet"
+  monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
+
+sudo_password: ${SUDO_PASSWORD}
+
+#TODO: main-api랑 같이 공동으로 관리해야 할듯
+frontend:
+  base-url: ${FRONTEND_URL}
+
+main-api:
+  base-url: ${MAIN_API_BASE_URL}
+  api-key: ${MAIN_API_API_KEY}
