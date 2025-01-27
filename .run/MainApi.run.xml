@@ -1,6 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MainApi" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <option name="envFilePaths">
+      <option value="$PROJECT_DIR$/modules/main-api/src/main/resources/.env" />
+    </option>
     <module name="whoz_in.modules.main-api.main" />
+    <selectedOptions>
+      <option name="environmentVariables" />
+    </selectedOptions>
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.whoz_in.main_api.MainApiApplication" />
     <method v="2">
       <option name="MakeProject" enabled="true" />

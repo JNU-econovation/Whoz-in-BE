@@ -1,19 +1,11 @@
-spring:
-  config:
-    import: "classpath:env-api-query-jpa.properties"
-
 api-query-jpa:
   datasource:
-    url: ${API_QUERY_JPA.DB_URL}
-    username: ${API_QUERY_JPA.DB_USERNAME}
-    password: ${API_QUERY_JPA.DB_PASSWORD}
-    driver-class-name: ${API_QUERY_JPA.DB_DRIVER_CLASS}
+    url: ${DOMAIN_JPA.DB_URL}
+    username: ${DOMAIN_JPA.DB_USERNAME}
+    password: ${DOMAIN_JPA.DB_PASSWORD}
+    driver-class-name: ${DOMAIN_JPA.DB_DRIVER_CLASS}
   hibernate:
-    show_sql: true
-    format_sql: true
-    ddl-auto: ${API_QUERY_JPA.DDL_AUTO}
+    show_sql: false
+    format_sql: false
+    ddl-auto: ${DOMAIN_JPA.DDL_AUTO}
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-
-logging:
-  level:
-    root: info
