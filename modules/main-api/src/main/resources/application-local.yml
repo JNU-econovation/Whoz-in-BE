@@ -1,5 +1,0 @@
-rooms-setting:
-  rooms:
-    - name: local
-      alt-ssid-list:
-        - en0

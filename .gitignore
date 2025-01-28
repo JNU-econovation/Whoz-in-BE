@@ -1,6 +1,6 @@
 #환경 설정 파일
-**/env-*
-**/.env*
+env
+
 **/.DS_Store
 
 HELP.md

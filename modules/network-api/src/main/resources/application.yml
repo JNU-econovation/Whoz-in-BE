@@ -3,8 +3,8 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE}
   config:
     import:
-      #해당 room의 network interface 설정 파일
-      - "classpath:env-room-setting.yml"
+      - "file:./env/network-api.properties"
+      - "file:./env/network-api.yml"
       #logging 모듈
       - "classpath:application-logging.yml"
       #domain-jpa 모듈

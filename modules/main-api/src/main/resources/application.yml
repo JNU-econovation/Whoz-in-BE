@@ -3,10 +3,13 @@ spring:
     active: ${SPRING_PROFILES_ACTIVE}
   config:
     import:
+      - "file:./env/main-api.properties"
+      - "file:./env/main-api.yml"
       #모듈 별 application.yml
       - "classpath:application-domain-jpa.yml"
       - "classpath:application-api-query-jpa.yml"
       - "classpath:application-logging.yml"
+
 
 frontend:
   base-url: ${FRONTEND_URL}
@@ -26,10 +29,6 @@ jwt:
   access-token-expiry: 2h
   refresh-token-expiry: 30d
   oauth2-temp-token-expiry: 5m
-
-#TODO: .env처럼 따로 관리하기
-rooms-setting:
-  rooms:
 
 #  level:
 #    org.springframework.security: DEBUG
