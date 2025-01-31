@@ -2,6 +2,7 @@
   <configuration default="false" name="NetworkApi" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="whoz_in.modules.network-api.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.whoz_in.network_api.NetworkApiApplication" />
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_WORKING_DIR$" />
     <method v="2">
       <option name="MakeProject" enabled="true" />
     </method>
