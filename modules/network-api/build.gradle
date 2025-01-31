@@ -5,12 +5,12 @@ plugins {
 
 version = '1'
 
-jar.enabled = false
+jar.enabled=false
 
 dependencies {
-    implementation project(':modules:infrastructure:logging')
-    implementation project(':modules:domain')
-    runtimeOnly project(':modules:infrastructure:domain-jpa')
+    implementation project(':logging')
+    implementation project(':domain')
+    runtimeOnly project(':domain-jpa')
 
 
     implementation 'org.springframework.boot:spring-boot-starter'
