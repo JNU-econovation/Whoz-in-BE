@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.diffplug.spotless" version '6.8.0' apply false //루트에서 선언해줘야 하위 모듈에서 사용 가능
 }
 
 java {
@@ -15,6 +16,7 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 
     apply plugin: 'java'
     apply plugin: 'java-library'
+    apply plugin: "com.diffplug.spotless"
 
     ext {
         springBootVersion='3.3.5'
@@ -47,11 +49,24 @@ subprojects { // 모든 하위 모듈들에 이 설정을 적용합니다.
 
     }
 
+    //TODO: 추후 적용
+//    spotless {
+//        java {
+//            googleJavaFormat().aosp()// Google Java 포맷 적용
+//            importOrder('java', 'javax', 'jakarta', 'org', 'com') // import 정렬 순서
+//            targetExclude 'build/' //빌드에 존재하는 건 제외
+//            removeUnusedImports() // 사용하지 않는 import 제거
+//            trimTrailingWhitespace() // 각 라인 끝에 있는 공백을 제거
+//            endWithNewline() // 파일 끝에 새로운 라인 추가
+//        }
+//    }
+
+    //TODO: 변경하고 실행하지 않으면 적용 안되니 pre-commit을 적용하든지..
+//    tasks.named('compileJava') {
+//        dependsOn 'spotlessApply'
+//    }
+
     test {
         useJUnitPlatform()
     }
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
 }
