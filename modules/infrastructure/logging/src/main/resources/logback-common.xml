@@ -1,4 +1,4 @@
-<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
+<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 환경변수를 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
 
 <configuration>
   <springProfile name="!prod">
