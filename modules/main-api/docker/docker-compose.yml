@@ -2,7 +2,9 @@ name: whozin
 services:
   main-api:
     container_name: main-api
-    image: whozin/main-api:latest #TODO: 태그
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
     env_file:
       - .env
     environment:
@@ -40,4 +42,4 @@ services:
       retries: 10
 
 volumes:
-  mysql-data: #//abas랑 두개 돌리면 어캐해야 함?
+  mysql-data:
