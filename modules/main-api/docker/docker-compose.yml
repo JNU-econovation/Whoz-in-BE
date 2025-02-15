@@ -1,22 +1,23 @@
+name: whozin
 services:
   main-api:
-    container_name: whozin-main-api
+    container_name: main-api
     image: whozin/main-api:latest #TODO: 태그
     env_file:
       - .env
     environment:
-      - DOMAIN_JPA.DB_HOST=whozin-command-db
+      - DOMAIN_JPA.DB_HOST=command-db
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
     ports:
-      - "8080"
+      - "8080:8080"
     restart: always
     depends_on:
       command-db:
         condition: service_healthy
   command-db:
-    container_name: whozin-command-db
+    container_name: command-db
     image: mysql:8.0.41
     env_file:
       - .env
@@ -26,12 +27,17 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=whozin
       # TODO: network-api를 위한 mysql 유저 추가
+    volumes:
+      - mysql-data:/var/lib/mysql
     command: ["--character-set-server=utf8mb4"]
     ports:
-      - "3306" #network-api에서 접근함
+      - "3306:3306" #network-api에서 접근함
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       start_period: 5s
       interval: 10s
       timeout: 5s
       retries: 10
+
+volumes:
+  mysql-data: #//abas랑 두개 돌리면 어캐해야 함?
