@@ -23,6 +23,9 @@ public class ContinuousProcess {
     //super()는 생성자의 첫 번째 줄에 있어야 하기 때문에 만든 것임
     public ContinuousProcess() {}
 
+    //TODO: sudo -S 가 붙어있으면 시스템 프로퍼티에서 가져오도록 변경
+    // -S가 없으면 자동으로 붙이기
+    // sudo 활성화 여부 환경변수 만들기 - 비활성화면 sudo -S 제거하여 실행
     public ContinuousProcess(String command) {
         this(command, null);
     }

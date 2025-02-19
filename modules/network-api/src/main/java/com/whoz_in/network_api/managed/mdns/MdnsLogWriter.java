@@ -26,7 +26,6 @@ public class MdnsLogWriter {
     private final Map<NetworkInterface, Boolean> dead;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
-    private final String sudoPassword;
     private final SystemNetworkInterfaces systemNIs;
 
     public MdnsLogWriter(ManagedLogRepository repository, MdnsLogParser parser, NetworkConfig config,
@@ -35,7 +34,6 @@ public class MdnsLogWriter {
         this.room = config.getRoom();
         this.repository = repository;
         this.parser = parser;
-        this.sudoPassword = config.getSudoPassword();
         this.processes = new HashMap<>();
         this.dead = new HashMap<>();
         this.systemNIs = systemNIs;
@@ -100,7 +98,7 @@ public class MdnsLogWriter {
             return;
         }
         Optional.ofNullable(this.processes.get(ni)).ifPresent(MdnsLogProcess::terminate);
-        MdnsLogProcess process = new MdnsLogProcess(ni.getCommand(), sudoPassword);
+        MdnsLogProcess process = new MdnsLogProcess(ni.getCommand());
         this.processes.put(ni, process);
         this.dead.put(ni, false);
 

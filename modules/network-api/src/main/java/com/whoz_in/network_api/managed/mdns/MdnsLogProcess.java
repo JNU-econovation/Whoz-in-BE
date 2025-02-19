@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class MdnsLogProcess extends ContinuousProcess {
-    public MdnsLogProcess(String command, String sudoPassword) {
-        super(command, sudoPassword);
+    public MdnsLogProcess(String command) {
+        super(command);
     }
 }
