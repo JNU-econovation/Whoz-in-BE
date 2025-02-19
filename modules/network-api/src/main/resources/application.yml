@@ -11,6 +11,9 @@ spring:
       #domain-jpa 모듈
       - "classpath:application-domain-jpa.yml"
 
+server:
+  port: 8081
+
 command:
   managed:
     mdns: "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
