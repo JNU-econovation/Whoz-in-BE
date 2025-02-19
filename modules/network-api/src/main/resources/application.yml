@@ -16,11 +16,9 @@ server:
 
 command:
   managed:
-    mdns: "sudo -S tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
-    arp: "sudo -S arp-scan --interface={{interface}} --localnet"
-  monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
-
-sudo_password: ${SUDO_PASSWORD}
+    mdns: "tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
+    arp: "arp-scan --interface={{interface}} --localnet"
+  monitor: "tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
 
 #TODO: main-api랑 같이 공동으로 관리해야 할듯
 frontend:

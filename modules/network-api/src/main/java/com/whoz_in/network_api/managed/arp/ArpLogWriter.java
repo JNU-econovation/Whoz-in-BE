@@ -22,7 +22,6 @@ public class ArpLogWriter {
     private final ManagedLogRepository repository;
     private final ArpLogParser parser;
     private final List<NetworkInterface> arpNIs;
-    private final String sudoPassword;
 
     public ArpLogWriter(ManagedLogRepository repository,
                         ArpLogParser parser,
@@ -32,7 +31,6 @@ public class ArpLogWriter {
         this.repository = repository;
         this.parser = parser;
         this.arpNIs = config.getArpNIs();
-        this.sudoPassword = config.getSudoPassword();
     }
 
     //주기적으로 arp 명령어를 실행하여 로그를 저장함
@@ -41,7 +39,7 @@ public class ArpLogWriter {
         List<ManagedLog> logs = arpNIs.stream()
                 .collect(Collectors.toMap(
                         ni -> ni,
-                        ni -> new ArpLogProcess(ni.getCommand(), sudoPassword)
+                        ni -> new ArpLogProcess(ni.getCommand())
                 )).entrySet().stream()
                 .map(entry -> getLogsFromProcess(entry.getKey(), entry.getValue()))
                 .flatMap(Collection::stream)
