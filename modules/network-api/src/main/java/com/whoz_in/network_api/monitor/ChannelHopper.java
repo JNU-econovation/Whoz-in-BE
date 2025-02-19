@@ -22,7 +22,7 @@ public final class ChannelHopper {
     private final String sudoPassword;
     private final Set<Integer> channelsToHop = new HashSet<>();
 
-    public ChannelHopper(NetworkConfig config, @Value("${sudo_password}") String sudoPassword) {
+    public ChannelHopper(NetworkConfig config, @Value("${sudo-password}") String sudoPassword) {
         this.sudoPassword = sudoPassword;
         this.monitorNI = config.getMonitorNI();
     }

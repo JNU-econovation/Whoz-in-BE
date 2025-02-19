@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class NetworkConfig {
     private final String room;
-    private final String sudoPassword;
     private final List<NetworkInterface> allNIs;
     private final List<NetworkInterface> managedNIs;
     private final NetworkInterface monitorNI;
@@ -23,13 +22,11 @@ public class NetworkConfig {
     public NetworkConfig(
             NetworkInterfaceProperties properties,
             @Value("${room-setting.room-name}") String roomName,
-            @Value("${sudo_password}") String sudoPassword,
             @Value("${command.monitor}") String monitorCommandTemplate,
             @Value("${command.managed.mdns}") String mdnsCommandTemplate,
             @Value("${command.managed.arp}") String arpCommandTemplate
     ) {
         this.room = roomName;
-        this.sudoPassword = sudoPassword;
         this.monitorNI = new NetworkInterface(properties.getMonitor().interfaceName(), null, "monitor",
                 null, generateCommand(monitorCommandTemplate, properties.getMonitor().interfaceName()));
         this.mdnsNIs = properties.getMdns().stream()

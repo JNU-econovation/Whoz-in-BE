@@ -20,7 +20,6 @@ public class MonitorLogWriter {
     private final String room;
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
-    private final String sudoPassword;
     private final NetworkInterface monitorNI;
     private final SystemNetworkInterfaces systemNIs;
 
@@ -30,7 +29,6 @@ public class MonitorLogWriter {
         this.repository = repository;
         this.room = config.getRoom();
         this.monitorNI = config.getMonitorNI();
-        this.sudoPassword = config.getSudoPassword();
         this.systemNIs = systemNIs;
         startProcess();
     }
@@ -71,7 +69,7 @@ public class MonitorLogWriter {
             return;
         }
         Optional.ofNullable(this.process).ifPresent(MonitorLogProcess::terminate);
-        this.process = new MonitorLogProcess(monitorNI.getCommand(), sudoPassword);
+        this.process = new MonitorLogProcess(monitorNI.getCommand());
         this.isProcDead = false;
 
         log.info("[monitor] 프로세스 실행 완료");

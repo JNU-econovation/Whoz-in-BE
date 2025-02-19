@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class ArpLogProcess extends TransientProcess {
-    public ArpLogProcess(String command, String password) {
-        super(command, password);
+    public ArpLogProcess(String command) {
+        super(command);
     }
 
 }
