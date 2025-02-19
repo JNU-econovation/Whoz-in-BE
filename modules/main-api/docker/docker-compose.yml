@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     environment:
-      - DOMAIN_JPA.DB_HOST=command-db
+      - DOMAIN_JPA.DB_URL=jdbc:mysql://command-db:3306/whozin?useSSL=false&allowPublicKeyRetrieval=true
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
@@ -27,13 +27,14 @@ services:
       - TZ=Asia/Seoul
       - MYSQL_ROOT_HOST=% #main-api
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      #TODO: MYSQL_ROOT_HOST=
       - MYSQL_DATABASE=whozin
-      # TODO: network-api를 위한 mysql 유저 추가
     volumes:
-      - mysql-data:/var/lib/mysql
+      - mysql-data:/var/lib/mysql # 데이터 백업
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     command: ["--character-set-server=utf8mb4"]
-    ports:
-      - "3306:3306" #network-api에서 접근함
+    ports: # network-api가 접근하므로 열어둠
+      - "4306:3306" # 도커 네트워크 바깥에선 4306으로 접근
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       start_period: 5s
