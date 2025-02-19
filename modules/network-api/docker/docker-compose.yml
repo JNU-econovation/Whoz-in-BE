@@ -1,0 +1,23 @@
+#⚠️리눅스에서만 제대로 동작합니다!
+name: whozin
+services:
+  network-api:
+    container_name: network-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    environment: # main-api에서 실행하는 db와 연결함
+      - DOMAIN_JPA.DB_URL=jdbc:mysql://${MAIN_API_HOST:-localhost}:4306/whozin?useSSL=false&allowPublicKeyRetrieval=true
+      - DOMAIN_JPA.DB_USERNAME=network-api
+      - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
+    network_mode: host
+    cap_add: # tshark가 요구하는 리눅스 권한
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+
+#TODO - wait-for-it
