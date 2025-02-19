@@ -12,6 +12,7 @@ services:
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
+      - main-api-data:/srv/whozin
     ports:
       - "8080:8080"
     restart: always
@@ -43,4 +44,5 @@ services:
       retries: 10
 
 volumes:
+  main-api-data:
   mysql-data:
