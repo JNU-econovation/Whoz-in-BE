@@ -1,12 +1,19 @@
 #!/bin/bash
 
-# gradlew로 jar 만들고 도커 컴포즈 실행
-
 set -e
 cd "$(dirname "$0")"
+
+# 변수 파일 불러오기
+set -a
+source .env
+set +a
+# 도커 컴포즈가 요구하는 init.sql 생성
+envsubst < ./mysql/init.sql.template > ./mysql/init.sql
+
 cd ../../..
 ./gradlew :main-api:bootJar
 cd -
 docker container prune -f
 docker image prune -f
+# main-api 이외엔 재실행되지 않음
 docker compose up -d main-api --build
