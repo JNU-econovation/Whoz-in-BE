@@ -38,14 +38,14 @@ public final class ChannelHopper {
         //hop channel
         Integer channel = channelsToHop.iterator().next();
         String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitorNI.getInterfaceName(), channel);
-        new TransientProcess(hopCommand, sudoPassword);
+        TransientProcess.start(hopCommand);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);
     }
 
     //주변 채널을 가져옵니다
     private Set<Integer> loadChannelsToHop(){
-        return new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
+        return TransientProcess.start("nmcli -f SSID,CHAN dev wifi").results()
                 .stream()
                 .map(line -> line.trim().split("\\s+"))
                 .filter(split -> (split.length == 2) && split[1].matches("\\d+"))

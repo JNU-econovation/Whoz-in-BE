@@ -4,6 +4,7 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.network_api.common.NetworkInterface;
 import com.whoz_in.network_api.common.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashSet;
 import java.util.Optional;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class MonitorLogWriter {
-    private MonitorLogProcess process; //교체될 수 있으므로 final X
+    private ContinuousProcess process; //교체될 수 있으므로 final X
     private boolean isProcDead;
     private final String room;
     private final MonitorLogParser parser;
@@ -68,8 +69,8 @@ public class MonitorLogWriter {
             log.error("[monitor] 실행 실패 : 설정된 모니터 네트워크 인터페이스가 시스템에 존재하지 않습니다.");
             return;
         }
-        Optional.ofNullable(this.process).ifPresent(MonitorLogProcess::terminate);
-        this.process = new MonitorLogProcess(monitorNI.getCommand());
+        Optional.ofNullable(this.process).ifPresent(ContinuousProcess::terminate);
+        this.process = ContinuousProcess.start(monitorNI.getCommand());
         this.isProcDead = false;
 
         log.info("[monitor] 프로세스 실행 완료");
