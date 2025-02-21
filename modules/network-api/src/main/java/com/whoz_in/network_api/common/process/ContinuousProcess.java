@@ -12,37 +12,41 @@ import java.util.List;
 
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
-public class ContinuousProcess {
-    protected Process process;
+public class ContinuousProcess extends AbstractProcess{
     protected NonBlockingBufferedReader br;
     //기본 생성자를 호출했을 땐 ebr이 null일 수 있다.
     @Nullable
     protected NonBlockingBufferedReader ebr = null;
 
-    //sub class에서 자신만의 Process를 정의하고 싶을 때 사용
-    //super()는 생성자의 첫 번째 줄에 있어야 하기 때문에 만든 것임
-    public ContinuousProcess() {}
-
-    //TODO: sudo -S 가 붙어있으면 시스템 프로퍼티에서 가져오도록 변경
-    // -S가 없으면 자동으로 붙이기
-    // sudo 활성화 여부 환경변수 만들기 - 비활성화면 sudo -S 제거하여 실행
-    public ContinuousProcess(String command) {
-        this(command, null);
+    private ContinuousProcess(ProcessCommand command, Process process){
+        super(command, process);
     }
-    public ContinuousProcess(String command, @Nullable String sudoPassword) {
+    public static ContinuousProcess start(String command){
+        return ContinuousProcess.start(ProcessCommand.of(command));
+    }
+    public static ContinuousProcess start(ProcessCommand command){
+        Process process;
         try {
-            this.process = new ProcessBuilder(command.split(" "))
-                    .start();
-            this.br = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(this.process.getInputStream())));
-            this.ebr = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(this.process.getErrorStream())));
-            if (sudoPassword==null) return;
-            Writer writer = new OutputStreamWriter(this.process.getOutputStream());
-            writer.write(sudoPassword + System.lineSeparator());
-            writer.flush();
+            process = new ProcessBuilder(command.getCommand()).start();
         } catch (IOException e) {
             throw new RuntimeException(command + " 실행 실패");
         }
+        ContinuousProcess cp = new ContinuousProcess(command, process);
+        cp.br = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
+        cp.ebr = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getErrorStream())));
+        if (command.isSudoCommand()) cp.enterSudoPassword();
+        return cp;
     }
+
+    @Override
+    protected void enterSudoPassword(){
+        try {
+            super.enterSudoPassword();
+        } catch (IOException e) {
+            throw new RuntimeException("[Continuous Process] " + command + " : sudo password 입력 실패 - " + e.getMessage());
+        }
+    }
+
     /**
      * @return 프로세스의 출력에서 한 줄을 읽어들인다.
      * 읽을 줄이 없을경우 null을 출력한다.
