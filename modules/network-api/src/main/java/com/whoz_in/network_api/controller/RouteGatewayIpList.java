@@ -17,9 +17,9 @@ public final class RouteGatewayIpList implements GatewayIpList{
     private final List<String> list;
 
     public RouteGatewayIpList() {
-        TransientProcess routeProcess = new TransientProcess("route -n");
+        TransientProcess routeProcess = TransientProcess.start("route -n");
         Pattern pattern = Pattern.compile("^0\\.0\\.0\\.0\\s+(\\d+\\.\\d+\\.\\d+\\.\\d+)"); // IP 찾는 정규식
-        this.list = routeProcess.resultList().stream()
+        this.list = routeProcess.results().stream()
                 .map(pattern::matcher)
                 .filter(Matcher::find)
                 .map(m->m.group(1))

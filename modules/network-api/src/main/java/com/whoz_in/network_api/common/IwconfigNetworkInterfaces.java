@@ -16,7 +16,7 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
     public List<NetworkInterface> getLatest() {
         List<NetworkInterface> interfaces = new ArrayList<>();
 
-        List<String> iwconfigOutput = new TransientProcess("iwconfig").resultList();
+        List<String> iwconfigOutput = TransientProcess.start("iwconfig").results();
 
         String currentName = null;
         String currentSsid = null;
