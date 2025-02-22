@@ -16,4 +16,5 @@ cd -
 docker container prune -f
 docker image prune -f
 # main-api 이외엔 재실행되지 않음
+# main-api 변경 사항이 없으면 재실행되지 않음
 docker compose up -d main-api --build

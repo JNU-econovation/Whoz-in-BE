@@ -36,6 +36,7 @@ services:
     command: ["--character-set-server=utf8mb4"]
     ports: # network-api가 접근하므로 열어둠
       - "4306:3306" # 도커 네트워크 바깥에선 4306으로 접근
+    restart: always
     healthcheck:
       test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       start_period: 5s
