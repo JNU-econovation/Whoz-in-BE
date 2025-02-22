@@ -1,8 +1,10 @@
 package com.whoz_in.network_api.config;
 
 import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.config.NetworkInterfaceProperties.Mdns;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +31,16 @@ public class NetworkConfig {
         this.room = roomName;
         this.monitorNI = new NetworkInterface(properties.getMonitor().interfaceName(), null, "monitor",
                 null, generateCommand(monitorCommandTemplate, properties.getMonitor().interfaceName()));
-        this.mdnsNIs = properties.getMdns().stream()
+        this.mdnsNIs = Optional.ofNullable(properties.getMdns())
+                .orElseGet(List::of).stream()
                 .map(mdns -> {
                     String altSsid = (mdns.altSsid() != null) ? mdns.altSsid() : mdns.realSsid();
                     return new NetworkInterface(mdns.interfaceName() , mdns.realSsid(),  "managed", altSsid,
                             generateCommand(mdnsCommandTemplate, mdns.interfaceName()));
                 })
                 .toList();
-        this.arpNIs = properties.getArp().stream()
+        this.arpNIs = Optional.ofNullable(properties.getArp())
+                .orElseGet(List::of).stream()
                 .map(arp -> {
                     String altSsid = (arp.altSsid() != null) ? arp.altSsid() : arp.realSsid();
                     return new NetworkInterface(arp.interfaceName(), arp.realSsid(), "managed", altSsid,
