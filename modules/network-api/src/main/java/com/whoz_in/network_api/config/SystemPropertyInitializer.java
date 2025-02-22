@@ -8,6 +8,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class SystemPropertyInitializer {
     public SystemPropertyInitializer(Environment environment) {
-        System.setProperty("sudo-password", environment.getProperty("sudo-password"));
+        System.setProperty("sudo-password", environment.getProperty("sudo-password", ""));
     }
 }

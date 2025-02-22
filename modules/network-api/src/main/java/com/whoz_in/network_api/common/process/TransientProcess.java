@@ -27,7 +27,6 @@ public class TransientProcess extends AbstractProcess{
     // 프로세스를 실행하며, sudo로 실행됐다면 비밀번호를 입력한다.
     // IOException을 여기서 처리하므로 무조건 실행되어야 하는 명령어는 사용하면 안된다!
     public static TransientProcess start(ProcessCommand command){
-        System.out.println("command = " + command);
         Process process;
         try {
             process = new ProcessBuilder(command.getCommand())
