@@ -13,7 +13,7 @@ services:
       - DOMAIN_JPA.DB_USERNAME=network-api
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - network-api-data:/srv/whozin
+      - network-api-data:${HOME}/whozin
       - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
     network_mode: host
     cap_add: # tshark가 요구하는 리눅스 권한
