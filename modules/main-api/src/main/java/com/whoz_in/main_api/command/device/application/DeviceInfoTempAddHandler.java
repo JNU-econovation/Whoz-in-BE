@@ -15,9 +15,12 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+
+// 기기 등록 전에 모든 와이파이에 대한 기기 정보가(맥) 있어야 한다.
+// 이 핸들러는 하나의 기기 정보를 임시로 저장하는 역할을 한다.
 @Handler
 @RequiredArgsConstructor
-public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, String> {
+public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAdd, String> {
     private final RequesterInfo requesterInfo;
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
@@ -29,7 +32,7 @@ public class DeviceInfoAddHandler implements CommandHandler<DeviceInfoAdd, Strin
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
     @Transactional
     @Override
-    public String handle(DeviceInfoAdd req) {
+    public String handle(DeviceInfoTempAdd req) {
         MemberId requesterId = requesterInfo.getMemberId();
         memberFinderService.mustExist(requesterId);
 
