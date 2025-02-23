@@ -5,9 +5,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt update && apt install -y --no-install-rec
     wireless-tools \
     network-manager \
     arp-scan \
+    iw \
     && rm -rf /var/lib/apt/lists/*
-
-#TODO: nmcli 스크립트, 모니터 모드 설정, iproute2
 
 WORKDIR /app
 COPY build/libs/network-api-*.jar app.jar
