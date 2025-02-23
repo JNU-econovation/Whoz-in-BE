@@ -1,8 +1,8 @@
 package com.whoz_in.network_api.system_validator;
 
 
-import com.whoz_in.network_api.common.NetworkInterface;
-import com.whoz_in.network_api.common.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
 import com.whoz_in.network_api.common.validation.ValidationException;
 import com.whoz_in.network_api.common.validation.ValidationResult;
 import com.whoz_in.network_api.config.NetworkConfig;

@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common;
+package com.whoz_in.network_api.common.network_interface;
 
 import jakarta.annotation.Nullable;
 import lombok.EqualsAndHashCode;

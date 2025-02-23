@@ -2,8 +2,8 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.network_api.common.NetworkInterface;
-import com.whoz_in.network_api.common.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashSet;

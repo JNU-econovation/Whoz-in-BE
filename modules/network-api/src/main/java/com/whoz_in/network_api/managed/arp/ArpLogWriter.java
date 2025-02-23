@@ -3,7 +3,7 @@ package com.whoz_in.network_api.managed.arp;
 
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
-import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
