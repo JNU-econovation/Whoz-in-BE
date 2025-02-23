@@ -38,12 +38,15 @@ public final class SystemValidator {
         log.info("시스템 검증을 수행합니다");
 
         //커맨드 설치 여부 검증
-        List<String> commands = List.of("tshark", "arp-scan", "iwconfig", "nmcli");
+        List<String> commands = List.of("tshark", "arp-scan", "iwconfig", "nmcli", "iw", "ip");
         commands.forEach(commandInstalledValidator::validate);
 
         //네트워크 인터페이스 정보
         List<NetworkInterface> system = systemNIs.getLatest();
         List<NetworkInterface> setting = config.getAllNIs();
+
+        //모니터 모드로 변경
+        monitorModeSwitcher.execute();
 
         //네트워크 인터페이스 출력
         log.info("\n시스템 네트워크 인터페이스 - \n{}\n설정된 네트워크 인터페이스 - \n{}",
@@ -53,7 +56,7 @@ public final class SystemValidator {
                 setting.stream()
                         .map(Object::toString)
                         .collect(Collectors.joining("\n")));
-        monitorModeSwitcher.execute();
+
         //네트워크 인터페이스 상태 검증
         networkInterfaceValidator.validate(system, setting);
 
