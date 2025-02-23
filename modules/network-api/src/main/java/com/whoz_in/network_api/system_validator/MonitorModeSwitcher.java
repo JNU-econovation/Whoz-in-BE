@@ -3,9 +3,11 @@ package com.whoz_in.network_api.system_validator;
 import com.whoz_in.network_api.common.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Profile("prod")
 @Component
 public class MonitorModeSwitcher {
@@ -22,8 +24,9 @@ public class MonitorModeSwitcher {
     }
 
     public void execute(){
-        TransientProcess.start(disableInterfaceCommand);
-        TransientProcess.start(setMonitorModeCommand);
-        TransientProcess.start(enableInterfaceCommand);
+        log.info("{}를 모니터 모드로 전환합니다..", this.monitorNI.getInterfaceName());
+        TransientProcess.start(disableInterfaceCommand).waitTermination();
+        TransientProcess.start(setMonitorModeCommand).waitTermination();
+        TransientProcess.start(enableInterfaceCommand).waitTermination();
     }
 }
