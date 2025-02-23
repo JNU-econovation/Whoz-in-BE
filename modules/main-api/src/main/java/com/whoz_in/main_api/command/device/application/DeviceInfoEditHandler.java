@@ -15,6 +15,8 @@ import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
+
+// 기기 등록이 완료된 기기의 기기 정보를 수정한다.
 @Handler
 @RequiredArgsConstructor
 public class DeviceInfoEditHandler implements CommandHandler<DeviceInfoEdit, Void> {
