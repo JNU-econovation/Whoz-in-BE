@@ -28,8 +28,10 @@ public final class ChannelHopper {
     public void hop(){
         //hopping할 채널이 없을경우 채널 불러오기
         if (channelsToHop.isEmpty()) {
-            channelsToHop.addAll(loadChannelsToHop());
-            log.info("channels to hop : "+channelsToHop);
+            Set<Integer> channels = loadChannelsToHop();
+            log.info("channels to hop : " + channels);
+            if (channels.isEmpty()) return; // 주변에 채널이 없을경우 종료 (물론 이럴 일은 없음)
+            channelsToHop.addAll(channels);
         }
 
         //hop channel

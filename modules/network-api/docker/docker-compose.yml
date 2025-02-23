@@ -15,10 +15,10 @@ services:
     volumes:
       - network-api-data:${HOME}/whozin
       - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
+      - /run/dbus:/run/dbus # nmcli
+      - /var/run/dbus:/var/run/dbus # nmcli
     network_mode: host
-    cap_add: # tshark가 요구하는 리눅스 권한
-      - NET_ADMIN
-      - NET_RAW
+    privileged: true # 호스트와 같은 수준의 권한을 부여 (tshark, iwconfig 등이 요구)
     restart: always
 
 #TODO - wait-for-it
