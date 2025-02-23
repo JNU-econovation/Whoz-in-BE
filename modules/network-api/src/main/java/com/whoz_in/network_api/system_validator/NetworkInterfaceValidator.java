@@ -23,13 +23,12 @@ public class NetworkInterfaceValidator implements BiValidator<List<NetworkInterf
 
         if (!unmatchedNIs.isEmpty()) {
             validationResult.addError(
-                    "설정된 네트워크 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다: \n" +
+                    "아래 네트워크 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다: \n" +
                             unmatchedNIs.stream()
                                     .map(Object::toString)
                                     .collect(Collectors.joining("\n"))
             );
         }
-
         return validationResult;
     }
 }
