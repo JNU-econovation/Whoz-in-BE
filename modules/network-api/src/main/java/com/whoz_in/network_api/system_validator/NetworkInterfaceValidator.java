@@ -1,6 +1,6 @@
 package com.whoz_in.network_api.system_validator;
 
-import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.validation.BiValidator;
 import com.whoz_in.network_api.common.validation.ValidationResult;
 import java.util.List;
