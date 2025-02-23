@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 
-// route -n으로 구현합니다. (nux 기반 운영체제의 기본 명령인듯)
+// route -n으로 구현합니다. (맥에 없는 명령어임. nux 기반 운영체제의 기본 명령인듯)
 @Slf4j
 @Profile("prod")
 @Component
