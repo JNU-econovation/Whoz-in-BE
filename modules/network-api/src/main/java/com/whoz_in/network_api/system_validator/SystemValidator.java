@@ -53,7 +53,7 @@ public final class SystemValidator {
                 setting.stream()
                         .map(Object::toString)
                         .collect(Collectors.joining("\n")));
-
+        monitorModeSwitcher.execute();
         //네트워크 인터페이스 상태 검증
         networkInterfaceValidator.validate(system, setting);
 
