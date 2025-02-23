@@ -1,12 +1,13 @@
 package com.whoz_in.network_api.common.validation;
 
-public class ValidationException extends RuntimeException{
+import lombok.Getter;
 
-    public ValidationException(String message) {
-        super(message);
-    }
+@Getter
+public class ValidationException extends RuntimeException{
+    private final ValidationResult validationResult;
 
     public ValidationException(ValidationResult result) {
         super(String.join(", ", result.getErrors()));
+        this.validationResult = result;
     }
 }
