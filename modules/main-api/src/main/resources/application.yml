@@ -11,6 +11,8 @@ spring:
       - "classpath:application-api-query-jpa.yml"
       - "classpath:application-logging.yml"
 
+server:
+  port: 2470 # 24시간 운영 + main-api니까 0번째
 
 frontend:
   base-url: ${FRONTEND_URL}
