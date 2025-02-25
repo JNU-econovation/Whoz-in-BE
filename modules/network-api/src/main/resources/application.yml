@@ -12,7 +12,7 @@ spring:
       - "classpath:application-domain-jpa.yml"
 
 server:
-  port: 2470 # 24시간 운영 + network-api니까 0번째
+  port: 2471 # 24시간 운영 + network-api니까 1번째
 
 sudo-password: ${SUDO_PASSWORD:}
 
