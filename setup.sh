@@ -9,8 +9,6 @@ else
 
   if command -v apt-get >/dev/null 2>&1; then # Debian 기반
     sudo apt-get update && sudo apt-get install -y openjdk-17-jdk
-  elif command -v yum >/dev/null 2>&1; then # RPM 기반
-    sudo yum install -y java-17-openjdk-devel
   else
     echo "지원하지 않는 배포판입니다. 자바는 수동으로 설치하세요."
     exit 1
