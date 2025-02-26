@@ -2,4 +2,4 @@
 logging:
   config: "classpath:logback-common.xml"
   discord:
-    webhook-url: ${LOGGING.DISCORD_WEBHOOK_URL}
+    webhook-url: ${LOGGING.DISCORD.WEBHOOK_URL:}
