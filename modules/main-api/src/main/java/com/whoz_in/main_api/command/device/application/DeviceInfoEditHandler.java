@@ -15,6 +15,8 @@ import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
+
+// 기기 등록이 완료된 기기의 기기 정보를 수정한다.
 @Handler
 @RequiredArgsConstructor
 public class DeviceInfoEditHandler implements CommandHandler<DeviceInfoEdit, Void> {
@@ -28,11 +30,11 @@ public class DeviceInfoEditHandler implements CommandHandler<DeviceInfoEdit, Voi
     @Override
     public Void handle(DeviceInfoEdit command) {
         memberFinderService.mustExist(requesterInfo.getMemberId());
-        deviceFinderService.mustNotExistByMac(command.macToRewrite());
+        deviceFinderService.mustNotExistByMac(command.newMac());
 
         //유효한 mac인지 확인
-        ManagedLog managedLog = managedLogRepository.getBySsidAndMac(command.ssid(), command.macToRewrite());
-        monitorLogRepository.mustExistAfter(command.macToRewrite(), LocalDateTime.now().minusMinutes(15)); //TODO: network log에서 제공하는 기능으로
+        ManagedLog managedLog = managedLogRepository.getBySsidAndMac(command.ssid(), command.newMac());
+        monitorLogRepository.mustExistAfter(command.newMac(), LocalDateTime.now().minusMinutes(15)); //TODO: network log에서 제공하는 기능으로
 
         //device info 최신화
         Device device = deviceFinderService.find(command.getDeviceId());

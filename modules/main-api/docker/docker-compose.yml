@@ -1,0 +1,49 @@
+name: whozin
+services:
+  main-api:
+    container_name: main-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    environment:
+      - DOMAIN_JPA.DB_URL=jdbc:mysql://command-db:3306/whozin?useSSL=false&allowPublicKeyRetrieval=true
+      - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
+      - main-api-data:${HOME}/whozin
+    ports:
+      - "2470:2470"
+    restart: always
+    depends_on:
+      command-db:
+        condition: service_healthy
+  command-db:
+    container_name: command-db
+    image: mysql:8.0.41
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Seoul
+      - MYSQL_ROOT_HOST=% #main-api
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      #TODO: MYSQL_ROOT_HOST=
+      - MYSQL_DATABASE=whozin
+    volumes:
+      - mysql-data:/var/lib/mysql # 데이터 백업
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+    command: ["--character-set-server=utf8mb4"]
+    ports: # network-api가 접근하므로 열어둠
+      - "4306:3306" # 도커 네트워크 바깥에선 4306으로 접근
+    restart: always
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      start_period: 5s
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  main-api-data:
+  mysql-data:
