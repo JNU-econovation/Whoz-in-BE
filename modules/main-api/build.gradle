@@ -3,9 +3,9 @@ plugins {
     id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
 }
 
-version = '0.0.1-SNAPSHOT'
+version = '1'
 
-jar.enabled = true
+jar.enabled=false
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
@@ -25,13 +25,13 @@ dependencies {
     implementation 'org.springframework:spring-tx'
 
     //domain
-    implementation project(':modules:domain')
-    runtimeOnly project(":modules:infrastructure:domain-jpa") // 구현 모듈
+    implementation project(':domain')
+    runtimeOnly project(":domain-jpa") // 구현 모듈
 
     //logging
-    implementation project(":modules:infrastructure:logging")
+    implementation project(":logging")
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
-    runtimeOnly project(":modules:infrastructure:api-query-jpa")
+    runtimeOnly project(":api-query-jpa")
 //    runtimeOnly project(":modules:infrastructure:api-redis")
 }

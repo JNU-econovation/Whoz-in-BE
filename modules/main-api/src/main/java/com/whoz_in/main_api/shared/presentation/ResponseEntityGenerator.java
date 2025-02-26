@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.shared.presentation;
 
-//import com.whoz_in.domain.shared.BusinessException;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +29,4 @@ public class ResponseEntityGenerator {
         return new ResponseEntity<>(
                 new FailureBody(code, message), status);
     }
-
-//    public static ResponseEntity<FailureBody> fail(BusinessException businessException, HttpStatus status){
-//        return fail(businessException.getErrorCode(), businessException.getErrorMessage(), status);
-//    }
 }
