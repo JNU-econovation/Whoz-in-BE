@@ -12,7 +12,7 @@ services:
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
-      - main-api-data:${HOME}/whozin
+      - main-api-data:/root/whozin # 컨테이너의 HOME은 /root임
     ports:
       - "2470:2470"
     restart: always
@@ -26,9 +26,8 @@ services:
       - .env
     environment:
       - TZ=Asia/Seoul
-      - MYSQL_ROOT_HOST=% #main-api
+      - MYSQL_ROOT_HOST=% #main-api #TODO: 외부에선 접속 못하도록 하기
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      #TODO: MYSQL_ROOT_HOST=
       - MYSQL_DATABASE=whozin
     volumes:
       - mysql-data:/var/lib/mysql # 데이터 백업
