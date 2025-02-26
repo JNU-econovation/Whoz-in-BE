@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common;
+package com.whoz_in.network_api.common.network_interface;
 
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces 
     public List<NetworkInterface> getLatest() {
         List<NetworkInterface> interfaces = new ArrayList<>();
 
-        List<String> iwconfigOutput = new TransientProcess("iwconfig").resultList();
+        List<String> iwconfigOutput = TransientProcess.start("iwconfig").results();
 
         String currentName = null;
         String currentSsid = null;

@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.controller;
+package com.whoz_in.network_api.common.gateways;
 
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.List;
@@ -8,22 +8,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-
-// route -n으로 구현합니다. (nux 기반 운영체제의 기본 명령인듯)
+// `ip route show` 명령어를 사용하여 기본 게이트웨이를 찾는 클래스
 @Slf4j
 @Profile("prod")
 @Component
-public final class RouteGatewayIpList implements GatewayIpList{
+public final class IpRouteShowGatewayList implements GatewayList {
     private final List<String> list;
 
-    public RouteGatewayIpList() {
-        TransientProcess routeProcess = new TransientProcess("route -n");
-        Pattern pattern = Pattern.compile("^0\\.0\\.0\\.0\\s+(\\d+\\.\\d+\\.\\d+\\.\\d+)"); // IP 찾는 정규식
-        this.list = routeProcess.resultList().stream()
+    public IpRouteShowGatewayList() {
+        TransientProcess routeProcess = TransientProcess.start("ip route show");
+        // 기본 게이트웨이 찾는 정규식 (예: "default via 192.168.0.1 dev wlan0 proto dhcp src 192.168.0.101")
+        Pattern pattern = Pattern.compile("^default via (\\d+\\.\\d+\\.\\d+\\.\\d+)");
+
+        this.list = routeProcess.results().stream()
                 .map(pattern::matcher)
                 .filter(Matcher::find)
-                .map(m->m.group(1))
+                .map(m -> m.group(1))
                 .toList();
+
         log.info("주변 게이트웨이 : {}", this.list);
     }
 
