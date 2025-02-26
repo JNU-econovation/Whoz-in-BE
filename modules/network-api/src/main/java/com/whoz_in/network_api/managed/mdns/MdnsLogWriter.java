@@ -2,8 +2,9 @@ package com.whoz_in.network_api.managed.mdns;
 
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
-import com.whoz_in.network_api.common.NetworkInterface;
-import com.whoz_in.network_api.common.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
@@ -22,11 +23,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class MdnsLogWriter {
     private final String room;
-    private final Map<NetworkInterface, MdnsLogProcess> processes;
+    private final Map<NetworkInterface, ContinuousProcess> processes;
     private final Map<NetworkInterface, Boolean> dead;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
-    private final String sudoPassword;
     private final SystemNetworkInterfaces systemNIs;
 
     public MdnsLogWriter(ManagedLogRepository repository, MdnsLogParser parser, NetworkConfig config,
@@ -35,7 +35,6 @@ public class MdnsLogWriter {
         this.room = config.getRoom();
         this.repository = repository;
         this.parser = parser;
-        this.sudoPassword = config.getSudoPassword();
         this.processes = new HashMap<>();
         this.dead = new HashMap<>();
         this.systemNIs = systemNIs;
@@ -54,7 +53,7 @@ public class MdnsLogWriter {
         repository.saveAll(totalLogs);
     }
 
-    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, MdnsLogProcess process) {
+    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, ContinuousProcess process) {
         Set<ParsedLog> logs = process.readLines().stream()
                 .map(parser::parse)
                 .filter(Optional::isPresent)
@@ -81,7 +80,7 @@ public class MdnsLogWriter {
                 .filter(entry-> !entry.getValue().isAlive())
                 .forEach(entry ->{
                     NetworkInterface ni = entry.getKey();
-                    MdnsLogProcess process = entry.getValue();
+                    ContinuousProcess process = entry.getValue();
                     //프로세스가 죽었다는 것을 인지했을때만 아래 로직을 실행
                     if (dead.get(ni).equals(Boolean.FALSE)) {
                         dead.put(ni, true);
@@ -99,8 +98,8 @@ public class MdnsLogWriter {
             log.error("[managed - mdns({})] 설정된 mdns 네트워크 인터페이스가 시스템에 존재하지 않습니다.", altSsid);
             return;
         }
-        Optional.ofNullable(this.processes.get(ni)).ifPresent(MdnsLogProcess::terminate);
-        MdnsLogProcess process = new MdnsLogProcess(ni.getCommand(), sudoPassword);
+        Optional.ofNullable(this.processes.get(ni)).ifPresent(ContinuousProcess::terminate);
+        ContinuousProcess process = ContinuousProcess.start(ni.getCommand());
         this.processes.put(ni, process);
         this.dead.put(ni, false);
 

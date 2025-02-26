@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 
+// 기기 등록을 진행하는 핸들러
+// TempDeviceInfoStore에 저장된 임시 기기 정보를 함께 db에 저장한다.
 @Handler
 @RequiredArgsConstructor
 public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Void> {
@@ -53,7 +55,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
         // TempDeviceInfo에 추가된 와이파이 가져오기
         List<String> addedSsids = getTempDeviceInfoSsids(requesterId);
         // 추가되지 않은 와이파이가 있으면 예외
-        validateAllSsidsAdded(registeredSsids, addedSsids);
+        validateAllSsidsExist(registeredSsids, addedSsids);
 
         // TempDeviceInfo로부터 DeviceInfo 생성
         Set<DeviceInfo> deviceInfos = createDeviceInfos(requesterId);
@@ -86,14 +88,16 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
                 .toList();
     }
 
-    private void validateAllSsidsAdded(List<String> registeredSsids, List<String> addedSsids) {
-        List<String> notAddedSsids = ssidConfig.getSsids().stream()
+    // 필요한 ssid들이 모두 존재하는지 확인
+    private void validateAllSsidsExist(List<String> registeredSsids, List<String> addedSsids) {
+        // 필요한 ssid 들 중 임시 저장도 안돼있고 db에도 없는 것들을 골라냄
+        List<String> missingSsids = ssidConfig.getSsids().stream()
                 .filter(ssid -> !registeredSsids.contains(ssid))
                 .filter(ssid -> !addedSsids.contains(ssid))
                 .toList();
 
-        if (!notAddedSsids.isEmpty()) {
-            throw new IllegalArgumentException("등록하지 않은 SSID: " + notAddedSsids);
+        if (!missingSsids.isEmpty()) {
+            throw new MissingSsidsException(missingSsids);
         }
     }
 
