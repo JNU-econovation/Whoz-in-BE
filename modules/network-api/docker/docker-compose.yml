@@ -1,0 +1,27 @@
+#⚠️리눅스에서만 제대로 동작합니다!
+name: whozin
+services:
+  network-api:
+    container_name: network-api
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    env_file:
+      - .env
+    environment: # main-api에서 실행하는 db와 연결함
+      - DOMAIN_JPA.DB_URL=jdbc:mysql://${MAIN_API_HOST:-localhost}:4306/whozin?useSSL=false&allowPublicKeyRetrieval=true
+      - DOMAIN_JPA.DB_USERNAME=network-api
+      - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - network-api-data:${HOME}/whozin
+      - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
+      - /run/dbus:/run/dbus # nmcli
+      - /var/run/dbus:/var/run/dbus # nmcli
+    network_mode: host
+    privileged: true # 호스트와 같은 수준의 권한을 부여 (tshark, iwconfig 등이 요구)
+    restart: always
+
+#TODO - wait-for-it
+
+volumes:
+  network-api-data:

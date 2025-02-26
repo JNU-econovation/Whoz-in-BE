@@ -1,7 +1,8 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="MainApi" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-    <module name="whoz_in.modules.main-api.main" />
+    <module name="whoz_in.main-api.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.whoz_in.main_api.MainApiApplication" />
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_WORKING_DIR$" />
     <method v="2">
       <option name="MakeProject" enabled="true" />
     </method>

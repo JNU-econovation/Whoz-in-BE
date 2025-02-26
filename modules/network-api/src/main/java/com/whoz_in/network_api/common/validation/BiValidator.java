@@ -6,7 +6,7 @@ public interface BiValidator<T, U>{
 
     default void validate(T target1, U target2){
         ValidationResult validationResult = getValidationResult(target1, target2);
-        if (validationResult.hasErrors()) {
+        if (validationResult.hasError()) {
             throw new ValidationException(validationResult);
         }
     }

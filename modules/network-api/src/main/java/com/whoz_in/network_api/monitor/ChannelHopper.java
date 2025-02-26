@@ -1,13 +1,12 @@
 package com.whoz_in.network_api.monitor;
 
-import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,11 +18,9 @@ import org.springframework.stereotype.Component;
 @Component
 public final class ChannelHopper {
     private final NetworkInterface monitorNI;
-    private final String sudoPassword;
     private final Set<Integer> channelsToHop = new HashSet<>();
 
-    public ChannelHopper(NetworkConfig config, @Value("${sudo_password}") String sudoPassword) {
-        this.sudoPassword = sudoPassword;
+    public ChannelHopper(NetworkConfig config) {
         this.monitorNI = config.getMonitorNI();
     }
 
@@ -31,21 +28,23 @@ public final class ChannelHopper {
     public void hop(){
         //hopping할 채널이 없을경우 채널 불러오기
         if (channelsToHop.isEmpty()) {
-            channelsToHop.addAll(loadChannelsToHop());
-            log.info("channels to hop : "+channelsToHop);
+            Set<Integer> channels = loadChannelsToHop();
+            log.info("channels to hop : " + channels);
+            if (channels.isEmpty()) return; // 주변에 채널이 없을경우 종료 (물론 이럴 일은 없음)
+            channelsToHop.addAll(channels);
         }
 
         //hop channel
         Integer channel = channelsToHop.iterator().next();
         String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitorNI.getInterfaceName(), channel);
-        new TransientProcess(hopCommand, sudoPassword);
+        TransientProcess.start(hopCommand);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);
     }
 
     //주변 채널을 가져옵니다
     private Set<Integer> loadChannelsToHop(){
-        return new TransientProcess("nmcli -f SSID,CHAN dev wifi").resultList()
+        return TransientProcess.start("nmcli -f SSID,CHAN dev wifi").results()
                 .stream()
                 .map(line -> line.trim().split("\\s+"))
                 .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
