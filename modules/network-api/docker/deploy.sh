@@ -6,7 +6,7 @@ cd "$(dirname "$0")"
 # TODO: 리눅스인지 확인하도록 수정
 OS=$(uname -s)
 if [ "$OS" = "Darwin" ]; then
-    echo "⚠️주의: 맥에서 network-api를 도커로 실행할 경우 tshark가 동작하지 않습니다."
+    echo "⚠️주의: 맥에서 network-api를 도커로 실행할 경우 tshark에 패킷이 잡히지 않습니다."
 fi
 
 docker container prune -f
