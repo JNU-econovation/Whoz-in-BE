@@ -1,6 +1,5 @@
 package com.whoz_in.domain.member;
 
-import com.whoz_in.domain.member.exception.NoMemberException;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import java.util.List;
@@ -14,7 +13,4 @@ public interface MemberRepository {
   Optional<Member> findByMemberId(MemberId id);
   List<Member> findByName(String name);
   Optional<Member> findBySocialId(String socialId);
-  default Member getBySocialId(String socialId){
-    return findBySocialId(socialId).orElseThrow(()->NoMemberException.EXCEPTION);
-  }
 }
