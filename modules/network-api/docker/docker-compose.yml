@@ -13,7 +13,7 @@ services:
       - DOMAIN_JPA.DB_USERNAME=network-api
       - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
-      - network-api-data:${HOME}/whozin
+      - network-api-data:/root/whozin # 컨테이너의 HOME은 /root임
       - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
       - /run/dbus:/run/dbus # nmcli
       - /var/run/dbus:/var/run/dbus # nmcli
