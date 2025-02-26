@@ -1,5 +1,5 @@
 dependencies {
-    compileOnly project(":modules:main-api")
+    compileOnly project(":main-api")
 
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

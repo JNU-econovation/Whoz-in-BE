@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface DeviceInfoRepository extends JpaRepository<DeviceInfo, Long> {
-    @Query(value = "SELECT di.id, di.device_id AS deviceId, di.mac, di.ssid " +
+    @Query(value = "SELECT di.id, di.device_id, di.mac, di.ssid " +
             "FROM device_entity d " +
             "JOIN device_info_entity di ON d.id = di.device_id " +
             "WHERE d.member_id = :ownerId " +

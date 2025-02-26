@@ -1,0 +1,2 @@
+command:
+  monitor: "tshark -l -i {{interface}} -T fields -e wlan.sa -e eth.src"

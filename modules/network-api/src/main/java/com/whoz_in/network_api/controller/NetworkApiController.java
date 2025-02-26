@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.controller;
 
+import com.whoz_in.network_api.common.gateways.GatewayList;
 import com.whoz_in.network_api.common.util.IpHolder;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -15,20 +16,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class NetworkApiController {
     private final IpHolder ipHolder;
-    private final GatewayIpList gatewayIpList;
+    private final GatewayList gatewayList;
     private final String room;
 
-    public NetworkApiController(IpHolder ipHolder, @Value("${room-setting.room-name}") String room, GatewayIpList gatewayIpList) {
+    public NetworkApiController(IpHolder ipHolder, @Value("${room-setting.room-name}") String room, GatewayList gatewayList) {
         this.ipHolder = ipHolder;
         this.room = room;
-        this.gatewayIpList = gatewayIpList;
+        this.gatewayList = gatewayList;
     }
 
     @GetMapping("/ip")
     public ResponseEntity<String> getIp() throws UnknownHostException {
         String ip = ipHolder.getIp();
         log.info("Requester Info : " + ip);
-        if (gatewayIpList.isGatewayIp(ip) || !InetAddress.getByName(ip).isSiteLocalAddress()){ // 루프백도 외부 아이피로 간주된다.
+        if (gatewayList.isGatewayIp(ip) || !InetAddress.getByName(ip).isSiteLocalAddress()){ // 루프백도 외부 아이피로 간주된다.
             return ResponseEntity.badRequest().body("외부 아이피로 요청됨");
         }
         return ResponseEntity.ok(ip);

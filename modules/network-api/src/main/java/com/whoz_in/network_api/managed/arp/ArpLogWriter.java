@@ -3,7 +3,8 @@ package com.whoz_in.network_api.managed.arp;
 
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
-import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
@@ -22,7 +23,6 @@ public class ArpLogWriter {
     private final ManagedLogRepository repository;
     private final ArpLogParser parser;
     private final List<NetworkInterface> arpNIs;
-    private final String sudoPassword;
 
     public ArpLogWriter(ManagedLogRepository repository,
                         ArpLogParser parser,
@@ -32,7 +32,6 @@ public class ArpLogWriter {
         this.repository = repository;
         this.parser = parser;
         this.arpNIs = config.getArpNIs();
-        this.sudoPassword = config.getSudoPassword();
     }
 
     //주기적으로 arp 명령어를 실행하여 로그를 저장함
@@ -41,7 +40,7 @@ public class ArpLogWriter {
         List<ManagedLog> logs = arpNIs.stream()
                 .collect(Collectors.toMap(
                         ni -> ni,
-                        ni -> new ArpLogProcess(ni.getCommand(), sudoPassword)
+                        ni -> TransientProcess.start(ni.getCommand())
                 )).entrySet().stream()
                 .map(entry -> getLogsFromProcess(entry.getKey(), entry.getValue()))
                 .flatMap(Collection::stream)
@@ -50,8 +49,8 @@ public class ArpLogWriter {
     }
 
     //프로세스의 출력들을 로그로 변환한다.
-    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, ArpLogProcess process){
-        Set<ParsedLog> logs = process.resultList().stream()
+    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, TransientProcess process){
+        Set<ParsedLog> logs = process.results().stream()
                 .filter(parser::validate)
                 .map(parser::parse)
                 .collect(Collectors.toSet());//Set으로 중복 제거

@@ -8,7 +8,7 @@ public interface Validator<T> {
 
     default void validate(T target){
         ValidationResult validationResult = getValidationResult(target);
-        if (validationResult.hasErrors()) {
+        if (validationResult.hasError()) {
             throw new ValidationException(validationResult);
         }
     }
