@@ -75,6 +75,7 @@ public class SecurityFilterChainConfig {
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/api/v1/signup/oauth"
+                ,"/api/v1/ssid"
         );
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
@@ -100,7 +101,7 @@ public class SecurityFilterChainConfig {
                     "/api/v1/device/info-status",
                     "/api/v1/devices",
                     "/api/v1/private-ips",
-                    "/api/v1/ssid",
+//                    "/api/v1/ssid",
                     "/api/v1/members",
                     "/api/v1/member"
             ).authenticated();
