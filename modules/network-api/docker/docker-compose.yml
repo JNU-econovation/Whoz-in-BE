@@ -18,6 +18,8 @@ services:
       - /run/dbus:/run/dbus # nmcli
       - /var/run/dbus:/var/run/dbus # nmcli
     network_mode: host
+    ports:
+      - "2471:2471"
     privileged: true # 호스트와 같은 수준의 권한을 부여 (tshark, iwconfig 등이 요구)
     restart: always
 
