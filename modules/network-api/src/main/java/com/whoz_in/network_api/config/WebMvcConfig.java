@@ -34,7 +34,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .allowedMethods("*")
                 .allowedOrigins(
                         "http://localhost:3000",
-                        "http://localhost:8080"
+                        "http://localhost:8080",
+                        frontendBaseUrl
                         //TODO: 내부 아이피 추가
                         )
                 .exposedHeaders("Set-Cookie")
