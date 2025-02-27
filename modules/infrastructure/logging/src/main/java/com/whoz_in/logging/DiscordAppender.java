@@ -97,10 +97,8 @@ public class DiscordAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     // 디스코드는 2000자 이하만 보낼 수 있음
     private String cleanseMessage(String message) {
         message = message.replaceAll("```\\s```", "");
-        if (message.length() > 2000) {
-            message = message.substring(0, 1997) + "...";
-        }
-        return message;
+        if (message.length() <= 2000) return message;
+        return message.substring(0, 1997) + "...";
     }
 
     //Logback XML 설정을 위한 Getter, Setter

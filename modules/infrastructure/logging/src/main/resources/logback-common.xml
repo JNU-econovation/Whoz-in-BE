@@ -1,4 +1,4 @@
-<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
+<!-- 스프링 컨텍스트가 완전히 초기화되기 전에 환경변수를 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
 
 <configuration>
   <springProfile name="!prod">
@@ -32,11 +32,14 @@
 
   <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
     <!-- 작성 완료되기 전의 로그 파일 이름 -->
-    <file>${user.home}/whozin_log/temp.log</file>
+    <file>${user.home}/whozin/log/temp.log</file>
+    <!-- 디렉토리가 없으면 자동 생성 -->
+    <append>true</append>
+    <createMissingDirectories>true</createMissingDirectories>
     <!-- 시간과 파일 크기를 기준으로 파일을 관리함 -->
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
       <!-- 하루 단위(%d)로 log를 남기며 최대 용량을 넘어가면 %i로 구별하여 저장 -->
-      <fileNamePattern>${user.home}/whozin_log/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+      <fileNamePattern>${user.home}/whozin/log/%d{yyyy-MM-dd}.%i.log</fileNamePattern>
       <!-- 한 파일은 최대 10MB -->
       <maxFileSize>10MB</maxFileSize>
       <!-- 로그 파일들은 30일(%d)까지 유지-->

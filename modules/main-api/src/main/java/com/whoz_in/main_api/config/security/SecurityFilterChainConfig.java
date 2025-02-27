@@ -103,8 +103,6 @@ public class SecurityFilterChainConfig {
                     "/api/v1/ssid",
                     "/api/v1/members",
                     "/api/v1/member"
-                    //network-api TODO: main-api에서 분리
-                    ,"/api/v1/ip"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
