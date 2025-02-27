@@ -1,2 +1,0 @@
-command:
-  monitor: "sudo -S tshark -l -i {{interface}} -T fields -e wlan.sa -e eth.src"

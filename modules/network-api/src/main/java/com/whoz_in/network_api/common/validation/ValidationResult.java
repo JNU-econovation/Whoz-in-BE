@@ -3,8 +3,10 @@ package com.whoz_in.network_api.common.validation;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
 
 //Validator가 검증 실패한 내용을 담는 객체
+@Getter
 public final class ValidationResult {
     private final List<String> errors;
 
@@ -24,12 +26,12 @@ public final class ValidationResult {
         this.errors.addAll(errors);
     }
 
-    public boolean hasErrors() {
+    public boolean hasError() {
         return !errors.isEmpty();
     }
 
-    public List<String> getErrors() {
-        return errors;
+    public String getError() {
+        return ! errors.isEmpty()?errors.get(0):null;
     }
 
     @Override
