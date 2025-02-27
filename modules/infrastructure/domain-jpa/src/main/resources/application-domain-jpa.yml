@@ -12,8 +12,4 @@ domain-jpa:
     ddl-auto: ${DOMAIN_JPA.DDL_AUTO}
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show_sql: false
-
-logging:
-  level:
-    root: info
-
+    format-sql: false
