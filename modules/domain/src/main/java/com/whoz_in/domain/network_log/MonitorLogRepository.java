@@ -13,6 +13,6 @@ public interface MonitorLogRepository {
     boolean existsAfter(String mac, LocalDateTime time);
     default void mustExistAfter(String mac, LocalDateTime time){
         if (!existsAfter(mac, time))
-            throw new IllegalArgumentException("monitor log가 없습니다");
+            throw new NoMonitorLogException(mac);
     }
 }
