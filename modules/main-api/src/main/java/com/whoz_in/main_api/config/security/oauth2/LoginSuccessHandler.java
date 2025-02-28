@@ -28,7 +28,7 @@ import org.springframework.web.util.UriBuilderFactory;
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final String ENDPOINT = "/oauth/success";
-    @Value("${frontend.base-url}")
+    @Value("${frontend.main.base-url}")
     private String frontendBaseUrl;
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;
