@@ -13,16 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class UnhandledExceptionHandler {
-    private final HttpRequestInfoExtractor httpRequestInfoExtractor;
+    private final ExceptionLogger exceptionLogger;
 
     // 나머지 예외
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<FailureBody> handleException(Exception e, HttpServletRequest request) {
-        log.error("처리하지 못한 예외\n-예외 정보-\n클래스: {}\n메세지: {}\n-요청 정보-\n{}\n-스택 트레이스-",
-                e.getClass().getName(),
-                e.getMessage(),
-                httpRequestInfoExtractor.extractInfoFrom(request),
-                e);
+    public ResponseEntity<FailureBody> handleException(HttpServletRequest request, Exception e) {
+        exceptionLogger.log("처리하지 못한 예외", request, e);
         return ResponseEntityGenerator.fail("UNEXPECTED_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
