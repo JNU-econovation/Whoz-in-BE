@@ -16,11 +16,11 @@ public final class Feedback extends AggregateRoot {
     private final String content;
     private final MemberId writer;
 
-    public static Feedback create(String content, MemberId wirter) {
+    public static Feedback create(String content, MemberId writer) {
         Feedback feedback = Feedback.builder()
                 .id(new FeedbackId())
                 .content(content)
-                .writer(wirter)
+                .writer(writer)
                 .build();
         feedback.register(new FeedbackCreated(feedback));
         return feedback;
