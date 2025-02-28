@@ -20,7 +20,7 @@ public class FeedbackEntity extends BaseEntity {
     @Column(nullable = false)
     private String content;
 
-    @Column(name = "member_id")
+    @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID memberId;
 
     public FeedbackEntity(UUID id, String content, UUID memberId) {
