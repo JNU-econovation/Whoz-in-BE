@@ -1,0 +1,26 @@
+name: Deploy to Raspberry Pi Server on Merge
+
+on:
+  push:
+    branches:
+      - develop  # develop ???? merge(push)? ? ??
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4  # ?? ?? ????
+
+      - name: Deploy to network-api
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.NETWORK_API_ADDRESS }}
+          username: ${{ secrets.NETWORK_API_USERNAME }}
+          password: ${{ secrets.NETWORK_API_PASSWORD }}
+          port: ${{ secrets.NETWORK_API_SSH_PORT }}
+          script: |
+            cd /home/whozin/Whoz-in-BE/modules/network-api/docker      # ???? ??? ??
+            git switch develop                                  # develop ???? ??
+            git pull origin develop                             # ?? ?? ????
+            ./build-and-deploy.sh                         # ?? ???? ??
