@@ -1,6 +1,9 @@
 package com.whoz_in.main_api.config.security;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -50,9 +53,13 @@ public class SecurityConfig {
 
     //security에서 사용할 Cors 설정을 정의합니다
     @Bean
-    public CorsConfigurationSource corsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
+    public CorsConfigurationSource corsConfigurationSource(
+            @Value("${frontend.main.base-url}") String mainBaseUrl,
+            @Value("${frontend.network-api.base-urls}") List<String> networkBaseUrls) {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of(frontendBaseUrl)); //TODO: 내부 아이피 추가
+        Set<String> corsUrls = new HashSet<>(networkBaseUrls);
+        corsUrls.add(mainBaseUrl);
+        corsConfiguration.setAllowedOrigins(List.copyOf(corsUrls));
         corsConfiguration.setAllowedMethods(List.of("*"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);
