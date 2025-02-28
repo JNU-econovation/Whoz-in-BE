@@ -1,0 +1,26 @@
+name: Deploy to Raspberry Pi Server on Merge
+
+on:
+  push:
+    branches:
+      - develop  # develop ???? merge(push)? ? ??
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Deploy to main-api
+        uses: appleboy/ssh-action@v0.1.7  # SSH
+        with:
+          host: ${{ secrets.MAIN_API_ADDRESS }}
+          username: ${{ secrets.MAIN_API_USERNAME }}
+          password: ${{ secrets.MAIN_API_PASSWORD }}
+          port: ${{ secrets.MAIN_API_SSH_PORT }}
+          script: |
+            cd /home/whozin/Whoz-in-BE/modules/main-api/docker      # 프로젝트 폴더로 이동
+            git switch develop                                  # develop 브랜치로 이동
+            git pull origin develop                             # 최신 코드 가져오기
+            ./build-and-deploy.sh                         # 배포 스크립트 실행
