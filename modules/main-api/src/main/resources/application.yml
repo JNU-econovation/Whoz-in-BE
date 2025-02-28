@@ -15,7 +15,10 @@ server:
   port: 2470 # 24시간 운영 + main-api니까 0번째
 
 frontend:
-  base-url: ${FRONTEND_URL}
+  main: # 메인 프론트 서버
+    base-url: ${FRONTEND.MAIN.BASE-URL} # 배열이면 안됨
+  network-api: # 네트워크 api에 띄워진 서버 (기기 등록을 위한)
+    base-urls: ${FRONTEND.NETWORK-API.BASE-URLS} # 배열 가능 (network-api가 여러 개일 수 있으므로)
 
 api-key: ${API_KEY}
 
