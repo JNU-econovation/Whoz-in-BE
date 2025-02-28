@@ -10,9 +10,9 @@ public interface ManagedLogRepository {
     Optional<ManagedLog> findLatestByIpAfter(String ip, LocalDateTime time);
     Optional<ManagedLog> findBySsidAndMac(String ssid, String mac);
     default ManagedLog getLatestByIpAfter(String ip, LocalDateTime time){
-        return findLatestByIpAfter(ip, time).orElseThrow(() -> new IllegalArgumentException("managed 로그가 없습니다"));
+        return findLatestByIpAfter(ip, time).orElseThrow(() -> new NoManagedLogException(ip));
     }
     default ManagedLog getBySsidAndMac(String ssid, String mac){
-        return findBySsidAndMac(ssid, mac).orElseThrow(() -> new IllegalArgumentException("managed 로그가 없습니다"));
+        return findBySsidAndMac(ssid, mac).orElseThrow(() -> new NoManagedLogException(mac));
     }
 }
