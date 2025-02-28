@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class WhozinExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<FailureBody> handle(ApplicationException e) {
+        log.warn(e.getMessage());
         //TODO: http status 예외에 따라 다르게 설정할 수 있어야 함
         return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
@@ -26,6 +27,7 @@ public class WhozinExceptionHandler {
     //TODO: ApplicationException과 WhozinException으로 합치기
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<FailureBody> handle(BusinessException e) {
+        log.warn(e.getMessage());
         return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
