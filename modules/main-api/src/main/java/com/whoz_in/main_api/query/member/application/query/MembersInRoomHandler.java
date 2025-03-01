@@ -1,13 +1,15 @@
-package com.whoz_in.main_api.query.device.application.active;
+package com.whoz_in.main_api.query.member.application.query;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
-import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountException;
-import com.whoz_in.main_api.query.member.application.MemberInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;

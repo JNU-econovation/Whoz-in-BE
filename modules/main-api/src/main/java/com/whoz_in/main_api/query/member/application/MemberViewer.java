@@ -1,5 +1,9 @@
 package com.whoz_in.main_api.query.member.application;
 
+import com.whoz_in.main_api.query.member.application.view.MemberAuthInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.shared.application.Viewer;
 import java.util.Optional;
 import java.util.UUID;
