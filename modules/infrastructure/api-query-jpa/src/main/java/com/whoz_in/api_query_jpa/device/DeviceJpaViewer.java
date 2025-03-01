@@ -56,4 +56,11 @@ public class DeviceJpaViewer implements DeviceViewer {
         List<Device> devices = deviceRepository.findAllByMemberId(ownerId);
         return new DeviceCount(devices.size());
     }
+
+    @Override
+    public List<DevicesStatus> findDevicesStatusAll(List<UUID> ownerIds) {
+        return ownerIds.stream()
+                .map(this::findDevicesStatus)
+                .toList();
+    }
 }
