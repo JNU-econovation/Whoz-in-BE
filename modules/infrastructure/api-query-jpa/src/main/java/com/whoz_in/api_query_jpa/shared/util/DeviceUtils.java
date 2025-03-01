@@ -21,19 +21,19 @@ public class DeviceUtils {
     private final DeviceRepository deviceRepository;
     private final MemberRepository memberRepository;
 
-    public boolean isLastDevice(UUID deviceId) {
+    public boolean isLastDisConnectedDevice(UUID deviceId) {
         // 마지막으로 접속 종료된 기기인지 검증
         Member owner = memberRepository.getByDeviceId(deviceId);
 
         List<ActiveDeviceEntity> myDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
-        List<UUID> lastDevices = findLastDevice(myDevices);
+        List<UUID> lastDevices = findLastDisConnectedDevice(myDevices);
 
         return lastDevices.contains(deviceId);
 
     }
 
-    public List<UUID> findLastDevice(List<ActiveDeviceEntity> activeDevices){
+    public List<UUID> findLastDisConnectedDevice(List<ActiveDeviceEntity> activeDevices){
         List<UUID> lastDevices = new ArrayList<>();
 
         // disconnect 시간을 기준으로 가장 늦게 연결이 종료된 기기 리턴
