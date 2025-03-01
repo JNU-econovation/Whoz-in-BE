@@ -1,7 +1,9 @@
-package com.whoz_in.main_api.query.device.application.active;
+package com.whoz_in.main_api.query.member.application.query;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
