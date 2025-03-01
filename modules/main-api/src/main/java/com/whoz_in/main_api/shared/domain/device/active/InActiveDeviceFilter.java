@@ -7,7 +7,8 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.exception.NotFoundConnectionInfoException;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
@@ -64,8 +65,15 @@ public class InActiveDeviceFilter extends DeviceFilter{
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
 
+        if(connectionInfo == null) throw new NotFoundConnectionInfoException();
+
+        // 다른 기기로 접속 중인 경우 이벤트에서 제외
+        if(connectionInfo.isActive())
+            return false;
+
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
-        if(connectionInfo==null || !activeDevice.isActive()) return false;
+        if(!activeDevice.isActive())
+            return false;
 
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
