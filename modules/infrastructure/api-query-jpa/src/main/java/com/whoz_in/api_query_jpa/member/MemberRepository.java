@@ -17,4 +17,8 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
 
     @Query("SELECT m FROM Member m WHERE m.id IN (SELECT d.memberId FROM Device d WHERE d.id IN (:deviceIds))")
     List<Member> findByDeviceIds(@Param("deviceIds") List<UUID> deviceIds);
+
+    default Member getByDeviceId(UUID deviceId) {
+        return findByDeviceId(deviceId).orElseThrow(() -> new IllegalArgumentException("기기의 주인을 찾을 수 없음"));
+    }
 }
