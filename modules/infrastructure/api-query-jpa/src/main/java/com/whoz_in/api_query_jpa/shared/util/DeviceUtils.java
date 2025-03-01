@@ -27,6 +27,11 @@ public class DeviceUtils {
 
         List<ActiveDeviceEntity> myDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
+        // 하나라도 active 상태인 기기가 있으면 false
+        long activeDeviceCnt = myDevices.stream().filter(ActiveDeviceEntity::isActive).count();
+
+        if(activeDeviceCnt > 0) return false;
+
         List<UUID> lastDevices = findLastDisConnectedDevice(myDevices);
 
         return lastDevices.contains(deviceId);
