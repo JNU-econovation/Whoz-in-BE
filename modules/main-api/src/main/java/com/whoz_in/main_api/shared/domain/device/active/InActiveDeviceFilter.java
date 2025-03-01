@@ -76,9 +76,9 @@ public class InActiveDeviceFilter extends DeviceFilter{
             return false;
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
+        LocalDateTime activeDeviceConnectedTime = activeDevice.connectedTime();
 
-        Duration term = Duration.between(activeDeviceActiveTime, now).abs();
+        Duration term = Duration.between(activeDeviceConnectedTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
         if(term.compareTo(MEASURE) > 0){
