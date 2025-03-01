@@ -12,4 +12,6 @@ public interface ActiveDeviceViewer extends Viewer {
         return findByDeviceId(deviceId).orElseThrow(()->new IllegalArgumentException("No ActiveDevice Find"));
     }
 
+    List<ActiveDevice> findAllByDeviceId(List<String> deviceIds);
+
 }
