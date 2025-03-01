@@ -35,6 +35,7 @@ jwt:
   access-token-expiry: ${JWT.ACCESS-TOKEN-EXPIRY}
   refresh-token-expiry: ${JWT.REFRESH-TOKEN-EXPIRY}
   oauth2-temp-token-expiry: ${JWT.OAUTH2-TEMP-TOKEN-EXPIRY}
+  device-register-token-expiry: ${JWT.DEVICE-REGISTER-TOKEN-EXPIRY}
 
 #  level:
 #    org.springframework.security: DEBUG

@@ -4,7 +4,10 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
+import static com.whoz_in.main_api.shared.jwt.JwtConst.DEVICE_REGISTER_TOKEN;
+
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
+import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
 import com.whoz_in.main_api.shared.jwt.tokens.Token;
@@ -17,7 +20,8 @@ import lombok.RequiredArgsConstructor;
 public enum TokenType {
     ACCESS(AccessToken.class, ACCESS_TOKEN),
     REFRESH(RefreshToken.class, REFRESH_TOKEN),
-    OAUTH2_TEMP(OAuth2TempToken.class, OAUTH2_TEMP_TOKEN);
+    OAUTH2_TEMP(OAuth2TempToken.class, OAUTH2_TEMP_TOKEN),
+    DEVICE_REGISTER(DeviceRegisterToken.class, DEVICE_REGISTER_TOKEN);
 
     private final Class<? extends Token> tokenClass;
     //TODO: 토큰 타입은 쿠키를 몰라야 한다.
