@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.query.member.presentation;
 
-import com.whoz_in.main_api.query.device.application.active.MembersInRoom;
-import com.whoz_in.main_api.query.device.application.active.MembersInRoomResponse;
+import com.whoz_in.main_api.query.member.application.query.MembersInRoom;
+import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.application.query.MemberDetailInfoGet;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
