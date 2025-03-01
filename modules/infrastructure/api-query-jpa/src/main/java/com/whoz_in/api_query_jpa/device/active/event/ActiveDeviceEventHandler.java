@@ -36,6 +36,7 @@ public class ActiveDeviceEventHandler {
         List<ActiveDeviceEntity> firstActiveDevices = findFirstActiveDevices(deviceIds);
         List<ActiveDeviceEntity> nonFirstActiveDevice = findNonFirstActiveDevices(deviceIds);
 
+        // TODO: 이 부분 배치로 바꿔서 순차처리 해도 될 듯
         save(firstActiveDevices);
         save(nonFirstActiveDevice);
 

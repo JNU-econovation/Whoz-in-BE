@@ -1,13 +1,17 @@
-package com.whoz_in.main_api.query.device.application.active;
+package com.whoz_in.main_api.query.member.application.query;
 
+import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
+import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
-import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountException;
-import com.whoz_in.main_api.query.member.application.MemberInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
@@ -20,8 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
@@ -33,6 +39,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final RequesterInfo requesterInfo;
 
     @Override
+    @Transactional // TODO: 병렬 스트림 내부에서 발생하는 Lazy 로딩 예외 방지를 위한 트랜잭셔널
     public MembersInRoomResponse handle(MembersInRoom query) {
         validateRegisteredDeviceCount(requesterInfo.getMemberId());
 
@@ -40,27 +47,59 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         int size = query.size();
         String sortType = query.sortType();
 
+        // 응답용 리스트
         List<MemberInRoomResponse> responses = new ArrayList<>();
 
-        List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
+        // 모든 멤버 정보 조회
+        List<MemberInfo> memberInfos = memberViewer.findAllMemberInfo();
+
+        // 모든 멤버 접속 정보 조회
+        List<MemberConnectionInfo> memberConnectionInfos = memberViewer.findAllMemberConnectionInfo();
+
+        // 모든 회원의 기기 정보 조회
+        Map<MemberId, List<DeviceStatus>> devicesStatusByMemberId = createDevicesStatusMap(memberInfos); // Map<MemberId, List<DeviceStatus>>
+
+        List<DeviceId> deviceIds = devicesStatusByMemberId.values().stream()
+                .flatMap(List::stream)
+                .map(DeviceStatus::deviceId)
+                .map(DeviceId::new)
+                .toList();
+
+        // 모든 회원의 ActiveDevice 정보 조회
+        List<ActiveDevice> activeDevices = activeDeviceViewer.findAllByDeviceId(deviceIds.stream().map(DeviceId::id).map(UUID::toString).toList());
+
+        Map<MemberId, MemberConnectionInfo> memberConnectionInfoByMemberId = createMemberConnectionInfoMap(memberConnectionInfos);
+
         Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
         if(!activeDevices.isEmpty()) {
 
             int start = page * size;
-            int end = Math.min((start + size), activeDevicesByMemberId.keySet().size());
+            int end = Math.min((start + size), memberInfos.size());
 
-            List<MemberId> memberIds = activeDevicesByMemberId.keySet().stream().toList();
+            List<MemberId> memberIds = memberInfos.stream().map(MemberInfo::memberId).map(MemberId::new).toList();
 
             for (int i = start; i < end; i++) {
 
                 MemberId memberId = memberIds.get(i);
-                List<ActiveDevice> activeDevicesByMember = activeDevicesByMemberId.get(memberId);
-                MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(memberId.id().toString()).get();
+                List<DeviceStatus> deviceStatuses = devicesStatusByMemberId.get(memberId);
 
-                MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo);
+                if(!deviceStatuses.isEmpty()) {
 
-                responses.add(oneResponse);
+                    List<ActiveDevice> activeDevicesByMember = activeDevicesByMemberId.get(memberId);
+                    MemberConnectionInfo connectionInfo = memberConnectionInfoByMemberId.get(memberId);
+
+                    MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo);
+
+                    responses.add(oneResponse);
+                }
+                // 어떠한 기기도 등록하지 않은 사용자일 경우
+                else {
+                    responses.add(MemberInRoomResponse.nonDeviceRegisterer(
+                            memberInfos.get(i).generation(),
+                            memberInfos.get(i).memberId().toString(),
+                            memberInfos.get(i).memberName()));
+                }
             }
 
             // TODO : 정렬 자동화
@@ -73,6 +112,36 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         }
 
         return new MembersInRoomResponse(responses, 0);
+    }
+
+    private Map<MemberId, MemberConnectionInfo> createMemberConnectionInfoMap(
+            List<MemberConnectionInfo> memberConnectionInfos) {
+
+        Set<UUID> memberIds = new HashSet<>();
+        memberConnectionInfos.forEach(memberConnectionInfo -> memberIds.add(memberConnectionInfo.memberId()));
+        return memberIds.stream()
+                .parallel()
+                .collect(Collectors.toMap(
+                        MemberId::new,
+                        memberId -> {
+                            return memberConnectionInfos.stream().filter(info -> info.memberId().equals(memberId)).findFirst()
+                                    .orElse(new MemberConnectionInfo(memberId, Duration.ZERO, Duration.ZERO, false));
+                        }
+                ));
+    }
+
+    private Map<MemberId, List<DeviceStatus>> createDevicesStatusMap(List<MemberInfo> memberInfos) {
+
+        Set<UUID> memberIds = new HashSet<>();
+        memberInfos.forEach(memberInfo -> memberIds.add(memberInfo.memberId()));
+        return memberIds.stream()
+                .parallel()
+                .collect(Collectors.toMap(
+                        MemberId::new,
+                        memberId -> {
+                            return deviceViewer.findDevicesStatus(memberId).devices(); // TODO: 많은 IO 작업 줄이기
+                        }
+                ));
     }
 
     private void validateRegisteredDeviceCount(MemberId memberId) {
@@ -128,6 +197,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         Set<UUID> memberIds = new HashSet<>();
         activeDevices.forEach(activeDevice -> memberIds.add(findDeviceOwnerId(activeDevice.deviceId())));
         return memberIds.stream()
+                .parallel()
                 .collect(Collectors.toMap(
                         MemberId::new,
                         memberId -> {
