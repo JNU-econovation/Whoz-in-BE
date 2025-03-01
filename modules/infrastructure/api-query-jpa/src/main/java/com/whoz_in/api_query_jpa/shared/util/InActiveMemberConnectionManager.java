@@ -16,11 +16,18 @@ import org.springframework.stereotype.Component;
 public class InActiveMemberConnectionManager {
 
     private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
+    private final ActiveTimeUpdateDeterminer activeTimeUpdateDeterminer;
     private final MemberConnectionInfoRepository connectionInfoRepository;
     private final MemberRepository memberRepository;
 
     public void processInActiveDevices(List<ActiveDeviceEntity> entities){
         // 기기가 접속이 종료되는 마지막 기기인지 판단하기
+
+        // Member Connection Info 를 update 할 수 있는 조건에 맞는 것만 처리
+        entities = entities.stream()
+                .filter(activeDevice -> activeTimeUpdateDeterminer.isUpdatable(activeDevice.getDeviceId()))
+                .toList();
+
         updateDailyTime(entities);
         inActiveOn(entities);
     }
