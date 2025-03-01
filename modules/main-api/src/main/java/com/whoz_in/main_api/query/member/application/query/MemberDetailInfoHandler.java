@@ -1,5 +1,7 @@
-package com.whoz_in.main_api.query.member.application;
+package com.whoz_in.main_api.query.member.application.query;
 
+import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
