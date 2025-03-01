@@ -1,10 +1,10 @@
 package com.whoz_in.api_query_jpa.member;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.main_api.query.member.application.MemberAuthInfo;
-import com.whoz_in.main_api.query.member.application.MemberDetailInfo;
-import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
-import com.whoz_in.main_api.query.member.application.MemberInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberAuthInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import java.util.Optional;
 import java.util.UUID;
