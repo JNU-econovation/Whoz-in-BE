@@ -18,7 +18,6 @@ public class MemberJpaViewer implements MemberViewer {
     private final MemberRepository repository;
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberConnectionInfoRepository connectionInfoRepository;
-    private final MemberRepository memberRepository;
 
     @Override
     public Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId) {
@@ -50,7 +49,7 @@ public class MemberJpaViewer implements MemberViewer {
 
     @Override
     public List<MemberInfo> findAllMemberInfo() {
-        return memberRepository.findAll().stream().map(this::toMemberInfo).toList();
+        return repository.findAll().stream().map(this::toMemberInfo).toList();
     }
 
     private MemberConnectionInfo toMemberConnectionInfo(com.whoz_in.api_query_jpa.member.MemberConnectionInfo entity){
