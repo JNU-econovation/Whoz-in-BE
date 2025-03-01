@@ -18,7 +18,8 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 public class HttpRequestInfoExtractor {
     private final ObjectMapper objectMapper;
     public String extractInfoFrom(HttpServletRequest request) {
-        return "URL: " + request.getRequestURI() + ", METHOD: " + request.getMethod() + "\n"
+        return "IP: " + request.getRemoteAddr() + "\n"
+                + "URL: " + request.getRequestURI() + ", METHOD: " + request.getMethod() + "\n"
                 + "QUERY PARAMS: " + getQueryParams(request) + "\n"
                 + "COOKIES: " + getCookies(request) + "\n"
                 + "BODY: " + getRequestBody(request);
