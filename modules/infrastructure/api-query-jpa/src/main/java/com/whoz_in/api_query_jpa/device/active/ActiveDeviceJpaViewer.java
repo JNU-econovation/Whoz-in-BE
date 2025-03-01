@@ -20,7 +20,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
 
         if(activeDevice == null) return Optional.empty();
 
-        return Optional.of(createOptionalActiveDevice(activeDevice));
+        return Optional.of(createActiveDevice(activeDevice));
     }
 
     @Override
@@ -28,11 +28,18 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
         List<ActiveDeviceEntity> entities = activeDeviceRepository.findAll();
 
         return entities.stream()
-                .map(this::createOptionalActiveDevice)
+                .map(this::createActiveDevice)
                 .toList();
     }
 
-    private ActiveDevice createOptionalActiveDevice(ActiveDeviceEntity entity){
+    @Override
+    public List<ActiveDevice> findAllByDeviceId(List<String> deviceIds) {
+        return activeDeviceRepository.findByDeviceIds(deviceIds.stream().map(UUID::fromString).toList()).stream()
+                .map(this::createActiveDevice)
+                .toList();
+    }
+
+    private ActiveDevice createActiveDevice(ActiveDeviceEntity entity){
         return new ActiveDevice(
                 entity.getDeviceId(),
                 entity.getConnectedAt(),
