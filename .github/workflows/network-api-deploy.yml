@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.NETWORK_API_PASSWORD }}
           port: ${{ secrets.NETWORK_API_SSH_PORT }}
           script: |
-            cd /home/whozin/Whoz-in-BE/modules/network-api/docker      # ???? ??? ??
-            git switch develop                                  # develop ???? ??
-            git pull origin develop                             # ?? ?? ????
-            ./build-and-deploy.sh                         # ?? ???? ??
+            cd /home/whozin/Whoz-in-BE/modules/main-api/docker      # 프로젝트 폴더로 이동
+            git fetch origin                                  # branch 이력 가져오기
+            git reset --hard origin/develop                    # develop branch로 이동 
+            ./build-and-deploy.sh                         # 배포 스크립트 실행
