@@ -10,7 +10,7 @@ import java.util.Map;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OAuth2TempTokenSerializer extends TokenSerializer<OAuth2TempToken> {
+public final class OAuth2TempTokenSerializer extends TokenSerializer<OAuth2TempToken> {
 
     public OAuth2TempTokenSerializer(JwtUtil jwtUtil, JwtProperties jwtProperties) {
         super(jwtUtil, jwtProperties);

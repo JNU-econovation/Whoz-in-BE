@@ -25,7 +25,8 @@ public class SecurityFilterChainConfig {
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final ServerAuthenticationFilter serverAuthenticationFilter;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final AccessTokenFilter accessTokenFilter;
+    private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
     private final CorsConfigurationSource corsConfigurationSource;
@@ -55,8 +56,6 @@ public class SecurityFilterChainConfig {
         );
 
         commonConfigurations(httpSecurity);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.oauth2Login(oauth2->
                 oauth2
@@ -79,9 +78,31 @@ public class SecurityFilterChainConfig {
         httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
         commonConfigurations(httpSecurity);
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
+    }
+
+    // 기기 등록 페이지에서 요청할 수 있는 api를 처리하는 필터
+    @Bean
+    @Order(3)
+    public SecurityFilterChain deviceRegisterFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher(
+                "/api/v1/device/info" //TODO: 이거 patch가 씹히게 됨
+        );
+
+        httpSecurity.authorizeHttpRequests(auth-> {
+            auth.requestMatchers(HttpMethod.POST,
+                    "/api/v1/device/info"
+            ).authenticated();}
+        );
+
+        commonConfigurations(httpSecurity);
 
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        //jwt(device register token)을 Authentication으로 만들어 등록하는 필터
+        httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
 
         return httpSecurity.build();
     }
@@ -89,7 +110,7 @@ public class SecurityFilterChainConfig {
     //인증이 필요한 엔드포인트나 인증 여부에 따라 다른 동작을 하는 엔드포인트
     //로그아웃, 게시글 작성 등
     @Bean
-    @Order(3)
+    @Order(4)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/**"
@@ -106,7 +127,7 @@ public class SecurityFilterChainConfig {
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
-                    "/api/v1/device/info",
+                    "/api/v1/device-register-token",
                     "/api/v1/feedback"
             ).authenticated();
             auth.requestMatchers(HttpMethod.PATCH,
@@ -121,13 +142,12 @@ public class SecurityFilterChainConfig {
         });
 
         commonConfigurations(httpSecurity);
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
         //쿠키를 받기 위한 설정
         httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
         httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터
-        httpSecurity.addFilterAt(jwtAuthenticationFilter, LogoutFilter.class);
+        httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
         httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 

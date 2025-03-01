@@ -20,10 +20,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-//요청에서 jwt를 꺼내어 인증정보를 만들고 SecurityContextHolder에 넣는 필터
+//요청에서 jwt(access token)를 꺼내어 인증정보를 만들고 SecurityContextHolder에 넣는 필터
 @Component
 @RequiredArgsConstructor
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
+public class AccessTokenFilter extends OncePerRequestFilter {
     private final AccessTokenSerializer accessTokenSerializer;
 
     @Override
