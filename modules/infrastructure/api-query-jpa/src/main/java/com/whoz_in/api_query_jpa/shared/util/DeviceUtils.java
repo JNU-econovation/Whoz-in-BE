@@ -5,6 +5,7 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,16 +29,12 @@ public class DeviceUtils {
 
         if(owner==null) return false;
 
-        List<ActiveDeviceEntity> myDevices = findMyActiveDevices(owner.getId());
+        List<ActiveDeviceEntity> myDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
         List<UUID> lastDevices = findLastDevice(myDevices);
 
         return lastDevices.contains(deviceId);
 
-    }
-
-    public List<ActiveDeviceEntity> findMyActiveDevices(UUID ownerId){
-        return activeDeviceRepository.findByMemberId(ownerId);
     }
 
     public List<UUID> findLastDevice(List<ActiveDeviceEntity> activeDevices){
@@ -59,6 +56,39 @@ public class DeviceUtils {
         );
 
         return lastDevices;
+    }
+
+    public boolean isLongest(UUID deviceId) {
+        // 가장 오랫동안 있었는지 검증
+        Member owner = memberRepository.findByDeviceId(deviceId).orElse(null);
+
+        if(owner==null) return false;
+
+        List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findByMemberId(owner.getId());
+
+        List<UUID> longestDeviceIds = findLongestDevice(activeDevices);
+
+        return longestDeviceIds.contains(deviceId);
+    }
+
+    public List<UUID> findLongestDevice(List<ActiveDeviceEntity> activeDevices){
+        List<UUID> longestDevices = new ArrayList<>();
+        // 접속 시간을 기준으로 가장 오래된 기기를 찾는다.
+         Duration maxContinuousTime = activeDevices.stream()
+                .max(DeviceTimeComparators.continuousTimeComparator())
+                .map(ActiveDeviceEntity::getContinuousTime)
+                .orElse(null);
+
+        if(activeDevices.isEmpty()) return longestDevices;
+
+        longestDevices.addAll(
+                activeDevices.stream()
+                        .filter(activeDevice -> activeDevice.getContinuousTime().equals(maxContinuousTime))
+                        .map(ActiveDeviceEntity::getDeviceId)
+                        .toList()
+        );
+
+        return longestDevices;
     }
 
 }
