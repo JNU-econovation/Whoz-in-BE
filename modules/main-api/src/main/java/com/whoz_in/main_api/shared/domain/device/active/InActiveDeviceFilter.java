@@ -7,7 +7,8 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.member.application.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.exception.NotFoundConnectionInfoException;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Component;
 public class InActiveDeviceFilter extends DeviceFilter{
 
     // MonitorLog 가 마지막으로 뜬지 10분이 되도록 발생하지 않을경우 InActive 처리하는 기준
-    private static final Duration MEASURE = Duration.ofMinutes(10);
+    private static final Duration MEASURE = Duration.ofMinutes(5);
 
     public InActiveDeviceFilter(
             DeviceRepository deviceRepository,
@@ -64,13 +65,16 @@ public class InActiveDeviceFilter extends DeviceFilter{
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
 
+        if(connectionInfo == null) throw new NotFoundConnectionInfoException();
+
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
-        if(connectionInfo==null || !activeDevice.isActive()) return false;
+        if(!activeDevice.isActive())
+            return false;
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
+        LocalDateTime activeDeviceConnectedTime = activeDevice.connectedTime();
 
-        Duration term = Duration.between(activeDeviceActiveTime, now).abs();
+        Duration term = Duration.between(activeDeviceConnectedTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
         if(term.compareTo(MEASURE) > 0){
