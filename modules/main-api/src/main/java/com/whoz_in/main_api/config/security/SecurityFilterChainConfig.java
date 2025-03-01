@@ -106,7 +106,8 @@ public class SecurityFilterChainConfig {
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
                     "/api/v1/device",
-                    "/api/v1/device/info"
+                    "/api/v1/device/info",
+                    "/api/v1/feedback"
             ).authenticated();
             auth.requestMatchers(HttpMethod.PATCH,
                     "/api/v1/device/info"
