@@ -17,8 +17,6 @@ public interface ActiveDeviceRepository extends JpaRepository<ActiveDeviceEntity
 
     Optional<ActiveDeviceEntity> findByDeviceId(UUID deviceId);
 
-    void deleteByDeviceId(UUID deviceId);
-
     boolean existsByDeviceId(UUID deviceId);
 
 }
