@@ -118,6 +118,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         Set<UUID> memberIds = new HashSet<>();
         memberConnectionInfos.forEach(memberConnectionInfo -> memberIds.add(memberConnectionInfo.memberId()));
         return memberIds.stream()
+                .parallel()
                 .collect(Collectors.toMap(
                         MemberId::new,
                         memberId -> {
@@ -132,6 +133,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         Set<UUID> memberIds = new HashSet<>();
         memberInfos.forEach(memberInfo -> memberIds.add(memberInfo.memberId()));
         return memberIds.stream()
+                .parallel()
                 .collect(Collectors.toMap(
                         MemberId::new,
                         memberId -> {
@@ -193,6 +195,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         Set<UUID> memberIds = new HashSet<>();
         activeDevices.forEach(activeDevice -> memberIds.add(findDeviceOwnerId(activeDevice.deviceId())));
         return memberIds.stream()
+                .parallel()
                 .collect(Collectors.toMap(
                         MemberId::new,
                         memberId -> {
