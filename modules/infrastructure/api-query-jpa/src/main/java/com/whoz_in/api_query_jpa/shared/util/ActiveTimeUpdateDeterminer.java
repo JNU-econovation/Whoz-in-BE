@@ -1,14 +1,10 @@
 package com.whoz_in.api_query_jpa.shared.util;
 
 import com.whoz_in.api_query_jpa.device.DeviceRepository;
-import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,7 +33,7 @@ public class ActiveTimeUpdateDeterminer {
             return deviceUtils.isLongest(deviceId);
         }
 
-        return deviceUtils.isLastDevice(deviceId);
+        return deviceUtils.isLastDisConnectedDevice(deviceId);
     }
 
     private boolean nowIsMidNight(){
