@@ -31,7 +31,7 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
         String sql = "INSERT INTO managed_log_entity " +
                 "(mac, created_at, updated_at, device_name, ip, ssid, room) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "ON DUPLICATE KEY UPDATE updated_at = ?";
+                "ON DUPLICATE KEY UPDATE updated_at = ?, ssid = ?";
 
         try {
             jdbcTemplate.batchUpdate(sql, logs, logs.size(), (ps, log) -> {
@@ -45,6 +45,7 @@ public class ManagedLogJpaRepository implements ManagedLogRepository {
                 ps.setString(6, log.getSsid());
                 ps.setString(7, log.getRoom());
                 ps.setTimestamp(8, updatedAt);
+                ps.setString(9, log.getSsid());
             });
         } catch (DuplicateKeyException e) {
             log.error("Duplicate key: " + e.getMessage());
