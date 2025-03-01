@@ -39,7 +39,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final RequesterInfo requesterInfo;
 
     @Override
-    @Transactional
+    @Transactional // TODO: 병렬 스트림 내부에서 발생하는 Lazy 로딩 예외 방지를 위한 트랜잭셔널
     public MembersInRoomResponse handle(MembersInRoom query) {
         validateRegisteredDeviceCount(requesterInfo.getMemberId());
 
