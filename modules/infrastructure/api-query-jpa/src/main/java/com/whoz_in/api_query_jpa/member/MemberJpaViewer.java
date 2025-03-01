@@ -58,7 +58,7 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     private MemberInfo toMemberInfo(com.whoz_in.api_query_jpa.member.Member entity){
-        return new MemberInfo(entity.getGeneration(), entity.getName());
+        return new MemberInfo(entity.getId(), entity.getPosition(), entity.getStatusMessage(), entity.getGeneration(), entity.getName());
     }
 
     private MemberAuthInfo toMemberAuthInfo(com.whoz_in.api_query_jpa.member.Member entity){
