@@ -10,4 +10,15 @@ public record MemberInRoomResponse(
     String totalActiveTime,
     boolean isActive
 ) implements Response {
+
+    public static MemberInRoomResponse nonDeviceRegisterer(int generation, String memberId, String memberName) {
+        return new MemberInRoomResponse(
+                generation,
+                memberId,
+                memberName,
+                "0시간 0분",
+                "0시간 0분",
+                false
+        );
+    }
 }
