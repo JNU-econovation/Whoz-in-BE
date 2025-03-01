@@ -21,7 +21,11 @@ public class ActiveTimeUpdateDeterminer {
     /**
      *
      * @param deviceId
-     * @return 이 Device 가 ActiveTime 을 업데이트 할 수 있는 대상인지 T/F
+     *
+     * ActiveTime 이 Update 가능하다는 것은, MemberConnectionInfo 엔티티 정보를 수정할 수 있다는 뜻이다.
+     * 어떤 사용자가 동방에 없는지 판단하는 기준은, 넘겨받은 deviceId가 마지막으로 접속 종료된 기기인지 판단하는 것이다.
+     *
+     * @return 이 Device 가 ActiveTime 을 업데이트 할 수 있는 대상인지 판단하여 True False 리턴
      */
     public boolean isUpdatable(UUID deviceId){
 
