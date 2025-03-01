@@ -20,4 +20,7 @@ public interface ActiveDeviceRepository extends JpaRepository<ActiveDeviceEntity
     void deleteByDeviceId(UUID deviceId);
 
     boolean existsByDeviceId(UUID deviceId);
+
+    @Query("SELECT ad FROM ActiveDeviceEntity ad WHERE ad.deviceId IN (SELECT d.id FROM Device d WHERE d.memberId=:memberId)")
+    List<ActiveDeviceEntity> findMyActiveDeviceEntityByMemberId(@Param("memberId") UUID memberId);
 }
