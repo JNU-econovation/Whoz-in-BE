@@ -67,10 +67,6 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
         if(connectionInfo == null) throw new NotFoundConnectionInfoException();
 
-        // 다른 기기로 접속 중인 경우 이벤트에서 제외
-        if(connectionInfo.isActive())
-            return false;
-
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
         if(!activeDevice.isActive())
             return false;
