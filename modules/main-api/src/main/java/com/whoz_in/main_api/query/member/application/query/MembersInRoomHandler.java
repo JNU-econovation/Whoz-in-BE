@@ -27,6 +27,7 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
@@ -38,6 +39,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final RequesterInfo requesterInfo;
 
     @Override
+    @Transactional
     public MembersInRoomResponse handle(MembersInRoom query) {
         validateRegisteredDeviceCount(requesterInfo.getMemberId());
 
