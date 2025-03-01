@@ -16,7 +16,7 @@ public class ActiveDeviceDeletedEventHandler {
     @Transactional
     @EventListener(DeviceDeletedEvent.class)
     public void handle(DeviceDeletedEvent event) {
-        activeDeviceRepository.deleteByDeviceId(event.deviceId());
+        activeDeviceRepository.deleteById(event.deviceId());
     }
 
 }
