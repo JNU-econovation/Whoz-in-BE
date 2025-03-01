@@ -21,6 +21,6 @@ jobs:
           port: ${{ secrets.MAIN_API_SSH_PORT }}
           script: |
             cd /home/whozin/Whoz-in-BE/modules/main-api/docker      # 프로젝트 폴더로 이동
-            git switch develop                                  # develop 브랜치로 이동
-            git pull origin develop                             # 최신 코드 가져오기
+            git fetch origin                                  # branch 이력 가져오기
+            git reset --hard origin/develop                    # develop branch로 이동 
             ./build-and-deploy.sh                         # 배포 스크립트 실행
