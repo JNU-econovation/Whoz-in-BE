@@ -8,7 +8,6 @@ import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +23,7 @@ public class DeviceUtils {
 
     public boolean isLastDevice(UUID deviceId) {
         // 마지막으로 접속 종료된 기기인지 검증
-
-        Member owner = memberRepository.findByDeviceId(deviceId).orElse(null);
-
-        if(owner==null) return false;
+        Member owner = memberRepository.getByDeviceId(deviceId);
 
         List<ActiveDeviceEntity> myDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
@@ -60,9 +56,7 @@ public class DeviceUtils {
 
     public boolean isLongest(UUID deviceId) {
         // 가장 오랫동안 있었는지 검증
-        Member owner = memberRepository.findByDeviceId(deviceId).orElse(null);
-
-        if(owner==null) return false;
+        Member owner = memberRepository.getByDeviceId(deviceId);
 
         List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
