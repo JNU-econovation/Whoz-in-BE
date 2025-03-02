@@ -47,7 +47,7 @@ public class ActiveDeviceFilter extends DeviceFilter {
             return List.of();
         }
 
-        log.info("[ActiveDeviceFilter] Active Device 후보 {}개", devices.size());
+        log.info("[ActiveDeviceFilter] Active Device find : {}", devices.size());
 
         return devices;
     }
