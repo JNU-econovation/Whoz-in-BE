@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.jwt;
 
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -9,6 +10,7 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import lombok.Getter;
+import lombok.NonNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
 
@@ -23,14 +25,20 @@ public class JwtProperties {
     }
 
     @ConstructorBinding
-    public JwtProperties(String secret, Duration accessTokenExpiry, Duration refreshTokenExpiry, Duration oAuth2TempTokenExpiry) {
+    public JwtProperties(String secret,
+            @NonNull Duration accessTokenExpiry,
+            @NonNull Duration refreshTokenExpiry,
+            @NonNull Duration oAuth2TempTokenExpiry,
+            @NonNull Duration deviceRegisterTokenExpiry
+    ) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         tokenExpiryDurations.put(TokenType.ACCESS, accessTokenExpiry);
         tokenExpiryDurations.put(TokenType.REFRESH, refreshTokenExpiry);
         tokenExpiryDurations.put(TokenType.OAUTH2_TEMP, oAuth2TempTokenExpiry);
+        tokenExpiryDurations.put(TokenType.DEVICE_REGISTER, deviceRegisterTokenExpiry);
         Arrays.stream(TokenType.values()).forEach(tokenType -> {
             if (!tokenExpiryDurations.containsKey(tokenType))
-                throw new IllegalStateException("토큰 만료 기간 설정 안됨");
+                throw new IllegalStateException("%s의 토큰 만료 기간 설정 안됨".formatted(tokenType));
         });
     }
 }

@@ -10,6 +10,7 @@ public final class JwtConst {
     public static final String ACCESS_TOKEN = "access-token";
     public static final String REFRESH_TOKEN = "refresh-token";
     public static final String OAUTH2_TEMP_TOKEN = "oauth2-temp-token";
+    public static final String DEVICE_REGISTER_TOKEN = "device-register-token";
     public static final String TOKEN_TYPE = "token-type";
     public static final String TOKEN_ID = "token-id";
     public static final String OAUTH_USER_INFO_KEY = "oauth-user-info-key";
