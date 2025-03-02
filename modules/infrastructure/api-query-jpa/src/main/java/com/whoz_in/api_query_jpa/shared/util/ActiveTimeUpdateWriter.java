@@ -7,7 +7,10 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +34,26 @@ public class ActiveTimeUpdateWriter {
     private final ActiveTimeUpdateDeterminer updateDeterminer;
 
     // deviceId를 넘겨주고, 이 기기에 대해서 접속 정보를 업데이트 해도 되는지 판별해주는 클래스가 있어야 한다.
+
+
+    public void updateActiveTime(List<ActiveDeviceEntity> activeDevices) {
+        List<UUID> deviceIds = activeDevices.stream().map(ActiveDeviceEntity::getDeviceId).toList();
+
+        // TODO: SQL 최적화, stream 원소 하나하나마다 save 를 하고 있으므로, 단일 쿼리가 여러번 날아간다.
+        deviceIds.stream()
+                .peek(this::updateDailyTime)
+                .forEach(this::updateTotalActiveTime);
+    }
+
+    public void clearDailyTime(List<ActiveDeviceEntity> actives) {
+        List<UUID> deviceIds = actives.stream().map(ActiveDeviceEntity::getDeviceId).toList();
+        deviceIds.forEach(this::clearDailyTime);
+    }
+
+    public void shutdown(List<ActiveDeviceEntity> activeDevices, LocalTime shutdownTime){
+        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), shutdownTime);
+        activeDevices.forEach(activeDevice -> activeDevice.disConnect(midnight));
+    }
 
     // 해당 기기 주인의 dailyTime 을 update
     @Transactional(propagation = Propagation.REQUIRED)
