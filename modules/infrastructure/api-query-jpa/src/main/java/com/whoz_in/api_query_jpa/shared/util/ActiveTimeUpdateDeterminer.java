@@ -13,9 +13,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ActiveTimeUpdateDeterminer {
 
-    private final ActiveDeviceRepository activeDeviceRepository;
-    private final DeviceRepository deviceRepository;
-    private final MemberRepository memberRepository;
     private final DeviceUtils deviceUtils;
 
     /**
