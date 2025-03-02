@@ -35,11 +35,11 @@ public class DeviceJpaViewer implements DeviceViewer {
     public DevicesStatus findDevicesStatus(UUID ownerId) {
         List<DeviceStatus> devicesStatus = deviceRepository.findAllByMemberId(ownerId)
                 .stream()
-                .map(device -> new DeviceStatus(device.getId(), device.getName(), device.getDeviceInfos()
-                        .stream()
-                        .collect(Collectors.toMap(
-                                DeviceInfo::getSsid,
-                                DeviceInfo::getMac)),
+                .map(device -> new DeviceStatus(device.getId(), device.getName(),
+                        device.getDeviceInfos().stream()
+                            .collect(Collectors.toMap(
+                                    DeviceInfo::getSsid,
+                                    DeviceInfo::getMac)),
                         null))//TODO: connected된 ssid는 기기 현황 구현 후 리팩토링하면서 구현하기
                 .toList();
         return new DevicesStatus(devicesStatus);
