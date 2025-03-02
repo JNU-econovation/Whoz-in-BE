@@ -72,10 +72,11 @@ public class SecurityFilterChainConfig {
     @Bean
     @Order(2)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/api/v1/signup/oauth",
-                "/api/v1/ssid"
-        );
+        httpSecurity.securityMatchers(matcher->{
+            matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
+                    .requestMatchers(HttpMethod.POST, "/api/v1/signup/oauth")
+                    .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
+        });
 
         commonConfigurations(httpSecurity);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
