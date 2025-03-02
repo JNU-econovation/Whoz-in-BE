@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.shared.presentation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whoz_in.main_api.config.RequestCachingFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -9,7 +8,6 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -34,8 +32,12 @@ public class HttpRequestInfoExtractor {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length == 0) return "없음";
         return Arrays.stream(cookies)
-                .map(cookie -> cookie.getName() + "=" + cookie.getValue())
-                .collect(Collectors.joining(", "));
+                .map(cookie -> {
+                    String cookieValue = (cookie.getValue().length() >= 30 ?
+                            cookie.getValue().substring(0, 15) + "..." + cookie.getValue().substring(cookie.getValue().length() - 15)
+                            : cookie.getValue());
+                    return cookie.getName() + "=" + cookieValue;
+                }).toList().toString();
     }
     private String getRequestBody(HttpServletRequest request) {
         if (request.getContentLength() == 0) return "없음";

@@ -7,7 +7,6 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
-import com.whoz_in.main_api.shared.jwt.TokenType;
 import io.jsonwebtoken.Claims;
 import java.util.Map;
 import java.util.UUID;
