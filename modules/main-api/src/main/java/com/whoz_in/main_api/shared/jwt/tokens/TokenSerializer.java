@@ -27,7 +27,7 @@ public abstract class TokenSerializer<T extends Token> {
             validate(claims);
             return Optional.of(buildToken(claims));
         } catch (JwtException e) {
-            log.warn("잘못된 토큰: {}", e.getMessage());
+            log.warn("{} 역직렬화 실패: {}", this.getTokenType().toString(), e.getMessage());
             return Optional.empty();
         }
     }
