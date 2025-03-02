@@ -36,7 +36,7 @@ public class DeviceRegisterTokenFilter extends OncePerRequestFilter {
         return Optional.ofNullable(request.getHeader("Authorization"))
                 .filter(header -> header.startsWith("bearer "))
                 .map(header -> header.substring(7))
-                .map(deviceRegisterTokenSerializer::deserialize);
+                .flatMap(deviceRegisterTokenSerializer::deserialize);
     }
 
     private JwtAuthentication createAuthentication(DeviceRegisterToken deviceRegisterToken){

@@ -42,7 +42,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
                 .filter(cookie -> ACCESS_TOKEN.equals(cookie.getName()))
                 .findAny()
                 .map(Cookie::getValue)
-                .map(accessTokenSerializer::deserialize);
+                .flatMap(accessTokenSerializer::deserialize);
     }
 
     private JwtAuthentication createAuthentication(AccessToken accessToken){
