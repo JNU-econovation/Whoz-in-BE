@@ -73,9 +73,9 @@ public class SecurityFilterChainConfig {
     @Order(2)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/api/v1/signup/oauth"
+                "/api/v1/signup/oauth",
+                "/api/v1/ssid"
         );
-        httpSecurity.authorizeHttpRequests(auth-> auth.anyRequest().permitAll());
 
         commonConfigurations(httpSecurity);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
@@ -87,15 +87,12 @@ public class SecurityFilterChainConfig {
     @Bean
     @Order(3)
     public SecurityFilterChain deviceRegisterFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/api/v1/device/info" //TODO: 이거 patch가 씹히게 됨
-        );
-
-        httpSecurity.authorizeHttpRequests(auth-> {
-            auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/device/info"
-            ).authenticated();}
-        );
+        httpSecurity.securityMatchers(matcher ->
+                matcher.requestMatchers(HttpMethod.POST,
+                        "/api/v1/device/info",
+                        "/api/v1/device"
+                )
+        ).authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
 
         commonConfigurations(httpSecurity);
 
@@ -121,12 +118,10 @@ public class SecurityFilterChainConfig {
                     "/api/v1/device/info-status",
                     "/api/v1/devices",
                     "/api/v1/private-ips",
-                    "/api/v1/ssid",
                     "/api/v1/members",
                     "/api/v1/member"
             ).authenticated();
             auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/device",
                     "/api/v1/device-register-token",
                     "/api/v1/feedback"
             ).authenticated();
@@ -140,6 +135,7 @@ public class SecurityFilterChainConfig {
 //            auth.requestMatchers(
 //            ).permitAll();
         });
+        //TODO: 로그아웃 추가
 
         commonConfigurations(httpSecurity);
         //쿠키를 받기 위한 설정
@@ -150,8 +146,6 @@ public class SecurityFilterChainConfig {
         httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
         httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
-
-        //TODO: 로그아웃 추가
 
         return httpSecurity.build();
     }
