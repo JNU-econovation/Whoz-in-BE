@@ -24,15 +24,15 @@ public final class DeviceRegisterTokenSerializer extends TokenSerializer<DeviceR
     }
 
     @Override
-    public Map<String, String> buildClaims(DeviceRegisterToken accessToken) {
+    public Map<String, String> buildClaims(DeviceRegisterToken deviceRegisterToken) {
         return Map.of(
-                MEMBER_ID, accessToken.getMemberId().toString()
+                MEMBER_ID, deviceRegisterToken.getMemberId().toString()
         );
     }
 
     @Override
     protected TokenType getTokenType() {
-        return TokenType.ACCESS;
+        return TokenType.DEVICE_REGISTER;
     }
 
 }
