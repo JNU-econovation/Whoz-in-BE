@@ -100,6 +100,8 @@ public class SecurityFilterChainConfig {
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
         //jwt(device register token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
+        //인증 실패 핸들러
+        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
         return httpSecurity.build();
     }
