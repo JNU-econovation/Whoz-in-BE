@@ -19,15 +19,15 @@ public class ExceptionLogger {
                 .orElse(e.getStackTrace()[0]);
         log.error("""
                 {}
-                -실행 정보-
+                🚀실행 정보
                 클래스: {}
                 메서드: {}
-                -예외 정보-
+                ⚠️예외 정보
                 클래스: {}
                 메세지: {}
-                -요청 정보-
+                🌐요청 정보
                 {}
-                -스택 트레이스-
+                📜스택 트레이스
                 """,
                 explain,
                 origin.getClassName(),
