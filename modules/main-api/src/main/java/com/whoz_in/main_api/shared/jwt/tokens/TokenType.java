@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.jwt;
+package com.whoz_in.main_api.shared.jwt.tokens;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
@@ -6,11 +6,6 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.DEVICE_REGISTER_TOKEN;
 
-import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
-import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
-import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
-import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
-import com.whoz_in.main_api.shared.jwt.tokens.Token;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
