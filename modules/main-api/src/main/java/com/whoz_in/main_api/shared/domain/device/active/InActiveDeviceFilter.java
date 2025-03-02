@@ -50,6 +50,8 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
             List<UUID> notInMonitorLog = getDeviceNotInMonitorLog(monitorLogDeviceIds, activeDevices);
 
+            log.info("[InActiveDeviceFilter] InActive Device 후보 {}개", notInMonitorLog.size());
+
             return findDevices(notInMonitorLog);
         }
 
