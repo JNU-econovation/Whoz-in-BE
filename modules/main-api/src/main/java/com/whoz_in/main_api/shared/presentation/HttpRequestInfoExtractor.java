@@ -34,7 +34,12 @@ public class HttpRequestInfoExtractor {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length == 0) return "없음";
         return Arrays.stream(cookies)
-                .map(cookie -> cookie.getName() + "=" + cookie.getValue())
+                .map(cookie -> {
+                    String cookieValue = (cookie.getValue().length() >= 30 ?
+                            cookie.getValue().substring(0, 15) + "..." + cookie.getValue().substring(cookie.getValue().length() - 15)
+                            : cookie.getValue());
+                    return cookie.getName() + "=" + cookieValue;
+                })
                 .collect(Collectors.joining(", "));
     }
     private String getRequestBody(HttpServletRequest request) {
