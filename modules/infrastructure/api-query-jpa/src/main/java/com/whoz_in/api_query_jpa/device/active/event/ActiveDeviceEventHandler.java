@@ -3,9 +3,10 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
+import com.whoz_in.api_query_jpa.shared.util.ActiveDeviceManager;
+import com.whoz_in.api_query_jpa.shared.util.ActiveMemberConnectionManager;
 import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +26,8 @@ public class ActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberRepository memberRepository;
-    private final MemberConnectionInfoRepository connectionInfoRepository;
+    private final ActiveMemberConnectionManager activeMemberConnectionManager;
+    private final ActiveDeviceManager activeDeviceManager;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     @EventListener(ActiveDeviceFinded.class)
@@ -33,15 +35,16 @@ public class ActiveDeviceEventHandler {
         List<UUID> deviceIds = event.getDevices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findAll();
 
+        // 처음 Active 상태가 되었는지 아닌지 구분
         List<ActiveDeviceEntity> firstActiveDevices = findFirstActiveDevices(deviceIds);
         List<ActiveDeviceEntity> nonFirstActiveDevice = findNonFirstActiveDevices(deviceIds);
 
         // TODO: 이 부분 배치로 바꿔서 순차처리 해도 될 듯
-        save(firstActiveDevices);
-        save(nonFirstActiveDevice);
+        activeDeviceManager.saveActiveDevices(firstActiveDevices);
+        activeDeviceManager.saveActiveDevices(nonFirstActiveDevice);
 
-        activeOn(firstActiveDevices);
-        activeOn(nonFirstActiveDevice);
+        activeMemberConnectionManager.memberConnectionOn(firstActiveDevices);
+        activeMemberConnectionManager.memberConnectionOn(nonFirstActiveDevice);
     }
 
     private List<ActiveDeviceEntity> findFirstActiveDevices(List<UUID> deviceIds){
@@ -57,25 +60,6 @@ public class ActiveDeviceEventHandler {
                 .map(opt -> opt.orElse(null))
                 .filter(Objects::nonNull)
                 .toList();
-    }
-
-    private void save(List<ActiveDeviceEntity> entities){
-        entities.forEach(activeDevice -> activeDevice.connect(LocalDateTime.now()));
-        activeDeviceRepository.saveAll(entities);
-    }
-
-    private void activeOn(List<ActiveDeviceEntity> entities) {
-        List<MemberConnectionInfo> connectionInfos = entities.stream()
-                .map(ActiveDeviceEntity::getDeviceId)
-                .map(memberRepository::findByDeviceId)
-                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
-                .map(Member::getId)
-                .map(connectionInfoRepository::findByMemberId)
-                .map(opt -> opt.orElse(null)).filter(Objects::nonNull)
-                .peek(MemberConnectionInfo::activeOn)
-                .toList();
-
-        connectionInfoRepository.saveAll(connectionInfos);
     }
 
     private Member findOwner(ActiveDeviceEntity activeDevice){
