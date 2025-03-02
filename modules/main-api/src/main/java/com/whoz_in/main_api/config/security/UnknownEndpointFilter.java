@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 따라서 시큐리티가 403을 띄우기 전에 미리 처리할 수 있는 엔드포인트인지 이 필터에서 확인하고 처리할 수 없다면 404를 반환한다.
 시큐리티와 관련 없이 서블릿 필터로 둬도 잘 동작할테지만 시큐리티의 제약으로 인해 구현하게 됐으니 시큐리티의 일부로 구성한다.
 */
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class UnknownEndpointFilter extends OncePerRequestFilter {
@@ -30,15 +32,14 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         try {
-            if (mapping.getHandler(request) == null) {
-                response404(response);
-                return;
+            if (mapping.getHandler(request) != null) {
+                log.warn("{}는 시큐리티 필터 체인에 등록되지 않은 엔드포인트입니다.", request.getRequestURI());
             }
         } catch (Exception e) {
-            response404(response);
-            return;
+            throw new IllegalStateException("엔드포인트 확인 중 오류 발생");
+        } finally {
+            response404(response); // 핸들러가 있든 없든 실패하든 말든 프론트로 404 반환
         }
-        filterChain.doFilter(request, response);
     }
 
     private void response404(HttpServletResponse response) throws IOException {

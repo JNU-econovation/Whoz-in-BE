@@ -104,44 +104,32 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //인증이 필요한 엔드포인트나 인증 여부에 따라 다른 동작을 하는 엔드포인트
+    //인증이 필요한 엔드포인트
     //로그아웃, 게시글 작성 등
     @Bean
     @Order(4)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/**"
-        );
-        httpSecurity.authorizeHttpRequests(auth-> {
-            //인증 필요
-            auth.requestMatchers(HttpMethod.GET,
-                    "/api/v1/device/info-status",
-                    "/api/v1/devices",
-                    "/api/v1/private-ips",
-                    "/api/v1/members",
-                    "/api/v1/member"
-            ).authenticated();
-            auth.requestMatchers(HttpMethod.POST,
-                    "/api/v1/device-register-token",
-                    "/api/v1/feedback"
-            ).authenticated();
-            auth.requestMatchers(HttpMethod.PATCH,
-                    "/api/v1/device/info"
-            ).authenticated();
-            auth.requestMatchers(HttpMethod.DELETE,
-                    "/api/v1/device"
-            ).authenticated();
-            //인증 여부에 따라 다른 동작하는 api
-//            auth.requestMatchers(
-//            ).permitAll();
-        });
-        //TODO: 로그아웃 추가
+        httpSecurity.securityMatchers(matcher->
+                matcher.requestMatchers(HttpMethod.GET,
+                        "/api/v1/device/info-status",
+                        "/api/v1/devices",
+                        "/api/v1/private-ips",
+                        "/api/v1/members",
+                        "/api/v1/member"
+                ).requestMatchers(HttpMethod.POST,
+                        "/api/v1/device-register-token",
+                        "/api/v1/feedback"
+                        //TODO: 로그아웃 추가
+                ).requestMatchers(HttpMethod.PATCH,
+                        "/api/v1/device/info"
+                ).requestMatchers(HttpMethod.DELETE,
+                        "/api/v1/device"
+                )
+        ).authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
 
         commonConfigurations(httpSecurity);
         //쿠키를 받기 위한 설정
         httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
-        //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
-        httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
@@ -149,6 +137,35 @@ public class SecurityFilterChainConfig {
 
         return httpSecurity.build();
     }
+
+    //인증 여부에 따라 다른 동작을 하는 엔드포인트 - 추가되면 주석 풀기
+//    @Bean
+//    @Order(5)
+//    public SecurityFilterChain optionalAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        httpSecurity.securityMatcher();
+//
+//        commonConfigurations(httpSecurity);
+//        httpSecurity.logout(AbstractHttpConfigurer::disable);
+//        //쿠키를 받기 위한 설정
+//        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
+//        //jwt(access token)을 Authentication으로 만들어 등록하는 필터
+//        httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
+//        return httpSecurity.build();
+//    }
+
+    @Bean
+    @Order(6)
+    public SecurityFilterChain unknownFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher("/**");
+
+        commonConfigurations(httpSecurity);
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        //서버가 처리할 수 있는 엔드포인트인지 확인하는 필터
+        httpSecurity.addFilterBefore(unknownEndpointFilter, DisableEncodeUrlFilter.class);
+        return httpSecurity.build();
+    }
+
+
 
     private void commonConfigurations(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
