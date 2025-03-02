@@ -34,7 +34,7 @@ public class DeviceRegisterTokenFilter extends OncePerRequestFilter {
 
     private Optional<DeviceRegisterToken> extractDeviceRegisterToken(HttpServletRequest request){
         return Optional.ofNullable(request.getHeader("Authorization"))
-                .filter(header -> header.startsWith("bearer "))
+                .filter(header -> header.startsWith("Bearer "))
                 .map(header -> header.substring(7))
                 .flatMap(deviceRegisterTokenSerializer::deserialize);
     }
