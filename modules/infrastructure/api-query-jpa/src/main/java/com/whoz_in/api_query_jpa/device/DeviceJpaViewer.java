@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Component
@@ -29,6 +30,7 @@ public class DeviceJpaViewer implements DeviceViewer {
                         .toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public DevicesStatus findDevicesStatus(UUID ownerId) {
         List<DeviceStatus> devicesStatus = deviceRepository.findAllByMemberId(ownerId)
