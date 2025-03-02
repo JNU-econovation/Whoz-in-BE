@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.jwt;
 
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
