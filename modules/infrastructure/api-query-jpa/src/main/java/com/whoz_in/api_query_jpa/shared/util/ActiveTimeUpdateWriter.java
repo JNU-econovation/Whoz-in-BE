@@ -51,8 +51,8 @@ public class ActiveTimeUpdateWriter {
     }
 
     public void shutdown(List<ActiveDeviceEntity> activeDevices, LocalTime shutdownTime){
-        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), shutdownTime);
-        activeDevices.forEach(activeDevice -> activeDevice.disConnect(midnight));
+        LocalDateTime shutdownDateTime = LocalDateTime.of(LocalDate.now(), shutdownTime);
+        activeDevices.forEach(activeDevice -> activeDevice.disConnect(shutdownDateTime));
     }
 
     // 해당 기기 주인의 dailyTime 을 update

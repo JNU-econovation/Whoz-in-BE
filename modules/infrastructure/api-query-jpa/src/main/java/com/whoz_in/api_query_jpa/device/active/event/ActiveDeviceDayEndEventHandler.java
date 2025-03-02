@@ -12,6 +12,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ActiveDeviceDayEndEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
@@ -40,13 +42,13 @@ public class ActiveDeviceDayEndEventHandler {
         List<ActiveDeviceEntity> inActives = filterInActive(activeDevices);
 
         // active 상태인 기기 모두 shutdown
-        shutdown(actives);
+        activeTimeUpdateWriter.shutdown(actives, LocalTime.MIDNIGHT);
         // active 상태인 기기들 shutdown 후, ActiveTime 업데이트
-        updateActiveTime(actives);
+        activeTimeUpdateWriter.updateActiveTime(actives);
 
         // DailyTime 을 초기화
-        clearDailyTime(actives);
-        clearDailyTime(inActives);
+        activeTimeUpdateWriter.clearDailyTime(actives);
+        activeTimeUpdateWriter.clearDailyTime(inActives);
     }
 
     private List<ActiveDeviceEntity> filterActive(List<ActiveDeviceEntity> activeDevices){
@@ -55,29 +57,10 @@ public class ActiveDeviceDayEndEventHandler {
                 .toList();
     }
 
-    private List<ActiveDeviceEntity> filterInActive(List<ActiveDeviceEntity> activeDevices){
+    private List<ActiveDeviceEntity> filterInActive(List<ActiveDeviceEntity> activeDevices) {
         return activeDevices.stream()
                 .filter(activeDevice -> !activeDevice.isActive())
                 .toList();
-    }
-
-    private void shutdown(List<ActiveDeviceEntity> activeDevices){
-        LocalDateTime midnight = LocalDateTime.of(LocalDate.now(), LocalTime.MIDNIGHT);
-        activeDevices.forEach(activeDevice -> activeDevice.disConnect(midnight));
-    }
-
-    private void updateActiveTime(List<ActiveDeviceEntity> activeDevices) {
-        List<UUID> deviceIds = activeDevices.stream().map(ActiveDeviceEntity::getDeviceId).toList();
-
-        // TODO: SQL 최적화, stream 원소 하나하나마다 save 를 하고 있으므로, 단일 쿼리가 여러번 날아간다.
-        deviceIds.stream()
-                .peek(activeTimeUpdateWriter::updateDailyTime)
-                .forEach(activeTimeUpdateWriter::updateTotalActiveTime);
-    }
-
-    private void clearDailyTime(List<ActiveDeviceEntity> actives) {
-        List<UUID> deviceIds = actives.stream().map(ActiveDeviceEntity::getDeviceId).toList();
-        deviceIds.forEach(activeTimeUpdateWriter::clearDailyTime);
     }
 
 }
