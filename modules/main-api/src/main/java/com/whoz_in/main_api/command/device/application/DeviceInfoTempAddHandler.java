@@ -1,6 +1,10 @@
 package com.whoz_in.main_api.command.device.application;
 
+import com.whoz_in.domain.device.DeviceRepository;
+import com.whoz_in.domain.device.exception.DeviceAlreadyRegisteredException;
+import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.service.DeviceFinderService;
+import com.whoz_in.domain.device.service.DeviceOwnershipService;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.network_log.ManagedLog;
@@ -12,6 +16,7 @@ import com.whoz_in.main_api.shared.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.caching.device.TempDeviceInfoStore;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +30,8 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
     private final DeviceFinderService deviceFinderService;
+    private final DeviceRepository deviceRepository;
+    private final DeviceOwnershipService deviceOwnershipService;
     //얘네 도메인에서의 입지가 애매해서 일단 Repository로 다뤘습니다.
     private final ManagedLogRepository managedLogRepository;
     private final MonitorLogRepository monitorLogRepository;
@@ -45,8 +52,14 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         if (tempDeviceInfoStore.exists(requesterId.id(), deviceInfo)) return managedLog.getSsid();
         //모니터 로그에서 현재 접속 중인 맥이 있어야 한다. (넉넉하게 15분)
         monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
-        //해당 맥으로 이미 등록된 기기가 없어야 한다.
-        deviceFinderService.mustNotExistByMac(mac);
+
+        //해당 맥으로 등록된 기기가 있으면 가져옴
+        Optional<Device> device = deviceRepository.findByMac(mac);
+        device.ifPresent(d -> { //기기가 있을경우
+            deviceOwnershipService.validateIsMine(d, requesterId); //내꺼 아니면 예외
+            throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
+        });
+
         //마침내! DeviceInfo를 추가한다.
         tempDeviceInfoStore.add(requesterId.id(), deviceInfo);
 
