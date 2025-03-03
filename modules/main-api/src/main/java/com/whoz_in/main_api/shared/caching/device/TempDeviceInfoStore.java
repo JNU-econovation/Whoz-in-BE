@@ -48,14 +48,8 @@ public final class TempDeviceInfoStore {
         return deviceInfos != null ? List.copyOf(deviceInfos) : List.of();
     }
 
-    public void remove(UUID ownerId){
-        store.invalidate(ownerId);
-    }
-
     //반환 전 제거
     public List<TempDeviceInfo> takeout(UUID ownerId){
-        List<TempDeviceInfo> deviceInfos = get(ownerId);
-        remove(ownerId);
-        return deviceInfos;
+        return store.asMap().remove(ownerId);
     }
 }
