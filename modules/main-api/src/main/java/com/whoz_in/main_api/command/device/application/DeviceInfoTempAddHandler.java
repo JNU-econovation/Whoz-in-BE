@@ -29,7 +29,6 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     private final RequesterInfo requesterInfo;
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
-    private final DeviceFinderService deviceFinderService;
     private final DeviceRepository deviceRepository;
     private final DeviceOwnershipService deviceOwnershipService;
     //얘네 도메인에서의 입지가 애매해서 일단 Repository로 다뤘습니다.
@@ -37,6 +36,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     private final MonitorLogRepository monitorLogRepository;
 
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
+    //TODO: 트랜잭셔널 범위 수정
     @Transactional
     @Override
     public String handle(DeviceInfoTempAdd req) {
