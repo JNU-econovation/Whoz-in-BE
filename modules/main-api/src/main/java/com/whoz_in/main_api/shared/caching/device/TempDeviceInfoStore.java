@@ -48,14 +48,11 @@ public final class TempDeviceInfoStore {
         return deviceInfos != null ? List.copyOf(deviceInfos) : List.of();
     }
 
-    public void remove(UUID ownerId){
-        store.invalidate(ownerId);
-    }
-
     //반환 전 제거
+    //값이 없을경우 예외 발생 (동시 접근 시 뜰거임)
     public List<TempDeviceInfo> takeout(UUID ownerId){
-        List<TempDeviceInfo> deviceInfos = get(ownerId);
-        remove(ownerId);
+        List<TempDeviceInfo> deviceInfos = store.asMap().remove(ownerId);
+        if (deviceInfos == null) throw new IllegalStateException("저장된 device info가 없음");
         return deviceInfos;
     }
 }
