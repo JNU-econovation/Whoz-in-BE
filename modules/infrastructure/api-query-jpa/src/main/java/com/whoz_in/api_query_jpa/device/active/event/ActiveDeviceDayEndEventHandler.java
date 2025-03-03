@@ -39,7 +39,7 @@ public class ActiveDeviceDayEndEventHandler {
 
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-    public void shutDownDevice(){
+    public void handle(){
         List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findAll();
 
         List<ActiveDeviceEntity> actives = filterActive(activeDevices);
