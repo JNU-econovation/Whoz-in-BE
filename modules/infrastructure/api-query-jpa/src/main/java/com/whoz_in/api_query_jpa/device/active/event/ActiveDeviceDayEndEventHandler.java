@@ -7,7 +7,6 @@ import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
-import com.whoz_in.api_query_jpa.shared.util.ActiveTimeUpdateWriter;
 import com.whoz_in.main_api.shared.domain.member.event.DayEndEvent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActiveDeviceDayEndEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
-    private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
     private final DeviceConnectionService deviceConnectionService;
     private final MemberConnectionService memberConnectionService;
     private final DeviceService deviceService;

@@ -7,8 +7,6 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
-import com.whoz_in.api_query_jpa.shared.util.ActiveTimeUpdateWriter;
-import com.whoz_in.api_query_jpa.shared.util.InActiveMemberConnectionManager;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -25,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class InActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
-    private final InActiveMemberConnectionManager inActiveMemberConnectionManager;
     private final DeviceConnectionService deviceConnectionService;
 
     // ActiveDeviceEvent 핸들러에서 데이터를 수정할 수 있으므로 격리 수준을 serializable 로 설정
