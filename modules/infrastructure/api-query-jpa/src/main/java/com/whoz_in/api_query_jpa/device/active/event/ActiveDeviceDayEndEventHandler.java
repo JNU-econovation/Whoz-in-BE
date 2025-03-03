@@ -55,7 +55,7 @@ public class ActiveDeviceDayEndEventHandler {
 
         inActives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .forEach(activeTimeUpdateWriter::updateDailyTime);
+                .forEach(activeTimeUpdateWriter::updateTotalActiveTime);
 
     }
 
