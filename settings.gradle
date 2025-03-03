@@ -13,3 +13,5 @@ include ':logging'
 project(':logging').projectDir = file('modules/infrastructure/logging')
 include ':api-redis'
 project(':api-redis').projectDir = file('modules/infrastructure/api-redis')
+include ':net-health-manager'
+project(':net-health-manager').projectDir = file('modules/infrastructure/net-health-manager')
