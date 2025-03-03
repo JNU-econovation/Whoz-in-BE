@@ -50,8 +50,6 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
             List<UUID> notInMonitorLog = getDeviceNotInMonitorLog(monitorLogDeviceIds, activeDevices);
 
-            log.info("[InActiveDeviceFilter] InActive Device find : {}", notInMonitorLog.size());
-
             return findDevices(notInMonitorLog);
         }
 
@@ -80,7 +78,6 @@ public class InActiveDeviceFilter extends DeviceFilter{
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
         if(term.compareTo(MEASURE) > 0){
-            log.info("[InActiveDeviceFilter] InActive 전환 {}", deviceId);
             return true;
         }
         return false;
