@@ -13,7 +13,8 @@ import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfoStore;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
-import com.whoz_in.main_api.shared.jwt.TokenType;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenException;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
@@ -59,7 +60,8 @@ public class MemberController extends CommandController {
           HttpServletResponse response
   ){
     //사용자의 소셜 정보 가져오기
-    OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue());
+    OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue())
+            .orElseThrow(() -> new TokenException("2008", "잘못된 oauth2 temp token"));
     OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey());
     //회원가입
     dispatch(new MemberOAuth2SignUp(oAuth2UserInfo.getSocialProvider(), oAuth2UserInfo.getSocialId(), req.name(), req.position(), req.generation()));

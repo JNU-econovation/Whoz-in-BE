@@ -7,7 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
-//JwtAuthentication이 없을경우 실행됨 (access token이 없다는 뜻)
+//JwtAuthentication이 없을경우 실행됨 (jwt(access, device register)이 없다는 뜻)
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
