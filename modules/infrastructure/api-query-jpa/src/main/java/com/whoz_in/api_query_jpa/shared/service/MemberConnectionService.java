@@ -24,7 +24,6 @@ public class MemberConnectionService {
     private final MemberConnectionInfoRepository connectionInfoRepository;
     private final MemberRepository memberRepository;
     private final DeviceService deviceService;
-    private final TimeUpdateService timeUpdateService;
 
     /**
      * inActive 처리된 기기 주인을 disconnect 시킨다.
