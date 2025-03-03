@@ -4,6 +4,8 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
+import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
+import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
 import com.whoz_in.api_query_jpa.shared.util.ActiveTimeUpdateWriter;
 import com.whoz_in.main_api.shared.domain.member.event.DayEndEvent;
 import java.time.LocalDate;
@@ -29,9 +31,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActiveDeviceDayEndEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
-    private final MemberConnectionInfoRepository connectionInfoRepository;
-    private final MemberRepository memberRepository;
     private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
+    private final DeviceConnectionService deviceConnectionService;
+    private final MemberConnectionService memberConnectionService;
 
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
@@ -41,14 +43,20 @@ public class ActiveDeviceDayEndEventHandler {
         List<ActiveDeviceEntity> actives = filterActive(activeDevices);
         List<ActiveDeviceEntity> inActives = filterInActive(activeDevices);
 
-        // active 상태인 기기 모두 shutdown
-        activeTimeUpdateWriter.shutdown(actives, LocalTime.MIDNIGHT);
-        // active 상태인 기기들 shutdown 후, ActiveTime 업데이트
-        activeTimeUpdateWriter.updateActiveTime(actives);
+        // active 상태인 기기 모두 접속 종료 / dailyTime 업데이트
+        actives.stream()
+                .map(ActiveDeviceEntity::getDeviceId)
+                .forEach(deviceConnectionService::disconnectDevice);
 
-        // DailyTime 을 초기화
-        activeTimeUpdateWriter.clearDailyTime(actives);
-        activeTimeUpdateWriter.clearDailyTime(inActives);
+        // totalTime 업데이트 및 dailyTime 초기화
+        actives.stream()
+                .map(ActiveDeviceEntity::getDeviceId)
+                .forEach(memberConnectionService::updateTotalTime);
+
+        inActives.stream()
+                .map(ActiveDeviceEntity::getDeviceId)
+                .forEach(activeTimeUpdateWriter::updateDailyTime);
+
     }
 
     private List<ActiveDeviceEntity> filterActive(List<ActiveDeviceEntity> activeDevices){
