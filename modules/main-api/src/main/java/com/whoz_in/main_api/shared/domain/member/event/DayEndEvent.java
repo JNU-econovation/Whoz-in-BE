@@ -11,10 +11,9 @@ import org.springframework.stereotype.Component;
 public class DayEndEvent implements ApplicationEvent {
 
     // 매일 자정에 이벤트 발생
-    @Scheduled(cron = "0 * 23 * * *")
+    @Scheduled(cron = "0 0 6 * * *")
     public void raiseDayEndEvent(){
         Events.raise(this);
-        System.out.println("자정 이벤트 발생");
     }
 
 }
