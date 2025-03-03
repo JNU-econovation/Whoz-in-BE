@@ -65,12 +65,36 @@ public class MemberConnectionService {
             connectionInfo.addDailyTime(continuousTime);
 
             connectionInfoRepository.save(connectionInfo);
+
+            log.info("disconnect (memberId) : {}", connectionInfo.getMemberId());
         } catch (Exception e) {
             log.warn("[예상치 못한 에러로, dailyTime 업데이트 실패");
             log.warn("exception : {}", e.getMessage());
             return false;
         }
         return true;
+    }
+
+    /**
+     *
+     * @param memberId
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public boolean updateTotalTime(UUID memberId) {
+        // connection 정보 조회
+        Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
+
+        if(memberConnectionInfo.isPresent()) {
+            MemberConnectionInfo connectionInfo = memberConnectionInfo.get();
+            connectionInfo.addTotalTime();
+            connectionInfo.resetDailyTime();
+            connectionInfoRepository.save(connectionInfo);
+            log.info("updateTotalTime (memberId) : {}", connectionInfo.getMemberId());
+            return true;
+        }
+        return false;
+
     }
 
 }
