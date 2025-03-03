@@ -4,7 +4,9 @@ package com.whoz_in.main_api.shared.jwt;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ISSUER;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_TYPE;
 
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import java.time.Duration;
 import java.time.Instant;
@@ -32,7 +34,7 @@ public class JwtUtil {
                 .compact();
     }
 
-    public Claims getClaims(String token){
+    public Claims getClaims(String token) throws JwtException {
         return Jwts.parser().verifyWith(jwtProperties.getSecretKey()).build().parseSignedClaims(token).getPayload();
     }
 
