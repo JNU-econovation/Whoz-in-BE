@@ -5,6 +5,7 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
+import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
 import com.whoz_in.api_query_jpa.shared.util.ActiveTimeUpdateWriter;
 import com.whoz_in.main_api.shared.domain.member.event.DayEndEvent;
@@ -34,6 +35,7 @@ public class ActiveDeviceDayEndEventHandler {
     private final ActiveTimeUpdateWriter activeTimeUpdateWriter;
     private final DeviceConnectionService deviceConnectionService;
     private final MemberConnectionService memberConnectionService;
+    private final DeviceService deviceService;
 
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
@@ -55,7 +57,8 @@ public class ActiveDeviceDayEndEventHandler {
 
         inActives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .forEach(memberConnectionService::updateTotalTime);
+                .map(deviceService::findDeviceOwner)
+                .forEach(ownerId -> ownerId.ifPresent(memberConnectionService::updateTotalTime));
 
     }
 
