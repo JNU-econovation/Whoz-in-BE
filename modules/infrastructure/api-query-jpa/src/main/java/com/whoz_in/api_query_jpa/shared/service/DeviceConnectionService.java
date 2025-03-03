@@ -11,6 +11,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
@@ -31,14 +32,17 @@ public class DeviceConnectionService {
      *   b) 마지막 기기가 아닐 경우, ActiveDevice 만 inActive 한다.
      * @param deviceId
      */
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void disconnectDevice(UUID deviceId) {
         boolean isActive = deviceService.isActive(deviceId);
         boolean isLastDevice = deviceService.isLastConnectedDevice(deviceId);
 
         if(isActive) {
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
-            activeDevice.ifPresent(ad -> ad.disConnect(LocalDateTime.now()));
+            activeDevice.ifPresent(ad -> {
+                log.info("disconnect (deviceId) : {}", ad.getDeviceId());
+                ad.disConnect(LocalDateTime.now());
+            });
         }
 
         if(isLastDevice){
