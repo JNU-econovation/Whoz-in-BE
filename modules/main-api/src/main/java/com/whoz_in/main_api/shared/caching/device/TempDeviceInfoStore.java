@@ -49,7 +49,10 @@ public final class TempDeviceInfoStore {
     }
 
     //반환 전 제거
+    //값이 없을경우 예외 발생 (동시 접근 시 뜰거임)
     public List<TempDeviceInfo> takeout(UUID ownerId){
-        return store.asMap().remove(ownerId);
+        List<TempDeviceInfo> deviceInfos = store.asMap().remove(ownerId);
+        if (deviceInfos == null) throw new IllegalStateException("저장된 device info가 없음");
+        return deviceInfos;
     }
 }
