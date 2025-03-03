@@ -56,6 +56,20 @@ public class MemberConnectionService {
         return false;
     }
 
+    public void connectMember(UUID memberId) {
+        Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
+
+        if(memberConnectionInfo.isPresent()) {
+            MemberConnectionInfo connectionInfo = memberConnectionInfo.get();
+
+            if(!connectionInfo.isActive()) {
+                log.info("connect (memberId) : {}", connectionInfo.getMemberId());
+                connectionInfo.activeOn();
+                connectionInfoRepository.save(connectionInfo);
+            }
+        }
+    }
+
     private boolean updateDailyTime(ActiveDeviceEntity activeDevice, MemberConnectionInfo connectionInfo) {
         try {
             Duration continuousTime = Duration.between(activeDevice.getConnectedAt(), activeDevice.getDisConnectedAt()).abs();
