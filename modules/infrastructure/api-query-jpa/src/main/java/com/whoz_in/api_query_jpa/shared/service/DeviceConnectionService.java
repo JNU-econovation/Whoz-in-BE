@@ -54,4 +54,17 @@ public class DeviceConnectionService {
         }
     }
 
+    public void connectDevice(UUID deviceId){
+        boolean isActive = deviceService.isActive(deviceId);
+
+        if(!isActive){
+            Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
+            activeDevice.ifPresent(ad -> {
+                log.info("connect (deviceId) : {}", ad.getDeviceId());
+                ad.connect(LocalDateTime.now());
+                activeDeviceRepository.save(ad);
+            });
+        }
+    }
+
 }
