@@ -3,7 +3,6 @@ package com.whoz_in.api_query_jpa.shared.service;
 import com.whoz_in.api_query_jpa.device.DeviceRepository;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.LocalDateTime;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ConnectionService {
+public class DeviceConnectionService {
 
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberConnectionInfoRepository connectionInfoRepository;
