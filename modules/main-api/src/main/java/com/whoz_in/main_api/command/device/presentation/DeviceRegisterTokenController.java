@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.command.device.presentation;
 
+import com.whoz_in.main_api.command.device.presentation.docs.DeviceRegisterTokenApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
@@ -18,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
-public class DeviceRegisterTokenController {
+public class DeviceRegisterTokenController implements DeviceRegisterTokenApi {
     private final TokenSerializer<DeviceRegisterToken> deviceRegisterTokenSerializer;
     private final RequesterInfo requesterInfo;
 
