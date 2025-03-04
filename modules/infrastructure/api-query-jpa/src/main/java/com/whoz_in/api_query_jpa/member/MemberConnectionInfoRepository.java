@@ -9,7 +9,7 @@ public interface MemberConnectionInfoRepository extends JpaRepository<MemberConn
 
     Optional<MemberConnectionInfo> findByMemberId(UUID memberId);
 
-    @Query("SELECT connectionInfo FROM MemberConnectionInfo connectionInfo WHERE connectionInfo.isActive = true")
+    @Query("SELECT count(connectionInfo) FROM MemberConnectionInfo connectionInfo WHERE connectionInfo.isActive = true")
     Long countActiveMember();
 
 }
