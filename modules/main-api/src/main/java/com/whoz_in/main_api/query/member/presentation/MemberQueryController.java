@@ -38,7 +38,7 @@ public class MemberQueryController extends QueryController implements MemberQuer
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }
 
-    @GetMapping("/active")
+    @GetMapping("/members/active/size")
     public ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveDevices(){
         return ResponseEntityGenerator.success(ask(new MemberCountInRoom()), CrudResponseCode.READ);
     }
