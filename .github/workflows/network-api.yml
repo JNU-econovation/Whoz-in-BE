@@ -1,0 +1,24 @@
+name: network-api 워크 플로우
+
+on:
+    push:
+        branches:
+        - develop
+
+jobs:
+    test:
+        name: 테스트하기
+        uses: ./.github/workflows/ci.yml
+
+    deploy:
+        name: 배포하기
+        needs: test
+        uses: ./.github/workflows/deploy.yml
+        secrets:
+            HOST: ${{ secrets.NETWORK_API_ADDRESS }}
+            USERNAME: ${{ secrets.NETWORK_API_USERNAME }}
+            PASSWORD: ${{ secrets.NETWORK_API_PASSWORD }}
+            SSH_PORT: ${{ secrets.NETWORK_API_SSH_PORT }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+            environment: network-api

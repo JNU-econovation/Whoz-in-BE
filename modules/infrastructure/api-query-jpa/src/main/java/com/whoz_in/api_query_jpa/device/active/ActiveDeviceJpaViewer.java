@@ -33,7 +33,7 @@ public class ActiveDeviceJpaViewer implements ActiveDeviceViewer {
     }
 
     @Override
-    public List<ActiveDevice> findAllByDeviceId(List<String> deviceIds) {
+    public List<ActiveDevice> findByDeviceIds(List<String> deviceIds) {
         return activeDeviceRepository.findByDeviceIds(deviceIds.stream().map(UUID::fromString).toList()).stream()
                 .map(this::createActiveDevice)
                 .toList();
