@@ -23,6 +23,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -124,6 +125,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private List<MemberInfo> findByStatus(String status) {
+        if(Objects.isNull(status)) return memberViewer.findAllMemberInfo();
+
         if(status.equals("active")){
             return memberViewer.findMembersByStatus(true);
         }
