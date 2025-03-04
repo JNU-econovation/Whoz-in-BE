@@ -26,9 +26,8 @@ public class MemberQueryController extends QueryController implements MemberQuer
         super(queryBus);
     }
 
-    //TODO: Response 클래스 이름 Member 기준으로 변경
     @GetMapping("/members")
-    public ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveDevices(
+    public ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveMembers(
             @RequestParam("size") int size,
             @RequestParam("page") int page,
             @RequestParam("sortType") String sortType,
@@ -40,7 +39,7 @@ public class MemberQueryController extends QueryController implements MemberQuer
     }
 
     @GetMapping("/members/active/size")
-    public ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveDevices(){
+    public ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveMemberCount(){
         return ResponseEntityGenerator.success(ask(new MemberCountInRoom()), CrudResponseCode.READ);
     }
 

@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
+import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
@@ -15,12 +16,18 @@ public interface MemberQueryApi {
             summary = "동아리 방 현황 조회",
             description = "동아리 방에 누가 있는지 현황을 조회합니다."
     )
-    ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveDevices(
+    ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveMembers(
             @Parameter(name="size") int size,
             @Parameter(name="page") int page,
             @Parameter(name="sortType") String sortType,
             @Parameter(name="status") String status
     );
+
+    @Operation(
+            summary = "동아리 방 회원 수 조회",
+            description = "동아리 방에 있는 회원 수를 조회합니다."
+    )
+    ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveMemberCount();
 
 
     @Operation(
