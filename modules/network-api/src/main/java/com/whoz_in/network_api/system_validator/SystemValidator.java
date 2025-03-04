@@ -6,6 +6,7 @@ import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
 import com.whoz_in.network_api.common.validation.ValidationException;
 import com.whoz_in.network_api.common.validation.ValidationResult;
 import com.whoz_in.network_api.config.NetworkConfig;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -57,8 +58,12 @@ public final class SystemValidator {
                         .map(Object::toString)
                         .collect(Collectors.joining("\n")));
 
+        // TODO: ni를 eth 생각 안하고 설계해서 하드코딩했음 Term3 때 고치겠습니다.
+        ArrayList<NetworkInterface> withoutEth = new ArrayList<>(config.getAllNIs());
+        withoutEth.removeIf(ni-> ni.getInterfaceName().equals("eth0"));
+
         //네트워크 인터페이스 상태 검증
-        networkInterfaceValidator.validate(system, setting);
+        networkInterfaceValidator.validate(system, withoutEth);
 
         log.info("시스템 검증 완료");
     }
@@ -71,9 +76,13 @@ public final class SystemValidator {
         // 검증 에러 담을 객체
         ValidationResult result = new ValidationResult();
 
+        // TODO: ni를 eth 생각 안하고 설계해서 하드코딩했음 Term3 때 고치겠습니다.
+        ArrayList<NetworkInterface> withoutEth = new ArrayList<>(config.getAllNIs());
+        withoutEth.removeIf(ni-> ni.getInterfaceName().equals("eth0"));
+
         //네트워크 인터페이스 상태 검증
         try {
-            networkInterfaceValidator.validate(systemNIs.getLatest(), config.getAllNIs());
+            networkInterfaceValidator.validate(systemNIs.getLatest(), withoutEth);
         } catch (ValidationException e){
             // 검증 후 에러들 추가
             List<String> errors = e.getValidationResult().getErrors();
