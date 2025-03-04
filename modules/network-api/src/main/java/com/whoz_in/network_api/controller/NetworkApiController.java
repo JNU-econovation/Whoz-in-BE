@@ -2,6 +2,7 @@ package com.whoz_in.network_api.controller;
 
 import com.whoz_in.network_api.common.gateways.GatewayList;
 import com.whoz_in.network_api.common.util.IpHolder;
+import com.whoz_in.network_api.controller.docs.NetworkApi;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class NetworkApiController {
+public class NetworkApiController implements NetworkApi {
     private final IpHolder ipHolder;
     private final GatewayList gatewayList;
     private final String room;

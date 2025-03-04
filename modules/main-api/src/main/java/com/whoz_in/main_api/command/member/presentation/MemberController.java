@@ -8,6 +8,7 @@ import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
 import com.whoz_in.main_api.command.member.application.MemberSignUp;
+import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MemberController extends CommandController {
+public class MemberController extends CommandController implements MemberCommandApi {
   private final TokenSerializer<OAuth2TempToken> oAuth2TempTokenTokenSerializer;
   private final CookieFactory cookieFactory;
   private final JwtProperties jwtProperties;
