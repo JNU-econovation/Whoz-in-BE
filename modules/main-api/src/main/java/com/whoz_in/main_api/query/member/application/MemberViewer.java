@@ -16,4 +16,5 @@ public interface MemberViewer extends Viewer {
     Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId);
     List<MemberConnectionInfo> findAllMemberConnectionInfo();
     List<MemberInfo> findAllMemberInfo();
+    Long countActiveMember();
 }
