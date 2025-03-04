@@ -16,6 +16,7 @@ import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
+import com.whoz_in.main_api.shared.utils.Sorter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -104,9 +105,17 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
             // TODO : 정렬 자동화
             if (sortType.equals("asc"))
-                responses.sort(Comparator.comparing(MemberInRoomResponse::memberName));
+                Sorter.<MemberInRoomResponse>builder()
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::totalActiveTime))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .build()
+                        .sort(responses);
+
             else
-                responses.sort(Comparator.comparing(MemberInRoomResponse::totalActiveTime));
+                Sorter.<MemberInRoomResponse>builder()
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName));
 
             return new MembersInRoomResponse(responses, (int)responses.stream().filter(MemberInRoomResponse::isActive).count());
         }
