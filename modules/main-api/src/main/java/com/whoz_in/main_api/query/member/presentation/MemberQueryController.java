@@ -4,6 +4,7 @@ import com.whoz_in.main_api.query.member.application.query.MembersInRoom;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.application.query.MemberDetailInfoGet;
+import com.whoz_in.main_api.query.member.presentation.docs.MemberQueryApi;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class MemberQueryController extends QueryController {
+public class MemberQueryController extends QueryController implements MemberQueryApi {
 
     public MemberQueryController(QueryBus queryBus) {
         super(queryBus);
