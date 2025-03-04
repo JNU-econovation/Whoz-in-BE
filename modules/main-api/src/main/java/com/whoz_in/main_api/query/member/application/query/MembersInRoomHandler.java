@@ -116,7 +116,9 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             else
                 Sorter.<MemberInRoomResponse>builder()
                         .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
-                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName));
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .build()
+                        .sort(responses);
 
             return new MembersInRoomResponse(responses, (int)responses.stream().filter(MemberInRoomResponse::isActive).count());
         }
