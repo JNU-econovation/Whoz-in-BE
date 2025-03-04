@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.command.feedback.presentation;
 
 import com.whoz_in.main_api.command.feedback.application.FeedbackSend;
+import com.whoz_in.main_api.command.feedback.presentation.docs.FeedbackCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class FeedbackController extends CommandController {
+public class FeedbackController extends CommandController implements FeedbackCommandApi {
     public FeedbackController(CommandBus commandBus) {super(commandBus);}
 
     @PostMapping("/api/v1/feedback")
