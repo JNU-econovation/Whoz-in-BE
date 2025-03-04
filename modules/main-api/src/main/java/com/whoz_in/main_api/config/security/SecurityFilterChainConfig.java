@@ -46,8 +46,23 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
+    // swagger
     @Bean
     @Order(1)
+    public SecurityFilterChain swaggerFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatchers(matcher -> {
+            matcher.requestMatchers(HttpMethod.GET, "/swagger-ui/**")
+                    .requestMatchers(HttpMethod.GET, "/v3/api-docs/**");
+        });
+
+        commonConfigurations(httpSecurity);
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        return httpSecurity.build();
+    }
+
+    @Bean
+    @Order(2)
     public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
                 "/login", //시큐리티 기본 로그인 페이지
@@ -70,7 +85,7 @@ public class SecurityFilterChainConfig {
 
     //인증인가 필요 없는 엔드포인트
     @Bean
-    @Order(2)
+    @Order(3)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->{
             matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
@@ -86,7 +101,7 @@ public class SecurityFilterChainConfig {
 
     // 기기 등록 페이지에서 요청할 수 있는 api를 처리하는 필터
     @Bean
-    @Order(3)
+    @Order(4)
     public SecurityFilterChain deviceRegisterFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher ->
                 matcher.requestMatchers(HttpMethod.POST,
@@ -110,7 +125,7 @@ public class SecurityFilterChainConfig {
     //인증이 필요한 엔드포인트
     //로그아웃, 게시글 작성 등
     @Bean
-    @Order(4)
+    @Order(5)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->
                 matcher.requestMatchers(HttpMethod.GET,
