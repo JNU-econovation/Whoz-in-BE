@@ -54,6 +54,11 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     @Override
+    public List<MemberInfo> findMembersByStatus(boolean isActive) {
+        return repository.findByStatus(isActive).stream().map(this::toMemberInfo).toList();
+    }
+
+    @Override
     public Long countActiveMember() {
         return memberConnectionInfoRepository.countActiveMember();
     }
