@@ -124,14 +124,14 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private List<MemberInfo> findByStatus(String status) {
-        if(status.equals("all")){
-            return memberViewer.findAllMemberInfo();
-        }
-        else if(status.equals("active")){
+        if(status.equals("active")){
             return memberViewer.findMembersByStatus(true);
         }
-        else{
+        else if(status.equals("inactive")){
             return memberViewer.findMembersByStatus(false);
+        }
+        else {
+            return memberViewer.findAllMemberInfo();
         }
     }
 
