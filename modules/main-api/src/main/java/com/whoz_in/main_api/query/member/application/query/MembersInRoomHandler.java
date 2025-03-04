@@ -16,15 +16,16 @@ import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
+import com.whoz_in.main_api.shared.utils.Sorter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,17 +47,18 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         int page = query.page() - 1;
         int size = query.size();
         String sortType = query.sortType();
+        String status = query.status();
 
         // 응답용 리스트
         List<MemberInRoomResponse> responses = new ArrayList<>();
 
-        // 모든 멤버 정보 조회
-        List<MemberInfo> memberInfos = memberViewer.findAllMemberInfo();
+        // 상태에 맞는 회원 정보 조회
+        List<MemberInfo> memberInfos = findByStatus(status);
 
-        // 모든 멤버 접속 정보 조회
-        List<MemberConnectionInfo> memberConnectionInfos = memberViewer.findAllMemberConnectionInfo();
+        // 해당 멤버 접속 정보 조회
+        List<MemberConnectionInfo> memberConnectionInfos = memberViewer.findByMemberIds(memberInfos.stream().map(MemberInfo::memberId).toList());
 
-        // 모든 회원의 기기 정보 조회
+        // 해당 회원의 기기 정보 조회
         Map<MemberId, List<DeviceStatus>> devicesStatusByMemberId = createDevicesStatusMap(memberInfos); // Map<MemberId, List<DeviceStatus>>
 
         List<DeviceId> deviceIds = devicesStatusByMemberId.values().stream()
@@ -65,8 +67,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 .map(DeviceId::new)
                 .toList();
 
-        // 모든 회원의 ActiveDevice 정보 조회
-        List<ActiveDevice> activeDevices = activeDeviceViewer.findAllByDeviceId(deviceIds.stream().map(DeviceId::id).map(UUID::toString).toList());
+        // 해당 회원의 ActiveDevice 정보 조회
+        List<ActiveDevice> activeDevices = activeDeviceViewer.findByDeviceIds(deviceIds.stream().map(DeviceId::id).map(UUID::toString).toList());
 
         Map<MemberId, MemberConnectionInfo> memberConnectionInfoByMemberId = createMemberConnectionInfoMap(memberConnectionInfos);
 
@@ -104,14 +106,38 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
             // TODO : 정렬 자동화
             if (sortType.equals("asc"))
-                responses.sort(Comparator.comparing(MemberInRoomResponse::memberName));
-            else
-                responses.sort(Comparator.comparing(MemberInRoomResponse::totalActiveTime));
+                Sorter.<MemberInRoomResponse>builder()
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::totalActiveTime))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .build()
+                        .sort(responses);
 
-            return new MembersInRoomResponse(responses, (int)responses.stream().filter(MemberInRoomResponse::isActive).count());
+            else
+                Sorter.<MemberInRoomResponse>builder()
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .build()
+                        .sort(responses);
+
+            return new MembersInRoomResponse(responses, memberViewer.countActiveMember().intValue());
         }
 
         return new MembersInRoomResponse(responses, 0);
+    }
+
+    private List<MemberInfo> findByStatus(String status) {
+        if(Objects.isNull(status)) return memberViewer.findAllMemberInfo();
+
+        if(status.equals("active")){
+            return memberViewer.findMembersByStatus(true);
+        }
+        else if(status.equals("inactive")){
+            return memberViewer.findMembersByStatus(false);
+        }
+        else {
+            return memberViewer.findAllMemberInfo();
+        }
     }
 
     private Map<MemberId, MemberConnectionInfo> createMemberConnectionInfoMap(
