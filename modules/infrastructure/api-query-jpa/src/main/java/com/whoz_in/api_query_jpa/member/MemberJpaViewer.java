@@ -48,8 +48,23 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     @Override
+    public List<MemberConnectionInfo> findByMemberIds(List<UUID> memberIds) {
+        return connectionInfoRepository.findByMemberIds(memberIds).stream().map(this::toMemberConnectionInfo).toList();
+    }
+
+    @Override
     public List<MemberInfo> findAllMemberInfo() {
         return repository.findAll().stream().map(this::toMemberInfo).toList();
+    }
+
+    @Override
+    public List<MemberInfo> findMembersByStatus(boolean isActive) {
+        return repository.findByStatus(isActive).stream().map(this::toMemberInfo).toList();
+    }
+
+    @Override
+    public Long countActiveMember() {
+        return connectionInfoRepository.countActiveMember();
     }
 
     private MemberConnectionInfo toMemberConnectionInfo(com.whoz_in.api_query_jpa.member.MemberConnectionInfo entity){

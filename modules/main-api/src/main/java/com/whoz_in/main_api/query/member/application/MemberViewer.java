@@ -11,9 +11,12 @@ import java.util.UUID;
 
 public interface MemberViewer extends Viewer {
     Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId);
-    Optional<MemberInfo> findNameByMemberId(String memberId);
-    Optional<MemberConnectionInfo> findConnectionInfo(String memberId);
+    Optional<MemberInfo> findNameByMemberId(String memberId); // TODO: UUID로 변경
+    Optional<MemberConnectionInfo> findConnectionInfo(String memberId); // TODO: UUID로 변경
     Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId);
     List<MemberConnectionInfo> findAllMemberConnectionInfo();
+    List<MemberConnectionInfo> findByMemberIds(List<UUID> memberIds);
     List<MemberInfo> findAllMemberInfo();
+    List<MemberInfo> findMembersByStatus(boolean isActive); //TODO: 상태 관리 Enum 으로 하기
+    Long countActiveMember();
 }

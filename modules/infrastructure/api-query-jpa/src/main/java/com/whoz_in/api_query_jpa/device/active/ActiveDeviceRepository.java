@@ -19,4 +19,7 @@ public interface ActiveDeviceRepository extends JpaRepository<ActiveDeviceEntity
 
     boolean existsByDeviceId(UUID deviceId);
 
+    @Query("SELECT COUNT(ad) FROM ActiveDeviceEntity ad WHERE ad.deviceId IN (SELECT d.id FROM Device d WHERE d.memberId=:memberId)")
+    int countByMemberId(@Param("memberId") UUID memberId);
+
 }
