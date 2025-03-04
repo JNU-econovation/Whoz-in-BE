@@ -1,0 +1,23 @@
+name: main-api ?? ???
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    test:
+        name: ?????
+        uses: ./.github/workflows/ci.yml
+
+    deploy:
+        name: ????
+        needs: test
+        uses: ./.github/workflows/deploy.yml
+        secrets:
+          HOST: ${{ secrets.MAIN_API_ADDRESS }}
+          USERNAME: ${{ secrets.MAIN_API_USERNAME }}
+          PASSWORD: ${{ secrets.MAIN_API_PASSWORD }}
+          SSH_PORT: ${{ secrets.MAIN_API_SSH_PORT }}
+        with:
+          environment: main-api
