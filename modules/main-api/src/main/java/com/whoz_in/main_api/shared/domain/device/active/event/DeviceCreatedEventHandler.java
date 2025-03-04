@@ -2,6 +2,7 @@ package com.whoz_in.main_api.shared.domain.device.active.event;
 
 import com.whoz_in.domain.device.event.DeviceCreated;
 import com.whoz_in.main_api.shared.event.Events;
+import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -18,6 +19,7 @@ public class DeviceCreatedEventHandler {
         UUID deviceId = event.getDeviceId();
 
         Events.raise(new DeviceCreatedEvent(deviceId));
+        Events.raise(new ActiveDeviceFinded(List.of(deviceId)));
     }
 
 }

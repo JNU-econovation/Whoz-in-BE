@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.query.private_ip;
 
+import com.whoz_in.main_api.query.private_ip.docs.PrivateIpQueryApi;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class PrivateIpQueryController extends QueryController {
+public class PrivateIpQueryController extends QueryController implements PrivateIpQueryApi {
     public PrivateIpQueryController(QueryBus queryBus) {
         super(queryBus);
     }

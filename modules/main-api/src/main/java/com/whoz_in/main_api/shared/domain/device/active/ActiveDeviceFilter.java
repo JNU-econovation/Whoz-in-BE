@@ -59,7 +59,6 @@ public class ActiveDeviceFilter extends DeviceFilter {
         ActiveDevice activeDevice = activeDeviceViewer.findByDeviceId(deviceId.toString()).orElse(null);
 
         if(!activeDevice.isActive()) {
-            log.info("[ActiveDeviceFilter] Active 전환 (deviceId) : {}", deviceId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
         }
 

@@ -1,4 +1,4 @@
-name: Deploy to Raspberry Pi Server on Merge
+name: main api deploy
 
 on:
   push:
@@ -9,10 +9,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: 레포지토리 가져오기
         uses: actions/checkout@v4
 
-      - name: Deploy to main-api
+      - name: main api로 배포하기
         uses: appleboy/ssh-action@v0.1.7  # SSH
         with:
           host: ${{ secrets.MAIN_API_ADDRESS }}
@@ -24,3 +24,66 @@ jobs:
             git fetch origin                                  # branch 이력 가져오기
             git reset --hard origin/develop                    # develop branch로 이동 
             ./build-and-deploy.sh                         # 배포 스크립트 실행
+
+      - name: 디스코드 알림 보내기
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+          BRANCH_NAME: ${{ github.ref_name }}
+          WORKFLOW_URL: ${{ github.event.workflow_url }}
+          TIMESTAMP: ${{ github.event.repository.updated_at }}
+        run: |
+          # JSON Payload 생성
+          DATA=$(cat <<EOF
+          {
+            "username": "🔔배포 알리미🔔",
+            "avatar_url": "https://i.namu.wiki/i/X6s5AIfkjae-h54b7EkMYVg7ityFni1B-YIhtck0g6P914sJTsjykJDEbrsoZdV8rmwmrcyioAH3d2CxLmjxLx20dpHZI1izwMjfs7Dvtuchchyt2HDu7iQyy02_QaU6b8RrxWBt4G0PMQ0IZTykpQ.webp",
+            "embeds": [
+              {
+                "title": "🎉🎉배포가 성공했어요~!🎉🎉",
+                "description" : "배포 알림이 도착했어요~",
+                "type": "rich",
+                "color": 123456,
+                "author": {
+                  "name": "칠가이",
+                  "icon_url": "https://i.namu.wiki/i/X6s5AIfkjae-h54b7EkMYVg7ityFni1B-YIhtck0g6P914sJTsjykJDEbrsoZdV8rmwmrcyioAH3d2CxLmjxLx20dpHZI1izwMjfs7Dvtuchchyt2HDu7iQyy02_QaU6b8RrxWBt4G0PMQ0IZTykpQ.webp"
+                },
+                "fields": [
+                  {
+                    "name": "커밋 메시지",
+                    "value": "\`$COMMIT_MESSAGE\`",
+                    "inline": false
+                  },
+                  {
+                    "name": "브랜치",
+                    "value": "\`$BRANCH_NAME\`",
+                    "inline": false
+                  },
+                  {
+                    "name": "배포 환경",
+                    "value": "\`main-api\`",
+                    "inline": false
+                  },    
+                  {
+                    "name": "GitHub Actions",
+                    "value": "[배포 워크플로우 실행 확인]($WORKFLOW_URL)",
+                    "inline": false
+                  }
+                ],
+                "footer": {
+                  "text": "배포 시각",
+                  "icon_url": "https://cdn-icons-png.flaticon.com/512/25/25231.png"
+                }
+              }
+            ]
+          }
+          EOF
+          )
+
+          # JSON 데이터 출력 (디버깅 용도)
+          echo "===== JSON PAYLOAD ====="
+          echo "$DATA"
+          echo "========================"
+
+          # Discord Webhook 호출
+          curl -X POST -H "Content-Type: application/json" -d "$DATA" "$DISCORD_WEBHOOK_URL"
