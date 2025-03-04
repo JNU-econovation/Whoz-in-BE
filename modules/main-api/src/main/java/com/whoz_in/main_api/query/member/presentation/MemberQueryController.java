@@ -29,11 +29,8 @@ public class MemberQueryController extends QueryController implements MemberQuer
     //TODO: Response 클래스 이름 Member 기준으로 변경
     @GetMapping("/members")
     public ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveDevices(
-            @RequestParam("size") int size,
-            @RequestParam("page") int page,
-            @RequestParam("sortType") String sortType
+            MembersInRoom query
     ) {
-        MembersInRoom query = new MembersInRoom(page, size, sortType);
         MembersInRoomResponse response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }
