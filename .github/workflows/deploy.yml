@@ -45,6 +45,8 @@ jobs:
           TIMESTAMP: ${{ github.event.repository.updated_at }}
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
+          
           # JSON Payload 생성
           DATA=$(cat <<EOF
           {
