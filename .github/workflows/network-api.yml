@@ -1,23 +1,23 @@
 name: network-api ?? ???
 
 on:
-  push:
-    branches:
-      - develop
+    push:
+        branches:
+        - develop
 
 jobs:
-  test:
-    name: ?????
-    uses: ./.github/workflows/ci.yml
+    test:
+        name: ?????
+        uses: ./.github/workflows/ci.yml
 
-  deploy:
-    name: ????
-    needs: test
-    uses: ./.github/workflows/deploy.yml
-    secrets:
-      HOST: ${{ secrets.NETWORK_API_ADDRESS }}
-      USERNAME: ${{ secrets.NETWORK_API_USERNAME }}
-      PASSWORD: ${{ secrets.NETWORK_API_PASSWORD }}
-      SSH_PORT: ${{ secrets.NETWORK_API_SSH_PORT }}
-    with:
-      environment: network-api
+    deploy:
+        name: ????
+        needs: test
+        uses: ./.github/workflows/deploy.yml
+        secrets:
+            HOST: ${{ secrets.NETWORK_API_ADDRESS }}
+            USERNAME: ${{ secrets.NETWORK_API_USERNAME }}
+            PASSWORD: ${{ secrets.NETWORK_API_PASSWORD }}
+            SSH_PORT: ${{ secrets.NETWORK_API_SSH_PORT }}
+        with:
+            environment: network-api
