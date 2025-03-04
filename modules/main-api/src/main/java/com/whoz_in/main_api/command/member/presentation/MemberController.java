@@ -61,7 +61,7 @@ public class MemberController extends CommandController {
   ){
     //사용자의 소셜 정보 가져오기
     OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue())
-            .orElseThrow(() -> new TokenException("2008", "잘못된 oauth2 temp token"));
+            .orElseThrow(() -> new TokenException("2002", "잘못된 oauth2 temp token"));
     OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey());
     //회원가입
     dispatch(new MemberOAuth2SignUp(oAuth2UserInfo.getSocialProvider(), oAuth2UserInfo.getSocialId(), req.name(), req.position(), req.generation()));
