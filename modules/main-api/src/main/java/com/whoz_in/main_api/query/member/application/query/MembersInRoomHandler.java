@@ -120,7 +120,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                         .build()
                         .sort(responses);
 
-            return new MembersInRoomResponse(responses, (int)responses.stream().filter(MemberInRoomResponse::isActive).count());
+            return new MembersInRoomResponse(responses, memberViewer.countActiveMember().intValue());
         }
 
         return new MembersInRoomResponse(responses, 0);
