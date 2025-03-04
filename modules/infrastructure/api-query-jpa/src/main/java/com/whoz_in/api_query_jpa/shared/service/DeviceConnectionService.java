@@ -36,6 +36,7 @@ public class DeviceConnectionService {
     public void disconnectDevice(UUID deviceId) {
         boolean isActive = deviceService.isActive(deviceId);
         boolean isLastDevice = deviceService.isLastConnectedDevice(deviceId);
+        boolean onlyOne = onlyOne(deviceId);
 
         if(isActive) {
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
@@ -65,6 +66,16 @@ public class DeviceConnectionService {
                 activeDeviceRepository.save(ad);
             });
         }
+    }
+
+    /**
+     * 해당 디바이스가 멤버의 유일한 액티브 디바이스인지 확인
+     * @param deviceId 확인할 디바이스 ID
+     * @return 유일한 액티브 디바이스인 경우 true, 그렇지 않은 경우 false
+     */
+    private boolean onlyOne(UUID deviceId) {
+        int isOne = deviceService.countActiveDevices(deviceId);
+        return isOne == 1;
     }
 
 }
