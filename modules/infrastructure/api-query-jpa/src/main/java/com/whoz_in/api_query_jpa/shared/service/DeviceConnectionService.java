@@ -36,6 +36,7 @@ public class DeviceConnectionService {
     public void disconnectDevice(UUID deviceId) {
         boolean isActive = deviceService.isActive(deviceId);
         boolean isLastDevice = deviceService.isLastConnectedDevice(deviceId);
+        boolean onlyOne = onlyOne(deviceId);
 
         if(isActive) {
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
@@ -65,6 +66,11 @@ public class DeviceConnectionService {
                 activeDeviceRepository.save(ad);
             });
         }
+    }
+
+    private boolean onlyOne(UUID deviceId) {
+        int isOne = deviceService.countActiveDevices(deviceId);
+        return isOne == 1;
     }
 
 }
