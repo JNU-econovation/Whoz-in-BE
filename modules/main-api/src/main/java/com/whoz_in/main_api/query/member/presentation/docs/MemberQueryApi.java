@@ -21,6 +21,7 @@ public interface MemberQueryApi {
             @RequestParam("sortType") String sortType
     );
 
+
     @Operation(
             summary = "회원 상세정보 조회",
             description = "회원 상세정보 (Id, 이름, 기수, 포지션, 상태메세지) 를 조회합니다."
