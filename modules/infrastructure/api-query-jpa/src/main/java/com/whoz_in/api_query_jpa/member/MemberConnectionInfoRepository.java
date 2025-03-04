@@ -15,6 +15,6 @@ public interface MemberConnectionInfoRepository extends JpaRepository<MemberConn
     Long countActiveMember();
 
     @Query("SELECT connectionInfo FROM MemberConnectionInfo connectionInfo WHERE connectionInfo.memberId IN :memberIds")
-    Optional<MemberConnectionInfo> findByMemberIds(@Param("memberIds") List<UUID> memberIds);
+    List<MemberConnectionInfo> findByMemberIds(@Param("memberIds") List<UUID> memberIds);
 
 }
