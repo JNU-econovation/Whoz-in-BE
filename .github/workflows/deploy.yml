@@ -1,9 +1,20 @@
-name: main api deploy
+name: deploy
 
 on:
-  push:
-    branches:
-      - develop  # develop ???? merge(push)? ? ??
+  workflow_call:
+    secrets:
+      HOST:
+        required: true
+      USERNAME:
+        required: true
+      PASSWORD:
+        required: true
+      SSH_PORT:
+        required: true
+    inputs:
+      environment: # main-api 또는 network-api 이어야 한다.
+        required: true
+        type: string
 
 jobs:
   deploy:
@@ -12,15 +23,15 @@ jobs:
       - name: 레포지토리 가져오기
         uses: actions/checkout@v4
 
-      - name: main api로 배포하기
+      - name: 배포하기
         uses: appleboy/ssh-action@v0.1.7  # SSH
         with:
-          host: ${{ secrets.MAIN_API_ADDRESS }}
-          username: ${{ secrets.MAIN_API_USERNAME }}
-          password: ${{ secrets.MAIN_API_PASSWORD }}
-          port: ${{ secrets.MAIN_API_SSH_PORT }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/whozin/Whoz-in-BE/modules/main-api/docker      # 프로젝트 폴더로 이동
+            cd /home/whozin/Whoz-in-BE/modules/${{ inputs.environment }}/docker      # 프로젝트 폴더로 이동
             git fetch origin                                  # branch 이력 가져오기
             git reset --hard origin/develop                    # develop branch로 이동 
             ./build-and-deploy.sh                         # 배포 스크립트 실행
@@ -32,6 +43,7 @@ jobs:
           BRANCH_NAME: ${{ github.ref_name }}
           WORKFLOW_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
           TIMESTAMP: ${{ github.event.repository.updated_at }}
+          ENVIRONMENT: ${{ inputs.environment }}
         run: |
           # JSON Payload 생성
           DATA=$(cat <<EOF
@@ -61,7 +73,7 @@ jobs:
                   },
                   {
                     "name": "배포 환경",
-                    "value": "\`main-api\`",
+                    "value": "\`$ENVIRONMENT\`",
                     "inline": false
                   },    
                   {
