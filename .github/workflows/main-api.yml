@@ -1,0 +1,24 @@
+name: main-api 워크 플로우
+
+on:
+    push:
+        branches:
+            - develop
+
+jobs:
+    test:
+        name: 테스트하기
+        uses: ./.github/workflows/ci.yml
+
+    deploy:
+        name: 배포하기
+        needs: test
+        uses: ./.github/workflows/deploy.yml
+        secrets:
+            HOST: ${{ secrets.MAIN_API_ADDRESS }}
+            USERNAME: ${{ secrets.MAIN_API_USERNAME }}
+            PASSWORD: ${{ secrets.MAIN_API_PASSWORD }}
+            SSH_PORT: ${{ secrets.MAIN_API_SSH_PORT }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        with:
+            environment: main-api

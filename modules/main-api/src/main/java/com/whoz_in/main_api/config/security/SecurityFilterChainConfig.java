@@ -130,13 +130,13 @@ public class SecurityFilterChainConfig {
         httpSecurity.securityMatchers(matcher->
                 matcher.requestMatchers(HttpMethod.GET,
                         "/api/v1/device/info-status",
-                        "/api/v1/devices",
+                        "/api/v1/devices/**",
                         "/api/v1/private-ips",
-                        "/api/v1/members",
-                        "/api/v1/member"
+                        "/api/v1/members/**",
+                        "/api/v1/member/**"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
-                        "/api/v1/feedback"
+                        "/api/v1/feedback/**"
                         //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
                         "/api/v1/device/info"

@@ -65,7 +65,10 @@ public class InActiveDeviceFilter extends DeviceFilter{
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
         MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
 
-        if(connectionInfo == null) throw new NotFoundConnectionInfoException();
+        if(connectionInfo == null){
+            log.warn("[InActiveDeviceFilter] memberId 가 존재하지 않는 에러 {}", ownerId);
+            return false; // 처리하지 않음
+        }
 
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
         if(!activeDevice.isActive())
