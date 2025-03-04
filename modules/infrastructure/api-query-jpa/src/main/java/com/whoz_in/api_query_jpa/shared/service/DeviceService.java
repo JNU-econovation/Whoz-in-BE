@@ -55,6 +55,15 @@ public class DeviceService {
         }
     }
 
+    public int countActiveDevices(UUID deviceId) {
+        Optional<Member> member = memberRepository.findByDeviceId(deviceId);
+        if(member.isPresent()) {
+            UUID memberId = member.get().getId();
+            return activeDeviceRepository.countByMemberId(memberId);
+        }
+        return 0;
+    }
+
     public Optional<ActiveDeviceEntity> findLastConnectedDevice(UUID memberId) {
         List<ActiveDeviceEntity> activeDevices =
                 activeDeviceRepository.findByMemberId(memberId);
