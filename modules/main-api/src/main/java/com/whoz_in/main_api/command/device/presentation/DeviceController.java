@@ -4,6 +4,7 @@ import com.whoz_in.main_api.command.device.application.DeviceInfoTempAdd;
 import com.whoz_in.main_api.command.device.application.DeviceInfoEdit;
 import com.whoz_in.main_api.command.device.application.DeviceRegister;
 import com.whoz_in.main_api.command.device.application.DeviceRemove;
+import com.whoz_in.main_api.command.device.presentation.docs.DeviceCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
-public class DeviceController extends CommandController{
+public class DeviceController extends CommandController implements DeviceCommandApi {
     public DeviceController(CommandBus commandBus) {
         super(commandBus);
     }
