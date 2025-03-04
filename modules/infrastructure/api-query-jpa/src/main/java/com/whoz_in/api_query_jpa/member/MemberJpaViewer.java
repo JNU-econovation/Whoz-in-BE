@@ -18,7 +18,6 @@ public class MemberJpaViewer implements MemberViewer {
     private final MemberRepository repository;
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberConnectionInfoRepository connectionInfoRepository;
-    private final MemberConnectionInfoRepository memberConnectionInfoRepository;
 
     @Override
     public Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId) {
@@ -49,6 +48,11 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     @Override
+    public List<MemberConnectionInfo> findByMemberIds(List<UUID> memberIds) {
+        return connectionInfoRepository.findByMemberIds(memberIds).stream().map(this::toMemberConnectionInfo).toList();
+    }
+
+    @Override
     public List<MemberInfo> findAllMemberInfo() {
         return repository.findAll().stream().map(this::toMemberInfo).toList();
     }
@@ -60,7 +64,7 @@ public class MemberJpaViewer implements MemberViewer {
 
     @Override
     public Long countActiveMember() {
-        return memberConnectionInfoRepository.countActiveMember();
+        return connectionInfoRepository.countActiveMember();
     }
 
     private MemberConnectionInfo toMemberConnectionInfo(com.whoz_in.api_query_jpa.member.MemberConnectionInfo entity){
