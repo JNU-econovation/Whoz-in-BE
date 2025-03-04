@@ -2,6 +2,9 @@ name: whoz in CI
 
 on:
   workflow_call:
+  push:
+    branches:
+      - develop
 
 jobs:
   build:
