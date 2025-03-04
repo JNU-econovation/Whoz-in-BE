@@ -2,7 +2,6 @@ package com.whoz_in.main_api.query.member.presentation;
 
 import com.whoz_in.main_api.query.member.application.query.MemberCountInRoom;
 import com.whoz_in.main_api.query.member.application.query.MembersInRoom;
-import com.whoz_in.main_api.query.member.application.request.MembersInRoomRequest;
 import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
@@ -30,9 +29,12 @@ public class MemberQueryController extends QueryController implements MemberQuer
     //TODO: Response 클래스 이름 Member 기준으로 변경
     @GetMapping("/members")
     public ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveDevices(
-            MembersInRoomRequest request
+            @RequestParam("size") int size,
+            @RequestParam("page") int page,
+            @RequestParam("sortType") String sortType,
+            @RequestParam("status") String status
     ) {
-        MembersInRoom query = MembersInRoom.of(request);
+        MembersInRoom query = new MembersInRoom(page, size, sortType, status);
         MembersInRoomResponse response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }
