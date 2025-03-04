@@ -11,6 +11,8 @@ on:
         required: true
       SSH_PORT:
         required: true
+      DISCORD_WEBHOOK_URL:
+        required: true
     inputs:
       environment: # main-api 또는 network-api 이어야 한다.
         required: true
