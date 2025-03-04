@@ -1,6 +1,8 @@
 package com.whoz_in.main_api.query.member.presentation;
 
+import com.whoz_in.main_api.query.member.application.query.MemberCountInRoom;
 import com.whoz_in.main_api.query.member.application.query.MembersInRoom;
+import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.application.query.MemberDetailInfoGet;
@@ -34,6 +36,11 @@ public class MemberQueryController extends QueryController implements MemberQuer
         MembersInRoom query = new MembersInRoom(page, size, sortType);
         MembersInRoomResponse response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveDevices(){
+        return ResponseEntityGenerator.success(ask(new MemberCountInRoom()), CrudResponseCode.READ);
     }
 
     @GetMapping("/member")
