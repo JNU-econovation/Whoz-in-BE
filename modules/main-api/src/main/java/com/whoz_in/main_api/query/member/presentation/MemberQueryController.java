@@ -31,7 +31,7 @@ public class MemberQueryController extends QueryController implements MemberQuer
             @RequestParam("size") int size,
             @RequestParam("page") int page,
             @RequestParam("sortType") String sortType,
-            @RequestParam("status") String status
+            @RequestParam(value = "status", required = false) String status
     ) {
         MembersInRoom query = new MembersInRoom(page, size, sortType, status);
         MembersInRoomResponse response = ask(query);
