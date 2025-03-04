@@ -19,5 +19,6 @@ jobs:
             USERNAME: ${{ secrets.MAIN_API_USERNAME }}
             PASSWORD: ${{ secrets.MAIN_API_PASSWORD }}
             SSH_PORT: ${{ secrets.MAIN_API_SSH_PORT }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
             environment: main-api
