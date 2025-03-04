@@ -1,13 +1,11 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
-import com.whoz_in.main_api.query.member.presentation.dto.MembersInRoomRequest;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 
 @Tag(name = "회원", description = "회원 Api")
