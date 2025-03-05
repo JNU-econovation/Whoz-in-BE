@@ -1,8 +1,9 @@
 package com.whoz_in.network_api.config;
 
-import com.whoz_in.network_api.common.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class NetworkConfig {
     private final String room;
-    private final String sudoPassword;
     private final List<NetworkInterface> allNIs;
     private final List<NetworkInterface> managedNIs;
     private final NetworkInterface monitorNI;
@@ -23,23 +23,23 @@ public class NetworkConfig {
     public NetworkConfig(
             NetworkInterfaceProperties properties,
             @Value("${room-setting.room-name}") String roomName,
-            @Value("${sudo_password}") String sudoPassword,
             @Value("${command.monitor}") String monitorCommandTemplate,
             @Value("${command.managed.mdns}") String mdnsCommandTemplate,
             @Value("${command.managed.arp}") String arpCommandTemplate
     ) {
         this.room = roomName;
-        this.sudoPassword = sudoPassword;
         this.monitorNI = new NetworkInterface(properties.getMonitor().interfaceName(), null, "monitor",
                 null, generateCommand(monitorCommandTemplate, properties.getMonitor().interfaceName()));
-        this.mdnsNIs = properties.getMdns().stream()
+        this.mdnsNIs = Optional.ofNullable(properties.getMdns())
+                .orElseGet(List::of).stream()
                 .map(mdns -> {
                     String altSsid = (mdns.altSsid() != null) ? mdns.altSsid() : mdns.realSsid();
                     return new NetworkInterface(mdns.interfaceName() , mdns.realSsid(),  "managed", altSsid,
                             generateCommand(mdnsCommandTemplate, mdns.interfaceName()));
                 })
                 .toList();
-        this.arpNIs = properties.getArp().stream()
+        this.arpNIs = Optional.ofNullable(properties.getArp())
+                .orElseGet(List::of).stream()
                 .map(arp -> {
                     String altSsid = (arp.altSsid() != null) ? arp.altSsid() : arp.realSsid();
                     return new NetworkInterface(arp.interfaceName(), arp.realSsid(), "managed", altSsid,

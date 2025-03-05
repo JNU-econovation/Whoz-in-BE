@@ -15,7 +15,9 @@ public class MemberFinderService {
     public Member find(MemberId memberId){
         return memberRepository.findByMemberId(memberId).orElseThrow(()->NoMemberException.EXCEPTION);
     }
-
+    public Member findBySocialId(String socialId){
+        return memberRepository.findBySocialId(socialId).orElseThrow(()->NoMemberException.EXCEPTION);
+    }
     public void mustExist(MemberId memberId) {
         if (!memberRepository.existsByMemberId(memberId))
             throw NoMemberException.EXCEPTION;

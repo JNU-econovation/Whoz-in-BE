@@ -8,7 +8,7 @@ import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2LoginHandler;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
-import com.whoz_in.main_api.shared.jwt.TokenType;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.utils.CookieFactory;
@@ -28,7 +28,7 @@ import org.springframework.web.util.UriBuilderFactory;
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private static final String ENDPOINT = "/oauth/success";
-    @Value("${frontend.base-url}")
+    @Value("${frontend.main.base-url}")
     private String frontendBaseUrl;
     private final CookieFactory cookieFactory;
     private final UriBuilderFactory uriBuilderFactory;

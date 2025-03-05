@@ -1,6 +1,42 @@
-#독립적인 서버로 동작할 때 필요한 yaml
 spring:
   profiles:
-    active: local
+    active: ${SPRING_PROFILES_ACTIVE}
   config:
-    import: "classpath:application-main-api.yml"
+    import:
+      # 필요한 환경 변수 가져옴 (상대경로는 user.dir이 기준)
+      - "file:./env/main-api.properties"
+      - "file:./env/main-api.yml"
+      #모듈 별 application.yml
+      - "classpath:application-domain-jpa.yml"
+      - "classpath:application-api-query-jpa.yml"
+      - "classpath:application-logging.yml"
+
+server:
+  port: 2470 # 24시간 운영 + main-api니까 0번째
+
+frontend:
+  main: # 메인 프론트 서버
+    base-url: ${FRONTEND.MAIN.BASE-URL} # 배열이면 안됨
+  network-api: # 네트워크 api에 띄워진 서버 (기기 등록을 위한)
+    base-urls: ${FRONTEND.NETWORK-API.BASE-URLS} # 배열 가능 (network-api가 여러 개일 수 있으므로)
+
+api-key: ${API_KEY}
+
+https-enabled: ${HTTPS_ENABLED}
+
+oauth:
+  redirect-uri: ${OAUTH_REDIRECT_URL}
+  kakao:
+    secret: ${KAKAO_SECRET}
+    clientId : ${KAKAO_CLIENT_ID}
+
+jwt:
+  secret: ${JWT.SECRET}
+  access-token-expiry: ${JWT.ACCESS-TOKEN-EXPIRY}
+  refresh-token-expiry: ${JWT.REFRESH-TOKEN-EXPIRY}
+  oauth2-temp-token-expiry: ${JWT.OAUTH2-TEMP-TOKEN-EXPIRY}
+  device-register-token-expiry: ${JWT.DEVICE-REGISTER-TOKEN-EXPIRY}
+
+#logging:
+#  level:
+#      org.springframework.security: DEBUG

@@ -8,12 +8,14 @@ import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
 import com.whoz_in.main_api.command.member.application.MemberSignUp;
+import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfo;
 import com.whoz_in.main_api.config.security.oauth2.OAuth2UserInfoStore;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
-import com.whoz_in.main_api.shared.jwt.TokenType;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenException;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
@@ -29,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class MemberController extends CommandController {
+public class MemberController extends CommandController implements MemberCommandApi {
   private final TokenSerializer<OAuth2TempToken> oAuth2TempTokenTokenSerializer;
   private final CookieFactory cookieFactory;
   private final JwtProperties jwtProperties;
@@ -59,7 +61,8 @@ public class MemberController extends CommandController {
           HttpServletResponse response
   ){
     //사용자의 소셜 정보 가져오기
-    OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue());
+    OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue())
+            .orElseThrow(() -> new TokenException("2002", "잘못된 oauth2 temp token"));
     OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey());
     //회원가입
     dispatch(new MemberOAuth2SignUp(oAuth2UserInfo.getSocialProvider(), oAuth2UserInfo.getSocialId(), req.name(), req.position(), req.generation()));

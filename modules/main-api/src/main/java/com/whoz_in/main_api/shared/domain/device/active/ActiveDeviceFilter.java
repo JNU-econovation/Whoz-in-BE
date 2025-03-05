@@ -5,18 +5,15 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.device.application.active.event.ActiveDeviceFinded;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -27,23 +24,23 @@ public class ActiveDeviceFilter extends DeviceFilter {
     public ActiveDeviceFilter(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer) {
-        super(deviceRepository, monitorLogRepository, activeDeviceViewer);
+            ActiveDeviceViewer activeDeviceViewer,
+            MemberViewer memberViewer) {
+        super(deviceRepository, monitorLogRepository, activeDeviceViewer, memberViewer);
     }
 
     @Override
     protected List<Device> find() {
-        Set<MonitorLog> uniqueLogs = getUniqueMonitorLogs();
+        Set<String> macs = getUniqueMonitorLogs().stream()
+                .map(MonitorLog::getMac)
+                .collect(Collectors.toSet());
 
-        if(deviceByMac.keySet().isEmpty() || deviceById.keySet().isEmpty() || uniqueLogs.isEmpty()){
+        if(macs.isEmpty()){
             log.info("[ActiveDeviceFilter] 처리할 정보 없음");
             return List.of();
         }
 
-        List<Device> devices = uniqueLogs.stream()
-                .map(log -> deviceByMac.get(log.getMac()))
-                .filter(Objects::nonNull) // MonitorLog 에 있는 mac 주소 중, WhozIn에 등록되지 않은 mac 제거
-                .toList();
+        List<Device> devices = deviceRepository.findByMacs(macs);
 
         if(devices.isEmpty()){
             log.info("[ActiveDeviceFilter] 처리할 정보 없음");
@@ -53,23 +50,15 @@ public class ActiveDeviceFilter extends DeviceFilter {
         return devices;
     }
 
-
+    // 이미 MonitorLog 에 존재하고 WhozIn에 등록된 기기를 Active 상태인지 아닌지 판별
     @Override
     protected boolean judge(Device device) {
-        // 이미 MonitorLog 에 존재하고 WhozIn에 등록된 기기이다.
-
         UUID deviceId = device.getId().id();
-        ActiveDevice activeDevice;
-        try {
-            activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
-        } catch (IllegalArgumentException e){
-            log.info("[ActiveDeviceFilter] 처음 Active 상태가 된 기기 {}", deviceId);
-            return true;
-        }
+        UUID ownerId = device.getMemberId().id();
 
+        ActiveDevice activeDevice = activeDeviceViewer.findByDeviceId(deviceId.toString()).orElse(null);
 
         if(!activeDevice.isActive()) {
-            log.info("[ActiveDeviceFilter] Active 전환 : {}", deviceId);
             return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
         }
 

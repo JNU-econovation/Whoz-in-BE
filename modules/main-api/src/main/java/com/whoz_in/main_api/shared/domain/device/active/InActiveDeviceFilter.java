@@ -5,15 +5,16 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.device.application.active.event.InActiveDeviceFinded;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.member.application.exception.NotFoundConnectionInfoException;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -25,38 +26,33 @@ import org.springframework.stereotype.Component;
 public class InActiveDeviceFilter extends DeviceFilter{
 
     // MonitorLog 가 마지막으로 뜬지 10분이 되도록 발생하지 않을경우 InActive 처리하는 기준
-    private static final Duration MEASURE = Duration.ofMinutes(10);
+    private static final Duration MEASURE = Duration.ofMinutes(5);
 
     public InActiveDeviceFilter(
             DeviceRepository deviceRepository,
             MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer) {
-        super(deviceRepository, monitorLogRepository, activeDeviceViewer);
+            ActiveDeviceViewer activeDeviceViewer,
+            MemberViewer memberViewer) {
+        super(deviceRepository, monitorLogRepository, activeDeviceViewer, memberViewer);
     }
 
     @Override
     protected List<Device> find() {
 
         List<ActiveDevice> activeDevices = activeDeviceViewer.findAll();
-        Set<MonitorLog> logs = getUniqueMonitorLogs();
+        Set<String> macs = getUniqueMonitorLogs().stream()
+                .map(MonitorLog::getMac)
+                .collect(Collectors.toSet());
 
         if(!activeDevices.isEmpty()) {
-            List<UUID> monitorLogDeviceIds = logs.stream()
-                    .map(log -> deviceByMac.get(log.getMac()))
-                    .filter(Objects::nonNull)
-                    .map(Device::getId)
-                    .map(DeviceId::id)
-                    .toList();
+            // DeviceFilter 는 무조건, 후즈인에 등록된 Device 만을 넘겨야 한다.
+            List<UUID> monitorLogDeviceIds = getDeviceInMonitorLog(macs);
 
-            List<UUID> deviceIds = activeDevices.stream().map(ActiveDevice::deviceId).toList();
+            List<UUID> notInMonitorLog = getDeviceNotInMonitorLog(monitorLogDeviceIds, activeDevices);
 
-            return deviceIds.stream()
-                    .filter(deviceId -> !monitorLogDeviceIds.contains(deviceId))
-                    .map(deviceById::get)
-                    .filter(Objects::nonNull)
-                    .toList();
-
+            return findDevices(notInMonitorLog);
         }
+
         log.info("[InActiveDeviceFilter] 처리할 정보 없음");
         return List.of();
     }
@@ -64,23 +60,27 @@ public class InActiveDeviceFilter extends DeviceFilter{
     @Override
     protected boolean judge(Device device) {
         UUID deviceId = device.getId().id();
+        UUID ownerId = device.getMemberId().id();
 
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
+
+        if(connectionInfo == null){
+            log.warn("[InActiveDeviceFilter] memberId 가 존재하지 않는 에러 {}", ownerId);
+            return false; // 처리하지 않음
+        }
 
         // 이미 inActive 상태인 기기의 경우 이벤트에서 제외
-        if(!activeDevice.isActive()) return false;
-
-        Map<UUID, LocalDateTime> logTimeByDeviceId = createLogTimeByDeviceIdMap();
+        if(!activeDevice.isActive())
+            return false;
 
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime activeDeviceActiveTime = activeDevice.connectedTime();
+        LocalDateTime activeDeviceConnectedTime = activeDevice.connectedTime();
 
-        Duration term = Duration.between(activeDeviceActiveTime, now).abs();
+        Duration term = Duration.between(activeDeviceConnectedTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-
         if(term.compareTo(MEASURE) > 0){
-            log.info("[InActiveDeviceFilter] InActive 전환 {}", deviceId);
             return true;
         }
         return false;
@@ -97,14 +97,21 @@ public class InActiveDeviceFilter extends DeviceFilter{
         Events.raise(new InActiveDeviceFinded(deviceIds));
     }
 
-    private Map<UUID, LocalDateTime> createLogTimeByDeviceIdMap(){
-        Set<MonitorLog> logs = getUniqueMonitorLogs();
+    private List<UUID> getDeviceInMonitorLog(Set<String> macs) {
+        return deviceRepository.findByMacs(macs).stream()
+                .map(Device::getId)
+                .map(DeviceId::id)
+                .toList();
+    }
 
-        return logs.stream() // 이 기기가 언제 MonitorLog를 발생시켰는지 알기위한 맵
-                .filter(log -> deviceByMac.containsKey(log.getMac()))
-                .collect(Collectors.toMap(
-                        log -> deviceByMac.get(log.getMac()).getId().id(),
-                        MonitorLog::getUpdatedAt
-                ));
+    private List<UUID> getDeviceNotInMonitorLog(List<UUID> monitorLogDeviceIds, List<ActiveDevice> activeDevices) {
+        return activeDevices.stream().map(ActiveDevice::deviceId)
+                .filter(deviceId -> !monitorLogDeviceIds.contains(deviceId))
+                .toList();
+
+    }
+
+    private List<Device> findDevices(List<UUID> deviceIds){
+        return deviceRepository.findByDeviceIds(deviceIds.stream().map(DeviceId::new).toList());
     }
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class OAuth2TempToken extends Token{
+public final class OAuth2TempToken extends Token{
 
     private final String userInfoKey;
 
