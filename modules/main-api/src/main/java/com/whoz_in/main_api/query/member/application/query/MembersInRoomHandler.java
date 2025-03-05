@@ -117,9 +117,10 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
             else
                 Sorter.<MemberInRoomResponse>builder()
-                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
-                        .comparator(Comparator.comparing(MemberInRoomResponse::generation))
-                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::dailyActiveMinute))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::generation).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName).reversed())
                         .build()
                         .sort(responses);
 
