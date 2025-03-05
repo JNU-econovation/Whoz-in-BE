@@ -120,7 +120,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                         .build()
                         .sort(responses);
 
-            return new MembersInRoomResponse(responses, memberViewer.countActiveMember().intValue());
+            return new MembersInRoomResponse(responses, memberViewer.countActiveMember().intValue()); // TODO: count 는 응답에서 제외하기 (FE가 반영되면)
         }
 
         return new MembersInRoomResponse(responses, 0);
