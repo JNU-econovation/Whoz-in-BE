@@ -74,7 +74,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
         Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
-        if(!activeDevices.isEmpty()) {
+        if(!memberInfos.isEmpty()) {
 
             int start = page * size;
             int end = Math.min((start + size), memberInfos.size());
@@ -129,7 +129,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private List<MemberInfo> findByStatus(String status) {
-        if(Objects.isNull(status)) return memberViewer.findAllMemberInfo();
+        if(Objects.isNull(status)) return memberViewer.findAllMemberInfoOrderByStatus();
 
         if(status.equals("active")){
             return memberViewer.findMembersByStatus(true);
@@ -138,7 +138,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             return memberViewer.findMembersByStatus(false);
         }
         else {
-            return memberViewer.findAllMemberInfo();
+            return memberViewer.findAllMemberInfoOrderByStatus();
         }
     }
 

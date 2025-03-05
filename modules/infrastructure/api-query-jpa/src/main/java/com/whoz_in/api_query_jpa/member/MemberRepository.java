@@ -1,5 +1,7 @@
 package com.whoz_in.api_query_jpa.member;
 
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -24,4 +26,9 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
     default Member getByDeviceId(UUID deviceId) {
         return findByDeviceId(deviceId).orElseThrow(() -> new IllegalArgumentException("기기의 주인을 찾을 수 없음"));
     }
+
+    @Query("SELECT m FROM Member m WHERE m.id IN"
+            + "(SELECT connectionInfo.memberId FROM MemberConnectionInfo connectionInfo ORDER BY connectionInfo.isActive asc)")
+    List<Member> findAllOrderByStatus();
+
 }
