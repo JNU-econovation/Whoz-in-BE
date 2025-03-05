@@ -27,8 +27,7 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
         return findByDeviceId(deviceId).orElseThrow(() -> new IllegalArgumentException("기기의 주인을 찾을 수 없음"));
     }
 
-    @Query("SELECT m FROM Member m WHERE m.id IN"
-            + "(SELECT connectionInfo.memberId FROM MemberConnectionInfo connectionInfo ORDER BY connectionInfo.isActive asc)")
+    @Query("SELECT m FROM Member m JOIN MemberConnectionInfo mci WHERE m.id=mci.memberId ORDER BY mci.isActive asc")
     List<Member> findAllOrderByStatus();
 
 }
