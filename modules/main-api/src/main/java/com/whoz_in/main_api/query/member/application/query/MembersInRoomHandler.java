@@ -109,7 +109,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             if (sortType.equals("asc"))
                 Sorter.<MemberInRoomResponse>builder()
                         .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
-                        .comparator(Comparator.comparing(MemberInRoomResponse::totalActiveTime).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::dailyActiveMinute).reversed())
                         .comparator(Comparator.comparing(MemberInRoomResponse::generation))
                         .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
                         .build()
@@ -194,6 +194,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 memberName,
                 String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
                 String.format("%s시간 %s분", dailyConnectedMinute / 60, dailyConnectedMinute % 60),
+                dailyConnectedMinute,
                 isActive
         );
     }
