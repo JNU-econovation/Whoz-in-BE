@@ -3,6 +3,7 @@ package com.whoz_in.main_api.shared.domain.device;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceInfo;
 import com.whoz_in.domain.member.model.MemberId;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -17,11 +18,13 @@ public class DeviceFixture {
     }
 
     private static Set<DeviceInfo> randomDeviceInfo(){
-        return Set.of(
-                DeviceInfoFixture.createMockDeviceInfo(),
-                DeviceInfoFixture.createMockDeviceInfo(),
-                DeviceInfoFixture.createMockDeviceInfo()
-        );
+        Set<DeviceInfo> deviceInfos = new HashSet<>();
+
+        deviceInfos.add(DeviceInfoFixture.createMockDeviceInfo());
+        deviceInfos.add(DeviceInfoFixture.createMockDeviceInfo());
+        deviceInfos.add(DeviceInfoFixture.createMockDeviceInfo());
+
+        return deviceInfos;
     }
 
 }
