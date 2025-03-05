@@ -3,7 +3,7 @@ package com.whoz_in.network_api.monitor;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfacesResolver;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import java.util.HashSet;
@@ -22,10 +22,10 @@ public class MonitorLogWriter {
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
     private final NetworkInterface monitorNI;
-    private final SystemNetworkInterfaces systemNIs;
+    private final NetworkInterfacesResolver systemNIs;
 
     public MonitorLogWriter(MonitorLogParser parser, MonitorLogRepository repository, NetworkConfig config,
-            SystemNetworkInterfaces systemNIs) {
+            NetworkInterfacesResolver systemNIs) {
         this.parser = parser;
         this.repository = repository;
         this.room = config.getRoom();

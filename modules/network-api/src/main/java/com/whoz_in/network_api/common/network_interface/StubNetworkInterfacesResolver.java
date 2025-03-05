@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Profile("local")
 @Component
 @RequiredArgsConstructor
-public final class StubNetworkInterfaces implements SystemNetworkInterfaces{
+public final class StubNetworkInterfacesResolver implements NetworkInterfacesResolver {
     private final NetworkConfig networkConfig;
 
     @Override

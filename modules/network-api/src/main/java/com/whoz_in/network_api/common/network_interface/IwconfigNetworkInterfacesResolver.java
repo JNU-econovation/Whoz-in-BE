@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 //prod 환경에선 iwconfig가 설치되어있을 것을 SystemValidator를 통해 보장한다.
 @Profile("prod")
 @Component
-public final class IwconfigNetworkInterfaces implements SystemNetworkInterfaces {
+public final class IwconfigNetworkInterfacesResolver implements NetworkInterfacesResolver {
 
     //최신 정보를 가져온다.
     public List<NetworkInterface> getLatest() {
