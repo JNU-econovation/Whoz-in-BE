@@ -11,6 +11,8 @@ on:
         required: true
       SSH_PORT:
         required: true
+      DISCORD_WEBHOOK_URL:
+        required: true
     inputs:
       environment: # main-api 또는 network-api 이어야 한다.
         required: true
@@ -45,6 +47,8 @@ jobs:
           TIMESTAMP: ${{ github.event.repository.updated_at }}
           ENVIRONMENT: ${{ inputs.environment }}
         run: |
+          COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed ':a;N;$!ba;s/\n/\\n/g')
+          
           # JSON Payload 생성
           DATA=$(cat <<EOF
           {

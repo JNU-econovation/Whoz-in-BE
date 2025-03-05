@@ -19,5 +19,6 @@ jobs:
             USERNAME: ${{ secrets.NETWORK_API_USERNAME }}
             PASSWORD: ${{ secrets.NETWORK_API_PASSWORD }}
             SSH_PORT: ${{ secrets.NETWORK_API_SSH_PORT }}
+            DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
             environment: network-api
