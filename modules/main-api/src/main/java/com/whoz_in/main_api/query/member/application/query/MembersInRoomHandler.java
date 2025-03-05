@@ -53,6 +53,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         List<MemberInRoomResponse> responses = new ArrayList<>();
 
         // 상태에 맞는 회원 정보 조회
+        // TODO: 애플리케이션에서 정렬하지 말고, DB에서 정렬 후 페이지에 맞는 데이터만 가져오기.
         List<MemberInfo> memberInfos = findByStatus(status);
 
         // 해당 멤버 접속 정보 조회
@@ -74,7 +75,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
         Map<MemberId, List<ActiveDevice>> activeDevicesByMemberId = createMemberDeviceMap(activeDevices);
 
-        if(!activeDevices.isEmpty()) {
+        if(!memberInfos.isEmpty()) {
 
             int start = page * size;
             int end = Math.min((start + size), memberInfos.size());
@@ -108,7 +109,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             if (sortType.equals("asc"))
                 Sorter.<MemberInRoomResponse>builder()
                         .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
-                        .comparator(Comparator.comparing(MemberInRoomResponse::totalActiveTime).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::dailyActiveMinute).reversed())
                         .comparator(Comparator.comparing(MemberInRoomResponse::generation))
                         .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
                         .build()
@@ -129,7 +130,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private List<MemberInfo> findByStatus(String status) {
-        if(Objects.isNull(status)) return memberViewer.findAllMemberInfo();
+        if(Objects.isNull(status)) return memberViewer.findAllMemberInfoOrderByStatus();
 
         if(status.equals("active")){
             return memberViewer.findMembersByStatus(true);
@@ -138,7 +139,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
             return memberViewer.findMembersByStatus(false);
         }
         else {
-            return memberViewer.findAllMemberInfo();
+            return memberViewer.findAllMemberInfoOrderByStatus();
         }
     }
 
@@ -193,6 +194,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 memberName,
                 String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
                 String.format("%s시간 %s분", dailyConnectedMinute / 60, dailyConnectedMinute % 60),
+                dailyConnectedMinute,
                 isActive
         );
     }
