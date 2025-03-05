@@ -2,7 +2,7 @@ package com.whoz_in.network_api.system_validator;
 
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfacesResolver;
 import com.whoz_in.network_api.common.validation.ValidationException;
 import com.whoz_in.network_api.common.validation.ValidationResult;
 import com.whoz_in.network_api.config.NetworkConfig;
@@ -21,14 +21,14 @@ import org.springframework.stereotype.Component;
 @Component
 public final class SystemValidator {
     private final NetworkConfig config;
-    private final SystemNetworkInterfaces systemNIs;
+    private final NetworkInterfacesResolver systemNIs;
     private final NetworkInterfaceValidator networkInterfaceValidator;
     private final MonitorModeSwitcher monitorModeSwitcher;
 
     //서버 시작 시 검증 (실패 시 예외가 발생하여 서버 시작이 실패하게 됨)
     public SystemValidator(
             NetworkConfig config,
-            SystemNetworkInterfaces systemNIs,
+            NetworkInterfacesResolver systemNIs,
             CommandInstalledValidator commandInstalledValidator,
             NetworkInterfaceValidator networkInterfaceValidator,
             MonitorModeSwitcher monitorModeSwitcher) {

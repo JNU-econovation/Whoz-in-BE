@@ -3,7 +3,7 @@ package com.whoz_in.network_api.managed.mdns;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfacesResolver;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.config.NetworkConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
@@ -27,10 +27,10 @@ public class MdnsLogWriter {
     private final Map<NetworkInterface, Boolean> dead;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
-    private final SystemNetworkInterfaces systemNIs;
+    private final NetworkInterfacesResolver systemNIs;
 
     public MdnsLogWriter(ManagedLogRepository repository, MdnsLogParser parser, NetworkConfig config,
-            SystemNetworkInterfaces systemNIs
+            NetworkInterfacesResolver systemNIs
     ) {
         this.room = config.getRoom();
         this.repository = repository;
