@@ -11,6 +11,7 @@ import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,13 +57,14 @@ public class ActiveDeviceFilter extends DeviceFilter {
         UUID deviceId = device.getId().id();
         UUID ownerId = device.getMemberId().id();
 
-        ActiveDevice activeDevice = activeDeviceViewer.findByDeviceId(deviceId.toString()).orElse(null);
+        Optional<ActiveDevice> opt = activeDeviceViewer.findByDeviceId(deviceId.toString());
 
-        if(!activeDevice.isActive()) {
-            return true; // 현재 inActive 상태인데, MonitorLog 에 존재할 경우
+        if(opt.isPresent()) {
+            ActiveDevice activeDevice = opt.get();
+            return !activeDevice.isActive(); // active 상태이면 false , inactive 상태이면 true
         }
 
-        // 이미 active 인 경우 이벤트에서 제외
+        log.warn("[ActiveDeviceFilter] device 는 존재하지만, active device 가 존재하지 않는 에러 {}", deviceId);
         return false;
     }
 
