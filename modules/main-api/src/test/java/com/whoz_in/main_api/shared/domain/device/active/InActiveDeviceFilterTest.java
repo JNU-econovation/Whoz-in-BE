@@ -11,15 +11,17 @@ import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceVie
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.DeviceFixture;
 import com.whoz_in.main_api.shared.domain.member.MemberFixture;
-import java.util.Set;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class InActiveDeviceFilterTest {
 
     @Mock private DeviceRepository deviceRepository;
