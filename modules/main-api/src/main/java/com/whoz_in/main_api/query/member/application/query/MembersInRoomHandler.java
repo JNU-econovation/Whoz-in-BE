@@ -53,6 +53,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         List<MemberInRoomResponse> responses = new ArrayList<>();
 
         // 상태에 맞는 회원 정보 조회
+        // TODO: 애플리케이션에서 정렬하지 말고, DB에서 정렬 후 페이지에 맞는 데이터만 가져오기.
         List<MemberInfo> memberInfos = findByStatus(status);
 
         // 해당 멤버 접속 정보 조회
