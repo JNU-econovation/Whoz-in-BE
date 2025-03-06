@@ -13,7 +13,6 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
 
-//TODO: 화이트리스트 방식
 @Handler
 @RequiredArgsConstructor
 public class ReissueHandler implements CommandHandler<Reissue, LoginSuccessTokens> {
@@ -39,6 +38,6 @@ public class ReissueHandler implements CommandHandler<Reissue, LoginSuccessToken
             return new LoginSuccessTokens(newAtString, newRtString);
         }
 
-        throw new TokenException("2004", "이미 사용한 리프레시 토큰입니다.");
+        throw new TokenException("2005", "이미 사용한 리프레시 토큰입니다.");
     }
 }

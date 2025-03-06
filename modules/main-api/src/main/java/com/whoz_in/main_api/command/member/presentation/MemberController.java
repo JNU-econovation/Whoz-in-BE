@@ -111,9 +111,9 @@ public class MemberController extends CommandController implements MemberCommand
           @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
           HttpServletResponse response) {
     RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
-                    .orElseThrow(()-> new TokenException("2003", "잘못된 refresh token"));
+                    .orElseThrow(()-> new TokenException("2004", "잘못된 refresh token"));
     AccessToken accessToken = accessTokenTokenSerializer.deserialize(atCookie.getValue())
-                    .orElseThrow(() -> new TokenException("2004", "잘못된 access token"));
+                    .orElseThrow(() -> new TokenException("2003", "잘못된 access token"));
 
     LogOut command = new LogOut(
             accessToken.getMemberId().toString(),
