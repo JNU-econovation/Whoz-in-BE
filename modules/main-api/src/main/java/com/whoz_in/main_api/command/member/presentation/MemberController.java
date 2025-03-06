@@ -84,7 +84,7 @@ public class MemberController extends CommandController implements MemberCommand
   }
 
   @Override
-  @PostMapping("/api/v1/auth/reissue")
+  @PostMapping("/api/v1/reissue")
   public ResponseEntity<SuccessBody<Void>> reissue(
           @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
           @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
@@ -104,7 +104,7 @@ public class MemberController extends CommandController implements MemberCommand
   }
 
   @Override
-  @PostMapping("/api/v1/auth/logout")
+  @PostMapping("/api/v1/logout")
   public ResponseEntity<SuccessBody<Void>> logout(
           @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
           @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
