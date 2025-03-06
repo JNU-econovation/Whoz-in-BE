@@ -4,6 +4,7 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
+import com.whoz_in.main_api.command.member.application.command.LogOut;
 import com.whoz_in.main_api.command.member.application.command.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.command.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.command.MemberOAuth2SignUp;
@@ -111,8 +112,15 @@ public class MemberController extends CommandController implements MemberCommand
           HttpServletResponse response) {
     RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
                     .orElseThrow(()-> new TokenException("2003", "잘못된 refresh token"));
+    AccessToken accessToken = accessTokenTokenSerializer.deserialize(atCookie.getValue())
+                    .orElseThrow(() -> new TokenException("2004", "잘못된 access token"));
 
-    //TODO: rt 블랙리스트 등록
+    LogOut command = new LogOut(
+            accessToken.getMemberId().toString(),
+            accessToken.getTokenId().toString(),
+            refreshToken.getTokenId().toString());
+
+    dispatch(command);
 
     removeTokenCookies(response);
 
