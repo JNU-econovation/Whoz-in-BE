@@ -6,4 +6,6 @@ public interface RefreshTokenStore {
 
     void save(String refreshTokenId);
 
+    boolean isExist(String refreshTokenId);
+
 }
