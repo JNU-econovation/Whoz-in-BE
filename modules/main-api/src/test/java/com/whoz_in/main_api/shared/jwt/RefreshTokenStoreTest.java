@@ -1,10 +1,8 @@
 package com.whoz_in.main_api.shared.jwt;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
-import com.whoz_in.main_api.command.member.application.token.RefreshTokenStore;
-import com.whoz_in.main_api.command.member.application.token.StubRefreshTokenStore;
+import com.whoz_in.main_api.shared.jwt.tokens.RefreshTokenStore;
+import com.whoz_in.main_api.shared.jwt.tokens.StubRefreshTokenStore;
 import java.util.UUID;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

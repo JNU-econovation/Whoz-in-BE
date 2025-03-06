@@ -1,6 +1,5 @@
-package com.whoz_in.main_api.command.member.application.token;
+package com.whoz_in.main_api.shared.jwt.tokens;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;

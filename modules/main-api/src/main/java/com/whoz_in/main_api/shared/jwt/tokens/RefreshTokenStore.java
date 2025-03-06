@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.command.member.application.token;
+package com.whoz_in.main_api.shared.jwt.tokens;
 
 // RefreshToken 을 저장하는 인터페이스
 // 하위 모듈에서 구현한다.
