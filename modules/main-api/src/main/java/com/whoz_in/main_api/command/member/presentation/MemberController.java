@@ -57,12 +57,14 @@ public class MemberController extends CommandController implements MemberCommand
     this.oAuth2UserInfoStore = oAuth2UserInfoStore;
   }
 
+  @Override
   @PostMapping("/api/v1/signup")
   public ResponseEntity<SuccessBody<Void>> signup(@RequestBody MemberSignUp request){
     dispatch(request);
     return ResponseEntityGenerator.success( "회원가입 완료", HttpStatus.CREATED);
   }
 
+  @Override
   @PostMapping("/api/v1/signup/oauth")
   public ResponseEntity<SuccessBody<Void>> oAuthSignUp(
           @CookieValue(name = OAUTH2_TEMP_TOKEN) Cookie oAuth2TempTokenCookie,
@@ -81,13 +83,14 @@ public class MemberController extends CommandController implements MemberCommand
     return ResponseEntityGenerator.success( "소셜 회원가입 완료", HttpStatus.CREATED);
   }
 
-  @PostMapping("/api/v1/reissue")
+  @Override
+  @PostMapping("/api/v1/auth/reissue")
   public ResponseEntity<SuccessBody<Void>> reissue(
-          @CookieValue(name = ACCESS_TOKEN) Cookie accessTokenCookie,
-          @CookieValue(name = REFRESH_TOKEN) Cookie refreshTokenCookie,
+          @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
+          @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
           HttpServletResponse response
   ){
-    RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(refreshTokenCookie.getValue())
+    RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
             .orElseThrow(()-> new TokenException("2003", "잘못된 refresh token"));
 
     removeTokenCookies(response);
@@ -98,6 +101,22 @@ public class MemberController extends CommandController implements MemberCommand
     addTokenCookies(response, newTokens);
     return ResponseEntityGenerator.success("토큰 재발급 완료", HttpStatus.CREATED);
 
+  }
+
+  @Override
+  @PostMapping("/api/v1/auth/logout")
+  public ResponseEntity<SuccessBody<Void>> logout(
+          @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
+          @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
+          HttpServletResponse response) {
+    RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
+                    .orElseThrow(()-> new TokenException("2003", "잘못된 refresh token"));
+
+    //TODO: rt 블랙리스트 등록
+
+    removeTokenCookies(response);
+
+    return ResponseEntityGenerator.success("로그아웃 성공", HttpStatus.OK);
   }
 
   private void removeTokenCookies(HttpServletResponse response) {
