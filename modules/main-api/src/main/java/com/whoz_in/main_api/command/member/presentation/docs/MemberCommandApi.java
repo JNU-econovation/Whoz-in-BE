@@ -30,10 +30,16 @@ public interface MemberCommandApi {
 
     @Operation(
             summary = "소셜 회원가입",
-            description = "사용자의 추가 정보를 받고 소셜 회원가입을 진행합니다."
+            description = """
+                    사용자의 추가 정보를 받고 소셜 회원가입을 진행합니다.
+                    
+                    아래의 쿠키가 필요합니다.
+                    
+                    - oauth2-temp-token
+                    """
     )
     ResponseEntity<SuccessBody<Void>> oAuthSignUp(
-            @CookieValue(name = OAUTH2_TEMP_TOKEN) Cookie oAuth2TempTokenCookie,
+            @Parameter(hidden = true) Cookie oAuth2TempTokenCookie,
             @RequestBody MemberOAuthSignUpAdditionalInfo req,
             HttpServletResponse response
     );
