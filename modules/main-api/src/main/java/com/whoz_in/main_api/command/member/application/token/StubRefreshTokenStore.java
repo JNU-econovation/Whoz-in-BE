@@ -23,4 +23,14 @@ public class StubRefreshTokenStore implements RefreshTokenStore{
     public boolean isExist(String refreshTokenId) {
         return store.containsKey(refreshTokenId);
     }
+
+    @Override
+    public void clear() {
+        store.clear();
+    }
+
+    @Override
+    public void delete(String refreshTokenId) {
+        store.remove(refreshTokenId);
+    }
 }

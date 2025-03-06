@@ -8,4 +8,8 @@ public interface RefreshTokenStore {
 
     boolean isExist(String refreshTokenId);
 
+    void clear();
+
+    void delete(String refreshTokenId);
+
 }
