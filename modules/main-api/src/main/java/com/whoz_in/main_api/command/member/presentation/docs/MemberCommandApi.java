@@ -2,7 +2,7 @@ package com.whoz_in.main_api.command.member.presentation.docs;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 
-import com.whoz_in.main_api.command.member.application.MemberSignUp;
+import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
