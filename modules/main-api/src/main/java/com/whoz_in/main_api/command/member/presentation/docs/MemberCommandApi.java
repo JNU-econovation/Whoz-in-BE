@@ -40,11 +40,18 @@ public interface MemberCommandApi {
 
     @Operation(
             summary = "토큰 재발급",
-            description = "액세스 토큰과 리프레시 토큰을 이용하여, 토큰을 재발급합니다."
+            description = """
+                    액세스 토큰과 리프레시 토큰을 이용하여, 토큰을 재발급합니다.
+                    
+                    아래의 쿠키가 필요합니다.
+                    
+                    - access-token
+                    - refresh-token
+                    """
     )
     ResponseEntity<SuccessBody<Void>> reissue(
-            @Parameter(name = "access-token", in = ParameterIn.COOKIE, description = "액세스 토큰이 담긴 쿠키") Cookie accessTokenCookie,
-            @Parameter(name = "refresh-token", in = ParameterIn.COOKIE, description = "리프레시 토큰이 담긴 쿠키") Cookie refreshTokenCookie,
+            @Parameter(hidden = true) Cookie accessTokenCookie,
+            @Parameter(hidden = true) Cookie refreshTokenCookie,
             @Parameter(hidden = true) HttpServletResponse response
     );
 
@@ -53,8 +60,8 @@ public interface MemberCommandApi {
             description = "로그아웃을 수행합니다."
     )
     ResponseEntity<SuccessBody<Void>> logout(
-            @Parameter(name = "access-token", in = ParameterIn.COOKIE, description = "액세스 토큰이 담긴 쿠키") Cookie accessTokenCookie,
-            @Parameter(name = "refresh-token", in = ParameterIn.COOKIE, description = "리프레시 토큰이 담긴 쿠키") Cookie refreshTokenCookie,
+            @Parameter(hidden = true) Cookie accessTokenCookie,
+            @Parameter(hidden = true) Cookie refreshTokenCookie,
             @Parameter(hidden = true) HttpServletResponse response
     );
 
