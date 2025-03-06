@@ -8,6 +8,8 @@ import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -41,9 +43,9 @@ public interface MemberCommandApi {
             description = "액세스 토큰 과 리프레시 토큰을 이용하여, 토큰을 재발급합니다."
     )
     ResponseEntity<SuccessBody<Void>> reissue(
-            @CookieValue(name = ACCESS_TOKEN) Cookie accessTokenCookie,
-            @CookieValue(name = REFRESH_TOKEN) Cookie refreshTokenCookie,
-            HttpServletResponse response
+            @Parameter(name = "access-token", in = ParameterIn.COOKIE, description = "access token cookie") Cookie accessTokenCookie,
+            @Parameter(name = "refresh-token", in = ParameterIn.COOKIE, description = "refresh token cookie") Cookie refreshTokenCookie,
+            @Parameter(hidden = true) HttpServletResponse response
     );
 
     @Operation(
@@ -51,9 +53,9 @@ public interface MemberCommandApi {
             description = "로그아웃을 수행합니다."
     )
     ResponseEntity<SuccessBody<Void>> logout(
-            @CookieValue(name = ACCESS_TOKEN) Cookie accessTokenCookie,
-            @CookieValue(name = REFRESH_TOKEN) Cookie refreshTokenCookie,
-            HttpServletResponse response
+            @Parameter(name = "access-token", in = ParameterIn.COOKIE, description = "access token cookie") Cookie accessTokenCookie,
+            @Parameter(name = "refresh-token", in = ParameterIn.COOKIE, description = "refresh token cookie") Cookie refreshTokenCookie,
+            @Parameter(hidden = true) HttpServletResponse response
     );
 
 
