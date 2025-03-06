@@ -5,22 +5,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StubRefreshTokenStore implements RefreshTokenStore{
+public class StubTokenStore implements TokenStore {
 
     private final Map<String, String> store;
 
-    public StubRefreshTokenStore(){
+    public StubTokenStore(){
         this.store = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void save(String refreshTokenId) {
-        store.put(refreshTokenId, System.currentTimeMillis()+3600000+"");
+    public void save(String tokenId) {
+        store.put(tokenId, System.currentTimeMillis()+3600000+"");
     }
 
     @Override
-    public boolean isExist(String refreshTokenId) {
-        return store.containsKey(refreshTokenId);
+    public boolean isExist(String tokenId) {
+        return store.containsKey(tokenId);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class StubRefreshTokenStore implements RefreshTokenStore{
     }
 
     @Override
-    public void delete(String refreshTokenId) {
-        store.remove(refreshTokenId);
+    public void delete(String tokenId) {
+        store.remove(tokenId);
     }
 }

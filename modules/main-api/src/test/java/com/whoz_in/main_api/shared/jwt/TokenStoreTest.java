@@ -1,19 +1,19 @@
 package com.whoz_in.main_api.shared.jwt;
 
-import com.whoz_in.main_api.shared.jwt.tokens.RefreshTokenStore;
-import com.whoz_in.main_api.shared.jwt.tokens.StubRefreshTokenStore;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenStore;
+import com.whoz_in.main_api.shared.jwt.tokens.StubTokenStore;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 
-public class RefreshTokenStoreTest {
+public class TokenStoreTest {
 
-    @Mock private final RefreshTokenStore refreshTokenStore;
+    @Mock private final TokenStore tokenStore;
 
-    public RefreshTokenStoreTest() {
-        this.refreshTokenStore = new StubRefreshTokenStore();
+    public TokenStoreTest() {
+        this.tokenStore = new StubTokenStore();
     }
 
     @Test
@@ -21,9 +21,9 @@ public class RefreshTokenStoreTest {
     void isExistTest(){
         String tokenId = UUID.randomUUID().toString();
 
-        refreshTokenStore.save(tokenId);
+        tokenStore.save(tokenId);
 
-        boolean isExist = refreshTokenStore.isExist(tokenId);
+        boolean isExist = tokenStore.isExist(tokenId);
 
         Assertions.assertTrue(isExist);
     }
@@ -33,10 +33,10 @@ public class RefreshTokenStoreTest {
     void isExistTest2(){
         String tokenId = UUID.randomUUID().toString();
 
-        refreshTokenStore.save(tokenId);
-        refreshTokenStore.delete(tokenId);
+        tokenStore.save(tokenId);
+        tokenStore.delete(tokenId);
 
-        boolean isExist = refreshTokenStore.isExist(tokenId);
+        boolean isExist = tokenStore.isExist(tokenId);
 
         Assertions.assertFalse(isExist);
     }
@@ -46,10 +46,10 @@ public class RefreshTokenStoreTest {
     void isExistTest3(){
         String tokenId = UUID.randomUUID().toString();
 
-        refreshTokenStore.save(tokenId);
-        refreshTokenStore.clear();
+        tokenStore.save(tokenId);
+        tokenStore.clear();
 
-        boolean isExist = refreshTokenStore.isExist(tokenId);
+        boolean isExist = tokenStore.isExist(tokenId);
 
         Assertions.assertFalse(isExist);
     }
@@ -59,9 +59,9 @@ public class RefreshTokenStoreTest {
     void isExistTest4(){
         String tokenId = UUID.randomUUID().toString();
 
-        // refreshTokenStore.save(tokenId);
+        // tokenStore.save(tokenId);
 
-        boolean isExist = refreshTokenStore.isExist(tokenId);
+        boolean isExist = tokenStore.isExist(tokenId);
 
         Assertions.assertFalse(isExist);
 
