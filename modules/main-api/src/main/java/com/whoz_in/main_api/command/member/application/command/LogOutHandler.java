@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class LogOutHandler implements CommandHandler<LogOut, Void> {
 
-    private final TokenStore refreshTokenStore;
+    private final TokenStore tokenStore;
 
     @Override
     public Void handle(LogOut command) {
@@ -17,7 +17,8 @@ public class LogOutHandler implements CommandHandler<LogOut, Void> {
         String refreshTokenId = command.refreshTokenId();
         String accessTokenId = command.accessTokenId();
 
-        refreshTokenStore.save(refreshTokenId);
+        tokenStore.save(refreshTokenId);
+        tokenStore.save(accessTokenId);
 
         return null;
     }

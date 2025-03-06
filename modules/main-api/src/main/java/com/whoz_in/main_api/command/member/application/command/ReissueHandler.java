@@ -20,15 +20,15 @@ public class ReissueHandler implements CommandHandler<Reissue, LoginSuccessToken
 
     private final TokenSerializer<RefreshToken> rtSerializer;
     private final TokenSerializer<AccessToken> atSerializer;
-    private final TokenStore rtStore;
+    private final TokenStore tokenStore;
 
     @Override
     public LoginSuccessTokens handle(Reissue command) {
         String tokenId = command.refreshTokenId();
         String memberId = command.memberId();
 
-        if(!rtStore.isExist(tokenId)){
-            rtStore.save(command.refreshTokenId());
+        if(!tokenStore.isExist(tokenId)){
+            tokenStore.save(command.refreshTokenId());
 
             RefreshToken newRtObj = new RefreshToken(new MemberId(UUID.fromString(memberId)));
             AccessToken newAtObj = new AccessToken(new MemberId(UUID.fromString(memberId)), AccountType.USER);
