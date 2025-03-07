@@ -24,7 +24,7 @@ public final class Feedback extends AggregateRoot {
                 .content(content)
                 .writer(writer)
                 .build();
-        feedback.register(new FeedbackCreated(feedback));
+        feedback.register(new FeedbackCreated(title,content,writer.id().toString()));
         return feedback;
     }
 
