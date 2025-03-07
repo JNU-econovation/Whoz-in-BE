@@ -14,5 +14,5 @@ public interface BadgeMemberRepository extends JpaRepository<BadgeMember, Long> 
 //    Set<UUID> findBadgeIdByMemberId(@Param("memberId") UUID memberId);
 //
     @Query("SELECT bm FROM BadgeMember bm WHERE bm.member_id = :memberId")
-    Set<BadgeMember> findByMemberId(@Param("memberId") UUID memberId);
+    List<BadgeMember> findByMemberId(@Param("memberId") UUID memberId);
 }

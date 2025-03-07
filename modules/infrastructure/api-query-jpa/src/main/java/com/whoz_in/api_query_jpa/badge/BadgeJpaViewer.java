@@ -1,12 +1,11 @@
 package com.whoz_in.api_query_jpa.badge;
 
-import com.whoz_in.main_api.query.badge.application.query.BadgeId;
-import com.whoz_in.main_api.query.badge.application.view.BadgeIds;
-import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
-import java.time.LocalDateTime;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
+import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
+import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember.BadgeOfMember;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -25,34 +24,13 @@ public class BadgeJpaViewer implements BadgeViewer {
     }
 
     @Override
-    public BadgeIds findRegisterableBadges(UUID memberId) {
-        LocalDateTime threshold = LocalDateTime.now().minusHours(12);
-        Set<BadgeId> allBadges = bageRepo.findAllActivatedBadgeIds(threshold)
-                .stream()
-                .map(BadgeId::new)
-                .collect(Collectors.toSet());
+    public BadgesOfMember findBadgesOfMember(UUID memberId) {
+        List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
 
-        Set<BadgeId> userBadges = badgeMemberRepo.findBadgeIdByMemberId(memberId)
-                .stream()
-                .map(BadgeId::new)
-                .collect(Collectors.toSet());
+        List<BadgeOfMember> badgeOfMembers = badgeMembers.stream()
+                .map(bm -> new BadgeOfMember(bm.getBadge_id(), bm.getIs_badge_shown())) // getBadge()로 badgeId 가져오기
+                .collect(Collectors.toList());
 
-        allBadges.removeAll(userBadges);
-
-        return new BadgeIds(allBadges);
-    }
-
-    @Override
-    public BadgeIds findBadgesByMemberId(UUID memberId) {
-        Set<BadgeMember> badgeMember = badgeMemberRepo.findByMemberId(memberId);
-
-
-
-
-//        Set<BadgeMember> badgeIdSet = badgeMemberRepo.findByMemberId(memberId)
-//                .stream()
-//                .map(bageId -> new BadgeId(bageId))
-//                .collect(Collectors.toSet());
-        return new BadgeIds(badgeIdSet);
+        return new BadgesOfMember(badgeOfMembers);
     }
 }
