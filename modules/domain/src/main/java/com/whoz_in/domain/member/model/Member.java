@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +32,7 @@ public final class Member extends AggregateRoot {
     @Getter private String statusMessage; //상태 메세지
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
-    private final Map<BadgeId, IsBadgeShown> badges;
+    private final Map<BadgeId, Boolean> badges;
 
     //일반 로그인이 아닐수도 있으므로 Optional
     public Optional<AuthCredentials> getAuthCredentials(){
@@ -52,7 +53,7 @@ public final class Member extends AggregateRoot {
     }
 
     private static Member create(String name, Position mainPosition, int generation,
-            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, IsBadgeShown> badges){
+            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
         if (authCredentials == null && oAuthCredentials == null)
             throw new IllegalStateException("no auth and oauth");
         Member member = builder()
@@ -70,7 +71,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, IsBadgeShown> badges){
+            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
         return builder()
                 .id(id)
                 .name(name)
@@ -96,12 +97,10 @@ public final class Member extends AggregateRoot {
     }
 
     public void changeBadgeShowOrHide(BadgeId badgeId) {
-        this.badges.computeIfPresent(badgeId, (id, isShown) -> isShown == IsBadgeShown.Y ? IsBadgeShown.N : IsBadgeShown.Y);
-        this.register(new MemberBadgeChanged(this.getId(), this.badges));
-    }
-
-    public Optional<IsBadgeShown> getBadgeStatus(BadgeId badgeId) {
-        return Optional.ofNullable(this.badges.get(badgeId));
+        this.badges.computeIfPresent(badgeId, (id, isShown) -> isShown == true ? false : true);
+        Map<String, Boolean> badges = this.badges.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
+        this.register(new MemberBadgeChanged(this.getId().id().toString(), badges));
     }
 
     public void addBadge(BadgeId badgeId) {
@@ -109,12 +108,14 @@ public final class Member extends AggregateRoot {
             throw AlreadyHasBadgeException.EXCEPTION;
         }
         if (!badges.containsKey(badgeId)) {
-            badges.put(badgeId, IsBadgeShown.Y);
-            this.register(new MemberBadgeAdded(this.getId(), this.badges));
+            badges.put(badgeId, true);
+            Map<String, Boolean> badges = this.badges.entrySet().stream()
+                    .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
+            this.register(new MemberBadgeAdded(this.getId().id().toString(), badges));
         }
     }
 
-    public Map<BadgeId, IsBadgeShown> getBadges() {
+    public Map<BadgeId, Boolean> getBadges() {
         return Collections.unmodifiableMap(this.badges);
     }
 }
