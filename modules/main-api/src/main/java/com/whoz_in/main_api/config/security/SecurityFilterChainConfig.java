@@ -137,7 +137,7 @@ public class SecurityFilterChainConfig {
                         "/api/v1/members/**",
                         "/api/v1/member/**",
                         "/api/v1/badges",
-                        "/api/v1/badges/whozin",
+                        "/api/v1/badges/register",
                         "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",

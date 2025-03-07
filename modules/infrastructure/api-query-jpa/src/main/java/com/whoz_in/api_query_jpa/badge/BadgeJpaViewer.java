@@ -25,14 +25,21 @@ public class BadgeJpaViewer implements BadgeViewer {
     }
 
     @Override
-    public BadgeIds findAllBadgeIds() {
+    public BadgeIds findRegisterableBadges(UUID memberId) {
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
-        Set<BadgeId> badgeIdSet = bageRepo.findAllActivatedBadgeIds(threshold)
+        Set<BadgeId> allBadges = bageRepo.findAllActivatedBadgeIds(threshold)
                 .stream()
-                .map(badgeId -> new BadgeId(badgeId))
+                .map(BadgeId::new)
                 .collect(Collectors.toSet());
 
-        return new BadgeIds(badgeIdSet);
+        Set<BadgeId> userBadges = badgeMemberRepo.findByMemberId(memberId)
+                .stream()
+                .map(BadgeId::new)
+                .collect(Collectors.toSet());
+
+        allBadges.removeAll(userBadges);
+
+        return new BadgeIds(allBadges);
     }
 
     @Override

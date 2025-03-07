@@ -8,14 +8,14 @@ import lombok.RequiredArgsConstructor;
 
 @Handler
 @RequiredArgsConstructor
-public class BadgeIdsOfMemberViewHandler implements QueryHandler<EmptyMemberBadgeQuery, BadgeIdsResponse> {
+public class BadgeIdsOfMemberViewHandler implements QueryHandler<EmptyMemberBadgeQuery, RegisterableBadgeResponse> {
     private final BadgeViewer viewer;
     private final RequesterInfo requesterInfo;
 
     @Override
-    public BadgeIdsResponse handle(EmptyMemberBadgeQuery query) {
+    public RegisterableBadgeResponse handle(EmptyMemberBadgeQuery query) {
         UUID memberId = requesterInfo.getMemberId().id();
         BadgeIds badgeIds = viewer.findBadgesByMemberId(memberId);
-        return new BadgeIdsResponse(badgeIds.badgeIds());
+        return new RegisterableBadgeResponse(badgeIds.badgeIds());
     }
 }
