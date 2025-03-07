@@ -1,8 +1,8 @@
 package com.whoz_in.api_query_jpa.badge;
 
-import com.whoz_in.main_api.query.badge.application.BadgeId;
-import com.whoz_in.main_api.query.badge.application.BadgeIds;
-import com.whoz_in.main_api.query.badge.application.BadgeInfo;
+import com.whoz_in.main_api.query.badge.application.query.BadgeId;
+import com.whoz_in.main_api.query.badge.application.view.BadgeIds;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -32,7 +32,7 @@ public class BadgeJpaViewer implements BadgeViewer {
                 .map(BadgeId::new)
                 .collect(Collectors.toSet());
 
-        Set<BadgeId> userBadges = badgeMemberRepo.findByMemberId(memberId)
+        Set<BadgeId> userBadges = badgeMemberRepo.findBadgeIdByMemberId(memberId)
                 .stream()
                 .map(BadgeId::new)
                 .collect(Collectors.toSet());
@@ -44,10 +44,15 @@ public class BadgeJpaViewer implements BadgeViewer {
 
     @Override
     public BadgeIds findBadgesByMemberId(UUID memberId) {
-        Set<BadgeId> badgeIdSet = badgeMemberRepo.findByMemberId(memberId)
-                .stream()
-                .map(bageId -> new BadgeId(bageId))
-                .collect(Collectors.toSet());
+        Set<BadgeMember> badgeMember = badgeMemberRepo.findByMemberId(memberId);
+
+
+
+
+//        Set<BadgeMember> badgeIdSet = badgeMemberRepo.findByMemberId(memberId)
+//                .stream()
+//                .map(bageId -> new BadgeId(bageId))
+//                .collect(Collectors.toSet());
         return new BadgeIds(badgeIdSet);
     }
 }

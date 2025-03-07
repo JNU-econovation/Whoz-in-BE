@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.query.badge.application;
+package com.whoz_in.main_api.query.badge.application.view;
 
 import com.whoz_in.main_api.query.shared.application.View;
 

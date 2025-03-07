@@ -1,5 +1,9 @@
-package com.whoz_in.main_api.query.badge.application;
+package com.whoz_in.main_api.query.badge.application.handler;
 
+import com.whoz_in.main_api.query.badge.application.BadgeViewer;
+import com.whoz_in.main_api.query.badge.application.query.EmptyRegisterableBadgeQuery;
+import com.whoz_in.main_api.query.badge.application.response.RegisterableBadgeResponse;
+import com.whoz_in.main_api.query.badge.application.view.BadgeIds;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
