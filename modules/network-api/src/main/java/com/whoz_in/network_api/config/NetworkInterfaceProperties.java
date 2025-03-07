@@ -15,8 +15,8 @@ public class NetworkInterfaceProperties {
 
     public record Monitor(String interfaceName) {}
     public record Managed(List<Mdns> mdns, List<Arp> arp) {}
-    public record Mdns(String altSsid, String realSsid, String interfaceName) {}
-    public record Arp(String altSsid, String realSsid, String interfaceName) {}
+    public record Mdns(String ssid, String interfaceName) {}
+    public record Arp(String ssid, String interfaceName) {}
 
 
     @ConstructorBinding
