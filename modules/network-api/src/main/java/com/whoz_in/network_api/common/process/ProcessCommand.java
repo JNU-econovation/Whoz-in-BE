@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ProcessCommand{
-    private static final boolean IS_SUDO_PRESENT= TransientProcess.start("which sudo")
+    private static final boolean IS_SUDO_PRESENT= TransientProcess.create("which sudo")
                 .result()
                 .contains("/sudo");
 
@@ -34,6 +34,6 @@ public final class ProcessCommand{
 
     @Override
     public String toString() {
-        return Arrays.toString(command);
+        return String.join(" ", command);
     }
 }

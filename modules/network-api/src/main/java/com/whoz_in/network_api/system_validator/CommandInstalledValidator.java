@@ -16,7 +16,7 @@ public class CommandInstalledValidator implements Validator<String> {
     public ValidationResult getValidationResult(String command){
         ValidationResult validationResult = new ValidationResult();
 
-        List<String> results = TransientProcess.start("which " + command).results();
+        List<String> results = TransientProcess.create("which " + command).results();
         if (results.isEmpty() || !results.get(0).contains("/")) {
             validationResult.addError(command + "가 설치되지 않았습니다.");
         }
