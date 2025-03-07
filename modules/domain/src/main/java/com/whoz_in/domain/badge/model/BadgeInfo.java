@@ -12,13 +12,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class BadgeInfo {
-    public static final String COLOR_CODE_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$\n";
+    public static final String COLOR_CODE_REGEX = "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$";
     private final String name;
     private final BadgeType badgeType;
     private final MemberId creator;
     private final String colorCode;
 
-    public static BadgeInfo create(String name, BadgeType badgeType, String colorCode,MemberId creator) {
+    public static BadgeInfo create(String name, BadgeType badgeType, String colorCode, MemberId creator) {
         if (!Pattern.matches(COLOR_CODE_REGEX,colorCode)) {
             throw InvalidFormColorCodeException.EXCEPTION;
         }

@@ -8,6 +8,7 @@ import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,11 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class SwitchBadgeVisibilityHandler implements CommandHandler<SwitchBadgeVisibility,Void> {
     private final MemberRepository repository;
     private final EventBus eventBus;
+    private final RequesterInfo requesterInfo;
 
     @Transactional
     @Override
     public Void handle(SwitchBadgeVisibility req) {
-        Member member = repository.findByMemberId(new MemberId(req.memberId())).orElseThrow(()-> NoMemberException.EXCEPTION);
+        MemberId requesterId = requesterInfo.getMemberId();
+        Member member = repository.findByMemberId(requesterId).orElseThrow(()-> NoMemberException.EXCEPTION);
         member.changeBadgeShowOrHide(new BadgeId(req.badgeId()));
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());

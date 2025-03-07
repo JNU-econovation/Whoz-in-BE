@@ -2,7 +2,6 @@ package com.whoz_in.domain_jpa.member;
 
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.model.AuthCredentials;
-import com.whoz_in.domain.member.model.IsBadgeShown;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.model.OAuthCredentials;
@@ -43,7 +42,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
 
     @Override
     public Member to(MemberEntity entity) {
-        Map<BadgeId, IsBadgeShown> badges = entity.getBadgeMembers().stream()
+        Map<BadgeId, Boolean> badges = entity.getBadgeMembers().stream()
                 .collect(Collectors.toMap(
                         badgeMember -> new BadgeId(badgeMember.getBadgeId()),
                         badgeMember -> badgeMember.getIsBadgeShown()

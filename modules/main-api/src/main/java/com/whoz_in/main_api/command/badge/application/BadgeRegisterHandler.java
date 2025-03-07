@@ -5,11 +5,13 @@ import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeInfo;
 import com.whoz_in.domain.badge.model.BadgeType;
 import com.whoz_in.domain.badge.service.BadgeFinderService;
+import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,14 +22,16 @@ public class BadgeRegisterHandler implements CommandHandler<BadgeRegister, Void>
     private final BadgeFinderService badgeFinderService;
     private final EventBus eventBus;
     private final MemberFinderService memberFinderService;
+    private final RequesterInfo requesterInfo;
 
     @Transactional
     @Override
     public Void handle(BadgeRegister req) {
-        memberFinderService.mustExist(new MemberId(req.creator()));
+        MemberId requesterId = requesterInfo.getMemberId();
+        memberFinderService.mustExist(requesterId);
         badgeFinderService.mustNotExist(req.name());
         Badge badge = Badge.create(
-                BadgeInfo.create(req.name(),BadgeType.USERMADE,req.colorCode(),new MemberId(req.creator()))
+                BadgeInfo.create(req.name(),BadgeType.USERMADE,req.colorCode(),requesterId)
         );
         repository.save(badge);
         eventBus.publish(badge.pullDomainEvents());

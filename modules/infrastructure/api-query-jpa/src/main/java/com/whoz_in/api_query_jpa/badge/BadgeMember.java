@@ -12,7 +12,6 @@ import org.hibernate.annotations.Synchronize;
 @Entity
 @Immutable
 @Subselect("SELECT "
-        + "bm.id AS id, "
         + "bm.member_id AS member_id, "
         + "bm.badge_id AS badge_id, "
         + "bm.is_badge_shown AS is_badge_shown "
@@ -20,8 +19,7 @@ import org.hibernate.annotations.Synchronize;
 @Synchronize({"badge_member_entity"})
 public class BadgeMember {
     @Id
-    private Long id;
     private UUID member_id;
     private UUID badge_id;
-    private String is_badge_shown;
+    private Boolean is_badge_shown;
 }
