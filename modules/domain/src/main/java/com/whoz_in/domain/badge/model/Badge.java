@@ -20,7 +20,10 @@ public final class Badge extends AggregateRoot {
                 .id(new BadgeId())
                 .badgeInfo(badgeInfo)
                 .build();
-        badge.register(new BadgeCreated(badge));
+        badge.register(new BadgeCreated(badge.getBadgeInfo().getName(),
+                badge.getBadgeInfo().getBadgeType().toString(),
+                badge.getBadgeInfo().getCreator().id().toString(),
+                badge.getBadgeInfo().getColorCode()));
         return badge;
     }
 
