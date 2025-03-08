@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 //시스템의 전체적인 검증을 진행하는 클래스
 @Slf4j
@@ -15,22 +16,28 @@ public final class SystemStartupValidator {
     public SystemStartupValidator(
             NetworkInterfaceProfileConfig profileConfig,
             CommandsInstalledValidator commandsInstalledValidator,
+            NetworkInterfaceExistValidator networkInterfaceExistValidator,
             NetworkInterfaceConnectedValidator networkInterfaceConnectedValidator
     ) {
         log.info("시스템 초기 검증을 수행합니다");
 
         //커맨드 설치 여부 검증
-        List<String> commands = List.of("tshark", "arp-scan", "iwconfig", "nmcli", "iw", "ip");
-        Errors errors = commandsInstalledValidator.validateObject(commands);
-        if (errors.hasErrors()){
-            errors.getAllErrors().forEach(e->System.out.println((String)e.getArguments()[0]));
-        }
+        Errors commandErrors = commandsInstalledValidator.validateObject(
+                new CommandInstalled(List.of("tshark", "arp-scan", "iwconfig", "nmcli", "iw", "ip"))
+        );
+        printErrorMessage(commandErrors);
 
         // 설정된 네트워크 인터페이스 상태 검증
-//        networkInterfaceStateValidator.validate(config.getAllNIs());
+        Errors existErrors = networkInterfaceExistValidator.validateObject(new NetworkInterfaceExist());
+        printErrorMessage(existErrors);
+
 
         // TODO: 네트워크 인터페이스 상태 검증
         log.info("시스템 초기 검증 완료");
     }
-
+    private void printErrorMessage(Errors errors){
+        if (errors.hasErrors()){
+            errors.getAllErrors().forEach(e->log.error(e.getDefaultMessage()));
+        }
+    }
 }
