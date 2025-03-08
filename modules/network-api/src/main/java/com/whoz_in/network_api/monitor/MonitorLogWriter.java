@@ -4,7 +4,7 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
-import com.whoz_in.network_api.config.NetworkInterfaceCommandConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +21,12 @@ public class MonitorLogWriter {
     private final MonitorLogRepository  repository;
     private final NetworkInterface monitorNI;
 
-    public MonitorLogWriter(@Value("${room-setting.room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceCommandConfig config) {
+    public MonitorLogWriter(@Value("${room-setting.room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config) {
         this.parser = parser;
         this.repository = repository;
         this.room = room;
-        this.monitorNI = config.getMonitorCommand().ni();
-        this.process = ResilientContinuousProcess.create(config.getMonitorCommand().command());
+        this.monitorNI = config.getMonitorProfile().ni();
+        this.process = ResilientContinuousProcess.create(config.getMonitorProfile().command());
     }
 
     @Scheduled(initialDelay = 10000, fixedDelay = 10000)

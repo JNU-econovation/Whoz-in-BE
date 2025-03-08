@@ -2,30 +2,27 @@ package com.whoz_in.network_api.common.network_interface.nux;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.whoz_in.network_api.common.network_interface.ConnectionInfo;
-import com.whoz_in.network_api.common.network_interface.ConnectionInfoResolver;
+import com.whoz_in.network_api.common.network_interface.NetworkAddress;
+import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
 import com.whoz_in.network_api.common.process.TransientProcess;
-import java.net.Inet4Address;
-import java.net.InetAddress;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-// TODO: 필요한 명령어를 어노테이션으로 작성
+// TODO: 필요한 명령어를 어노테이션으로 작성? sh을 실행할수도 있는데 어떻게 하지
 @Profile("prod")
 @Component
-public final class IpRouteConnectionInfoResolver implements ConnectionInfoResolver {
+public final class IpRouteNetworkAddressResolver implements NetworkAddressResolver {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public Map<String, ConnectionInfo> resolve() {
+    public Map<String, NetworkAddress> resolve() {
         return parse(TransientProcess.create("ip -j route show default").result());
     }
 
-    private static Map<String, ConnectionInfo> parse(String result) {
-        Map<String, ConnectionInfo> connectionInfoMap = new HashMap<>();
+    private static Map<String, NetworkAddress> parse(String result) {
+        Map<String, NetworkAddress> connectionInfoMap = new HashMap<>();
         try {
             JsonNode root = objectMapper.readTree(result);
             for (JsonNode route : root) {
@@ -33,7 +30,7 @@ public final class IpRouteConnectionInfoResolver implements ConnectionInfoResolv
                     String iface = route.get("dev").asText();
                     String ip = route.get("src").asText();
                     String gateway = route.get("gateway").asText();
-                    connectionInfoMap.put(iface, new ConnectionInfo(ip, gateway));
+                    connectionInfoMap.put(iface, new NetworkAddress(ip, gateway));
                 }
             }
         } catch (Exception e) {
