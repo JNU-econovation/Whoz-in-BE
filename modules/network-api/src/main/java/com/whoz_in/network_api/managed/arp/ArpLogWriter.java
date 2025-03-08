@@ -5,9 +5,9 @@ import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceCommand;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.TransientProcess;
-import com.whoz_in.network_api.config.NetworkInterfaceCommandConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
 import java.util.List;
@@ -25,24 +25,24 @@ public class ArpLogWriter {
     private final String room;
     private final ManagedLogRepository repository;
     private final ArpLogParser parser;
-    private final List<NetworkInterfaceCommand> arpNIs;
+    private final List<NetworkInterfaceProfile> arpProfiles;
 
     public ArpLogWriter(
             @Value("${room-setting.room-name}") String room,
             ManagedLogRepository repository,
             ArpLogParser parser,
-            NetworkInterfaceCommandConfig config
+            NetworkInterfaceProfileConfig config
     ) {
         this.room = room;
         this.repository = repository;
         this.parser = parser;
-        this.arpNIs = config.getArpCommands();
+        this.arpProfiles = config.getArpProfiles();
     }
 
     //주기적으로 arp 명령어를 실행하여 로그를 저장함
     @Scheduled(initialDelay = 10000, fixedDelay = 5000)
     private void scan() {
-        List<ManagedLog> logs = arpNIs.stream()
+        List<ManagedLog> logs = arpProfiles.stream()
                 .collect(Collectors.toMap(
                         ni -> ni,
                         ni -> TransientProcess.create(ni.command())

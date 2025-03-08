@@ -2,7 +2,7 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
-import com.whoz_in.network_api.config.NetworkInterfaceConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -20,8 +20,8 @@ public final class ChannelHopper {
     private final NetworkInterface monitorNI;
     private final Set<Integer> channelsToHop = new HashSet<>();
 
-    public ChannelHopper(NetworkInterfaceConfig config) {
-        this.monitorNI = config.getMonitorNI();
+    public ChannelHopper(NetworkInterfaceProfileConfig config) {
+        this.monitorNI = config.getMonitorProfile().ni();
     }
 
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)

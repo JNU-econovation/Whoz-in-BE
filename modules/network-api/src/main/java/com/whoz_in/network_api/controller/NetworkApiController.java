@@ -1,9 +1,8 @@
 package com.whoz_in.network_api.controller;
 
 import com.whoz_in.network_api.common.util.IpHolder;
-import com.whoz_in.network_api.config.NetworkInterfaceConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.NetworkApi;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -22,11 +21,14 @@ public class NetworkApiController implements NetworkApi {
     private final List<String> gateways;
     private final String room;
 
-    public NetworkApiController(IpHolder ipHolder, @Value("${room-setting.room-name}") String room, NetworkInterfaceConfig networkInterfaceConfig) {
+    public NetworkApiController(
+            IpHolder ipHolder,
+            @Value("${room-setting.room-name}") String room,
+            NetworkInterfaceProfileConfig profileConfig) {
         this.ipHolder = ipHolder;
         this.room = room;
-        this.gateways = networkInterfaceConfig.getManagedNIs().stream()
-                .map(ni-> ni.getConnectionInfo().gateway())
+        this.gateways = profileConfig.getManagedProfiles().stream()
+                .map(profile-> profile.ni().getNetworkAddress().gateway())
                 .toList();
     }
 

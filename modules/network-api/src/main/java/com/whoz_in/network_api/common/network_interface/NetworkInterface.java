@@ -18,26 +18,25 @@ import lombok.ToString;
 public final class NetworkInterface{
     @EqualsAndHashCode.Include
     private final String name;
-
-    @Nullable private ConnectionInfo connectionInfo; // null일 경우 연결되지 않음 / 변경 가능
-    @Nullable private final WirelessInfo wirelessInfo; // null일 경우 유선
+    @Nullable private NetworkAddress networkAddress; // null일 경우 네트워크에 연결되지 않음
+    @Nullable private WirelessInfo wirelessInfo; // null일 경우 유선
 
     public boolean isConnected(){
-        return connectionInfo != null;
+        return networkAddress != null;
     }
     public boolean isWireless(){
         return wirelessInfo != null;
     }
 
-    public static NetworkInterface wired(String interfaceName, @Nullable ConnectionInfo connectionInfo){
-        return new NetworkInterface(interfaceName, connectionInfo, null);
+    public static NetworkInterface wired(String interfaceName, @Nullable NetworkAddress networkAddress){
+        return new NetworkInterface(interfaceName, networkAddress, null);
     }
 
-    public static NetworkInterface wireless(String interfaceName, @Nullable ConnectionInfo connectionInfo, WirelessInfo wirelessInfo){
-        return new NetworkInterface(interfaceName, connectionInfo, wirelessInfo);
+    public static NetworkInterface wireless(String interfaceName, @Nullable NetworkAddress networkAddress, WirelessInfo wirelessInfo){
+        return new NetworkInterface(interfaceName, networkAddress, wirelessInfo);
     }
 
-    public static NetworkInterface of(String interfaceName, @Nullable ConnectionInfo connectionInfo, @Nullable WirelessInfo wirelessInfo){
-        return new NetworkInterface(interfaceName, connectionInfo, wirelessInfo);
+    public static NetworkInterface of(String interfaceName, @Nullable NetworkAddress networkAddress, @Nullable WirelessInfo wirelessInfo){
+        return new NetworkInterface(interfaceName, networkAddress, wirelessInfo);
     }
 }

@@ -3,10 +3,10 @@ package com.whoz_in.network_api.managed.mdns;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceCommand;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
-import com.whoz_in.network_api.config.NetworkInterfaceCommandConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
 import java.util.List;
@@ -28,14 +28,14 @@ public class MdnsLogWriter {
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
 
-    public MdnsLogWriter(@Value("${room-setting.room-name}") String room, NetworkInterfaceCommandConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
+    public MdnsLogWriter(@Value("${room-setting.room-name}") String room, NetworkInterfaceProfileConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
         this.room = room;
         this.repository = repository;
         this.parser = parser;
-        this.processes = config.getMdnsCommands().stream()
+        this.processes = config.getMdnsProfiles().stream()
                         .collect(Collectors.toMap(
-                                NetworkInterfaceCommand::ni,
-                                mdnsCmd -> ResilientContinuousProcess.create(mdnsCmd.command()))
+                                NetworkInterfaceProfile::ni,
+                                profile -> ResilientContinuousProcess.create(profile.command()))
                         );
     }
 

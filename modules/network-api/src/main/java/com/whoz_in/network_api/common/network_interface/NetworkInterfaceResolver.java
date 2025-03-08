@@ -11,17 +11,30 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public final class NetworkInterfaceResolver {
-    private final ConnectionInfoResolver connectionInfoResolver;
+    private static final ThreadLocal<List<NetworkInterface>> cache = new ThreadLocal<>();
+
+    private final NetworkAddressResolver networkAddressResolver;
     private final WirelessInfoResolver wirelessInfoResolver;
 
+    // refresh()를 호출하지 않을경우 캐시된 네트워크 인터페이스 정보를 반환합니다.
     public List<NetworkInterface> get() {
-        Map<String, ConnectionInfo> connectionInfos = connectionInfoResolver.resolve();
-        Map<String, WirelessInfo> wirelessInfos = wirelessInfoResolver.resolve();
+        List<NetworkInterface> cached = cache.get();
+        if (cached != null) return cached;
+        // 캐시된게 없으면 새로 가져옴
+        cache.set(fetch());
+        return cache.get();
+    }
 
+    public void refresh(){
+        cache.remove();
+    }
+
+    private List<NetworkInterface> fetch(){
+        Map<String, NetworkAddress> connectionInfos = networkAddressResolver.resolve();
+        Map<String, WirelessInfo> wirelessInfos = wirelessInfoResolver.resolve();
         Set<String> interfaceNames = new HashSet<>();
         interfaceNames.addAll(connectionInfos.keySet());
         interfaceNames.addAll(wirelessInfos.keySet());
-
         return interfaceNames.stream()
                 .map(interfaceName -> NetworkInterface.of(
                         interfaceName,
