@@ -4,6 +4,7 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,13 +20,11 @@ public class MonitorLogWriter {
     private final String room;
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
-    private final NetworkInterface monitorNI;
 
     public MonitorLogWriter(@Value("${room-setting.room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config) {
         this.parser = parser;
         this.repository = repository;
         this.room = room;
-        this.monitorNI = config.getMonitorProfile().ni();
         this.process = ResilientContinuousProcess.create(config.getMonitorProfile().command());
     }
 

@@ -5,7 +5,7 @@ import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceProfile;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
@@ -47,20 +47,20 @@ public class ArpLogWriter {
                         ni -> ni,
                         ni -> TransientProcess.create(ni.command())
                 )).entrySet().stream()
-                .map(entry -> getLogsFromProcess(entry.getKey().ni(), entry.getValue()))
+                .map(entry -> getLogsFromProcess(entry.getKey(), entry.getValue()))
                 .flatMap(Collection::stream)
                 .toList();
         repository.saveAll(logs);
     }
 
     //프로세스의 출력들을 로그로 변환한다.
-    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, TransientProcess process){
+    private List<ManagedLog> getLogsFromProcess(NetworkInterfaceProfile ni, TransientProcess process){
         Set<ParsedLog> logs = process.results().stream()
                 .filter(parser::validate)
                 .map(parser::parse)
                 .collect(Collectors.toSet());//Set으로 중복 제거
 
-        String ssid = ni.getWirelessInfo().ssid();
+        String ssid = ni.ssid();
         log.info("[managed - arp({})] log to save : {}", ssid, logs.size());
         //parsedLog를 저장할 수 있는 ManagedLog로 변환
         return logs.stream()
