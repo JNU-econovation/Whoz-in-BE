@@ -3,7 +3,7 @@ package com.whoz_in.network_api.managed.mdns;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceProfile;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +25,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class MdnsLogWriter {
     private final String room;
-    private final Map<NetworkInterface, ResilientContinuousProcess> processes;
+    private final Map<NetworkInterfaceProfile, ResilientContinuousProcess> processes;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
 
@@ -34,7 +35,7 @@ public class MdnsLogWriter {
         this.parser = parser;
         this.processes = config.getMdnsProfiles().stream()
                         .collect(Collectors.toMap(
-                                NetworkInterfaceProfile::ni,
+                                Function.identity(),
                                 profile -> ResilientContinuousProcess.create(profile.command()))
                         );
     }
@@ -50,20 +51,20 @@ public class MdnsLogWriter {
         repository.saveAll(totalLogs);
     }
 
-    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, ContinuousProcess process) {
+    private List<ManagedLog> getLogsFromProcess(NetworkInterfaceProfile profile, ContinuousProcess process) {
         Set<ParsedLog> logs = process.readLines().stream()
                 .map(parser::parse)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        log.info("[managed - mdns({})] log to save : {}", ni.getWirelessInfo().ssid(), logs.size());
+        log.info("[managed - mdns({})] log to save : {}", profile.ssid(), logs.size());
 
         //Parsed를 Managed로 변환
         return logs.stream()
                 .map(log -> new ManagedLog(
                         log.getMac(), log.getIp(),
-                        log.getDeviceName(), ni.getWirelessInfo().ssid(), room,
+                        log.getDeviceName(), profile.ssid(), room,
                         log.getCreatedAt(), log.getCreatedAt()
                 ))
                 .toList();
