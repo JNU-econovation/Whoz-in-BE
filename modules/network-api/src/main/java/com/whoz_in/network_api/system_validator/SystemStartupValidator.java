@@ -1,7 +1,6 @@
 package com.whoz_in.network_api.system_validator;
 
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,7 @@ public final class SystemStartupValidator {
             CommandsInstalledValidator commandsInstalledValidator,
             NetworkInterfaceConnectedValidator networkInterfaceConnectedValidator
     ) {
-        log.info("시스템 검증을 수행합니다");
+        log.info("시스템 초기 검증을 수행합니다");
 
         //커맨드 설치 여부 검증
         List<String> commands = List.of("tshark", "arp-scan", "iwconfig", "nmcli", "iw", "ip");
@@ -31,7 +30,7 @@ public final class SystemStartupValidator {
 //        networkInterfaceStateValidator.validate(config.getAllNIs());
 
         // TODO: 네트워크 인터페이스 상태 검증
-        log.info("시스템 검증 완료");
+        log.info("시스템 초기 검증 완료");
     }
 
 }

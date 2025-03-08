@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.controller;
 
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.util.IpHolder;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.NetworkApi;
@@ -24,11 +25,11 @@ public class NetworkApiController implements NetworkApi {
     public NetworkApiController(
             IpHolder ipHolder,
             @Value("${room-setting.room-name}") String room,
-            NetworkInterfaceProfileConfig profileConfig) {
+            NetworkInterfaceManager manager) {
         this.ipHolder = ipHolder;
         this.room = room;
-        this.gateways = profileConfig.getManagedProfiles().stream()
-                .map(profile-> profile.ni().getNetworkAddress().gateway())
+        this.gateways = manager.get().stream()
+                .map(ni-> ni.getNetworkAddress().gateway())
                 .toList();
     }
 

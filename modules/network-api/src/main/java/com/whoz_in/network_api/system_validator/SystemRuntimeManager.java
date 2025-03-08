@@ -1,6 +1,6 @@
 package com.whoz_in.network_api.system_validator;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceResolver;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SystemRuntimeManager {
     private final NetworkInterfaceProfileConfig profileConfig;
-    private final NetworkInterfaceResolver networkInterfaceResolver;
+    private final NetworkInterfaceManager networkInterfaceManager;
     public void validate(){
-        networkInterfaceResolver.refresh();
+        networkInterfaceManager.refresh();
     }
     //정기적으로 시스템 상태를 검사함
     //예외를 띄우지 않고 로깅만 하기

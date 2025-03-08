@@ -29,18 +29,5 @@ public class NetworkInterfaceConnectedValidator implements Validator {
                  "%s의 연결이 끊겼습니다.".formatted(ni.getName())
             );
         });
-//        List<NetworkInterface> unmatchedNIs = setting.stream()
-//                .filter(ni -> !system.contains(ni))
-//                .toList();
-//
-//        if (!unmatchedNIs.isEmpty()) {
-//            validationResult.addError(
-//                    "아래 네트워크 인터페이스가 시스템에 존재하지 않거나 상태가 올바르지 않습니다: \n" +
-//                            unmatchedNIs.stream()
-//                                    .map(Object::toString)
-//                                    .collect(Collectors.joining("\n"))
-//            );
-//        }
-//        return validationResult;
     }
 }
