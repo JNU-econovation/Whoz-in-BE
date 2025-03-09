@@ -82,7 +82,7 @@ public final class NetworkInterfaceManager {
         removed.removeAll(nowSet);
         for (String niName : removed) {
             NetworkInterface oldInterface = cachedInterfaces.get(niName);
-            log.error("인터페이스 {}가 제거되었습니다.", niName);
+            log.error("인터페이스 {}가 사라졌습니다.", niName);
             eventPublisher.publishEvent(
                     new NetworkInterfaceStatusEvent(niName, oldInterface, null, REMOVED)
             );
@@ -111,34 +111,34 @@ public final class NetworkInterfaceManager {
         existing.retainAll(oldSet);
         for (String niName : existing) {
             NetworkInterface oldInterface = cachedInterfaces.get(niName);
-            NetworkInterface newInterface = nowInterfaces.get(niName);
+            NetworkInterface nowInterface = nowInterfaces.get(niName);
 
             // 연결 상태 변화
-            if (oldInterface.isConnected() && !newInterface.isConnected()) {
+            if (oldInterface.isConnected() && !nowInterface.isConnected()) {
                 log.error("{}의 네트워크 연결이 끊겼습니다.", niName);
                 eventPublisher.publishEvent(
-                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, DISCONNECTED)
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, DISCONNECTED)
                 );
-            } else if (!oldInterface.isConnected() && newInterface.isConnected()) {
+            } else if (!oldInterface.isConnected() && nowInterface.isConnected()) {
                 log.info("{}가 다시 네트워크에 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
-                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, RECONNECTED)
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, RECONNECTED)
                 );
             } else if (oldInterface.isConnected()) {
                 // 연결 유지 중인데 IP 혹은 gateway가 변경된 경우 (fetch 주기(3초) 안에 연결이 끊겼다가 다시 연결되어야 해서 일어날 수 없을듯)
-                if (!Objects.equals(oldInterface.getNetworkAddress(), newInterface.getNetworkAddress())) {
+                if (!Objects.equals(oldInterface.getNetworkAddress(), nowInterface.getNetworkAddress())) {
                     log.error("{}의 아이피가 변경되었습니다.", niName);
                 }
             }
 
             // 무선 모드 변화 감지 (연결 상태와 상관없이)
-            if (!Objects.equals(oldInterface.getWirelessInfo(), newInterface.getWirelessInfo())) {
+            if (!Objects.equals(oldInterface.getWirelessInfo(), nowInterface.getWirelessInfo())) {
                 log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
                         niName,
                         oldInterface.getWirelessInfo(),
-                        newInterface.getWirelessInfo());
+                        nowInterface.getWirelessInfo());
                 eventPublisher.publishEvent(
-                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, MODE_CHANGED)
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, MODE_CHANGED)
                 );
             }
         }
