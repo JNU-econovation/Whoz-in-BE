@@ -35,14 +35,14 @@ public final class IpRouteManager {
     public void addRoute(String gateway, String interfaceName, String table) {
         String cmd = String.format("sudo ip route add default via %s dev %s table %s", gateway, interfaceName, table);
         TransientProcess.create(cmd).waitTermination();
-        log.info("추가된 route: {}", cmd);
+        log.info("[ip route] {}(interface:{}, gateway:{}) 추가됨", table, interfaceName, gateway);
     }
 
     // table의 default 라우트 삭제
     public void removeRoutesByTable(String table) {
         String cmd = String.format("sudo ip route flush table %s", table);
         TransientProcess.create(cmd).waitTermination();
-        log.info("Flushed all routes in table: {}", table);
+        log.info("[ip route] {} 삭제됨", table);
     }
 }
 

@@ -38,8 +38,8 @@ public final class IpRuleManager {
         rules.forEach((ip, table) -> {
             if (table.equals(tableName)) {
                 String delCmd = String.format("sudo ip rule del from %s table %s", ip, tableName);
-                log.info("Deleting ip rule: {}", delCmd);
                 TransientProcess.create(delCmd).waitTermination();
+                log.info("[ip rule] {}({}) 삭제됨", table, ip);
             }
         });
     }
@@ -48,7 +48,7 @@ public final class IpRuleManager {
     public void addRule(String ip, String table) {
         String addCmd = String.format("sudo ip rule add from %s table %s", ip, table);
         TransientProcess.create(addCmd).waitTermination();
-        log.info("ip rule 추가됨 : {} - {}", ip, table);
+        log.info("[ip rule] {}({}) 추가됨", table, ip);
     }
 
     // getRules()로 파싱된 모든 ip rule(사용자 정의 규칙)을 삭제
@@ -58,7 +58,7 @@ public final class IpRuleManager {
             String delCmd = String.format("sudo ip rule del from %s table %s", ip, table);
             TransientProcess.create(delCmd).waitTermination();
         });
-        log.info("ip rule 초기화됨");
+        log.info("[ip rule] 초기화됨");
     }
 }
 
