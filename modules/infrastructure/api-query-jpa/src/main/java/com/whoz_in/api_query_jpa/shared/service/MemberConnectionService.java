@@ -63,6 +63,9 @@ public class MemberConnectionService {
                 connectionInfo.activeOn(time);
                 connectionInfoRepository.save(connectionInfo);
             }
+
+            log.info("이미 connect 상태 (memberId) : {}", connectionInfo.getMemberId());
+            return;
         }
 
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
