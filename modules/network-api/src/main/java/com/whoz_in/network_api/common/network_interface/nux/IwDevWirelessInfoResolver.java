@@ -25,19 +25,20 @@ public final class IwDevWirelessInfoResolver implements WirelessInfoResolver {
         String ssid = null;
 
         for (String line : results) {
-            if (line.startsWith("Interface ")) {
+            line = line.trim();
+            if (line.startsWith("Interface")) {
                 if (currentInterface != null) {
                     wirelessMap.put(currentInterface, new WirelessInfo(mode, ssid));
                 }
-                currentInterface = line.split("Interface ")[1].trim();
+                currentInterface = line.replace("Interface", "").trim();
                 mode = null;
                 ssid = null;
             }
-            if (line.contains("type ") && currentInterface != null) {
-                mode = line.split("type ")[1].trim();
+            if (line.contains("type") && currentInterface != null) {
+                mode = line.split("type")[1].trim();
             }
-            if (line.contains("ssid ") && currentInterface != null) {
-                ssid = line.split("ssid ")[1].trim();
+            if (line.contains("ssid") && currentInterface != null) {
+                ssid = line.split("ssid")[1].trim();
             }
         }
         if (currentInterface != null) {
