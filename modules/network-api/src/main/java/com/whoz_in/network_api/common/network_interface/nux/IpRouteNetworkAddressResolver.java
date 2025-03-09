@@ -26,9 +26,9 @@ public final class IpRouteNetworkAddressResolver implements NetworkAddressResolv
         try {
             JsonNode root = objectMapper.readTree(result);
             for (JsonNode route : root) {
-                if (route.has("dev") && route.has("gateway") && route.has("src")) {
+                if (route.has("dev") && route.has("gateway") && route.has("prefsrc")) {
                     String iface = route.get("dev").asText();
-                    String ip = route.get("src").asText();
+                    String ip = route.get("prefsrc").asText();
                     String gateway = route.get("gateway").asText();
                     connectionInfoMap.put(iface, new NetworkAddress(ip, gateway));
                 }
