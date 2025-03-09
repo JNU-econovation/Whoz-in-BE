@@ -17,6 +17,7 @@ services:
       - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
       - /run/dbus:/run/dbus # nmcli
       - /var/run/dbus:/var/run/dbus # nmcli
+      - /etc/iproute2/rt_tables:/etc/iproute2/rt_tables # 라우팅 테이블 경로 (리눅스)
     network_mode: host
     privileged: true # 호스트와 같은 수준의 권한을 부여 (tshark, iwconfig 등이 요구)
     restart: always
