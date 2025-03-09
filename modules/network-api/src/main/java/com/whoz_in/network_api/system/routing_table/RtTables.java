@@ -3,12 +3,10 @@ package com.whoz_in.network_api.system.routing_table;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -16,37 +14,24 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @Profile("prod")
-@RequiredArgsConstructor
 public final class RtTables {
-    private final Map<Integer, String> rtTables;
+    private final Set<String> rtTables;
 
-    public Map<Integer, String> get(){
+    public RtTables() throws IOException {
+        this.rtTables = loadRtTables();
+    }
+
+    public Set<String> get(){
         return this.rtTables;
     }
 
-    public RtTables() throws IOException {
-        Map<Integer, String> rtTables = new HashMap<>();
-        List<String> lines = Files.readAllLines(Path.of("/etc/iproute2/rt_tables"));
-
-        for (String line : lines) {
-            line = line.trim();
-            // 빈 줄이나 주석은 건너뜀
-            if (line.isEmpty() || line.startsWith("#")) {
-                continue;
-            }
-            // 공백으로 분리 (번호와 테이블 이름)
-            String[] parts = line.split("\\s+");
-            if (parts.length >= 2) {
-                try {
-                    int tableId = Integer.parseInt(parts[0]);
-                    String tableName = parts[1];
-                    rtTables.put(tableId, tableName);
-                } catch (NumberFormatException e) {
-                    log.error("형식에 맞지 않는 줄: " + line);
-                }
-            }
-        }
-        this.rtTables = Map.copyOf(rtTables);
+    private Set<String> loadRtTables() throws IOException {
+        return Files.lines(Path.of("/etc/iproute2/rt_tables"))
+                .map(String::trim)                          // 공백 제거
+                .filter(line -> !line.isEmpty() && !line.startsWith("#"))  // 빈 줄 및 주석 제거
+                .map(line -> line.split("\\s+"))            // 공백 기준 분할
+                .filter(parts -> parts.length >= 2)         // 번호와 테이블 이름이 있는 경우만 처리
+                .map(parts -> parts[1])                     // 테이블 이름만 추출
+                .collect(Collectors.toUnmodifiableSet());   // 불변 Set으로 변환
     }
 }
-
