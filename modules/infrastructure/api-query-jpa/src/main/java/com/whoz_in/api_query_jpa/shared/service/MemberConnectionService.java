@@ -64,7 +64,6 @@ public class MemberConnectionService {
                 connectionInfoRepository.save(connectionInfo);
             }
 
-            log.info("이미 connect 상태 (memberId) : {}", connectionInfo.getMemberId());
             return;
         }
 
