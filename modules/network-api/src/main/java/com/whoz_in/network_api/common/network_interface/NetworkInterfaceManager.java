@@ -1,17 +1,20 @@
 package com.whoz_in.network_api.common.network_interface;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.*;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED_AND_RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.DISCONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.MODE_CHANGED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.REMOVED;
 
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -42,6 +45,22 @@ public final class NetworkInterfaceManager {
         this.networkAddressResolver = networkAddressResolver;
         this.wirelessInfoResolver = wirelessInfoResolver;
         this.cachedInterfaces = fetch();
+        logInterfaces();
+    }
+
+    public void logInterfaces(){
+        log.info("네트워크 인터페이스 목록\n{}", formattedNIs());
+    }
+    private String formattedNIs(){
+        return this.cachedInterfaces.values().stream()
+                .map(ni-> "%s\n%s\n%s\n%s\n%s".formatted(
+                                "name: " + ni.getName(),
+                                "is_connected: "+ ni.isConnected(),
+                                "is_wireless: " + ni.isWireless(),
+                                "address: " + ni.getNetworkAddress(),
+                                "wireless_info: " + ni.getWirelessInfo()
+                        )
+                ).collect(Collectors.joining("\n====================================\n"));
     }
 
     //주기적으로 네트워크 인터페이스 정보를 가져와서 캐시함
