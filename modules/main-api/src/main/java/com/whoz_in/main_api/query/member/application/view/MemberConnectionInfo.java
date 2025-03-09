@@ -28,7 +28,8 @@ public record MemberConnectionInfo(
     }
 
     public Duration continuousTime(){
-        if(Objects.isNull(activeAt) || Objects.isNull(inActiveAt)) return Duration.ZERO;
+        if(Objects.isNull(activeAt) && Objects.isNull(inActiveAt)) return Duration.ZERO;
+        else if(Objects.isNull(inActiveAt)) return Duration.between(activeAt, LocalDateTime.now());
         return Duration.between(activeAt, inActiveAt).abs();
     }
 
