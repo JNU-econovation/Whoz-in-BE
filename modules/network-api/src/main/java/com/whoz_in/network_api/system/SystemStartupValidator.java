@@ -18,7 +18,7 @@ public final class SystemStartupValidator {
             NetworkInterfaceValidator networkInterfaceValidator
     ) {
         log.info("시스템 초기 검증을 수행합니다");
-
+        // TODO: 라우팅 테이블 검증
         //커맨드 설치 여부 검증
         Errors commandErrors = commandsInstalledValidator.validateObject(
                 new CommandInstalledValidation(List.of("tshark", "arp-scan", "iwconfig", "nmcli", "iw", "ip"))

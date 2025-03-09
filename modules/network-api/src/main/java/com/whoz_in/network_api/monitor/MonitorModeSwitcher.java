@@ -32,7 +32,7 @@ public class MonitorModeSwitcher {
     }
 
     @EventListener
-    public void handleNiModeChanged(NetworkInterfaceModeChanged event) {
+    private void handleNiModeChanged(NetworkInterfaceModeChanged event) {
         // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
         if (this.interfaceName.equals(event.getInterfaceName()) && !event.getNow().mode().equals("monitor")) {
             log.info("{}의 모드가 monitor가 아닙니다. (이전: {}, 현재: {}). 모니터 모드로 전환합니다.",
