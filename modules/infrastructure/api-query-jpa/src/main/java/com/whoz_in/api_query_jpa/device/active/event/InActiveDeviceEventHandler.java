@@ -2,15 +2,10 @@ package com.whoz_in.api_query_jpa.device.active.event;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.Member;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
-import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
@@ -35,10 +30,12 @@ public class InActiveDeviceEventHandler {
         List<UUID> devices = event.getDevices();
         List<ActiveDeviceEntity> inActives = activeDeviceRepository.findByDeviceIds(devices);
 
+        LocalDateTime disConnectedAt = LocalDateTime.now();
+
         // 기기 disConnect
         inActives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .forEach(deviceConnectionService::disconnectDevice);
+                .forEach(id -> deviceConnectionService.disconnectDevice(id, disConnectedAt));
     }
 
 }
