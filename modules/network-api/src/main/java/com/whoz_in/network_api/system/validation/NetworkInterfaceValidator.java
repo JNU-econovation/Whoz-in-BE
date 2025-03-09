@@ -5,6 +5,7 @@ import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.validation.CustomValidator;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -35,6 +36,7 @@ public class NetworkInterfaceValidator extends CustomValidator<NetworkInterfaceV
         //연결 확인
         config.getManagedProfiles().stream()
                 .map(profile -> systemNiMap.get(profile.interfaceName()))
+                .filter(Objects::nonNull)
                 .forEach(ni -> {
                     if (ni.isConnected()) return;
                     errors.reject(
@@ -43,8 +45,10 @@ public class NetworkInterfaceValidator extends CustomValidator<NetworkInterfaceV
                             "%s의 연결이 끊겨있습니다.".formatted(ni.getName())
                     );
         });
+
         //모니터 모드 확인
         NetworkInterface monitorInterface = systemNiMap.get(config.getMonitorProfile().interfaceName());
+        if (monitorInterface == null) return;
         String mode = monitorInterface.getWirelessInfo().mode();
         if (!mode.equals("monitor")) {
             errors.reject(
