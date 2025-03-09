@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class NetworkInterfaceModeChanged {
         private final String interfaceName;
-        private final NetworkAddress pre;
-        private final NetworkAddress now;
+        private final WirelessInfo pre;
+        private final WirelessInfo now;
 
         public NetworkInterfaceModeChanged(NetworkInterface pre, NetworkInterface now) {
                 this.interfaceName = pre.getName();
-                this.pre = pre.getNetworkAddress();
-                this.now = now.getNetworkAddress();
+                this.pre = pre.getWirelessInfo();
+                this.now = now.getWirelessInfo();
         }
 }

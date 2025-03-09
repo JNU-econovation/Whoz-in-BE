@@ -10,12 +10,14 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 // 시스템의 현재 네트워크 인터페이스를 가져와서 저장 및 변경 감지
 // TODO: cachedInterfaces를 SystemNetworkInterface로 분리
+@Slf4j
 @Component
 public final class NetworkInterfaceManager {
     private final NetworkInterfaceProfileConfig profileConfig;
@@ -72,14 +74,19 @@ public final class NetworkInterfaceManager {
             NetworkInterface oldInterface = cachedInterfaces.get(interfaceName);
             NetworkInterface newInterface = newInterfaces.get(interfaceName);
             if (!newInterface.isConnected()) { // 현재 연결이 끊겨있는데
-                if (oldInterface.isConnected()) // 이전엔 연결되어있었으면 연결 끊김 감지
-                    eventPublisher.publishEvent(new NetworkInterfaceDisconnected(newInterface.getName()));
+                if (oldInterface.isConnected()) {// 이전엔 연결되어있었으면 연결 끊김 감지
+                    log.error("{}의 네트워크 연결이 끊겼습니다.", interfaceName);
+                    eventPublisher.publishEvent(
+                            new NetworkInterfaceDisconnected(newInterface.getName()));
+                }
             } else { // 현재 연결되어있는데
                 if (!oldInterface.isConnected()) { // 이전엔 연결이 안되어있었을경우 다시 연결됨 감지
+                    log.warn("{}가 다시 네트워크에 연결되었습니다.", interfaceName);
                     eventPublisher.publishEvent(new NetworkInterfaceReconnected(newInterface.getName()));
                 } else {// 이전에도 연결되어있었을경우 (연결 유지)
                     // ip 혹은 gateway가 바뀐 경우 감지
                     if (!Objects.equals(oldInterface.getNetworkAddress(), newInterface.getNetworkAddress())) {
+                        log.error("{}의 아이피가 변경되었습니다.", interfaceName);
                         eventPublisher.publishEvent(new NetworkInterfaceAddressChanged(oldInterface, newInterface));
                     }
                 }
@@ -87,6 +94,11 @@ public final class NetworkInterfaceManager {
 
             // 무선 모드 변화 감지
             if (!Objects.equals(oldInterface.getWirelessInfo(), newInterface.getWirelessInfo())) {
+                log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
+                        interfaceName,
+                        oldInterface.getWirelessInfo(),
+                        newInterface.getWirelessInfo()
+                );
                 eventPublisher.publishEvent(new NetworkInterfaceModeChanged(oldInterface, newInterface));
             }
         }
