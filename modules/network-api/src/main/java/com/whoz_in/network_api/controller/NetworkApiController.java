@@ -28,7 +28,7 @@ public class NetworkApiController implements NetworkApi {
             NetworkInterfaceManager manager) {
         this.ipHolder = ipHolder;
         this.room = room;
-        this.gateways = manager.get().stream()
+        this.gateways = manager.get().values().stream()
                 .map(ni-> ni.getNetworkAddress().gateway())
                 .toList();
     }
