@@ -19,7 +19,6 @@ public class NetworkInterfaceProfileConfig {
     private final List<NetworkInterfaceProfile> mdnsProfiles;
 
     public NetworkInterfaceProfileConfig(
-//            NetworkInterfaceManager manager,
             NetworkInterfaceProfileProperties properties,
             @Value("${command.monitor}") String monitorCommandTemplate,
             @Value("${command.managed.mdns}") String mdnsCommandTemplate,

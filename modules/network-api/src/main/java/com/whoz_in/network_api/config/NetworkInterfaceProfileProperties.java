@@ -15,9 +15,21 @@ public class NetworkInterfaceProfileProperties {
     private final List<Mdns> mdns;
 
     public record Monitor(String interfaceName) {}
-    public record Managed(List<Mdns> mdns, List<Arp> arp) {}
-    public record Mdns(String ssid, String interfaceName) {}
-    public record Arp(String ssid, String interfaceName) {}
+    public record Managed(List<Mdns> mdns, List<Arp> arp) {
+
+    }
+    public record Mdns(String ssid, String interfaceName) {
+        public Mdns {
+            if (ssid == null || interfaceName == null)
+                throw new IllegalStateException("MDNS 설정 잘못됐어요");
+        }
+    }
+    public record Arp(String ssid, String interfaceName) {
+        public Arp {
+            if (ssid == null || interfaceName == null)
+                throw new IllegalStateException("ARP 설정 잘못됐어요");
+        }
+    }
 
 
     @ConstructorBinding
