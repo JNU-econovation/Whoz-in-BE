@@ -37,7 +37,7 @@ public final class SystemStartupValidator {
 
         if (commandErrors.hasErrors() || niErrors.hasErrors() || rtTableErrors.hasErrors()) {
             log.error("시스템 초기 검증에 실패했습니다. 애플리케이션을 종료합니다.");
-            System.exit(1);
+            throw new IllegalStateException("검증 실패");
         }
 
         log.info("시스템 초기 검증 완료");
