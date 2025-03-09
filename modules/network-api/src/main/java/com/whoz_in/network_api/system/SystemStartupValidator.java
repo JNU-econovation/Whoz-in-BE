@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.system_validator;
+package com.whoz_in.network_api.system;
 
 
 import java.util.List;
