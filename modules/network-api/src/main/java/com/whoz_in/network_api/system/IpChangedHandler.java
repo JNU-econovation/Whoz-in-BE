@@ -1,7 +1,9 @@
 package com.whoz_in.network_api.system;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.*;
+
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceAddressChanged;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import com.whoz_in.network_api.config.DynamicCorsConfigurationSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,17 +19,18 @@ public class IpChangedHandler {
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
 
     // cors 처리 메서드
-    private void changeCorsOrigin(NetworkInterfaceAddressChanged event){
-        dynamicCorsConfigurationSource.removeAllowedOrigin(event.getPre().getNetworkAddress().ip());
-        dynamicCorsConfigurationSource.addAllowedOrigin(event.getNow().getNetworkAddress().ip());
+    private void changeCorsOrigin(NetworkInterfaceStatusEvent event){
+        dynamicCorsConfigurationSource.removeAllowedOrigin(event.pre().getNetworkAddress().ip());
+        dynamicCorsConfigurationSource.addAllowedOrigin(event.now().getNetworkAddress().ip());
     }
     // 정책 기반 라우팅 처리 메서드
 
 
     @EventListener
-    private void handleIpChanged(NetworkInterfaceAddressChanged event) {
-        NetworkInterface now = event.getNow();
+    private void handle(NetworkInterfaceStatusEvent event) {
+        if (event.status() != RECONNECTED && event.status() != ADDED_AND_RECONNECTED) return;
         changeCorsOrigin(event);
+        NetworkInterface now = event.now();
         if (!now.isWireless()) return; // 유선일 경우 종료
 
     }

@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.common.network_interface;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.*;
+
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.ArrayList;
@@ -52,54 +54,73 @@ public final class NetworkInterfaceManager {
     }
 
     // 이전과 새로 조회된 네트워크 인터페이스를 비교하여 변경점이 있으면 이벤트 발생
-    private void checkChanged(Map<String, NetworkInterface> newInterfaces) {
-        Set<String> oldSet = cachedInterfaces.keySet();
-        Set<String> newSet = newInterfaces.keySet();
+    private void checkChanged(Map<String, NetworkInterface> nowInterfaces) {
+        Set<String> oldSet = new HashSet<>(cachedInterfaces.keySet());
+        Set<String> nowSet = new HashSet<>(nowInterfaces.keySet());
 
-        // 사라진 인터페이스 처리
+        // 제거된 인터페이스: 기존에는 있었지만 현재는 없는 경우
         Set<String> removed = new HashSet<>(oldSet);
-        removed.removeAll(newSet);
-        removed.forEach(niName-> eventPublisher.publishEvent(new NetworkInterfaceRemoved(niName)));
-        // 생긴 인터페이스 처리
-        Set<String> added = new HashSet<>(newSet);
-        added.removeAll(oldSet);
-        removed.forEach(niName-> eventPublisher.publishEvent(new NetworkInterfaceAdded(niName)));
+        removed.removeAll(nowSet);
+        for (String niName : removed) {
+            NetworkInterface oldInterface = cachedInterfaces.get(niName);
+            log.error("인터페이스 {}가 제거되었습니다.", niName);
+            eventPublisher.publishEvent(
+                    new NetworkInterfaceStatusEvent(niName, oldInterface, null, REMOVED)
+            );
+        }
 
-        // 기존 인터페이스
-        Set<String> exist = newSet.stream()
-                .filter(oldSet::contains)
-                .collect(Collectors.toSet());
-        // 기존 인터페이스의 변화 감지
-        for (String interfaceName : exist) {
-            NetworkInterface oldInterface = cachedInterfaces.get(interfaceName);
-            NetworkInterface newInterface = newInterfaces.get(interfaceName);
-            if (!newInterface.isConnected()) { // 현재 연결이 끊겨있는데
-                if (oldInterface.isConnected()) {// 이전엔 연결되어있었으면 연결 끊김 감지
-                    log.error("{}의 네트워크 연결이 끊겼습니다.", interfaceName);
-                    eventPublisher.publishEvent(
-                            new NetworkInterfaceDisconnected(newInterface.getName()));
-                }
-            } else { // 현재 연결되어있는데
-                if (!oldInterface.isConnected()) { // 이전엔 연결이 안되어있었을경우 다시 연결됨 감지
-                    log.warn("{}가 다시 네트워크에 연결되었습니다.", interfaceName);
-                    eventPublisher.publishEvent(new NetworkInterfaceReconnected(newInterface.getName()));
-                } else {// 이전에도 연결되어있었을경우 (연결 유지)
-                    // ip 혹은 gateway가 바뀐 경우 감지
-                    if (!Objects.equals(oldInterface.getNetworkAddress(), newInterface.getNetworkAddress())) {
-                        log.error("{}의 아이피가 변경되었습니다.", interfaceName);
-                        eventPublisher.publishEvent(new NetworkInterfaceAddressChanged(oldInterface, newInterface));
-                    }
+        // 새로 추가된 인터페이스: 현재에는 있으나 기존에는 없는 경우
+        Set<String> added = new HashSet<>(nowSet);
+        added.removeAll(oldSet);
+        for (String niName : added) {
+            NetworkInterface nowInterface = nowInterfaces.get(niName);
+            if (nowInterface.isConnected()) {
+                log.info("{}가 추가되고 연결되었습니다.", niName);
+                eventPublisher.publishEvent(
+                        new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED_AND_RECONNECTED)
+                );
+            } else {
+                log.info("{}가 새로 추가되었습니다.", niName);
+                eventPublisher.publishEvent(
+                        new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED)
+                );
+            }
+        }
+
+        // 기존에 존재하는 인터페이스 (both old and now)
+        Set<String> existing = new HashSet<>(nowSet);
+        existing.retainAll(oldSet);
+        for (String niName : existing) {
+            NetworkInterface oldInterface = cachedInterfaces.get(niName);
+            NetworkInterface newInterface = nowInterfaces.get(niName);
+
+            // 연결 상태 변화
+            if (oldInterface.isConnected() && !newInterface.isConnected()) {
+                log.error("{}의 네트워크 연결이 끊겼습니다.", niName);
+                eventPublisher.publishEvent(
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, DISCONNECTED)
+                );
+            } else if (!oldInterface.isConnected() && newInterface.isConnected()) {
+                log.info("{}가 다시 네트워크에 연결되었습니다.", niName);
+                eventPublisher.publishEvent(
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, RECONNECTED)
+                );
+            } else if (oldInterface.isConnected()) {
+                // 연결 유지 중인데 IP 혹은 gateway가 변경된 경우 (fetch 주기(3초) 안에 연결이 끊겼다가 다시 연결되어야 해서 일어날 수 없을듯)
+                if (!Objects.equals(oldInterface.getNetworkAddress(), newInterface.getNetworkAddress())) {
+                    log.error("{}의 아이피가 변경되었습니다.", niName);
                 }
             }
 
-            // 무선 모드 변화 감지
+            // 무선 모드 변화 감지 (연결 상태와 상관없이)
             if (!Objects.equals(oldInterface.getWirelessInfo(), newInterface.getWirelessInfo())) {
                 log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
-                        interfaceName,
+                        niName,
                         oldInterface.getWirelessInfo(),
-                        newInterface.getWirelessInfo()
+                        newInterface.getWirelessInfo());
+                eventPublisher.publishEvent(
+                        new NetworkInterfaceStatusEvent(niName, oldInterface, newInterface, MODE_CHANGED)
                 );
-                eventPublisher.publishEvent(new NetworkInterfaceModeChanged(oldInterface, newInterface));
             }
         }
     }

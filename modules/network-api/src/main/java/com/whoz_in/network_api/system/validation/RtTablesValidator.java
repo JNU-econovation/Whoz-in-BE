@@ -24,14 +24,14 @@ public class RtTablesValidator extends CustomValidator<RtTableValidation> {
 
     @Override
     public void validate(RtTableValidation target, Errors errors) {
-        List<NetworkInterface> wirelessInterfaces = config.getManagedProfiles().stream()
+        List<NetworkInterface> wirelessManagedNIs = config.getManagedProfiles().stream()
                 .map(profile -> manager.get().get(profile.interfaceName()))
                 .filter(NetworkInterface::isWireless)
                 .toList();
-        if (rtTables.get().size() != wirelessInterfaces.size())
+        if (rtTables.get().size() != wirelessManagedNIs.size())
             errors.reject(
                     "rtTables.invalidSize",
-                    "rt_tables에 설정된 테이블 개수(%d)와 무선 managed 인터페이스의 개수(%d)가 다릅니다.".formatted(rtTables.get().size(), wirelessInterfaces.size())
+                    "rt_tables에 설정된 테이블 개수(%d)와 무선 managed 인터페이스의 개수(%d)가 다릅니다.".formatted(rtTables.get().size(), wirelessManagedNIs.size())
             );
     }
 }
