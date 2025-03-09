@@ -3,13 +3,17 @@ package com.whoz_in.main_api.query.member.application.view;
 import com.whoz_in.domain.shared.Nullable;
 import com.whoz_in.main_api.query.shared.application.View;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
+import org.checkerframework.checker.units.qual.N;
 
 public record MemberConnectionInfo(
         UUID memberId,
         @Nullable Duration dailyTime,
         @Nullable Duration totalTime,
+        @Nullable LocalDateTime activeAt,
+        @Nullable LocalDateTime inActiveAt,
         boolean isActive
     ) implements View {
 
