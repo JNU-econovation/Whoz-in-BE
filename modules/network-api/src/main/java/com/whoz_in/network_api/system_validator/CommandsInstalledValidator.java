@@ -7,14 +7,13 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 //which로 커맨드가 설치되어있는지 확인함
 @Component
 @RequiredArgsConstructor
-public class CommandsInstalledValidator extends CustomValidator<CommandInstalled> {
+public class CommandsInstalledValidator extends CustomValidator<CommandInstalledValidation> {
     @Override
-    public void validate(CommandInstalled target, Errors errors) {
+    public void validate(CommandInstalledValidation target, Errors errors) {
         target.commands().forEach(command -> {
             List<String> results = TransientProcess.create("which " + command).results();
             if (results.isEmpty() || !results.get(0).contains("/")) {

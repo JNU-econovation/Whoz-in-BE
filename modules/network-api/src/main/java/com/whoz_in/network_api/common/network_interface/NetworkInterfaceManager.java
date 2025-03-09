@@ -22,9 +22,9 @@ public final class NetworkInterfaceManager {
     private final ApplicationEventPublisher eventPublisher;
     private final NetworkAddressResolver networkAddressResolver;
     private final WirelessInfoResolver wirelessInfoResolver;
-    private Set<NetworkInterface> cachedInterfaces;
+    private Map<String, NetworkInterface> cachedInterfaces;
 
-    public Set<NetworkInterface> get(){
+    public Map<String, NetworkInterface> get(){
         return cachedInterfaces;
     }
 
@@ -44,19 +44,15 @@ public final class NetworkInterfaceManager {
     //변경되면 이벤트를 발행
     @Scheduled(fixedRate = 3000)
     public void refresh() {
-        Set<NetworkInterface> newInterfaces = fetch();
+        Map<String, NetworkInterface> newInterfaces = fetch();
         checkChanged(newInterfaces);
         this.cachedInterfaces = newInterfaces;
     }
 
     // 이전과 새로 조회된 네트워크 인터페이스를 비교하여 변경점이 있으면 이벤트 발생
-    private void checkChanged(Set<NetworkInterface> newInterfaces) {
-        Map<String, NetworkInterface> preNIs = cachedInterfaces.stream()
-                .collect(Collectors.toMap(NetworkInterface::getName, ni -> ni));
-        Map<String, NetworkInterface> newNIs = newInterfaces.stream()
-                .collect(Collectors.toMap(NetworkInterface::getName, ni -> ni));
-        Set<String> oldSet = preNIs.keySet();
-        Set<String> newSet = newNIs.keySet();
+    private void checkChanged(Map<String, NetworkInterface> newInterfaces) {
+        Set<String> oldSet = cachedInterfaces.keySet();
+        Set<String> newSet = newInterfaces.keySet();
 
         // 사라진 인터페이스 처리
         Set<String> removed = new HashSet<>(oldSet);
@@ -73,8 +69,8 @@ public final class NetworkInterfaceManager {
                 .collect(Collectors.toSet());
         // 기존 인터페이스의 변화 감지
         for (String interfaceName : exist) {
-            NetworkInterface oldInterface = preNIs.get(interfaceName);
-            NetworkInterface newInterface = newNIs.get(interfaceName);
+            NetworkInterface oldInterface = cachedInterfaces.get(interfaceName);
+            NetworkInterface newInterface = newInterfaces.get(interfaceName);
             if (!newInterface.isConnected()) { // 현재 연결이 끊겨있는데
                 if (oldInterface.isConnected()) // 이전엔 연결되어있었으면 연결 끊김 감지
                     eventPublisher.publishEvent(new NetworkInterfaceDisconnected(newInterface.getName()));
@@ -98,7 +94,7 @@ public final class NetworkInterfaceManager {
 
 
     // 최신 네트워크 인터페이스 정보를 반환
-    private Set<NetworkInterface> fetch(){
+    private Map<String, NetworkInterface> fetch(){
         Map<String, NetworkAddress> connectionInfos = networkAddressResolver.resolve();
         Map<String, WirelessInfo> wirelessInfos = wirelessInfoResolver.resolve();
 
@@ -113,12 +109,16 @@ public final class NetworkInterfaceManager {
                 .toList();
 
         //모든 인터페이스 중 프로파일로 설정된 인터페이스만 걸러냄
-        return Set.copyOf(profileInterfaces.stream()
+        return profileInterfaces.stream()
                 .filter(fetchedInterfaces::contains)
-                .map(interfaceName -> NetworkInterface.of(
-                        interfaceName,
-                        connectionInfos.get(interfaceName),
-                        wirelessInfos.get(interfaceName)
-                )).collect(Collectors.toSet()));
+                .collect(Collectors.toMap(
+                        interfaceName -> interfaceName,
+                        interfaceName -> NetworkInterface.of(
+                                interfaceName,
+                                connectionInfos.get(interfaceName),
+                                wirelessInfos.get(interfaceName)
+                        ),
+                        (existing, replacement) -> existing  // 중복 시 기존 값 유지
+                ));
     }
 }
