@@ -17,13 +17,13 @@ import org.springframework.validation.Errors;
 @Component
 @Profile("prod")
 @RequiredArgsConstructor
-public class RtTablesValidator extends CustomValidator<NetworkInterfaceValidation> {
+public class RtTablesValidator extends CustomValidator<RtTableValidation> {
     private final NetworkInterfaceProfileConfig config;
     private final NetworkInterfaceManager manager;
     private final RtTables rtTables;
 
     @Override
-    public void validate(NetworkInterfaceValidation target, Errors errors) {
+    public void validate(RtTableValidation target, Errors errors) {
         List<NetworkInterface> wirelessInterfaces = config.getManagedProfiles().stream()
                 .map(profile -> manager.get().get(profile.interfaceName()))
                 .filter(NetworkInterface::isWireless)
