@@ -4,9 +4,9 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
-import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
-import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
-import com.whoz_in.main_api.command.member.application.MemberOAuth2LoginHandler;
+import com.whoz_in.main_api.command.member.application.command.LoginSuccessTokens;
+import com.whoz_in.main_api.command.member.application.command.MemberOAuth2Login;
+import com.whoz_in.main_api.command.member.application.command.MemberOAuth2LoginHandler;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
