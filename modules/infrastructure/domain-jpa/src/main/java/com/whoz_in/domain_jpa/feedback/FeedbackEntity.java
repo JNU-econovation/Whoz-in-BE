@@ -18,13 +18,17 @@ public class FeedbackEntity extends BaseEntity {
     private UUID id;
 
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false)
     private String content;
 
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID memberId;
 
-    public FeedbackEntity(UUID id, String content, UUID memberId) {
+    public FeedbackEntity(UUID id, String title, String content, UUID memberId) {
         this.id = id;
+        this.title = title;
         this.content = content;
         this.memberId = memberId;
     }

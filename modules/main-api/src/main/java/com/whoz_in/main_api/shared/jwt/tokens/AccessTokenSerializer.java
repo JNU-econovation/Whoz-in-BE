@@ -3,6 +3,7 @@ package com.whoz_in.main_api.shared.jwt.tokens;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCOUNT_TYPE;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.AccountType;
 import com.whoz_in.domain.member.model.MemberId;
