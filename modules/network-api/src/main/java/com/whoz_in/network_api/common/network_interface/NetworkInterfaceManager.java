@@ -131,8 +131,11 @@ public final class NetworkInterfaceManager {
                 }
             }
 
-            // 무선 모드 변화 감지 (연결 상태와 상관없이)
-            if (!Objects.equals(oldInterface.getWirelessInfo(), nowInterface.getWirelessInfo())) {
+            // 여기서부터 무선 모드인 인터페이스 전용 로직
+            if (!nowInterface.isWireless()) return;
+
+            // 무선 모드 변화 감지
+            if (!Objects.equals(oldInterface.getWirelessInfo().mode(), nowInterface.getWirelessInfo().mode())) {
                 log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
                         niName,
                         oldInterface.getWirelessInfo(),
