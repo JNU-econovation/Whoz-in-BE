@@ -13,10 +13,10 @@ public record FeedbackSend(
     public static final int MAX_LENGTH_CONTENT = 500;
 
     public FeedbackSend {
-        if (title.length() > MAX_LENGTH_TITLE) {
+        if (title != null && title.length() > MAX_LENGTH_TITLE) {
             throw TitleLengthExceededException.EXCEPTION;
         }
-        if (content.length() > MAX_LENGTH_CONTENT) {
+        if (content != null && content.length() > MAX_LENGTH_CONTENT) {
             throw ContentLengthExceedException.EXCEPTION;
         }
     }
