@@ -13,6 +13,7 @@ import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +32,7 @@ public class NetworkApiController implements NetworkApi {
     private final IpHolder ipHolder;
     private Set<String> gateways;
     private final String room;
-    private final List<String> disconnectedNIs;
+    private final Set<String> disconnectedNIs;
 
     public NetworkApiController(
             IpHolder ipHolder,
@@ -42,7 +43,7 @@ public class NetworkApiController implements NetworkApi {
         this.manager = manager;
         this.ipHolder = ipHolder;
         this.room = room;
-        this.disconnectedNIs = new CopyOnWriteArrayList<>();
+        this.disconnectedNIs = new CopyOnWriteArraySet<>();
         this.gateways = getGateways();
     }
 
@@ -50,14 +51,14 @@ public class NetworkApiController implements NetworkApi {
     private void handle(NetworkInterfaceStatusEvent event) {
         if (event.status() == Status.DISCONNECTED || event.status() == Status.REMOVED) {
             String disconnectedNI = event.pre().getName();
-            disconnectedNIs.add(disconnectedNI);
-            log.warn("{}의 네트워크 연결이 끊겨 ip 반환 컨트롤러가 비활성화됨", disconnectedNI);
+            if (disconnectedNIs.add(disconnectedNI))
+                log.warn("{}의 네트워크 연결이 끊겨 ip 반환 컨트롤러가 비활성화 상태입니다.", disconnectedNI);
         }
         if (event.status() == Status.RECONNECTED || event.status() == Status.ADDED_AND_RECONNECTED) {
             disconnectedNIs.remove(event.interfaceName());
             if (!disconnectedNIs.isEmpty()) return;
             this.gateways = getGateways();
-            log.info("ip 반환 컨트롤러 정상화됨");
+            log.info("ip 반환 컨트롤러가 정상화되었습니다.");
         }
     }
 
