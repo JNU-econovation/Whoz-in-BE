@@ -24,7 +24,7 @@ public final class AccessTokenSerializer extends TokenSerializer<AccessToken> {
     protected AccessToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
         AccountType accountType = AccountType.findAccountType(claims.get(ACCOUNT_TYPE, String.class));
-        return new AccessToken(memberId, tokenId, accountType);
+        return new AccessToken(memberId, accountType);
     }
 
     @Override
