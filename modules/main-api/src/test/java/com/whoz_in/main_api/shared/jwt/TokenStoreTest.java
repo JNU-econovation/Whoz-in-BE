@@ -12,8 +12,8 @@ public class TokenStoreTest {
 
     @Mock private final TokenStore tokenStore;
 
-    public TokenStoreTest() {
-        this.tokenStore = new StubTokenStore();
+    public TokenStoreTest(JwtProperties jwtProperties) {
+        this.tokenStore = new StubTokenStore(jwtProperties);
     }
 
     @Test
