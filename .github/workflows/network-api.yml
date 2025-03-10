@@ -6,14 +6,14 @@ on:
         - develop
 
 jobs:
-    if: "contains(github.event.head_commit.modified, 'modules/network-api/') || 
-        contains(github.event.head_commit.added, 'modules/network-api/') || 
-        contains(github.event.head_commit.removed, 'modules/network-api/')"
     test:
         name: 테스트하기
         uses: ./.github/workflows/ci.yml
 
     deploy:
+        if: "contains(github.event.head_commit.modified, 'modules/network-api/') || 
+                contains(github.event.head_commit.added, 'modules/network-api/') || 
+                contains(github.event.head_commit.removed, 'modules/network-api/')"
         name: 배포하기
         needs: test
         uses: ./.github/workflows/deploy.yml
