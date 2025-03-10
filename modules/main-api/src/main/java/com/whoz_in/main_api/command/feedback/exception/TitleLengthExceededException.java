@@ -6,7 +6,7 @@ public class TitleLengthExceededException extends ApplicationException {
   public static final TitleLengthExceededException EXCEPTION = new TitleLengthExceededException();
     public TitleLengthExceededException() {
         super(
-                "5001", "제목은 50자까지 작성가능합니다."
+                "5001", "제목은 30자까지 작성가능합니다."
         );
     }
 }
