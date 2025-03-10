@@ -10,6 +10,7 @@ spring:
       - "classpath:application-domain-jpa.yml"
       - "classpath:application-api-query-jpa.yml"
       - "classpath:application-logging.yml"
+      - "classpath:application-redis.yml"
 
 server:
   port: 2470 # 24시간 운영 + main-api니까 0번째

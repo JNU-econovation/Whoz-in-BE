@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.command.member.application;
+package com.whoz_in.main_api.command.member.application.command;
 
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;

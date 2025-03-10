@@ -3,6 +3,7 @@ package com.whoz_in.main_api.shared.jwt.tokens;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCOUNT_TYPE;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.AccountType;
 import com.whoz_in.domain.member.model.MemberId;
@@ -23,14 +24,16 @@ public final class AccessTokenSerializer extends TokenSerializer<AccessToken> {
     protected AccessToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
         AccountType accountType = AccountType.findAccountType(claims.get(ACCOUNT_TYPE, String.class));
-        return new AccessToken(memberId, accountType);
+        UUID tokenId = UUID.fromString(claims.get(TOKEN_ID, String.class));
+        return new AccessToken(memberId, tokenId, accountType);
     }
 
     @Override
     public Map<String, String> buildClaims(AccessToken accessToken) {
         return Map.of(
                 MEMBER_ID, accessToken.getMemberId().toString(),
-                ACCOUNT_TYPE, accessToken.getAccountType().toString()
+                ACCOUNT_TYPE, accessToken.getAccountType().toString(),
+                TOKEN_ID, accessToken.getTokenId().toString()
         );
     }
 
