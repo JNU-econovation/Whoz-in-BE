@@ -2,16 +2,16 @@ package com.whoz_in.network_api.common.network_interface;
 
 public record NetworkInterfaceStatusEvent(
         String interfaceName,
-        NetworkInterface pre, // 이벤트 발생 이전 (사라졌다 생긴 경우 null)
-        NetworkInterface now, // 이벤트 발생 이후 (제거된 경우 null)
+        NetworkInterface pre,
+        NetworkInterface now,
         Status status
 ) {
     public enum Status {
-        ADDED,
+        ADDED, // pre null
         RECONNECTED,
-        ADDED_AND_RECONNECTED,
+        ADDED_AND_RECONNECTED, // pre null
         DISCONNECTED,
-        REMOVED,
+        REMOVED, // now null
         MODE_CHANGED
     }
 }
