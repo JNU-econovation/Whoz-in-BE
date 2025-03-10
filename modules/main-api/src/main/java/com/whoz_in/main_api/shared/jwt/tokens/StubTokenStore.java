@@ -17,7 +17,7 @@ public class StubTokenStore implements TokenStore {
         this.jwtProperties = jwtProperties;
         this.store = CacheBuilder.newBuilder()
                 .maximumSize(1000)
-                .expireAfterWrite(Duration.ofDays(jwtProperties.getTokenExpiry(TokenType.REFRESH).toDays()))
+                .expireAfterWrite(jwtProperties.getTokenExpiry(TokenType.REFRESH))
                 .build();
     }
 
@@ -33,7 +33,7 @@ public class StubTokenStore implements TokenStore {
 
     @Override
     public void clear() {
-        store.cleanUp();
+        store.invalidateAll();
     }
 
     @Override

@@ -1,18 +1,20 @@
 package com.whoz_in.main_api.shared.jwt;
 
-import com.whoz_in.main_api.shared.jwt.tokens.TokenStore;
 import com.whoz_in.main_api.shared.jwt.tokens.StubTokenStore;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenStore;
+import java.time.Duration;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 public class TokenStoreTest {
 
-    @Mock private final TokenStore tokenStore;
+    private TokenStore tokenStore;
+    private Duration testDuration = Duration.ofSeconds(30);
 
-    public TokenStoreTest(JwtProperties jwtProperties) {
+    public TokenStoreTest(){
+        JwtProperties jwtProperties = new JwtProperties("secret", testDuration, testDuration, testDuration, testDuration);
         this.tokenStore = new StubTokenStore(jwtProperties);
     }
 
@@ -22,7 +24,6 @@ public class TokenStoreTest {
         String tokenId = UUID.randomUUID().toString();
 
         tokenStore.save(tokenId);
-
         boolean isExist = tokenStore.isExist(tokenId);
 
         Assertions.assertTrue(isExist);
