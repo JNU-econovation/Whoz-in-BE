@@ -40,7 +40,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final RequesterInfo requesterInfo;
 
     @Override
-    @Transactional // TODO: 병렬 스트림 내부에서 발생하는 Lazy 로딩 예외 방지를 위한 트랜잭셔널
+    @Transactional(readOnly = true) // TODO: 병렬 스트림 내부에서 발생하는 Lazy 로딩 예외 방지를 위한 트랜잭셔널
     public MembersInRoomResponse handle(MembersInRoom query) {
         validateRegisteredDeviceCount(requesterInfo.getMemberId());
 
@@ -117,9 +117,10 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
             else
                 Sorter.<MemberInRoomResponse>builder()
-                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive).reversed())
-                        .comparator(Comparator.comparing(MemberInRoomResponse::generation))
-                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::isActive))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::dailyActiveMinute))
+                        .comparator(Comparator.comparing(MemberInRoomResponse::generation).reversed())
+                        .comparator(Comparator.comparing(MemberInRoomResponse::memberName).reversed())
                         .build()
                         .sort(responses);
 
