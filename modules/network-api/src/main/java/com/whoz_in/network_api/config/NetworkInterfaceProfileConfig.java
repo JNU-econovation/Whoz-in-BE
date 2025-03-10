@@ -17,6 +17,14 @@ public class NetworkInterfaceProfileConfig {
     private final List<NetworkInterfaceProfile> arpProfiles;
     private final List<NetworkInterfaceProfile> mdnsProfiles;
 
+    public NetworkInterfaceProfile getBySsid(String ssid){
+        return allProfiles.stream()
+                .filter(profile -> profile.ssid() != null) // managed인 프로파일만
+                .filter(profile -> profile.ssid().equals(ssid))
+                .findAny()
+                .orElseThrow(()->new IllegalStateException(ssid + "는 설정에 존재하지 않는 ssid"));
+    }
+
     public NetworkInterfaceProfileConfig(
             NetworkInterfaceProfileProperties properties,
             @Value("${command.monitor}") String monitorCommandTemplate,

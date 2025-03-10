@@ -24,7 +24,9 @@ command:
 
 #TODO: main-api랑 같이 공동으로 관리해야 할듯
 frontend:
-  base-url: ${FRONTEND_URL}
+  network-api:
+    internal-access-ssid: ${FRONTEND.NETWORK_API.INTERNAL_ACCESS_SSID}
+    port: ${FRONTEND.NETWORK_API.PORT}
 
 main-api:
   base-url: ${MAIN_API_BASE_URL}
