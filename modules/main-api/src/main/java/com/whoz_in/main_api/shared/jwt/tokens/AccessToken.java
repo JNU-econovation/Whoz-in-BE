@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public final class AccessToken extends Token {
     private final MemberId memberId;
+    private final UUID tokenId;
     private final AccountType accountType;
 
     public AccessToken(MemberId memberId, AccountType accountType) {
