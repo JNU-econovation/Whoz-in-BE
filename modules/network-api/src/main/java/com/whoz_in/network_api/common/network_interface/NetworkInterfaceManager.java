@@ -29,10 +29,10 @@ public final class NetworkInterfaceManager {
     private final ApplicationEventPublisher eventPublisher;
     private final NetworkAddressResolver networkAddressResolver;
     private final WirelessInfoResolver wirelessInfoResolver;
-    private Map<String, NetworkInterface> cachedInterfaces;
+    private Map<String, NetworkInterface> nowInterfaces;
 
     public Map<String, NetworkInterface> get(){
-        return cachedInterfaces;
+        return nowInterfaces;
     }
 
     public NetworkInterfaceManager(
@@ -44,7 +44,7 @@ public final class NetworkInterfaceManager {
         this.eventPublisher = eventPublisher;
         this.networkAddressResolver = networkAddressResolver;
         this.wirelessInfoResolver = wirelessInfoResolver;
-        this.cachedInterfaces = fetch();
+        this.nowInterfaces = fetch();
         logInterfaces();
     }
 
@@ -52,7 +52,7 @@ public final class NetworkInterfaceManager {
         log.info("네트워크 인터페이스 목록\n{}", formattedNIs());
     }
     private String formattedNIs(){
-        return this.cachedInterfaces.values().stream()
+        return this.nowInterfaces.values().stream()
                 .map(ni-> "%s\n%s\n%s\n%s\n%s".formatted(
                                 "name: " + ni.getName(),
                                 "is_connected: "+ ni.isConnected(),
@@ -67,21 +67,21 @@ public final class NetworkInterfaceManager {
     //변경되면 이벤트를 발행
     @Scheduled(fixedRate = 3000)
     public void refresh() {
-        Map<String, NetworkInterface> newInterfaces = fetch();
-        checkChanged(newInterfaces);
-        this.cachedInterfaces = newInterfaces;
+        Map<String, NetworkInterface> oldInterfaces = Map.copyOf(this.nowInterfaces);
+        this.nowInterfaces = fetch();
+        checkChanged(oldInterfaces);
     }
 
     // 이전과 새로 조회된 네트워크 인터페이스를 비교하여 변경점이 있으면 이벤트 발생
-    private void checkChanged(Map<String, NetworkInterface> nowInterfaces) {
-        Set<String> oldSet = new HashSet<>(cachedInterfaces.keySet());
+    private void checkChanged(Map<String, NetworkInterface> oldInterfaces) {
+        Set<String> oldSet = new HashSet<>(oldInterfaces.keySet());
         Set<String> nowSet = new HashSet<>(nowInterfaces.keySet());
 
         // 제거된 인터페이스: 기존에는 있었지만 현재는 없는 경우
         Set<String> removed = new HashSet<>(oldSet);
         removed.removeAll(nowSet);
         for (String niName : removed) {
-            NetworkInterface oldInterface = cachedInterfaces.get(niName);
+            NetworkInterface oldInterface = oldInterfaces.get(niName);
             log.error("인터페이스 {}가 사라졌습니다.", niName);
             eventPublisher.publishEvent(
                     new NetworkInterfaceStatusEvent(niName, oldInterface, null, REMOVED)
@@ -92,7 +92,7 @@ public final class NetworkInterfaceManager {
         Set<String> added = new HashSet<>(nowSet);
         added.removeAll(oldSet);
         for (String niName : added) {
-            NetworkInterface nowInterface = nowInterfaces.get(niName);
+            NetworkInterface nowInterface = oldInterfaces.get(niName);
             if (nowInterface.isConnected()) {
                 log.info("{}가 추가되고 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
@@ -110,7 +110,7 @@ public final class NetworkInterfaceManager {
         Set<String> existing = new HashSet<>(nowSet);
         existing.retainAll(oldSet);
         for (String niName : existing) {
-            NetworkInterface oldInterface = cachedInterfaces.get(niName);
+            NetworkInterface oldInterface = oldInterfaces.get(niName);
             NetworkInterface nowInterface = nowInterfaces.get(niName);
 
             // 연결 상태 변화
