@@ -17,6 +17,9 @@ on:
       environment: # main-api 또는 network-api 이어야 한다.
         required: true
         type: string
+      branch: # origin에 있는 브랜치일 경우에도 origin/{브랜치명} 과 같이 적어줘야 한다.
+        required: false
+        type: string
 
 jobs:
   deploy:
@@ -24,6 +27,20 @@ jobs:
     steps:
       - name: 레포지토리 가져오기
         uses: actions/checkout@v4
+
+      - name: 배포 환경 설정
+        run: |
+          echo "ENVIRONMENT=${{ inputs.environment }}" >> $GITHUB_ENV
+
+      - name: 브랜치 설정
+        run: |
+          if [[ ${{ inputs.branch }} != null && ${{ inputs.branch }} != '' ]]; then
+            echo "BRANCH_NAME=origin/develop" >> $GITHUB_ENV
+          fi
+          
+          if [[ ${{ inputs.branch }} != null && ${{ inputs.branch }} != '' ]]; then
+            echo "BRANCH_NAME=${{ inputs.branch }}" >> $GITHUB_ENV
+          fi
 
       - name: 배포하기
         uses: appleboy/ssh-action@v0.1.7  # SSH
@@ -33,9 +50,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /home/whozin/Whoz-in-BE/modules/${{ inputs.environment }}/docker      # 프로젝트 폴더로 이동
+            cd /home/whozin/Whoz-in-BE/modules/${{ env.ENVIRONMENT }}/docker      # 프로젝트 폴더로 이동
             git fetch origin                                  # branch 이력 가져오기
-            git reset --hard origin/develop                    # develop branch로 이동 
+            git reset --hard ${{ env.BRANCH_NAME }}                # develop branch로 이동 
             ./build-and-deploy.sh                         # 배포 스크립트 실행
 
       - name: 디스코드 알림 보내기
