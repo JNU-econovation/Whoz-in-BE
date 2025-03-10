@@ -117,7 +117,6 @@ public class MemberController extends CommandController implements MemberCommand
 
     LogOut command = new LogOut(
             accessToken.getMemberId().toString(),
-            accessToken.getTokenId().toString(),
             refreshToken.getTokenId().toString());
 
     dispatch(command);

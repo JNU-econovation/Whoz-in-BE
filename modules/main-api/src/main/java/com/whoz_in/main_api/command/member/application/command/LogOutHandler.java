@@ -15,10 +15,8 @@ public class LogOutHandler implements CommandHandler<LogOut, Void> {
     public Void handle(LogOut command) {
 
         String refreshTokenId = command.refreshTokenId();
-        String accessTokenId = command.accessTokenId();
 
         tokenStore.save(refreshTokenId);
-        tokenStore.save(accessTokenId);
 
         return null;
     }

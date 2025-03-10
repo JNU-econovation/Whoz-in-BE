@@ -8,16 +8,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public final class AccessToken extends Token {
     private final MemberId memberId;
-    private final UUID tokenId;
     private final AccountType accountType;
 
-    public AccessToken(MemberId memberId, AccountType accountType){
+    public AccessToken(MemberId memberId, AccountType accountType) {
         this.memberId = memberId;
         this.accountType = accountType;
-        this.tokenId = UUID.randomUUID();
     }
 
 }

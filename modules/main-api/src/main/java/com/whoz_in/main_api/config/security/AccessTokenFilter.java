@@ -29,9 +29,9 @@ public class AccessTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
-        extractAccessToken(request)
-                .map(this::createAuthentication)
-                .ifPresentOrElse(this::setAuthentication, SecurityContextHolder::clearContext);
+            extractAccessToken(request)
+                    .map(this::createAuthentication)
+                    .ifPresentOrElse(this::setAuthentication, SecurityContextHolder::clearContext);
         filterChain.doFilter(request, response);
     }
 
