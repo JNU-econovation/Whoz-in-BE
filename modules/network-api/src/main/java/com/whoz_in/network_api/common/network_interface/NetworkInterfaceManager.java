@@ -35,6 +35,12 @@ public final class NetworkInterfaceManager {
         return nowInterfaces;
     }
 
+    public NetworkInterface getByName(String interfaceName){
+        NetworkInterface ni = this.nowInterfaces.get(interfaceName);
+        if (ni == null) throw new IllegalStateException(interfaceName + "라는 인터페이스는 없음");
+        return ni;
+    };
+
     public NetworkInterfaceManager(
             NetworkInterfaceProfileConfig profileConfig,
             ApplicationEventPublisher eventPublisher,

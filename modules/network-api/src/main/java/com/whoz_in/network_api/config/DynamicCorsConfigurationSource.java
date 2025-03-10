@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.config;
 
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -14,11 +15,20 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
     private final List<String> allowedOrigins = new CopyOnWriteArrayList<>();
 
-    public DynamicCorsConfigurationSource(@Value("${frontend.base-url}") String frontendBaseUrl) {
+    public DynamicCorsConfigurationSource(
+            NetworkInterfaceManager manager,
+            NetworkInterfaceProfileConfig profileConfig,
+            @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
+            @Value("${frontend.network-api.port}") String networkApiFrontendPort
+    ) {
         // 기본으로 허용할 origin
         allowedOrigins.add("http://localhost:3000");
         allowedOrigins.add("http://localhost:8080");
-        allowedOrigins.add(frontendBaseUrl);
+        // network-api에 배포된 프론트의 url
+        String internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
+        String origin = "http://"+ manager.getByName(internalAccessInterface).getNetworkAddress().ip() + ":" + networkApiFrontendPort;
+        allowedOrigins.add(origin);
+        log.info("등록된 cors origin: {}", allowedOrigins);
     }
 
     @Override
