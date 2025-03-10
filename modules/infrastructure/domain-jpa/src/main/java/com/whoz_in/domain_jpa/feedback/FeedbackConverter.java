@@ -12,6 +12,7 @@ public class FeedbackConverter extends BaseConverter<FeedbackEntity, Feedback> {
     public FeedbackEntity from(Feedback feedback) {
         return new FeedbackEntity(
                 feedback.getId().id(),
+                feedback.getTitle(),
                 feedback.getContent(),
                 feedback.getWriter().id()
         );
@@ -22,6 +23,7 @@ public class FeedbackConverter extends BaseConverter<FeedbackEntity, Feedback> {
     public Feedback to(FeedbackEntity entity) {
         return Feedback.load(
                 new FeedbackId(entity.getId()),
+                entity.getTitle(),
                 entity.getContent(),
                 new MemberId(entity.getMemberId())
         );

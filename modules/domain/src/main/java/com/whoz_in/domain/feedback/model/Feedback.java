@@ -13,22 +13,25 @@ import lombok.Getter;
 @AllArgsConstructor(access =  AccessLevel.PRIVATE)
 public final class Feedback extends AggregateRoot {
     private final FeedbackId id;
+    private final String title;
     private final String content;
     private final MemberId writer;
 
-    public static Feedback create(String content, MemberId writer) {
+    public static Feedback create(String title, String content, MemberId writer) {
         Feedback feedback = Feedback.builder()
                 .id(new FeedbackId())
+                .title(title)
                 .content(content)
                 .writer(writer)
                 .build();
-        feedback.register(new FeedbackCreated(feedback));
+        feedback.register(new FeedbackCreated(title,content,writer.id().toString()));
         return feedback;
     }
 
-    public static Feedback load(FeedbackId id, String content, MemberId writer) {
+    public static Feedback load(FeedbackId id, String title, String content, MemberId writer) {
         return Feedback.builder()
                 .id(id)
+                .title(title)
                 .content(content)
                 .writer(writer)
                 .build();

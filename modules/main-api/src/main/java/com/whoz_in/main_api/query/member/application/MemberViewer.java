@@ -16,7 +16,7 @@ public interface MemberViewer extends Viewer {
     Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId);
     List<MemberConnectionInfo> findAllMemberConnectionInfo();
     List<MemberConnectionInfo> findByMemberIds(List<UUID> memberIds);
-    List<MemberInfo> findAllMemberInfo();
+    List<MemberInfo> findAllMemberInfoOrderByStatus ();
     List<MemberInfo> findMembersByStatus(boolean isActive); //TODO: 상태 관리 Enum 으로 하기
     Long countActiveMember();
 }
