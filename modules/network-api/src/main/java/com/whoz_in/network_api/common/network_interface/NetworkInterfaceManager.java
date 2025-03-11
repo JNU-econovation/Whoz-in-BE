@@ -55,18 +55,20 @@ public final class NetworkInterfaceManager {
     }
 
     public void logInterfaces(){
-        log.info("네트워크 인터페이스 목록\n{}", formattedNIs());
+        log.info("네트워크 인터페이스 목록\n{}", this);
     }
-    private String formattedNIs(){
+
+    @Override
+    public String toString(){
         return this.nowInterfaces.values().stream()
                 .map(ni-> "%s\n%s\n%s\n%s\n%s".formatted(
-                                "name: " + ni.getName(),
-                                "is_connected: "+ ni.isConnected(),
-                                "is_wireless: " + ni.isWireless(),
-                                "address: " + ni.getNetworkAddress(),
-                                "wireless_info: " + ni.getWirelessInfo()
+                                "====================[" + ni.getName() + "]====================",
+                                " is_connected: "+ ni.isConnected(),
+                                " is_wireless: " + ni.isWireless(),
+                                " address: " + ni.getNetworkAddress(),
+                                " wireless_info: " + ni.getWirelessInfo()
                         )
-                ).collect(Collectors.joining("\n====================================\n"));
+                ).collect(Collectors.joining("\n"));
     }
 
     //주기적으로 네트워크 인터페이스 정보를 가져와서 캐시함
