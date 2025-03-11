@@ -11,6 +11,9 @@ jobs:
         uses: ./.github/workflows/ci.yml
 
     deploy:
+        if: "contains(github.event.head_commit.modified, 'modules/network-api/') || 
+                contains(github.event.head_commit.added, 'modules/network-api/') || 
+                contains(github.event.head_commit.removed, 'modules/network-api/')"
         name: 배포하기
         needs: test
         uses: ./.github/workflows/deploy.yml
@@ -22,3 +25,4 @@ jobs:
             DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         with:
             environment: network-api
+            branch: origin/system_recovery

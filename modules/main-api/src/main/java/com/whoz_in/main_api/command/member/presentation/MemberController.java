@@ -117,7 +117,6 @@ public class MemberController extends CommandController implements MemberCommand
 
     LogOut command = new LogOut(
             accessToken.getMemberId().toString(),
-            accessToken.getTokenId().toString(),
             refreshToken.getTokenId().toString());
 
     dispatch(command);
@@ -133,6 +132,7 @@ public class MemberController extends CommandController implements MemberCommand
     response.addCookie(emptyAccess);
     response.addCookie(emptyRefresh);
   }
+
 
   private void addTokenCookies(HttpServletResponse response, LoginSuccessTokens tokens){
     Cookie accessTokenCookie = cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS));
