@@ -1,35 +1,45 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
+import com.whoz_in.main_api.shared.jwt.JwtProperties;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 @Component
 public class StubTokenStore implements TokenStore {
 
-    private final Map<String, String> store;
+    private final Cache<String, LocalDateTime> store;
+    private final JwtProperties jwtProperties;
 
-    public StubTokenStore(){
-        this.store = new ConcurrentHashMap<>();
+    public StubTokenStore(JwtProperties jwtProperties){
+        this.jwtProperties = jwtProperties;
+        this.store = CacheBuilder.newBuilder()
+                .maximumSize(1000)
+                .expireAfterWrite(jwtProperties.getTokenExpiry(TokenType.REFRESH))
+                .build();
     }
 
     @Override
     public void save(String tokenId) {
-        store.put(tokenId, System.currentTimeMillis()+3600000+"");
+        store.put(tokenId, LocalDateTime.now());
     }
 
     @Override
     public boolean isExist(String tokenId) {
-        return store.containsKey(tokenId);
+        return store.asMap().containsKey(tokenId);
+
     }
 
     @Override
     public void clear() {
-        store.clear();
+        store.invalidateAll();
+
     }
 
     @Override
     public void delete(String tokenId) {
-        store.remove(tokenId);
+        store.invalidate(tokenId);
     }
 }

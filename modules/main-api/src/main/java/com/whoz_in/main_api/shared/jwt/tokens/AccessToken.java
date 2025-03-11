@@ -14,10 +14,9 @@ public final class AccessToken extends Token {
     private final UUID tokenId;
     private final AccountType accountType;
 
-    public AccessToken(MemberId memberId, AccountType accountType){
+    public AccessToken(MemberId memberId, AccountType accountType) {
         this.memberId = memberId;
         this.accountType = accountType;
-        this.tokenId = UUID.randomUUID();
     }
 
 }
