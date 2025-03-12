@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.monitor;
+package com.whoz_in.network_api.system;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+// 모니터 모드여야 하는 인터페이스를 모니터 모드로 설정함
 @Slf4j
 @Profile("prod")
 @Component
@@ -26,7 +27,8 @@ public class MonitorModeSwitcher {
         this.enableInterfaceCommand = "sudo -S ip link set %s up".formatted(interfaceName);
     }
 
-    private void execute(){
+    // 이미 모니터 모드였는지 확인 안함
+    public void switchToMonitor(){
         log.info("{}를 모니터 모드로 전환합니다..", this.interfaceName);
         TransientProcess.create(disableInterfaceCommand).waitTermination();
         TransientProcess.create(setMonitorModeCommand).waitTermination();
@@ -42,7 +44,7 @@ public class MonitorModeSwitcher {
             if (this.interfaceName.equals(now.getName()) && !now.getWirelessInfo().mode().equals("monitor")){
                 log.info("{}의 모드가 현재 {}입니다. 모니터 모드로 전환합니다.",
                         now.getName(), now.getWirelessInfo().mode());
-                execute();
+                switchToMonitor();
             }
         }
     }
