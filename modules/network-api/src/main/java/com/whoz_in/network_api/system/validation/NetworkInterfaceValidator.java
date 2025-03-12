@@ -45,17 +45,5 @@ public class NetworkInterfaceValidator extends CustomValidator<NetworkInterfaceV
                             "%s의 연결이 끊겨있습니다.".formatted(ni.getName())
                     );
         });
-
-        //모니터 모드 확인
-        NetworkInterface monitorInterface = systemNiMap.get(config.getMonitorProfile().interfaceName());
-        if (monitorInterface == null) return;
-        String mode = monitorInterface.getWirelessInfo().mode();
-        if (!mode.equals("monitor")) {
-            errors.reject(
-                    "monitorInterface.notMonitorMode",
-                    new Object[]{monitorInterface},
-                    "%s가 모니터 모드가 아닙니다. (현재 %s)".formatted(monitorInterface.getName(), mode)
-            );
-        }
     }
 }
