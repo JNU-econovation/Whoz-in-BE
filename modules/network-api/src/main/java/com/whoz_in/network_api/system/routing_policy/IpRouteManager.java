@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.system;
+package com.whoz_in.network_api.system.routing_policy;
 
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.Collection;
@@ -39,7 +39,7 @@ public final class IpRouteManager {
     }
 
     // table의 default 라우트 삭제
-    public void removeRoutesByTable(String table) {
+    public void deleteByTable(String table) {
         String cmd = String.format("sudo ip route flush table %s", table);
         TransientProcess.create(cmd).waitTermination();
         log.info("[ip route] {} 삭제됨", table);
