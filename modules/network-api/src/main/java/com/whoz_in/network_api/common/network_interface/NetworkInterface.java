@@ -28,14 +28,6 @@ public final class NetworkInterface{
         return wirelessInfo != null;
     }
 
-    public static NetworkInterface wired(String interfaceName, @Nullable NetworkAddress networkAddress){
-        return new NetworkInterface(interfaceName, networkAddress, null);
-    }
-
-    public static NetworkInterface wireless(String interfaceName, @Nullable NetworkAddress networkAddress, WirelessInfo wirelessInfo){
-        return new NetworkInterface(interfaceName, networkAddress, wirelessInfo);
-    }
-
     public static NetworkInterface of(String interfaceName, @Nullable NetworkAddress networkAddress, @Nullable WirelessInfo wirelessInfo){
         return new NetworkInterface(interfaceName, networkAddress, wirelessInfo);
     }

@@ -1,6 +1,8 @@
 package com.whoz_in.network_api.monitor;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceModeChanged;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +34,16 @@ public class MonitorModeSwitcher {
     }
 
     @EventListener
-    private void handleNiModeChanged(NetworkInterfaceModeChanged event) {
-        // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
-        if (this.interfaceName.equals(event.getInterfaceName()) && !event.getNow().mode().equals("monitor")) {
-            log.info("{}의 모드가 monitor가 아닙니다. (이전: {}, 현재: {}). 모니터 모드로 전환합니다.",
-                    event.getInterfaceName(), event.getPre().mode(), event.getNow().mode());
-            execute();
+    private void handle(NetworkInterfaceStatusEvent event) {
+        // 모드가 바꼈거나 새로 추가됐을때
+        if (event.status() == Status.MODE_CHANGED || event.status() == Status.ADDED) {
+            NetworkInterface now = event.now();
+            // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
+            if (this.interfaceName.equals(now.getName()) && !now.getWirelessInfo().mode().equals("monitor")){
+                log.info("{}의 모드가 현재 {}입니다. 모니터 모드로 전환합니다.",
+                        now.getName(), now.getWirelessInfo().mode());
+                execute();
+            }
         }
     }
 }
