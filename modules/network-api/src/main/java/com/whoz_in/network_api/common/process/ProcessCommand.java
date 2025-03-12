@@ -18,10 +18,19 @@ public final class ProcessCommand{
     private final String[] command;
 
     public static ProcessCommand of(String command) {
+        if (command.contains("|")) {
+            throw new IllegalArgumentException("파이프(|) 문자는 사용할 수 없음. (" + command + ")");
+        }
+
         boolean hasSudo = command.startsWith("sudo "); // sudo로 실행됐는가?
-        if (hasSudo && !IS_SUDO_PRESENT) { // sudo로 실행됐는데 시스템에 sudo가 존재하지 않으면
-            command = removeSudoPrefix(command); // 명령어에서 sudo를 제거한다.
-            hasSudo = false; // 이제 sudo로 실행되는 커맨드가 아님
+        if (hasSudo) { // sudo로 실행됐는데
+            if (!IS_SUDO_PRESENT) { // 시스템에 sudo가 존재하지 않으면
+                command = removeSudoPrefix(command); // 명령어에서 sudo를 제거한다.
+                hasSudo = false; // 이제 sudo로 실행되는 커맨드가 아님
+            } else if (!command.startsWith("sudo -S "))  { // 시스템에 sudo가 존재하고 sudo -S로 시작하지 않으면
+                // sudo를 sudo -S로 변경
+                command = command.replaceFirst("sudo ", "sudo -S ");
+            }
         }
         String[] separatedCommand = command.split(" ");
         return new ProcessCommand(hasSudo, separatedCommand);
