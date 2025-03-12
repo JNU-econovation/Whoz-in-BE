@@ -19,8 +19,10 @@ public final class SystemInitializer {
             MappedRtTables mappedRtTables,
             IpRuleManager ipRuleManager,
             IpRouteManager ipRouteManager,
-            NetworkInterfaceManager niManager
+            NetworkInterfaceManager niManager,
+            MonitorModeSwitcher monitorModeSwitcher
         ) {
+
         Map<String, NetworkInterface> niMap = niManager.get();
 
         // 기존에 등록된 모든 ip rule 삭제
@@ -35,5 +37,8 @@ public final class SystemInitializer {
             ipRuleManager.addRule(wirelessInterface.getNetworkAddress().ip(), table);
             ipRouteManager.addRoute(wirelessInterface.getNetworkAddress().gateway(), interfaceName, table);
         });
+
+        // 모니터 모드로 전환
+        monitorModeSwitcher.switchToMonitor();
     }
 }
