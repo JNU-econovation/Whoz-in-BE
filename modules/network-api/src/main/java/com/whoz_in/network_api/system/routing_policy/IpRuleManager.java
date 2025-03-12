@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.system;
+package com.whoz_in.network_api.system.routing_policy;
 
 import com.whoz_in.network_api.common.process.TransientProcess;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ public final class IpRuleManager {
     }
 
     // 지정된 테이블 이름을 가진 ip rule을 모두 삭제
-    public void deleteRuleByTable(String tableName) {
+    public void deleteByTable(String tableName) {
         Map<String, String> rules = getRules();
         rules.forEach((ip, table) -> {
             if (table.equals(tableName)) {
