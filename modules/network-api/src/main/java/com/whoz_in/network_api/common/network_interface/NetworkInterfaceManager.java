@@ -100,7 +100,7 @@ public final class NetworkInterfaceManager {
         Set<String> added = new HashSet<>(nowSet);
         added.removeAll(oldSet);
         for (String niName : added) {
-            NetworkInterface nowInterface = oldInterfaces.get(niName);
+            NetworkInterface nowInterface = nowInterfaces.get(niName);
             if (nowInterface.isConnected()) {
                 log.info("{}가 추가되고 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
