@@ -34,15 +34,16 @@ public class ResilientContinuousProcess extends ContinuousProcess {
         scheduleRestart(0); // 재시작 스케줄링
     }
 
+    // 주기적으로 프로세스가 종료됐는지 확인하고 재실행함. 계속 종료된다면 확인하고 재실행하는 간격을 늘림
     private void scheduleRestart(long delayMs) {
         scheduler.schedule(() -> {
-            if (isAlive()) {
+            if (isAlive()){
                 backoffCount = 0;
-                return;
+            }else {
+                log.error("[{}] 프로세스가 종료됨! 프로세스를 재실행합니다({})\n에러 스트림: {}", command, backoffCount, readErrorLines());
+                restart();
+                backoffCount++;
             }
-            log.error("[{}] 프로세스가 종료됨! 프로세스를 재실행합니다({})\n에러 스트림: {}", command, backoffCount, readErrorLines());
-            restart();
-            backoffCount++;
             scheduleRestart(Math.min(backoffMaxMs, backoffIntervalMs + backoffStepMs * backoffCount));
         }, delayMs, TimeUnit.MILLISECONDS);
     }
