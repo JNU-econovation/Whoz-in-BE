@@ -28,11 +28,10 @@ public class ResilientContinuousProcess extends ContinuousProcess {
         return rcp;
     }
 
-    // 프로세스 시작 및 재시작 스케줄링
     @Override
     protected void init() throws IOException{
-        super.init();
-        scheduleRestart(0);
+        super.init(); // 프로세스 시작
+        scheduleRestart(0); // 재시작 스케줄링
     }
 
     private void scheduleRestart(long delayMs) {
@@ -51,8 +50,8 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     // 프로세스 재시작
     private void restart() {
         try {
-            super.terminate();
-            super.init();
+            super.terminate(); // 프로세스 종료
+            super.init(); // 프로세스 시작
             log.warn("[{}] 프로세스 재실행 완료", command);
         } catch (IOException e) {
             log.error("[{}] 프로세스 재실행 실패: ", command, e);
@@ -60,11 +59,10 @@ public class ResilientContinuousProcess extends ContinuousProcess {
         }
     }
 
-    // 재시작 종료 및 프로세스 종료
     @Override
     public void terminate() {
-        scheduler.shutdownNow();
-        super.terminate();
+        scheduler.shutdownNow(); // 재시작 스케줄러 종료
+        super.terminate(); // 프로세스 종료
         backoffCount = 0;
     }
 }
