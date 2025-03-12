@@ -7,11 +7,11 @@ public record NetworkInterfaceStatusEvent(
         Status status
 ) {
     public enum Status {
-        ADDED, // pre null
+        ADDED, // pre는 null
         RECONNECTED,
-        ADDED_AND_RECONNECTED, // pre null
+        ADDED_AND_RECONNECTED, // pre는 null
         DISCONNECTED,
-        REMOVED, // now null
-        MODE_CHANGED
+        REMOVED, // now는 null
+        MODE_CHANGED // 이전에도 인터페이스가 있었을때 발생
     }
 }
