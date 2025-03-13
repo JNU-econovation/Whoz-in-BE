@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.bind.ConstructorBinding;
 // NetworkInterfaceProfile을 구성하기 위한 값들을 환경 변수로부터 읽는다.
 // 그리고 Profile을 구성하는 NetworkInterfaceProfileConfig가 사용하기 쉽도록 가공해놓는다.
 @Getter
-@ConfigurationProperties(prefix = "room-setting.network-interfaces")
+@ConfigurationProperties(prefix = "network-interfaces")
 public class NetworkInterfaceProfileProperties {
     private final Monitor monitor;
     private final List<Arp> arp;

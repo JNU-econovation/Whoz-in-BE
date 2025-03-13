@@ -28,7 +28,7 @@ public class ArpLogWriter {
     private final List<NetworkInterfaceProfile> arpProfiles;
 
     public ArpLogWriter(
-            @Value("${room-setting.room-name}") String room,
+            @Value("${room-name}") String room,
             ManagedLogRepository repository,
             ArpLogParser parser,
             NetworkInterfaceProfileConfig config
