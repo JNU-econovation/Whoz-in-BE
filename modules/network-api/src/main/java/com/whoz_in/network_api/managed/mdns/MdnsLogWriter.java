@@ -29,7 +29,7 @@ public class MdnsLogWriter {
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
 
-    public MdnsLogWriter(@Value("${room-setting.room-name}") String room, NetworkInterfaceProfileConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
+    public MdnsLogWriter(@Value("${room-name}") String room, NetworkInterfaceProfileConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
         this.room = room;
         this.repository = repository;
         this.parser = parser;

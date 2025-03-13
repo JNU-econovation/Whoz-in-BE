@@ -21,7 +21,7 @@ public class MonitorLogWriter {
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
 
-    public MonitorLogWriter(@Value("${room-setting.room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config) {
+    public MonitorLogWriter(@Value("${room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config) {
         this.parser = parser;
         this.repository = repository;
         this.room = room;
