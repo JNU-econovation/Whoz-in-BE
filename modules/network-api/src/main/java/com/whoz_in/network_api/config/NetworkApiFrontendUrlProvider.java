@@ -5,14 +5,14 @@ import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-// 기기 등록 페이지를 위해 origin을 계산하여 제공하는 역할
+// 기기 등록 페이지 접근 주소를 제공함
 @Component
-public final class CorsOriginProvider {
+public final class NetworkApiFrontendUrlProvider {
     private final NetworkInterfaceManager manager;
     private final String internalAccessInterface;
     private final String networkApiFrontendPort;
 
-    public CorsOriginProvider(
+    public NetworkApiFrontendUrlProvider(
             NetworkInterfaceManager manager,
             NetworkInterfaceProfileConfig profileConfig,
             @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,

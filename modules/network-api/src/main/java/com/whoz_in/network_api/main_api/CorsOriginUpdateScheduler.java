@@ -1,6 +1,6 @@
 package com.whoz_in.network_api.main_api;
 
-import com.whoz_in.network_api.config.CorsOriginProvider;
+import com.whoz_in.network_api.config.NetworkApiFrontendUrlProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,21 +14,21 @@ import org.springframework.stereotype.Component;
 public final class CorsOriginUpdateScheduler {
     private final String roomName;
     private final CorsWriter writer;
-    private final CorsOriginProvider corsOriginProvider;
+    private final NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider;
 
     public CorsOriginUpdateScheduler(
             @Value("${room-name}") String roomName,
             CorsWriter writer,
-            CorsOriginProvider corsOriginProvider
+            NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider
     ) {
         this.roomName = roomName;
         this.writer = writer;
-        this.corsOriginProvider = corsOriginProvider;
+        this.networkApiFrontendUrlProvider = networkApiFrontendUrlProvider;
     }
 
     @Scheduled(fixedRate = 30000)
     private void update() {
-        writer.write(roomName, corsOriginProvider.get());
+        writer.write(roomName, networkApiFrontendUrlProvider.get());
         log.info("origin updated");
     }
 }
