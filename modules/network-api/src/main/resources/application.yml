@@ -18,6 +18,8 @@ room-name: ${ROOM_NAME}
 
 sudo-password: ${SUDO_PASSWORD:}
 
+my-ip-hosts: ${MY_IP_HOSTS}
+
 command:
   managed:
     mdns: "tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
