@@ -10,9 +10,7 @@ import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.NetworkApi;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +34,7 @@ public class NetworkApiController implements NetworkApi {
 
     public NetworkApiController(
             IpHolder ipHolder,
-            @Value("${room-setting.room-name}") String room,
+            @Value("${room-name}") String room,
             NetworkInterfaceProfileConfig profileConfig,
             NetworkInterfaceManager manager) {
         this.profileConfig = profileConfig;
