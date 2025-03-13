@@ -53,6 +53,8 @@ public final class MappedRtTables {
                 .map(line -> line.split("\\s+"))            // 공백 기준 분할
                 .filter(parts -> parts.length >= 2)         // 번호와 테이블 이름이 있는 경우만 처리
                 .map(parts -> parts[1])                     // 테이블 이름만 추출
+                .map(String::trim) // 화이트 스페이스 삭제
+                .filter(table-> !List.of("main", "default", "local", "unspec").contains(table)) // 기본 테이블 제외
                 .toList();
 
         if (wirelessManagedNIs.size() != tables.size())
