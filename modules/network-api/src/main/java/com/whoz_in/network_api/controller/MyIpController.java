@@ -7,9 +7,10 @@ import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEv
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status;
 import com.whoz_in.network_api.common.util.IpHolder;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
-import com.whoz_in.network_api.controller.docs.NetworkApi;
+import com.whoz_in.network_api.controller.docs.MyIpApi;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
@@ -24,25 +25,26 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1")
-public class NetworkApiController implements NetworkApi {
+public class MyIpController implements MyIpApi {
     private final NetworkInterfaceProfileConfig profileConfig;
     private final NetworkInterfaceManager manager;
     private final IpHolder ipHolder;
     private Set<String> gateways;
-    private final String room;
     private final Set<String> disconnectedNIs;
+    private final List<String> hosts;
 
-    public NetworkApiController(
+    public MyIpController(
             IpHolder ipHolder,
-            @Value("${room-name}") String room,
             NetworkInterfaceProfileConfig profileConfig,
-            NetworkInterfaceManager manager) {
+            NetworkInterfaceManager manager,
+            @Value("${my-ip-hosts}") List<String> hosts
+            ) {
         this.profileConfig = profileConfig;
         this.manager = manager;
         this.ipHolder = ipHolder;
-        this.room = room;
         this.disconnectedNIs = new CopyOnWriteArraySet<>();
         this.gateways = getGateways();
+        this.hosts = hosts;
     }
 
     @EventListener
@@ -68,7 +70,8 @@ public class NetworkApiController implements NetworkApi {
                 .collect(Collectors.toSet());
     }
 
-    @GetMapping("/ip")
+    @Override
+    @GetMapping("/my-ip")
     public ResponseEntity<String> getIp() throws UnknownHostException {
         if (!this.disconnectedNIs.isEmpty())
             return ResponseEntity.internalServerError().body("서버가 와이파이에 연결되지 않음");
@@ -80,8 +83,9 @@ public class NetworkApiController implements NetworkApi {
         return ResponseEntity.ok(ip);
     }
 
-    @GetMapping("/room")
-    public ResponseEntity<String> getRoom(){
-        return ResponseEntity.ok(room);
+    @Override
+    @GetMapping("/my-ip-hosts")
+    public ResponseEntity<List<String>> getAccessIps(){
+        return ResponseEntity.ok(this.hosts);
     }
 }

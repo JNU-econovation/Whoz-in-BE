@@ -14,13 +14,13 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
     private final List<String> allowedOrigins = new CopyOnWriteArrayList<>();
 
     public DynamicCorsConfigurationSource(
-            CorsOriginProvider corsOriginProvider
+            NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider
     ) {
         // 기본으로 허용할 origin
         allowedOrigins.add("http://localhost:3000");
 
         // network-api에 배포된 프론트의 url
-        allowedOrigins.add(corsOriginProvider.get());
+        allowedOrigins.add(networkApiFrontendUrlProvider.get());
 
         log.info("등록된 cors origin: {}", allowedOrigins);
     }

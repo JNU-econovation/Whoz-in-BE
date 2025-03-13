@@ -17,15 +17,15 @@ import org.springframework.stereotype.Component;
 public class CorsUpdateListener {
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final String internalAccessInterface;
-    private final CorsOriginProvider corsOriginProvider;
+    private final NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider;
 
     public CorsUpdateListener(
             NetworkInterfaceProfileConfig profileConfig,
             DynamicCorsConfigurationSource dynamicCorsConfigurationSource,
             @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
-            CorsOriginProvider corsOriginProvider
+            NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider
     ) {
-        this.corsOriginProvider = corsOriginProvider;
+        this.networkApiFrontendUrlProvider = networkApiFrontendUrlProvider;
         this.dynamicCorsConfigurationSource = dynamicCorsConfigurationSource;
         this.internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
     }
@@ -37,6 +37,6 @@ public class CorsUpdateListener {
         // 해당 인터페이스에 대한 이벤트일때만 처리
         if (!event.now().getName().equals(internalAccessInterface)) return;
 
-        dynamicCorsConfigurationSource.addAllowedOrigin(corsOriginProvider.get());
+        dynamicCorsConfigurationSource.addAllowedOrigin(networkApiFrontendUrlProvider.get());
     }
 }
