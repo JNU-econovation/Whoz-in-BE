@@ -1,6 +1,6 @@
-package com.whoz_in.main_api.command.private_ip;
+package com.whoz_in.main_api.command.network_api;
 
-import com.whoz_in.main_api.command.private_ip.docs.PrivateIpCommandApi;
+import com.whoz_in.main_api.command.network_api.docs.CorsOriginCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.RestController;
 //server to server
 @RestController
 @RequestMapping("/internal/api/v1")
-public class PrivateIpController extends CommandController implements PrivateIpCommandApi {
+public class CorsOriginController extends CommandController implements
+        CorsOriginCommandApi {
 
-    public PrivateIpController(CommandBus commandBus) {
+    public CorsOriginController(CommandBus commandBus) {
         super(commandBus);
     }
 
-    @PutMapping("/private-ip")
-    public void updatePrivateIp(@RequestBody PrivateIpUpdate req){
+    @PutMapping("/cors-origin")
+    public void updateCors(@RequestBody CorsOriginUpdate req){
         dispatch(req);
     }
 }

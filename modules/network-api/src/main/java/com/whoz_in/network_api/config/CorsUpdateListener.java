@@ -3,7 +3,6 @@ package com.whoz_in.network_api.config;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED_AND_RECONNECTED;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.RECONNECTED;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,36 +15,28 @@ import org.springframework.stereotype.Component;
 @Profile("prod")
 @Component
 public class CorsUpdateListener {
-    private final NetworkInterfaceProfileConfig profileConfig;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
-    private final String internalAccessSsid;
-    private final String networkApiFrontendPort;
+    private final String internalAccessInterface;
+    private final CorsOriginProvider corsOriginProvider;
 
     public CorsUpdateListener(
             NetworkInterfaceProfileConfig profileConfig,
             DynamicCorsConfigurationSource dynamicCorsConfigurationSource,
             @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
-            @Value("${frontend.network-api.port}") String networkApiFrontendPort
+            CorsOriginProvider corsOriginProvider
     ) {
-        this.profileConfig = profileConfig;
+        this.corsOriginProvider = corsOriginProvider;
         this.dynamicCorsConfigurationSource = dynamicCorsConfigurationSource;
-        this.internalAccessSsid = internalAccessSsid;
-        this.networkApiFrontendPort = networkApiFrontendPort;
+        this.internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
     }
 
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
         // 재연결일 때만 처리
         if (event.status() != RECONNECTED && event.status() != ADDED_AND_RECONNECTED) return;
-
-        // 사용자가 어떤 와이파이에 연결돼있든 network-api에 배포된 프론트로 접근할 수 있는 ssid를 인터페이스로 변환
-        String internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
-
         // 해당 인터페이스에 대한 이벤트일때만 처리
         if (!event.now().getName().equals(internalAccessInterface)) return;
 
-        // CORS origin에 추가할 origin 생성
-        String origin = "http://"+ event.now().getNetworkAddress().ip() + ":" + networkApiFrontendPort;
-        dynamicCorsConfigurationSource.addAllowedOrigin(origin);
+        dynamicCorsConfigurationSource.addAllowedOrigin(corsOriginProvider.get());
     }
 }
