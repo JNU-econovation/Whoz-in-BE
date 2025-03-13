@@ -1,27 +1,23 @@
-package com.whoz_in.network_api.config;
+package com.whoz_in.main_api.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
 @Slf4j
 @Component
-public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
+public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
     private final List<String> allowedOrigins = new CopyOnWriteArrayList<>();
 
     public DynamicCorsConfigurationSource(
-            CorsOriginProvider corsOriginProvider
-    ) {
+            @Value("${frontend.main.base-url}") String mainFrontendBaseUrl) {
         // 기본으로 허용할 origin
-        allowedOrigins.add("http://localhost:3000");
-
-        // network-api에 배포된 프론트의 url
-        allowedOrigins.add(corsOriginProvider.get());
-
+        allowedOrigins.add(mainFrontendBaseUrl);
         log.info("등록된 cors origin: {}", allowedOrigins);
     }
 
@@ -30,9 +26,11 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(allowedOrigins);
         config.addAllowedHeader("*");
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH","DELETE", "OPTIONS"));
+        config.setAllowedMethods(List.of("*"));
         config.setAllowCredentials(true);
         config.addExposedHeader("Set-Cookie");
+        //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        //        source.registerCorsConfiguration("/**", corsConfiguration);
         return config;
     }
 
@@ -45,9 +43,12 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
         }
     }
 
+    public boolean isAllowedOrigin(String origin) {
+        return allowedOrigins.contains(origin);
+    }
+
     public void removeAllowedOrigin(String origin) {
         if (allowedOrigins.remove(origin))
             log.warn("{}는 origin 목록에 존재하지 않습니다.", origin);
     }
 }
-
