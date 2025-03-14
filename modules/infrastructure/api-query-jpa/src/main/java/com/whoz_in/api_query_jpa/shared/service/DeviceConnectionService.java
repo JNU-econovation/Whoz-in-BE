@@ -32,7 +32,7 @@ public class DeviceConnectionService {
      *   b) 마지막 기기가 아닐 경우, ActiveDevice 만 inActive 한다.
      * @param deviceId
      */
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void disconnectDevice(UUID deviceId, LocalDateTime disconnectedAt) {
         boolean isActive = deviceService.isActive(deviceId);
         boolean isLastDevice = deviceService.isLastConnectedDevice(deviceId);
@@ -55,6 +55,7 @@ public class DeviceConnectionService {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void connectDevice(UUID deviceId, LocalDateTime connectedAt) {
         boolean isActive = deviceService.isActive(deviceId);
 
