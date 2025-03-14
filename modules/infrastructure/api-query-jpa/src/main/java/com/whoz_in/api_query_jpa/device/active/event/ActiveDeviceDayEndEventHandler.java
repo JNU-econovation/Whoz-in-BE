@@ -53,7 +53,8 @@ public class ActiveDeviceDayEndEventHandler {
         // totalTime 업데이트 및 dailyTime 초기화
         actives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .forEach(memberConnectionService::updateTotalTime);
+                .map(deviceService::findDeviceOwner)
+                .forEach(owner->owner.ifPresent(memberConnectionService::updateTotalTime));
 
         inActives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
