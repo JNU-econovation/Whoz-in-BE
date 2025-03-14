@@ -13,47 +13,27 @@ import java.util.List;
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
 public class ContinuousProcess extends AbstractProcess{
-    protected NonBlockingBufferedReader br;
-    //기본 생성자를 호출했을 땐 ebr이 null일 수 있다.
-    @Nullable
-    protected NonBlockingBufferedReader ebr = null;
+    ContinuousProcess(String command){
+        super(command);
+    }
 
-    private ContinuousProcess(ProcessCommand command, Process process){
-        super(command, process);
-    }
-    public static ContinuousProcess start(String command){
-        return ContinuousProcess.start(ProcessCommand.of(command));
-    }
-    public static ContinuousProcess start(ProcessCommand command){
-        Process process;
-        try {
-            process = new ProcessBuilder(command.getCommand()).start();
-        } catch (IOException e) {
-            throw new RuntimeException(command + " 실행 실패");
-        }
-        ContinuousProcess cp = new ContinuousProcess(command, process);
-        cp.br = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
-        cp.ebr = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getErrorStream())));
-        if (command.isSudoCommand()) cp.enterSudoPassword();
-        return cp;
+    public static ContinuousProcess create(String command) {
+        ContinuousProcess continuousProcess = new ContinuousProcess(command);
+        continuousProcess.start();
+        return continuousProcess;
     }
 
     @Override
-    protected void enterSudoPassword(){
-        try {
-            super.enterSudoPassword();
-        } catch (IOException e) {
-            throw new RuntimeException("[Continuous Process] " + command + " : sudo password 입력 실패 - " + e.getMessage());
-        }
+    protected void init() throws IOException {
+        super.process = new ProcessBuilder(command.getCommand()).start();
+        super.outputReader = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
+        super.errorReader = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getErrorStream())));
     }
 
-    /**
-     * @return 프로세스의 출력에서 한 줄을 읽어들인다.
-     * 읽을 줄이 없을경우 null을 출력한다.
-     */
+    // 읽을 줄이 없을경우 null을 출력한다.
     public String readLine(){
         try {
-            return this.br.readLine();
+            return super.outputReader.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -63,7 +43,7 @@ public class ContinuousProcess extends AbstractProcess{
         List<String> lines = new ArrayList<>();
         try {
             String line;
-            while((line=this.br.readLine()) != null) {
+            while((line=super.outputReader.readLine()) != null) {
                 lines.add(line);
             }
             return lines;
@@ -72,15 +52,12 @@ public class ContinuousProcess extends AbstractProcess{
         }
     }
 
-    /**
-     * @return 프로세스의 에러 출력에서 한 줄을 읽어들인다.
-     * 읽을 줄이 없을경우 null을 출력한다.
-     */
+    // 읽을 줄이 없을경우 null을 출력한다.
     public String readErrorLine(){
-        if (this.ebr == null)
-            throw new RuntimeException("error stream을 초기화하지 않았습니다!");
+        if (super.errorReader == null)
+            throw new IllegalStateException("error stream을 초기화하지 않았습니다!");
         try {
-            return this.ebr.readLine();
+            return super.errorReader.readLine();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -93,12 +70,5 @@ public class ContinuousProcess extends AbstractProcess{
             sb.append(line).append("\n");
         }
         return sb.toString();
-    }
-
-    public boolean isAlive(){
-        return this.process.isAlive();
-    }
-    public void terminate(){
-        this.process.destroy();
     }
 }

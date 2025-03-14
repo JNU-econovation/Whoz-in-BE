@@ -4,6 +4,7 @@ import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -29,7 +30,7 @@ public class SecurityFilterChainConfig {
     private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
+    private final DynamicCorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(0)
@@ -158,20 +159,7 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //인증 여부에 따라 다른 동작을 하는 엔드포인트 - 추가되면 주석 풀기
-//    @Bean
-//    @Order(5)
-//    public SecurityFilterChain optionalAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.securityMatcher();
-//
-//        commonConfigurations(httpSecurity);
-//        httpSecurity.logout(AbstractHttpConfigurer::disable);
-//        //쿠키를 받기 위한 설정
-//        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
-//        //jwt(access token)을 Authentication으로 만들어 등록하는 필터
-//        httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
-//        return httpSecurity.build();
-//    }
+    // TODO: 인증 여부에 따라 다른 동작을 하는 엔드포인트가 생기면 필터 체인 추가하기
 
     @Bean
     @Order(6)

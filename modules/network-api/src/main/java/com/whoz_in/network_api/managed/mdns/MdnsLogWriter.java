@@ -3,18 +3,20 @@ package com.whoz_in.network_api.managed.mdns;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.SystemNetworkInterfaces;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
-import com.whoz_in.network_api.config.NetworkConfig;
+import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -23,86 +25,48 @@ import org.springframework.stereotype.Component;
 @Component
 public class MdnsLogWriter {
     private final String room;
-    private final Map<NetworkInterface, ContinuousProcess> processes;
-    private final Map<NetworkInterface, Boolean> dead;
+    private final Map<NetworkInterfaceProfile, ResilientContinuousProcess> processes;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
-    private final SystemNetworkInterfaces systemNIs;
 
-    public MdnsLogWriter(ManagedLogRepository repository, MdnsLogParser parser, NetworkConfig config,
-            SystemNetworkInterfaces systemNIs
-    ) {
-        this.room = config.getRoom();
+    public MdnsLogWriter(@Value("${room-name}") String room, NetworkInterfaceProfileConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
+        this.room = room;
         this.repository = repository;
         this.parser = parser;
-        this.processes = new HashMap<>();
-        this.dead = new HashMap<>();
-        this.systemNIs = systemNIs;
-        config.getMdnsNIs().forEach(this::startProcess);
+        this.processes = config.getMdnsProfiles().stream()
+                        .collect(Collectors.toMap(
+                                Function.identity(),
+                                profile -> ResilientContinuousProcess.create(profile.command()))
+                        );
     }
 
     //주기적으로 로그를 저장함
-
-    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
     private void saveLogs() {
         List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
-                .filter(entry -> entry.getValue().isAlive())
-                .map(entry -> getLogsFromProcess(entry.getKey(), entry.getValue()))
+                .filter(niProc -> niProc.getValue().isAlive())
+                .map(niProc -> getLogsFromProcess(niProc.getKey(), niProc.getValue()))
                 .flatMap(Collection::stream)
                 .toList();
         repository.saveAll(totalLogs);
     }
 
-    private List<ManagedLog> getLogsFromProcess(NetworkInterface ni, ContinuousProcess process) {
+    private List<ManagedLog> getLogsFromProcess(NetworkInterfaceProfile profile, ContinuousProcess process) {
         Set<ParsedLog> logs = process.readLines().stream()
                 .map(parser::parse)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        String altSsid = ni.getAltSsid();
-        log.info("[managed - mdns({})] log to save : {}", altSsid, logs.size());
+        log.info("[managed - mdns({})] log to save : {}", profile.ssid(), logs.size());
 
         //Parsed를 Managed로 변환
         return logs.stream()
                 .map(log -> new ManagedLog(
                         log.getMac(), log.getIp(),
-                        log.getDeviceName(), altSsid, room,
+                        log.getDeviceName(), profile.ssid(), room,
                         log.getCreatedAt(), log.getCreatedAt()
                 ))
                 .toList();
-    }
-
-    //주기적으로 프로세스가 죽었는지 확인하고 재실행함
-    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
-    private void checkProcesses(){
-        this.processes.entrySet().parallelStream()
-                .filter(entry-> !entry.getValue().isAlive())
-                .forEach(entry ->{
-                    NetworkInterface ni = entry.getKey();
-                    ContinuousProcess process = entry.getValue();
-                    //프로세스가 죽었다는 것을 인지했을때만 아래 로직을 실행
-                    if (dead.get(ni).equals(Boolean.FALSE)) {
-                        dead.put(ni, true);
-                        log.error("[managed - mdns({})] 프로세스가 종료됨 :\n{}\n{}", ni.getRealSsid(), "프로세스의 에러 스트림 내용:", process.readErrorLines());
-                    }
-                    startProcess(ni);
-                });
-    }
-
-    private void startProcess(NetworkInterface ni){
-        String altSsid = ni.getAltSsid();
-        log.info("[managed - mdns({})] 프로세스를 실행합니다.", altSsid);
-
-        if (!systemNIs.exists(ni)){
-            log.error("[managed - mdns({})] 설정된 mdns 네트워크 인터페이스가 시스템에 존재하지 않습니다.", altSsid);
-            return;
-        }
-        Optional.ofNullable(this.processes.get(ni)).ifPresent(ContinuousProcess::terminate);
-        ContinuousProcess process = ContinuousProcess.start(ni.getCommand());
-        this.processes.put(ni, process);
-        this.dead.put(ni, false);
-
-        log.info("[managed - mdns({})] 프로세스 실행 완료", altSsid);
     }
 }

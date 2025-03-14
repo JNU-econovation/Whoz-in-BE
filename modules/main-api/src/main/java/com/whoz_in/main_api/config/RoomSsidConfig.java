@@ -30,10 +30,10 @@ public class RoomSsidConfig {
     RoomSsidConfig(List<Room> rooms) {
         this.rooms = rooms.stream().collect(Collectors.toMap(
                 Room::name,
-                room -> List.copyOf(room.altSsidList())
+                room -> List.copyOf(room.ssid())
         ));
     }
 }
 
 //yml 읽기용 레코드
-record Room(String name, List<String> altSsidList){}
+record Room(String name, List<String> ssid){}

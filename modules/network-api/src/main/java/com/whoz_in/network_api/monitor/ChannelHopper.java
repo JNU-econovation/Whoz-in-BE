@@ -2,7 +2,8 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
-import com.whoz_in.network_api.config.NetworkConfig;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
+import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Component;
 @Profile("prod")
 @Component
 public final class ChannelHopper {
-    private final NetworkInterface monitorNI;
+    private final NetworkInterfaceProfile monitorNI;
     private final Set<Integer> channelsToHop = new HashSet<>();
 
-    public ChannelHopper(NetworkConfig config) {
-        this.monitorNI = config.getMonitorNI();
+    public ChannelHopper(NetworkInterfaceProfileConfig config) {
+        this.monitorNI = config.getMonitorProfile();
     }
 
     @Scheduled(initialDelay = 5000, fixedDelay = 1000)
@@ -36,15 +37,15 @@ public final class ChannelHopper {
 
         //hop channel
         Integer channel = channelsToHop.iterator().next();
-        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitorNI.getInterfaceName(), channel);
-        TransientProcess.start(hopCommand);
+        String hopCommand = "sudo -S iwconfig %s channel %d".formatted(monitorNI.interfaceName(), channel);
+        TransientProcess.create(hopCommand);
         //hopping된 채널 삭제
         channelsToHop.remove(channel);
     }
 
     //주변 채널을 가져옵니다
     private Set<Integer> loadChannelsToHop(){
-        return TransientProcess.start("nmcli -f SSID,CHAN dev wifi").results()
+        return TransientProcess.create("nmcli -f SSID,CHAN dev wifi").results()
                 .stream()
                 .map(line -> line.trim().split("\\s+"))
                 .filter(split -> (split.length == 2) && split[1].matches("\\d+"))
