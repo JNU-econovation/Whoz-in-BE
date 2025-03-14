@@ -29,6 +29,5 @@ public final class CorsOriginUpdateScheduler {
     @Scheduled(fixedRate = 30000)
     private void update() {
         writer.write(roomName, networkApiFrontendUrlProvider.get());
-        log.info("origin updated");
     }
 }
