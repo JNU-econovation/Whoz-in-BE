@@ -6,6 +6,7 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -72,7 +73,12 @@ public class MemberConnectionService {
 
     private boolean updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
         try {
-//            Duration continuousTime = Duration.between(activeDevice.getConnectedAt(), activeDevice.getDisConnectedAt()).abs();
+            LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
+            LocalDateTime activeAt = connectionInfo.getActiveAt();
+
+            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
+            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
+
             Duration continuousTime = Duration.between(connectionInfo.getActiveAt(), connectionInfo.getInActiveAt()).abs();
 
             connectionInfo.inActiveOn(disConnectedAt);
@@ -83,7 +89,7 @@ public class MemberConnectionService {
             log.info("disconnect (memberId) : {}", connectionInfo.getMemberId());
         } catch (Exception e) {
             log.warn("[예상치 못한 에러로, dailyTime 업데이트 실패]");
-            log.warn("exception : {}", e.getMessage());
+            log.warn("exception : {}", e);
             return false;
         }
         return true;
