@@ -133,6 +133,7 @@ public class MemberController extends CommandController implements MemberCommand
     response.addCookie(emptyRefresh);
   }
 
+
   private void addTokenCookies(HttpServletResponse response, LoginSuccessTokens tokens){
     Cookie accessTokenCookie = cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS));
     Cookie refreshTokenCookie = cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH));

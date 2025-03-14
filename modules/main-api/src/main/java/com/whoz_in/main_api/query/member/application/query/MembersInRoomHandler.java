@@ -155,7 +155,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                         MemberId::new,
                         memberId -> {
                             return memberConnectionInfos.stream().filter(info -> info.memberId().equals(memberId)).findFirst()
-                                    .orElse(new MemberConnectionInfo(memberId, Duration.ZERO, Duration.ZERO, false));
+                                    .orElse(MemberConnectionInfo.empty(memberId));
                         }
                 ));
     }
@@ -184,7 +184,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
         int generation = ownerInfo.generation();
         String memberName = ownerInfo.memberName();
-        Long continuousMinute = getContinuousMinute(devices); // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
+//        Long continuousMinute = getContinuousMinute(devices); // active 기기가 여러 개라면, 여러 기기 중, 가장 큰 연속 접속 시간만 보여준다.
+        Long continuousMinute = connectionInfo.continuousTime().toMinutes();
         Long dailyConnectedMinute = getDailyConnectedTime(connectionInfo, continuousMinute);
         boolean isActive = connectionInfo.isActive();
 
