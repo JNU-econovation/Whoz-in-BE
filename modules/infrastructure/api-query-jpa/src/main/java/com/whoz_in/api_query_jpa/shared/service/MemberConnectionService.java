@@ -38,7 +38,7 @@ public class MemberConnectionService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean disconnectMember(UUID memberId, LocalDateTime disconnectedAt) {
+    public void disconnectMember(UUID memberId, LocalDateTime disconnectedAt) {
 
         // connection 정보 조회
         Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
@@ -46,11 +46,10 @@ public class MemberConnectionService {
         if(memberConnectionInfo.isPresent()) {
             MemberConnectionInfo connectionInfo = memberConnectionInfo.get();
 
-            return updateDailyTime(connectionInfo, disconnectedAt);
+            updateDailyTime(connectionInfo, disconnectedAt);
         }
 
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
-        return false;
     }
 
     public void connectMember(UUID memberId, LocalDateTime time) {
@@ -71,7 +70,7 @@ public class MemberConnectionService {
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
     }
 
-    private boolean updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
+    private void updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
         try {
             LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
             LocalDateTime activeAt = connectionInfo.getActiveAt();
@@ -79,7 +78,7 @@ public class MemberConnectionService {
             if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
             if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
 
-            Duration continuousTime = Duration.between(connectionInfo.getActiveAt(), connectionInfo.getInActiveAt()).abs();
+            Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 
             connectionInfo.inActiveOn(disConnectedAt);
             connectionInfo.addDailyTime(continuousTime);
@@ -90,9 +89,8 @@ public class MemberConnectionService {
         } catch (Exception e) {
             log.warn("[예상치 못한 에러로, dailyTime 업데이트 실패]");
             log.warn("exception : {}", e);
-            return false;
+            throw e;
         }
-        return true;
     }
 
     /**
