@@ -20,7 +20,7 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
         allowedOrigins.add("http://localhost:3000");
 
         // network-api에 배포된 프론트의 url
-        allowedOrigins.add(networkApiFrontendUrlProvider.get());
+        allowedOrigins.add(networkApiFrontendUrlProvider.get().get()); // 이상적으론 무조건 값이 존재
 
         log.info("등록된 cors origin: {}", allowedOrigins);
     }
