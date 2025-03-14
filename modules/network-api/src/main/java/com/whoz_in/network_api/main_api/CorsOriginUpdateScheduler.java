@@ -28,6 +28,9 @@ public final class CorsOriginUpdateScheduler {
 
     @Scheduled(fixedRate = 30000)
     private void update() {
-        writer.write(roomName, networkApiFrontendUrlProvider.get());
+        networkApiFrontendUrlProvider.get().ifPresentOrElse(
+                url-> writer.write(roomName, url),
+                ()->log.warn("internal access NI가 인터넷에 연결되어있지 않습니다.")
+        );
     }
 }

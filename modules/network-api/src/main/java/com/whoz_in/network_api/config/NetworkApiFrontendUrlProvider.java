@@ -2,10 +2,13 @@ package com.whoz_in.network_api.config;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
+import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 // 기기 등록 페이지 접근 주소를 제공함
+@Slf4j
 @Component
 public final class NetworkApiFrontendUrlProvider {
     private final NetworkInterfaceManager manager;
@@ -24,12 +27,14 @@ public final class NetworkApiFrontendUrlProvider {
         this.networkApiFrontendPort = networkApiFrontendPort;
     }
 
-    public String get(){
+    public Optional<String> get(){
         NetworkInterface internalAccessNI = manager.getByName(internalAccessInterface);
-        if (!internalAccessNI.isConnected()) throw new IllegalStateException(internalAccessNI + "가 인터넷에 연결되어있지 않음");
-        return "http://%s:%s".formatted(
+        if (!internalAccessNI.isConnected()) {
+            return Optional.empty();
+        }
+        return Optional.of("http://%s:%s".formatted(
                 internalAccessNI.getNetworkAddress().ip(),
                 networkApiFrontendPort
-        );
+        ));
     }
 }

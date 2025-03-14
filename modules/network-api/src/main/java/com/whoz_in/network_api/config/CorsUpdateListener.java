@@ -37,6 +37,6 @@ public class CorsUpdateListener {
         // 해당 인터페이스에 대한 이벤트일때만 처리
         if (!event.now().getName().equals(internalAccessInterface)) return;
 
-        dynamicCorsConfigurationSource.addAllowedOrigin(networkApiFrontendUrlProvider.get());
+        dynamicCorsConfigurationSource.addAllowedOrigin(networkApiFrontendUrlProvider.get().get()); // 이상적으론 무조건 값이 존재
     }
 }
