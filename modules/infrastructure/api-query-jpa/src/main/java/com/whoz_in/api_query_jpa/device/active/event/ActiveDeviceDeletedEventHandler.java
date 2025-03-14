@@ -3,6 +3,7 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.main_api.shared.domain.device.active.event.DeviceDeletedEvent;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -20,8 +21,10 @@ public class ActiveDeviceDeletedEventHandler {
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @EventListener(DeviceDeletedEvent.class)
     public void handle(DeviceDeletedEvent event) {
+        LocalDateTime disconnectedAt = LocalDateTime.now();
+
         // Device를 inActive 처리, DailyTime 까지 자동으로 업데이트
-        deviceConnectionService.disconnectDevice(event.deviceId());
+        deviceConnectionService.disconnectDevice(event.deviceId(), disconnectedAt);
 //        activeTimeUpdateWriter.updateDailyTime(event.deviceId());
         activeDeviceRepository.deleteById(event.deviceId());
     }

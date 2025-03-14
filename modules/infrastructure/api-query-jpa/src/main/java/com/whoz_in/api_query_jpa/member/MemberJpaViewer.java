@@ -71,7 +71,7 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     private MemberConnectionInfo toMemberConnectionInfo(com.whoz_in.api_query_jpa.member.MemberConnectionInfo entity){
-        return new MemberConnectionInfo(entity.getMemberId(), entity.getDailyTime(), entity.getTotalTime(), entity.isActive());
+        return new MemberConnectionInfo(entity.getMemberId(), entity.getDailyTime(), entity.getTotalTime(), entity.getActiveAt(), entity.getInActiveAt(), entity.isActive());
     }
 
     private MemberInfo toMemberInfo(com.whoz_in.api_query_jpa.member.Member entity){

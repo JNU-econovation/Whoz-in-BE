@@ -7,6 +7,7 @@ import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
 import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -33,13 +34,14 @@ public class ActiveDeviceEventHandler {
         List<UUID> deviceIds = event.getDevices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
 
-        // TODO: 이 부분 배치로 바꿔서 순차처리 해도 될 듯
+        LocalDateTime connectedAt = LocalDateTime.now();
+        // TODO: 이 부분 배치로 바꿔서 일괄처리 해도 될 듯
 
         activeDeviceEntities.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .peek(deviceConnectionService::connectDevice)
+                .peek(ad -> deviceConnectionService.connectDevice(ad, connectedAt))
                 .map(deviceService::findDeviceOwner)
-                .forEach(owner -> owner.ifPresent(memberConnectionService::connectMember));
+                .forEach(owner -> owner.ifPresent(id -> memberConnectionService.connectMember(id, connectedAt)));
 
     }
 
