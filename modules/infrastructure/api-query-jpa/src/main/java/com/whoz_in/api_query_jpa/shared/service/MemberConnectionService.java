@@ -6,6 +6,7 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class MemberConnectionService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean disconnectMember(UUID memberId, LocalDateTime disconnectedAt) {
+    public void disconnectMember(UUID memberId, LocalDateTime disconnectedAt) {
 
         // connection 정보 조회
         Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
@@ -45,13 +46,14 @@ public class MemberConnectionService {
         if(memberConnectionInfo.isPresent()) {
             MemberConnectionInfo connectionInfo = memberConnectionInfo.get();
 
-            return updateDailyTime(connectionInfo, disconnectedAt);
+            updateDailyTime(connectionInfo, disconnectedAt);
+            return;
         }
 
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
-        return false;
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void connectMember(UUID memberId, LocalDateTime time) {
         Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
 
@@ -70,10 +72,15 @@ public class MemberConnectionService {
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
     }
 
-    private boolean updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
+    private void updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
         try {
-//            Duration continuousTime = Duration.between(activeDevice.getConnectedAt(), activeDevice.getDisConnectedAt()).abs();
-            Duration continuousTime = Duration.between(connectionInfo.getActiveAt(), connectionInfo.getInActiveAt()).abs();
+            LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
+            LocalDateTime activeAt = connectionInfo.getActiveAt();
+
+            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
+            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
+
+            Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 
             connectionInfo.inActiveOn(disConnectedAt);
             connectionInfo.addDailyTime(continuousTime);
@@ -83,10 +90,9 @@ public class MemberConnectionService {
             log.info("disconnect (memberId) : {}", connectionInfo.getMemberId());
         } catch (Exception e) {
             log.warn("[예상치 못한 에러로, dailyTime 업데이트 실패]");
-            log.warn("exception : {}", e.getMessage());
-            return false;
+            log.warn("exception : {}", e);
+            throw e;
         }
-        return true;
     }
 
     /**
@@ -94,8 +100,8 @@ public class MemberConnectionService {
      * @param memberId
      * @return
      */
-    @Transactional(propagation = Propagation.REQUIRED)
-    public boolean updateTotalTime(UUID memberId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void updateTotalTime(UUID memberId) {
         // connection 정보 조회
         Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
 
@@ -105,9 +111,7 @@ public class MemberConnectionService {
             connectionInfo.resetDailyTime();
             connectionInfoRepository.save(connectionInfo);
             log.info("updateTotalTime (memberId) : {}", connectionInfo.getMemberId());
-            return true;
         }
-        return false;
 
     }
 
