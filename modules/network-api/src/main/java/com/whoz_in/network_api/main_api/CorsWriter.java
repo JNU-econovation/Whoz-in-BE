@@ -46,6 +46,7 @@ public final class CorsWriter {
                     requestEntity,
                     Void.class
             );
+            log.info("origin updated");
         } catch (ResourceAccessException e){
             log.error("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
         } catch (HttpClientErrorException.Forbidden e) {
