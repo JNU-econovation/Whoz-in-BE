@@ -55,7 +55,7 @@ public class DeviceConnectionService {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRED)
     public void connectDevice(UUID deviceId, LocalDateTime connectedAt) {
         boolean isActive = deviceService.isActive(deviceId);
 
