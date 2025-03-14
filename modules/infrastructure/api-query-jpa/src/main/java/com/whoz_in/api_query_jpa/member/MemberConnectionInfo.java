@@ -1,14 +1,15 @@
 package com.whoz_in.api_query_jpa.member;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 // Member 가 생성될 때 생성되어야 한다.
 @Entity
@@ -21,6 +22,12 @@ public class MemberConnectionInfo {
 
     private Duration dailyTime;
 
+    @Column(nullable = true)
+    private LocalDateTime activeAt;
+
+    @Column(nullable = true)
+    private LocalDateTime inActiveAt;
+
     private Duration totalTime;
 
     private boolean isActive;
@@ -29,6 +36,8 @@ public class MemberConnectionInfo {
         this.memberId = memberId;
         this.dailyTime = Duration.ZERO;
         this.totalTime = Duration.ZERO;
+        this.activeAt = null;
+        this.inActiveAt = null;
         this.isActive = false;
     }
 
@@ -46,12 +55,23 @@ public class MemberConnectionInfo {
         this.totalTime = totalTime.plus(this.dailyTime);
     }
 
-    public void activeOn(){
+    public void activeOn(LocalDateTime activeAt){
         this.isActive = true;
+        this.connect(activeAt);
     }
 
-    public void inActiveOn(){
+    public void inActiveOn(LocalDateTime inActiveAt){
         this.isActive = false;
+        this.disConnect(inActiveAt);
+    }
+
+    private void connect(LocalDateTime connectedAt){
+        this.activeAt = connectedAt;
+        this.inActiveAt = null;
+    }
+
+    private void disConnect(LocalDateTime time){
+        this.inActiveAt = time;
     }
 
     public static MemberConnectionInfo create(UUID memberId){

@@ -32,8 +32,8 @@ public class DeviceConnectionService {
      *   b) 마지막 기기가 아닐 경우, ActiveDevice 만 inActive 한다.
      * @param deviceId
      */
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void disconnectDevice(UUID deviceId) {
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void disconnectDevice(UUID deviceId, LocalDateTime disconnectedAt) {
         boolean isActive = deviceService.isActive(deviceId);
         boolean isLastDevice = deviceService.isLastConnectedDevice(deviceId);
         boolean onlyOne = onlyOne(deviceId);
@@ -42,7 +42,7 @@ public class DeviceConnectionService {
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
             activeDevice.ifPresent(ad -> {
                 log.info("disconnect (deviceId) : {}", ad.getDeviceId());
-                ad.disConnect(LocalDateTime.now());
+                ad.disConnect(disconnectedAt);
                 activeDeviceRepository.save(ad);
             });
         }
@@ -51,18 +51,19 @@ public class DeviceConnectionService {
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
             Optional<UUID> ownerId = deviceService.findDeviceOwner(deviceId);
 
-            ownerId.ifPresent(memberConnectionService::disconnectMember);
+            ownerId.ifPresent(id -> memberConnectionService.disconnectMember(id, disconnectedAt));
         }
     }
 
-    public void connectDevice(UUID deviceId){
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void connectDevice(UUID deviceId, LocalDateTime connectedAt) {
         boolean isActive = deviceService.isActive(deviceId);
 
         if(!isActive){
             Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
             activeDevice.ifPresent(ad -> {
                 log.info("connect (deviceId) : {}", ad.getDeviceId());
-                ad.connect(LocalDateTime.now());
+                ad.connect(connectedAt);
                 activeDeviceRepository.save(ad);
             });
         }
