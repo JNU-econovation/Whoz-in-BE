@@ -8,5 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class FeedbackCreated extends DomainEvent {
-    private final Feedback feedback;
+    private final String title;
+    private final String content;
+    private final String memberId;
 }

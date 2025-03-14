@@ -16,17 +16,17 @@ public class SorterTest {
 
         // given
         List<MemberInRoomResponse> responses = new ArrayList<>(List.of(
-                new MemberInRoomResponse(1, "1", "1", "1", "1", true),
-                new MemberInRoomResponse(2, "2", "2", "2", "2", false),
-                new MemberInRoomResponse(3, "3", "3", "3", "3", true),
-                new MemberInRoomResponse(4, "4", "4", "4", "4", false)
+                new MemberInRoomResponse(1, "1", "1", "1", "1", 0, true),
+                new MemberInRoomResponse(2, "2", "2", "2", "2",0, false),
+                new MemberInRoomResponse(3, "3", "3", "3", "3", 0, true),
+                new MemberInRoomResponse(4, "4", "4", "4", "4",0, false)
         ));
 
         List<MemberInRoomResponse> answer = new ArrayList<>(List.of(
-                new MemberInRoomResponse(1, "1", "1", "1", "1", true),
-                new MemberInRoomResponse(3, "3", "3", "3", "3", true),
-                new MemberInRoomResponse(2, "2", "2", "2", "2", false),
-            new MemberInRoomResponse(4, "4", "4", "4", "4", false)
+                new MemberInRoomResponse(1, "1", "1", "1", "1", 0,true),
+                new MemberInRoomResponse(3, "3", "3", "3", "3", 0,true),
+                new MemberInRoomResponse(2, "2", "2", "2", "2", 0,false),
+            new MemberInRoomResponse(4, "4", "4", "4", "4", 0,false)
         ));
 
         // when
@@ -43,17 +43,17 @@ public class SorterTest {
     @DisplayName("MemberInRoomResponse MemberName 기준 정렬 테스트")
     public void MemberName_기준_오름차순_정렬(){
         List<MemberInRoomResponse> responses = new ArrayList<>(List.of(
-            new MemberInRoomResponse(1, "1", "D", "1", "1", true),
-            new MemberInRoomResponse(2, "2", "C", "2", "2", false),
-            new MemberInRoomResponse(3, "3", "B", "3", "3", true),
-            new MemberInRoomResponse(4, "4", "A", "4", "4", false)
+            new MemberInRoomResponse(1, "1", "D", "1", "1", 0,true),
+            new MemberInRoomResponse(2, "2", "C", "2", "2", 0,false),
+            new MemberInRoomResponse(3, "3", "B", "3", "3", 0,true),
+            new MemberInRoomResponse(4, "4", "A", "4", "4", 0,false)
         ));
 
         List<MemberInRoomResponse> answer = new ArrayList<>(List.of(
-            new MemberInRoomResponse(4, "4", "A", "4", "4", false),
-                new MemberInRoomResponse(3, "3", "B", "3", "3", true),
-            new MemberInRoomResponse(2, "2", "C", "2", "2", false),
-            new MemberInRoomResponse(1, "1", "D", "1", "1", true)
+            new MemberInRoomResponse(4, "4", "A", "4", "4", 0,false),
+                new MemberInRoomResponse(3, "3", "B", "3", "3", 0,true),
+            new MemberInRoomResponse(2, "2", "C", "2", "2", 0,false),
+            new MemberInRoomResponse(1, "1", "D", "1", "1", 0,true)
         ));
 
         Sorter.<MemberInRoomResponse>builder()
