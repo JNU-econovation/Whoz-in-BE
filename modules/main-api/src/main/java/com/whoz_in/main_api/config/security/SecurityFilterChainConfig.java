@@ -137,6 +137,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/member/**"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
+                        "/api/v1/reissue",
+                        "/api/v1/logout",
                         "/api/v1/feedback/**"
                         //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
