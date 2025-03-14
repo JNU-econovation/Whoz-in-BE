@@ -79,7 +79,7 @@ public class UsbRebinder {
             writeToFile("/sys/bus/usb/drivers/usb/bind", usbPath);
             // 네트워크 인터페이스 활성화
             TransientProcess.create("sudo ip link set " + interfaceName + " up").waitTermination();
-            log.info("{} 활성화 완료", interfaceName);
+            log.info("{}의 USB 초기화 완료", interfaceName);
 
         } catch (Exception e) {
             log.error("{} USB 초기화 중 오류 발생: {}", interfaceName, e.getMessage());
@@ -111,12 +111,16 @@ public class UsbRebinder {
                 return null;
             }
 
+            // 심볼릭 링크가 가르키는 실제 경로로 변환
+            // 예시: /sys/class/net/wlan0 -> ../../devices/pci0000:00/0000:00:14.0/usb1/1-8/1-8:1.0/net/wlan0
             File realPath = interfacePath.getCanonicalFile();
+            // 상대 경로인 실제 경로를 절대 경로로 변환
+            // 위를 기준으로 /sys/devices/pci0000:00/......으로 바뀌게 됨
             String absolutePath = realPath.getAbsolutePath();
 
             String[] pathSegments = absolutePath.split("/");
             for (String pathSegment : pathSegments) {
-                if (pathSegment.startsWith("usb")) {
+                if (pathSegment.matches("\\d+-\\d+(\\.\\d+)?")) {
                     return pathSegment;
                 }
             }
