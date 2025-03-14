@@ -140,7 +140,7 @@ public final class NetworkInterfaceManager {
             }
 
             // 여기서부터 무선 인터페이스 전용 로직
-            if (!nowInterface.isWireless()) return;
+            if (!nowInterface.isWireless()) continue;
 
             // 무선 모드 변화 감지
             if (!Objects.equals(oldInterface.getWirelessInfo().mode(), nowInterface.getWirelessInfo().mode())) {
