@@ -6,6 +6,7 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ public abstract class DeviceFilter {
     protected final MonitorLogRepository monitorLogRepository;
     protected final ActiveDeviceViewer activeDeviceViewer;
     protected final MemberViewer memberViewer;
+    protected static final Duration MEASURE = Duration.ofMinutes(5);
 
     public DeviceFilter(
             DeviceRepository deviceRepository,
@@ -42,8 +44,8 @@ public abstract class DeviceFilter {
     }
 
     protected Set<MonitorLog> getUniqueMonitorLogs(){
-        LocalDateTime before1Minute = LocalDateTime.now().minusMinutes(1);
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before1Minute); // 1분 전 로그 조회
+        LocalDateTime before = LocalDateTime.now().minus(MEASURE);
+        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before); // 몇 분 간의 로그 조회
         return new HashSet<>(logs); // TODO: 중복 제거
     }
 
