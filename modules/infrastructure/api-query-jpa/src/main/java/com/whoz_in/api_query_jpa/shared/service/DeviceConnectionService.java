@@ -43,7 +43,7 @@ public class DeviceConnectionService {
             activeDevice.ifPresent(ad -> {
                 log.info("disconnect (deviceId) : {}", ad.getDeviceId());
                 ad.disConnect(disconnectedAt);
-                activeDeviceRepository.save(ad);
+//                activeDeviceRepository.save(ad);
             });
         }
 

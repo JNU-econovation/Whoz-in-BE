@@ -47,6 +47,7 @@ public class MemberConnectionService {
             MemberConnectionInfo connectionInfo = memberConnectionInfo.get();
 
             updateDailyTime(connectionInfo, disconnectedAt);
+            return;
         }
 
         log.warn("회원가입 할 때, memberConnectionInfo 가 만들어지지 않음 (memberId) : {}", memberId);
@@ -61,7 +62,7 @@ public class MemberConnectionService {
             if(!connectionInfo.isActive()) {
                 log.info("connect (memberId) : {}", connectionInfo.getMemberId());
                 connectionInfo.activeOn(time);
-                connectionInfoRepository.save(connectionInfo);
+//                connectionInfoRepository.save(connectionInfo);
             }
 
             return;
@@ -83,7 +84,7 @@ public class MemberConnectionService {
             connectionInfo.inActiveOn(disConnectedAt);
             connectionInfo.addDailyTime(continuousTime);
 
-            connectionInfoRepository.save(connectionInfo);
+//            connectionInfoRepository.save(connectionInfo);
 
             log.info("disconnect (memberId) : {}", connectionInfo.getMemberId());
         } catch (Exception e) {
@@ -99,7 +100,7 @@ public class MemberConnectionService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public boolean updateTotalTime(UUID memberId) {
+    public void updateTotalTime(UUID memberId) {
         // connection 정보 조회
         Optional<MemberConnectionInfo> memberConnectionInfo = connectionInfoRepository.findByMemberId(memberId);
 
@@ -109,9 +110,7 @@ public class MemberConnectionService {
             connectionInfo.resetDailyTime();
             connectionInfoRepository.save(connectionInfo);
             log.info("updateTotalTime (memberId) : {}", connectionInfo.getMemberId());
-            return true;
         }
-        return false;
 
     }
 
