@@ -6,8 +6,8 @@ import com.whoz_in.main_api.command.feedback.exception.TitleLengthExceededExcept
 import com.whoz_in.main_api.command.shared.application.Command;
 
 public record FeedbackSend(
-        @Nullable String title,
-        @Nullable String content
+        String title,
+        String content
 ) implements Command {
     public static final int MAX_LENGTH_TITLE = 30;
     public static final int MAX_LENGTH_CONTENT = 500;

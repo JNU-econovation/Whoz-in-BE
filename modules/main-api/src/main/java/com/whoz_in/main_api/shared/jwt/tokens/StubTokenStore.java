@@ -29,11 +29,13 @@ public class StubTokenStore implements TokenStore {
     @Override
     public boolean isExist(String tokenId) {
         return store.asMap().containsKey(tokenId);
+
     }
 
     @Override
     public void clear() {
         store.invalidateAll();
+
     }
 
     @Override
