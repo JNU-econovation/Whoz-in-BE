@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class DayEndEvent implements ApplicationEvent {
 
     // 매일 자정에 이벤트 발생
-    @Scheduled(cron = "0 0 6 * * *")
+    @Scheduled(cron = "0 50 20 * * *")
     public void raiseDayEndEvent(){
         log.info("[DayEndEvent] 발생 : 접속 중인 기기를 shutdown 하고, DailyTime 을 초기화 합니다.");
         Events.raise(this);
