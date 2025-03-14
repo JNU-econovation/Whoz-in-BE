@@ -1,32 +1,34 @@
 package com.whoz_in.network_api.common.network_interface;
 
 import jakarta.annotation.Nullable;
+import java.net.Inet4Address;
+import java.util.Optional;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
+
+// 네트워크 인터페이스를 network-api에서 필요한대로 가공
 @Getter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NetworkInterface{
-    private final String interfaceName;
-    private final String realSsid; //실제 연결될 와이파이 이름 (ex: ECONO_5G)
-    private final String mode;
+    @EqualsAndHashCode.Include
+    private final String name;
+    @Nullable private NetworkAddress networkAddress; // null일 경우 네트워크에 연결되지 않음
+    @Nullable private WirelessInfo wirelessInfo; // null일 경우 유선
 
-    @EqualsAndHashCode.Exclude
-    @Nullable private final String altSsid; //network log의 ssid는 이걸로 저장된다. (ex: econo)
-    @EqualsAndHashCode.Exclude
-    @Nullable private final String command; //실행할 명령어
-
-    public NetworkInterface(String interfaceName, String realSsid, String mode, String altSsid, String command) {
-        this.interfaceName = interfaceName;
-        this.realSsid = realSsid;
-        this.mode = mode;
-        this.altSsid = altSsid;
-        this.command = command;
+    public boolean isConnected(){
+        return networkAddress != null;
+    }
+    public boolean isWireless(){
+        return wirelessInfo != null;
     }
 
-    public NetworkInterface(String interfaceName, String realSsid, String mode) {
-        this(interfaceName, realSsid, mode, realSsid, null);
+    public static NetworkInterface of(String interfaceName, @Nullable NetworkAddress networkAddress, @Nullable WirelessInfo wirelessInfo){
+        return new NetworkInterface(interfaceName, networkAddress, wirelessInfo);
     }
 }
