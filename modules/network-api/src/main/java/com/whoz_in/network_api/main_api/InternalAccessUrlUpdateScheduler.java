@@ -7,18 +7,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 
-// 주기적으로 메인 api의 cors origin을 업데이트함 (network-api에서 서빙하는 기기 등록 페이지에서 main-api에 접근하므로)
-// TODO: 변경됐을때만 업데이트하도록 수정
+// 주기적으로 메인 api에게 자신(n-api)의 InternalAccessUrl를 업데이트함
+// TODO: main이 시작됐을때, url이 변경됐을때만 업데이트하도록 수정
 @Slf4j
 @Component
-public final class CorsOriginUpdateScheduler {
+public final class InternalAccessUrlUpdateScheduler {
     private final String roomName;
-    private final CorsWriter writer;
+    private final InternalAccessUrlWriter writer;
     private final NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider;
 
-    public CorsOriginUpdateScheduler(
+    public InternalAccessUrlUpdateScheduler(
             @Value("${room-name}") String roomName,
-            CorsWriter writer,
+            InternalAccessUrlWriter writer,
             NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider
     ) {
         this.roomName = roomName;

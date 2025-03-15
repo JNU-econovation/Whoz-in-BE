@@ -15,13 +15,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Slf4j
 @Component
-public final class CorsWriter {
+public final class InternalAccessUrlWriter {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final String mainApiBaseUrl;
     private final String mainApiKey;
 
-    public CorsWriter(RestTemplate restTemplate, ObjectMapper objectMapper,
+    public InternalAccessUrlWriter(RestTemplate restTemplate, ObjectMapper objectMapper,
             @Value("${main-api.base-url}") String mainApiBaseUrl,
             @Value("${main-api.api-key}") String mainApiKey) {
         this.restTemplate = restTemplate;
@@ -31,22 +31,22 @@ public final class CorsWriter {
     }
 
     //TODO: 다른 요청도 하게 되면 공통 로직 묶기
-    public void write(String room, String origin) {
+    public void write(String room, String url) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", mainApiKey);
         headers.set("Content-Type", "application/json");
 
-        HttpEntity<String> requestEntity = new HttpEntity<>(createRequestBody(room, origin), headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(createRequestBody(room, url), headers);
 
         try {
             restTemplate.exchange(
-                    mainApiBaseUrl + "/internal/api/v1/cors-origin",
+                    mainApiBaseUrl + "/internal/api/v1/internal-access-url",
                     HttpMethod.PUT,
                     requestEntity,
                     Void.class
             );
-            log.info("origin updated");
+            log.info("'internal access url' updated");
         } catch (ResourceAccessException e){
             log.error("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
         } catch (HttpClientErrorException.Forbidden e) {
@@ -56,11 +56,11 @@ public final class CorsWriter {
         }
     }
 
-    private String createRequestBody(String room, String origin) {
+    private String createRequestBody(String room, String url) {
         try {
             return objectMapper.writeValueAsString(Map.of(
                     "room", room,
-                    "origin", origin
+                    "url", url
             ));
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Failed to serialize request body", e);

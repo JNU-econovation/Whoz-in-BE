@@ -17,6 +17,7 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
     public DynamicCorsConfigurationSource(
             @Value("${frontend.main.base-url}") String mainFrontendBaseUrl) {
         // 기본으로 허용할 origin
+        allowedOrigins.add("http://localhost:3000");
         allowedOrigins.add(mainFrontendBaseUrl);
         log.info("등록된 cors origin: {}", allowedOrigins);
     }
@@ -26,11 +27,9 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(allowedOrigins);
         config.addAllowedHeader("*");
-        config.setAllowedMethods(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowCredentials(true);
         config.addExposedHeader("Set-Cookie");
-        //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        //        source.registerCorsConfiguration("/**", corsConfiguration);
         return config;
     }
 

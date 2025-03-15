@@ -13,13 +13,13 @@ import org.springframework.stereotype.Component;
 public final class NetworkApiFrontendUrlProvider {
     private final NetworkInterfaceManager manager;
     private final String internalAccessInterface;
-    private final String networkApiFrontendPort;
+    private final int networkApiFrontendPort;
 
     public NetworkApiFrontendUrlProvider(
             NetworkInterfaceManager manager,
             NetworkInterfaceProfileConfig profileConfig,
             @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
-            @Value("${frontend.network-api.port}") String networkApiFrontendPort
+            @Value("${frontend.network-api.port}") int networkApiFrontendPort
     ) {
         this.manager = manager;
         // 사용자가 어떤 와이파이에 연결돼있든 network-api에 배포된 프론트로 접근할 수 있는 ssid를 인터페이스로 변환
@@ -32,7 +32,7 @@ public final class NetworkApiFrontendUrlProvider {
         if (!internalAccessNI.isConnected()) {
             return Optional.empty();
         }
-        return Optional.of("http://%s:%s".formatted(
+        return Optional.of("http://%s:%d".formatted(
                 internalAccessNI.getNetworkAddress().ip(),
                 networkApiFrontendPort
         ));
