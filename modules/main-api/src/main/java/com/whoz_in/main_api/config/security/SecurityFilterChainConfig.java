@@ -134,7 +134,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/devices/**",
                         "/api/v1/private-ips",
                         "/api/v1/members/**",
-                        "/api/v1/member/**"
+                        "/api/v1/member/**",
+                        "/api/v1/internal-access-url"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
                         "/api/v1/reissue",
