@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@Order(Ordered.HIGHEST_PRECEDENCE+1) // 캐싱 먼저 수행
+@Order(Ordered.HIGHEST_PRECEDENCE+1) // 요청 바디 캐싱 먼저 수행하기 위해 +1
 public class ExceptionLoggingFilter extends OncePerRequestFilter {
     private final ExceptionLogger exceptionLogger;
     @Override

@@ -52,8 +52,10 @@ public class SecurityFilterChainConfig {
     @Order(1)
     public SecurityFilterChain swaggerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher -> {
-            matcher.requestMatchers(HttpMethod.GET, "/swagger-ui/**")
-                    .requestMatchers(HttpMethod.GET, "/v3/api-docs/**");
+            matcher.requestMatchers(HttpMethod.GET,
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+            );
         });
 
         commonConfigurations(httpSecurity);
@@ -97,6 +99,7 @@ public class SecurityFilterChainConfig {
         commonConfigurations(httpSecurity);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
@@ -119,7 +122,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
         httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
-
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
@@ -134,7 +137,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/devices/**",
                         "/api/v1/private-ips",
                         "/api/v1/members/**",
-                        "/api/v1/member/**"
+                        "/api/v1/member/**",
+                        "/api/v1/internal-access-url"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
                         "/api/v1/reissue",
