@@ -122,7 +122,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
         httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
-
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
