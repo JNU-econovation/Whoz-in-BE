@@ -27,11 +27,9 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowedOrigins(allowedOrigins);
         config.addAllowedHeader("*");
-        config.setAllowedMethods(List.of("*"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowCredentials(true);
         config.addExposedHeader("Set-Cookie");
-        //        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        //        source.registerCorsConfiguration("/**", corsConfiguration);
         return config;
     }
 

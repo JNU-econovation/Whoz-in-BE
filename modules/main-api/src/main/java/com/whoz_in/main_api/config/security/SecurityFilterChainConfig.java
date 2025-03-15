@@ -99,6 +99,7 @@ public class SecurityFilterChainConfig {
         commonConfigurations(httpSecurity);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
