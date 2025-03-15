@@ -17,6 +17,7 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
     public DynamicCorsConfigurationSource(
             @Value("${frontend.main.base-url}") String mainFrontendBaseUrl) {
         // 기본으로 허용할 origin
+        allowedOrigins.add("http://localhost:3000");
         allowedOrigins.add(mainFrontendBaseUrl);
         log.info("등록된 cors origin: {}", allowedOrigins);
     }
