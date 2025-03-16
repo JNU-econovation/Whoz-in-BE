@@ -27,7 +27,9 @@ public class CreateBadgeOnMemberCreated {
         Member member = event.getMember();
         String position = member.getMainPosition().getPosition();
         Badge badge = badgeRepo.findByName(position).orElseThrow(()-> new NoBadgeException());
-        member.addBadge(badge.getId());
+        Member findMember = memberRepo.findByMemberId(member.getId()).orElseThrow();
+        findMember.addBadge(badge.getId());
+        memberRepo.save(findMember);
         eventBus.publish(member.pullDomainEvents());
         return null;
     }
