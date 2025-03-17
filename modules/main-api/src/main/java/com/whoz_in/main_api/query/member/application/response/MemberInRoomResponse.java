@@ -8,6 +8,7 @@ public record MemberInRoomResponse(
     String memberName,
     String continuousActiveTime,
     String totalActiveTime,
+    long dailyActiveMinute,
     boolean isActive
 ) implements Response {
 
@@ -18,6 +19,7 @@ public record MemberInRoomResponse(
                 memberName,
                 "0시간 0분",
                 "0시간 0분",
+                0,
                 false
         );
     }

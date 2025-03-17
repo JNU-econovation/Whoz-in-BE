@@ -4,6 +4,7 @@ import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -29,7 +30,7 @@ public class SecurityFilterChainConfig {
     private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final UnknownEndpointFilter unknownEndpointFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
+    private final DynamicCorsConfigurationSource corsConfigurationSource;
 
     @Bean
     @Order(0)
@@ -51,8 +52,10 @@ public class SecurityFilterChainConfig {
     @Order(1)
     public SecurityFilterChain swaggerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher -> {
-            matcher.requestMatchers(HttpMethod.GET, "/swagger-ui/**")
-                    .requestMatchers(HttpMethod.GET, "/v3/api-docs/**");
+            matcher.requestMatchers(HttpMethod.GET,
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+            );
         });
 
         commonConfigurations(httpSecurity);
@@ -71,8 +74,6 @@ public class SecurityFilterChainConfig {
         );
 
         commonConfigurations(httpSecurity);
-
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.oauth2Login(oauth2->
                 oauth2
@@ -98,6 +99,7 @@ public class SecurityFilterChainConfig {
         commonConfigurations(httpSecurity);
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
@@ -120,7 +122,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
         httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
-
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
 
@@ -136,18 +138,20 @@ public class SecurityFilterChainConfig {
                         "/api/v1/private-ips",
                         "/api/v1/members/**",
                         "/api/v1/member/**",
+                        "/api/v1/internal-access-url",
                         "/api/v1/badges",
                         "/api/v1/badges/register",
                         "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
+                        "/api/v1/reissue",
+                        "/api/v1/logout",
                         "/api/v1/feedback/**",
                         "/api/v1/badges",
                         "/api/v1/badges/members"
                         //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
-                        "/api/v1/device/info",
-                        "/api/v1/badges/members"
+                        "/api/v1/device/info"
                 ).requestMatchers(HttpMethod.DELETE,
                         "/api/v1/device"
                 )
@@ -164,20 +168,7 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //인증 여부에 따라 다른 동작을 하는 엔드포인트 - 추가되면 주석 풀기
-//    @Bean
-//    @Order(5)
-//    public SecurityFilterChain optionalAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity.securityMatcher();
-//
-//        commonConfigurations(httpSecurity);
-//        httpSecurity.logout(AbstractHttpConfigurer::disable);
-//        //쿠키를 받기 위한 설정
-//        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
-//        //jwt(access token)을 Authentication으로 만들어 등록하는 필터
-//        httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
-//        return httpSecurity.build();
-//    }
+    // TODO: 인증 여부에 따라 다른 동작을 하는 엔드포인트가 생기면 필터 체인 추가하기
 
     @Bean
     @Order(6)

@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -53,8 +56,8 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     @Override
-    public List<MemberInfo> findAllMemberInfo() {
-        return repository.findAll().stream().map(this::toMemberInfo).toList();
+    public List<MemberInfo> findAllMemberInfoOrderByStatus() {
+        return repository.findAllOrderByStatus().stream().map(this::toMemberInfo).toList();
     }
 
     @Override
@@ -68,7 +71,7 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     private MemberConnectionInfo toMemberConnectionInfo(com.whoz_in.api_query_jpa.member.MemberConnectionInfo entity){
-        return new MemberConnectionInfo(entity.getMemberId(), entity.getDailyTime(), entity.getTotalTime(), entity.isActive());
+        return new MemberConnectionInfo(entity.getMemberId(), entity.getDailyTime(), entity.getTotalTime(), entity.getActiveAt(), entity.getInActiveAt(), entity.isActive());
     }
 
     private MemberInfo toMemberInfo(com.whoz_in.api_query_jpa.member.Member entity){

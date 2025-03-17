@@ -20,6 +20,7 @@ public class FeedbackSendHandler implements CommandHandler<FeedbackSend, Void> {
     @Override
     public Void handle(FeedbackSend cmd) {
         Feedback feedback = Feedback.create(
+                cmd.title(),
                 cmd.content(),
                 requesterInfo.getMemberId()
         );

@@ -11,6 +11,9 @@ jobs:
         uses: ./.github/workflows/ci.yml
 
     deploy:
+        if: "contains(github.event.head_commit.modified, 'modules/main-api/') ||
+                     contains(github.event.head_commit.added, 'modules/main-api/') ||
+                     contains(github.event.head_commit.removed, 'modules/main-api/')"
         name: 배포하기
         needs: test
         uses: ./.github/workflows/deploy.yml
