@@ -2,8 +2,7 @@ package com.whoz_in.main_api.query.badge.application.handler;
 
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import com.whoz_in.main_api.query.badge.application.query.EmptyRegisterableBadgeQuery;
-import com.whoz_in.main_api.query.badge.application.response.RegisterableBadgeResponse;
-import com.whoz_in.main_api.query.badge.application.view.BadgeIds;
+import com.whoz_in.main_api.query.badge.application.view.RegisterableBadges;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
@@ -12,14 +11,14 @@ import lombok.RequiredArgsConstructor;
 
 @Handler
 @RequiredArgsConstructor
-public class BadgeIdsViewHandler implements QueryHandler<EmptyRegisterableBadgeQuery, RegisterableBadgeResponse> {
+public class RegisterableBadgeViewHandler implements QueryHandler<EmptyRegisterableBadgeQuery, RegisterableBadges> {
     private final BadgeViewer viewer;
     private final RequesterInfo requesterInfo;
 
     @Override
-    public RegisterableBadgeResponse handle(EmptyRegisterableBadgeQuery query) {
+    public RegisterableBadges handle(EmptyRegisterableBadgeQuery query) {
         UUID memberId = requesterInfo.getMemberId().id();
-        BadgeIds badgeIds = viewer.findRegisterableBadges(memberId);
-        return new RegisterableBadgeResponse(badgeIds.badgeIds());
+        RegisterableBadges badges = viewer.findRegisterable(memberId);
+        return badges;
     }
 }

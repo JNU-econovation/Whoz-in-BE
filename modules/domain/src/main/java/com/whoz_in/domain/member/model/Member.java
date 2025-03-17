@@ -1,6 +1,5 @@
 package com.whoz_in.domain.member.model;
 
-import com.whoz_in.domain.badge.exception.AlreadyHasBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.event.MemberBadgeAdded;
 import com.whoz_in.domain.member.event.MemberBadgeChanged;
@@ -15,7 +14,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,7 +30,7 @@ public final class Member extends AggregateRoot {
     @Getter private String statusMessage; //상태 메세지
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
-    private final Map<BadgeId, Boolean> badges;
+    private Map<BadgeId, Boolean> badges;
 
     //일반 로그인이 아닐수도 있으므로 Optional
     public Optional<AuthCredentials> getAuthCredentials(){
@@ -44,16 +42,16 @@ public final class Member extends AggregateRoot {
     }
 
     //일반 회원가입
-    public static Member create(String name, Position mainPosition, int generation, AuthCredentials authCredentials, Set<BadgeId> badges){
+    public static Member create(String name, Position mainPosition, int generation, AuthCredentials authCredentials, Map<BadgeId, Boolean> badges){
         return create(name, mainPosition, generation, authCredentials, null, new HashMap<>());
     }
     //소셜 회원가입
-    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials, Set<BadgeId> badges){
+    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
         return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>());
     }
 
     private static Member create(String name, Position mainPosition, int generation,
-            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
+                                 AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
         if (authCredentials == null && oAuthCredentials == null)
             throw new IllegalStateException("no auth and oauth");
         Member member = builder()
@@ -71,7 +69,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-            AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
+                              AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
         return builder()
                 .id(id)
                 .name(name)
@@ -104,15 +102,10 @@ public final class Member extends AggregateRoot {
     }
 
     public void addBadge(BadgeId badgeId) {
-        if (badges.containsKey(badgeId)) {
-            throw AlreadyHasBadgeException.EXCEPTION;
-        }
-        if (!badges.containsKey(badgeId)) {
-            badges.put(badgeId, true);
-            Map<String, Boolean> badges = this.badges.entrySet().stream()
-                    .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
-            this.register(new MemberBadgeAdded(this.getId().id().toString(), badges));
-        }
+        this.badges.put(badgeId, true);
+        Map<String, Boolean> badges = this.badges.entrySet().stream()
+                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
+        this.register(new MemberBadgeAdded(this.getId().id().toString(), badges));
     }
 
     public Map<BadgeId, Boolean> getBadges() {
