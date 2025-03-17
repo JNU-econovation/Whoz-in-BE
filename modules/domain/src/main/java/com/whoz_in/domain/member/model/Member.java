@@ -1,7 +1,6 @@
 package com.whoz_in.domain.member.model;
 
 import com.whoz_in.domain.badge.model.BadgeId;
-import com.whoz_in.domain.member.event.MemberBadgeAdded;
 import com.whoz_in.domain.member.event.MemberBadgeChanged;
 import com.whoz_in.domain.member.event.MemberCreated;
 import com.whoz_in.domain.member.event.MemberPasswordChanged;
@@ -105,7 +104,6 @@ public final class Member extends AggregateRoot {
         this.badges.put(badgeId, true);
         Map<String, Boolean> badges = this.badges.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
-        this.register(new MemberBadgeAdded(this.getId().id().toString(), badges));
     }
 
     public Map<BadgeId, Boolean> getBadges() {
