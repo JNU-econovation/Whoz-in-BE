@@ -49,7 +49,7 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     }
 
     // 프로세스 재시작
-    public void restart() {
+    public synchronized void restart() {
         super.terminate(); // 프로세스 종료
         this.start(); // 프로세스 시작
         log.info("[{}] 프로세스 재실행 완료", command);
