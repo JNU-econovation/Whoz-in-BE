@@ -69,4 +69,14 @@ public class MdnsLogWriter {
                 ))
                 .toList();
     }
+
+    // 오랫동안 켜진 tshark는 모든 대역의 mdns 패킷을 받지 못하는 것으로 확인되어 오전 9시, 오후 9시에 재실행한다.
+    @Scheduled(cron = "0 0 9,21 * * *")
+    private void restartTshark(){
+        this.processes.forEach((profile, process)-> {
+                    if (!process.isAlive()) return;
+                    process.restart();
+                    log.info("[managed - mdns({})] tshark가 재실행되었습니다.", profile.ssid());
+                });
+    }
 }
