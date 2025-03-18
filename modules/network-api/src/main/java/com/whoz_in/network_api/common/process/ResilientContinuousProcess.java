@@ -49,17 +49,13 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     }
 
     // 프로세스 재시작
-    private void restart() {
-        try {
-            super.terminate(); // 프로세스 종료
-            super.init(); // 프로세스 시작
-            log.warn("[{}] 프로세스 재실행 완료", command);
-        } catch (IOException e) {
-            log.error("[{}] 프로세스 재실행 실패: ", command, e);
-            terminate();
-        }
+    public void restart() {
+        super.terminate(); // 프로세스 종료
+        this.start(); // 프로세스 시작
+        log.info("[{}] 프로세스 재실행 완료", command);
     }
 
+    // 완전히 종료하는 것. 이 객체는 재사용 불가능해짐
     @Override
     public void terminate() {
         scheduler.shutdownNow(); // 재시작 스케줄러 종료
