@@ -2,9 +2,7 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
-import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,4 +40,10 @@ public class MonitorLogWriter {
         repository.saveAll(macs.stream().map(mac -> new MonitorLog(mac, room)).toList());
     }
 
+    // 오랫동안 켜진 tshark는 모니터 로그가 발생하지 않는 것으로 확인되어 오전 6시에 재실행한다.
+    @Scheduled(cron = "0 0 6 * * *")
+    private void refreshTshark(){
+        this.process.restart();
+        log.info("[monitor] tshark가 재실행되었습니다.");
+    }
 }
