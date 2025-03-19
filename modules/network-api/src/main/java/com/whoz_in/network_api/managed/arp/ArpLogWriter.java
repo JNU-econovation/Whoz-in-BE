@@ -40,7 +40,7 @@ public class ArpLogWriter {
     }
 
     //주기적으로 arp 명령어를 실행하여 로그를 저장함
-    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 3000)
     private void scan() {
         List<ManagedLog> logs = arpProfiles.stream()
                 .collect(Collectors.toMap(

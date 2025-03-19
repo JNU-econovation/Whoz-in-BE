@@ -41,7 +41,7 @@ public class MdnsLogWriter {
     }
 
     //주기적으로 로그를 저장함
-    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 3000)
     private void saveLogs() {
         List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
                 .filter(niProc -> niProc.getValue().isAlive())
