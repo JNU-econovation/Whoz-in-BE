@@ -21,11 +21,8 @@ public class NetworkInterfaceRestorer {
 
         if (status == Status.DISCONNECTED || status == Status.REMOVED) {
             reconnector.scheduleReconnection(interfaceName);
-            log.info("{}의 USB 초기화가 예약됐습니다. (10초 후 실행)", interfaceName);
-
         } else if (status == Status.RECONNECTED || status == Status.ADDED) {
             reconnector.cancelReconnection(interfaceName);
-            log.info("{}의 USB 초기화 예약이 취소됐습니다. (다시 연결됨)", interfaceName);
         }
     }
 }
