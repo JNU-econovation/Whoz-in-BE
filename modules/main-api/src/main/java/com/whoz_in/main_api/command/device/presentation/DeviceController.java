@@ -9,6 +9,7 @@ import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,7 +28,7 @@ public class DeviceController extends CommandController implements DeviceCommand
     }
 
     @PostMapping("/device/info")
-    public ResponseEntity<SuccessBody<String>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request) {
+    public ResponseEntity<SuccessBody<List<String>>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request) {
         return ResponseEntityGenerator.success(dispatch(request), "맥 정보 등록 완료", HttpStatus.CREATED);
     }
 

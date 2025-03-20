@@ -7,6 +7,8 @@ import com.whoz_in.main_api.command.device.application.DeviceRemove;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.List;
+import org.apache.catalina.LifecycleState;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -17,7 +19,7 @@ public interface DeviceCommandApi {
             summary = "기기 Mac 정보 등록",
             description = "기기의 Mac 주소 등록을 위한 API"
     )
-    ResponseEntity<SuccessBody<String>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request);
+    ResponseEntity<SuccessBody<List<String>>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request);
 
 
     @Operation(

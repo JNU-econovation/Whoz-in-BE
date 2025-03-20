@@ -29,11 +29,4 @@ public class DeviceQueryController extends QueryController implements DeviceQuer
         return ResponseEntityGenerator.success(ask(new DevicesStatusGet()), CrudResponseCode.READ);
     }
 
-    @GetMapping("/device/info-status")
-    public ResponseEntity<SuccessBody<TempDeviceInfosStatus>> getTempDeviceInfosStatus(@RequestParam String room, @RequestParam String ip){
-        return ResponseEntityGenerator.success(
-                ask(new TempDeviceInfosStatusGet(room, ip)),
-                CrudResponseCode.READ);
-    }
-
 }

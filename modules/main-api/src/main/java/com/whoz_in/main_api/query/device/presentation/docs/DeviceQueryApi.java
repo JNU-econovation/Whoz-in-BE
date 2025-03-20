@@ -17,11 +17,4 @@ public interface DeviceQueryApi {
             description = "기기 Id, 기기 mac, 기기 이름, ssid를 조회합니다."
     )
     public ResponseEntity<SuccessBody<DevicesStatus>> getDeviceStatus();
-
-    @Operation(
-            summary = "기기 상태 조회",
-            description = "기기 등록을 위한 임시적인 기기들의 상태 정보를 조회합니다."
-    )
-    ResponseEntity<SuccessBody<TempDeviceInfosStatus>> getTempDeviceInfosStatus(@RequestParam String room, @RequestParam String ip);
-
 }
