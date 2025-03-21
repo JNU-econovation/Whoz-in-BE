@@ -11,6 +11,7 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.domain.network_log.NoManagedLogException;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.config.RoomSsidConfig;
+import com.whoz_in.main_api.shared.application.ApplicationException;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.caching.device.TempDeviceInfoStore;
@@ -19,11 +20,13 @@ import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
 
 // 기기 등록 전에 모든 와이파이에 대한 기기 정보가(맥) 있어야 한다.
 // 이 핸들러는 하나의 기기 정보를 임시로 저장하는 역할을 한다.
+@Slf4j
 @Handler
 @RequiredArgsConstructor
 public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAdd, List<String>> {
@@ -55,9 +58,10 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         } else if (managedLogs.size() == 2){
             // ❗️네트워크 특징 파악이 안돼서 JNU, eduroam 처리 로직 하드코딩했음
             // 2개인 경우는 jnu에 연결된 기기의 mdns 로그임
-            managedLogs.removeIf(log-> log.getSsid().equals("eduroam"));
+            managedLogs.removeIf(ml-> ml.getSsid().equals("eduroam"));
         } else {
-            throw new IllegalStateException("알 수 없는 예외");
+            log.error("managed log가 3개 이상임. ip: {}, log: {},", req.ip(), managedLogs);
+            throw DeviceInfoTempAddFailedException.EXCEPTION;
         }
 
         ManagedLog managedLog = managedLogs.get(0);
@@ -84,5 +88,12 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, managedLog.getSsid(), mac));
             return List.of(managedLog.getSsid());
         }
+    }
+}
+
+class DeviceInfoTempAddFailedException extends ApplicationException {
+    public static final DeviceInfoTempAddFailedException EXCEPTION = new DeviceInfoTempAddFailedException();
+    private DeviceInfoTempAddFailedException() {
+        super("3033", "알 수 없는 오류로 와이파이 등록에 실패했습니다. 관리자에게 문의해주세요.");
     }
 }
