@@ -2,7 +2,6 @@ package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.exception.DeviceAlreadyRegisteredException;
-import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.service.DeviceOwnershipService;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
@@ -19,7 +18,6 @@ import com.whoz_in.main_api.shared.utils.MacAddressUtil;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,10 +48,17 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
         List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusHours(6));
 
-//        managedLogs.removeIf(log ->
-//                tempDeviceInfoStore.exists(requesterId.id(), log.getSsid())
-//        );
-        if (managedLogs.isEmpty()) throw new NoManagedLogException(req.ip().toString());
+        if (managedLogs.isEmpty()) {
+            throw new NoManagedLogException(req.ip().toString());
+        } else if (managedLogs.size() == 1){
+            // 1개면 정상
+        } else if (managedLogs.size() == 2){
+            // ❗️네트워크 특징 파악이 안돼서 JNU, eduroam 처리 로직 하드코딩했음
+            // 2개인 경우는 jnu에 연결된 기기의 mdns 로그임
+            managedLogs.removeIf(log-> log.getSsid().equals("eduroam"));
+        } else {
+            throw new IllegalStateException("알 수 없는 예외");
+        }
 
         ManagedLog managedLog = managedLogs.get(0);
         String mac = managedLog.getMac();
@@ -75,23 +80,9 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                     .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
             return ssidConfig.getSsids();
         } else { // 랜덤 맥일 때
-            List<TempDeviceInfo> storedDIs = tempDeviceInfoStore.get(requesterId.id());
-            boolean isStoredMac = storedDIs.stream()
-                    .anyMatch(tdi -> tdi.getMac().equals(mac));
-            // 랜덤 맥은 ssid마다 맥이 다를 수 밖에 없기 때문에 같은걸 등록하려는 경우 리턴
-            if (isStoredMac) return List.of();
-            // 이미 등록된 맥들의 ssid들을 가져옴
-            List<String> storedSsids = storedDIs.stream()
-                    .map(TempDeviceInfo::getSsid).toList();
-            // 아직 등록이 안된 ssid의 로그를 가져옴 (맥이 등록 안된 경우 등록 안된 ssid가 없을리가 없음. 이 경우 맥이 바뀐거일텐데 불가능하다고 봄)
-            String notStoredSsid = managedLogs.stream()
-                    .map(ManagedLog::getSsid)
-                    .filter(ssid -> !storedSsids.contains(ssid))
-                    .findAny()
-                    .orElseThrow(() -> new IllegalStateException(storedSsids + ", " + mac + " - mdns 로그 바뀜"));
             //DeviceInfo를 추가한다.
-            tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, notStoredSsid, mac));
-            return List.of(notStoredSsid);
+            tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, managedLog.getSsid(), mac));
+            return List.of(managedLog.getSsid());
         }
     }
 }
