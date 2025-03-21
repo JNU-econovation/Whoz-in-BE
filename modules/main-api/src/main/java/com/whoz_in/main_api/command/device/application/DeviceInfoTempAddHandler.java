@@ -41,7 +41,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     private final RoomSsidConfig ssidConfig;
 
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
-    //TODO: 트랜잭셔널 범위 수정
+    // ❗️ssid 하드코딩 죄송합니다..❗️
     @Transactional
     @Override
     public List<String> handle(DeviceInfoTempAdd req) {
@@ -78,16 +78,17 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
         });
 
-        if (MacAddressUtil.isFixedMac(mac)){ // 고정 맥일 때
+        String ssid = managedLog.getSsid();
+        if (MacAddressUtil.isFixedMac(mac) && !ssid.equals("ECONO_5G")){ // 고정 맥일 때
             // 모두 똑같은 맥으로 등록
             ssidConfig.getSsids().stream()
-                    .map(ssid -> new TempDeviceInfo(room, ssid, mac))
+                    .map(storedSsid -> new TempDeviceInfo(room, storedSsid, mac))
                     .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
             return ssidConfig.getSsids();
         } else { // 랜덤 맥일 때
             //DeviceInfo를 추가한다.
-            tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, managedLog.getSsid(), mac));
-            return List.of(managedLog.getSsid());
+            tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
+            return List.of(ssid);
         }
     }
 }
