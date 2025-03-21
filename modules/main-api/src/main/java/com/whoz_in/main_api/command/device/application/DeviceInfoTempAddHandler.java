@@ -79,17 +79,22 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
 
         String ssid = managedLog.getSsid();
-        if (MacAddressUtil.isFixedMac(mac) && !ssid.equals("ECONO_5G")){ // 고정 맥일 때
-            // 모두 똑같은 맥으로 등록
-            ssidConfig.getSsids().stream()
-                    .map(storedSsid -> new TempDeviceInfo(room, storedSsid, mac))
-                    .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
-            return ssidConfig.getSsids();
-        } else { // 랜덤 맥일 때
-            //DeviceInfo를 추가한다.
-            tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
-            return List.of(ssid);
+        if (MacAddressUtil.isFixedMac(mac)){ // 고정 맥일 때
+            boolean isRandomMacExisting = tempDeviceInfoStore.get(requesterId.id()).stream()
+                    .anyMatch(tdi -> !MacAddressUtil.isFixedMac(tdi.getMac()));
+            if (!isRandomMacExisting){
+                // 모두 똑같은 맥으로 등록
+                ssidConfig.getSsids().stream()
+                        .map(storedSsid -> new TempDeviceInfo(room, storedSsid, mac))
+                        .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
+                return ssidConfig.getSsids();
+            }
         }
+
+        // 등록하려는 맥이 랜덤 맥일 때 / 고정 맥이더라도 이미 등록된 TempDeviceInfo 중 랜덤 맥이 있을때
+        // DeviceInfo를 추가한다.
+        tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
+        return List.of(ssid);
     }
 }
 
