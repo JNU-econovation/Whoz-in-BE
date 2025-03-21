@@ -56,7 +56,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         } else if (managedLogs.size() == 1){
             // 1개면 정상
         } else if (managedLogs.size() == 2){
-            // ❗️네트워크 특징 파악이 안돼서 JNU, eduroam 처리 로직 하드코딩했음
+            // ❗️JNU, eduroam 네트워크 구조 파악이 안돼서 일단 특징에 따라 하드코딩했음
             // 2개인 경우는 jnu에 연결된 기기의 mdns 로그임
             managedLogs.removeIf(ml-> ml.getSsid().equals("eduroam"));
         } else {
@@ -69,14 +69,14 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         String mac = managedLog.getMac();
         String room = managedLog.getRoom();
 
-        //모니터 로그에서 현재 접속 중인 맥이 있어야 한다. (넉넉하게 15분)
-        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
-
         //해당 맥으로 등록된 기기가 있으면 예외
         deviceRepository.findByMac(mac).ifPresent(d -> { //기기가 있을경우
             deviceOwnershipService.validateIsMine(d, requesterId); //내꺼 아닐때 예외
             throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
         });
+
+        //모니터 로그에서 현재 접속 중인 맥이 있어야 한다. (넉넉하게 15분)
+        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
 
         String ssid = managedLog.getSsid();
         if (MacAddressUtil.isFixedMac(mac) && !ssid.equals("ECONO_5G")){ // 고정 맥일 때
