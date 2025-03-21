@@ -60,6 +60,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             // 2개인 경우는 jnu에 연결된 기기의 mdns 로그임
             managedLogs.removeIf(ml-> ml.getSsid().equals("eduroam"));
         } else {
+            // 만약 jnu, eduroam와 같은 네트워크에 존재하는 다른 와이파이가 또 생기면 이 로직 없애야 함
             log.error("managed log가 3개 이상임. ip: {}, log: {},", req.ip(), managedLogs);
             throw DeviceInfoTempAddFailedException.EXCEPTION;
         }

@@ -17,7 +17,7 @@ public interface DeviceCommandApi {
 
     @Operation(
             summary = "기기 Mac 정보 등록",
-            description = "기기의 Mac 주소 등록을 위한 API"
+            description = "기기의 Mac 주소 등록을 위한 API, 해당 아이피로 등록된 와이파이들을 리스트로 반환한다."
     )
     ResponseEntity<SuccessBody<List<String>>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request);
 
