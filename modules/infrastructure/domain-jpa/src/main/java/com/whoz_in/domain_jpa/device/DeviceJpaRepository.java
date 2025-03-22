@@ -2,13 +2,9 @@ package com.whoz_in.domain_jpa.device;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
+import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.member.model.MemberId;
 import java.util.List;
-import com.whoz_in.domain.device.model.MacAddress;
-import java.util.Optional;
-import java.util.List;
-import com.whoz_in.domain.device.model.MacAddress;
-import com.whoz_in.domain.device.model.DeviceId;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
