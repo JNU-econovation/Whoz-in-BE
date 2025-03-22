@@ -2,6 +2,7 @@
 
 <configuration>
   <springProfile name="!prod">
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <root level="INFO">
       <appender-ref ref="COLOR_CONSOLE"/>
     </root>
@@ -69,4 +70,6 @@
     <appender-ref ref="DISCORD_ERROR"/>
   </appender>
 
+
+<!--  <statusLevel>WARN</statusLevel>-->
 </configuration>
