@@ -69,7 +69,4 @@
   <appender name="ASYNC_DISCORD_ERROR" class="ch.qos.logback.classic.AsyncAppender">
     <appender-ref ref="DISCORD_ERROR"/>
   </appender>
-
-
-<!--  <statusLevel>WARN</statusLevel>-->
 </configuration>
