@@ -24,7 +24,7 @@ import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
-import com.whoz_in.main_api.shared.utils.CookieFactory;
+import com.whoz_in.main_api.shared.presentation.CookieFactory;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
