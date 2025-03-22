@@ -60,4 +60,3 @@ public final class IpRuleManager {
         log.info("[ip rule] 초기화됨");
     }
 }
-

@@ -83,5 +83,5 @@ public final class Member extends AggregateRoot {
         this.statusMessage = newStatusMessage;
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
-    
+
 }

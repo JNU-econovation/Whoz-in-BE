@@ -25,9 +25,9 @@ public interface MemberCommandApi {
             summary = "소셜 회원가입",
             description = """
                     사용자의 추가 정보를 받고 소셜 회원가입을 진행합니다.
-                    
+
                     아래의 쿠키가 필요합니다.
-                    
+
                     - oauth2-temp-token
                     """
     )
@@ -41,9 +41,9 @@ public interface MemberCommandApi {
             summary = "토큰 재발급",
             description = """
                     액세스 토큰과 리프레시 토큰을 이용하여, 토큰을 재발급합니다.
-                    
+
                     아래의 쿠키가 필요합니다.
-                    
+
                     - access-token
                     - refresh-token
                     """

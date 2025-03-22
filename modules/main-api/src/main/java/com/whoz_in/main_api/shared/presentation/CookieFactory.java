@@ -13,7 +13,7 @@ public abstract class CookieFactory {
         cookie.setMaxAge(expiry);
         return cookie;
     }
-    
+
     public Cookie create(String name, String value, Duration expiry){
         return create(name, value, (int) expiry.toSeconds());
     }

@@ -47,4 +47,3 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
         response.getWriter().flush();
     }
 }
-

@@ -20,7 +20,7 @@ public record MemberConnectionInfo(
         if(Objects.isNull(totalTime)) return Duration.ZERO;
         return totalTime;
     }
-    
+
     public Duration dailyTime(){
         if(Objects.isNull(dailyTime)) return Duration.ZERO;
         return dailyTime;

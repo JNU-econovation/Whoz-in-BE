@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.config.security.oauth2;
 
-import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

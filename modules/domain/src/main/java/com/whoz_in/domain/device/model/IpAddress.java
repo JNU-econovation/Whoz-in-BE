@@ -38,4 +38,3 @@ public final class IpAddress {
         return this.address;
     }
 }
-

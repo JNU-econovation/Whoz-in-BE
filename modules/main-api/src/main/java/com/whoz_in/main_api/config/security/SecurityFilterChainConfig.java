@@ -185,4 +185,3 @@ public class SecurityFilterChainConfig {
         httpSecurity.requestCache(AbstractHttpConfigurer::disable);
     }
 }
-
