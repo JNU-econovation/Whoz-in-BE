@@ -25,7 +25,7 @@ public class LoginFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
 
-        log.info("소셜 로그인 요청 없이 소셜 로그인이 시도됨");
+        log.warn("소셜 로그인 실패: {}", exception.getMessage());
         String uri = uriBuilderFactory.uriString(frontendBaseUrl)
                 .build()
                 .toString();
