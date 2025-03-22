@@ -21,18 +21,21 @@ import org.springframework.web.bind.annotation.RestController;
 public class BadgeCommandController extends CommandController implements BadgeCommandApi {
     public BadgeCommandController(CommandBus commandBus) {super(commandBus);}
 
+    @Override
     @PostMapping("/badges")
     public ResponseEntity<SuccessBody<Void>> create(@RequestBody BadgeRegister request) {
         dispatch(request);
         return ResponseEntityGenerator.success( "뱃지 생성 완료", HttpStatus.CREATED);
     }
 
+    @Override
     @PostMapping("/badges/members")
     public ResponseEntity<SuccessBody<Void>> attach(@RequestBody BadgeAttach request) {
         dispatch(request);
         return ResponseEntityGenerator.success( "뱃지 달기 완료", HttpStatus.CREATED);
     }
 
+    @Override
     @PatchMapping("/badges/members")
     public ResponseEntity<SuccessBody<Void>> update(@RequestBody SwitchBadgeVisibility request) {
         dispatch(request);

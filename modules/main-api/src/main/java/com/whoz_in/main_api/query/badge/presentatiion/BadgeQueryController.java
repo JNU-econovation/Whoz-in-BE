@@ -25,18 +25,21 @@ public class BadgeQueryController extends QueryController implements BadgeQueryA
         super(queryBus);
     }
 
+    @Override
     @GetMapping("/badges")
     public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestBody BadgeId request) {
         BadgeInfoResponse r = ask(request);
         return ResponseEntityGenerator.success(r, CrudResponseCode.READ);
     }
 
+    @Override
     @GetMapping("/badges/register")
     public ResponseEntity<SuccessBody<RegisterableBadges>> viewRegisterable() {
         RegisterableBadges r = ask(new EmptyRegisterableBadgeQuery());
         return ResponseEntityGenerator.success(r,CrudResponseCode.READ);
     }
 
+    @Override
     @GetMapping("/badges/members")
     public ResponseEntity<SuccessBody<BadgesOfMember>> viewBadgesOfMember() {
          BadgesOfMember r = ask(new EmptyMemberBadgeQuery());
