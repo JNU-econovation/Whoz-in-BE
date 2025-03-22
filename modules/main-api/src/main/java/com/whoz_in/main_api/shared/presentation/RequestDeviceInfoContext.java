@@ -34,6 +34,7 @@ public class RequestDeviceInfoContext implements RequestDeviceInfo {
 
     @Override
     public String getOs() {
-        return userAgent.getValue("OperatingSystemName");
+        String os = userAgent.getValue("OperatingSystemName");
+        return os != null ? os : "Unknown";
     }
 }
