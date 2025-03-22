@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.command.feedback.application;
 
-import com.whoz_in.domain.shared.Nullable;
 import com.whoz_in.main_api.command.feedback.exception.ContentLengthExceedException;
 import com.whoz_in.main_api.command.feedback.exception.TitleLengthExceededException;
 import com.whoz_in.main_api.command.shared.application.Command;

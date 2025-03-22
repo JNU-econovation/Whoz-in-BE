@@ -3,7 +3,7 @@ package com.whoz_in.main_api.command.network_api;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.config.security.DynamicCorsConfigurationSource;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.caching.network_api.InternalAccessUrlStore;
+import com.whoz_in.main_api.shared.application.caching.network_api.InternalAccessUrlStore;
 import lombok.RequiredArgsConstructor;
 
 @Handler

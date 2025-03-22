@@ -2,8 +2,6 @@ package com.whoz_in.main_api.shared.domain.device.active;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
-import com.whoz_in.domain.device.model.DeviceInfo;
-import com.whoz_in.domain.device.model.MacAddress;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.network_log.MonitorLogRepository;

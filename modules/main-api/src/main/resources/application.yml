@@ -36,6 +36,7 @@ jwt:
   oauth2-temp-token-expiry: ${JWT.OAUTH2-TEMP-TOKEN-EXPIRY}
   device-register-token-expiry: ${JWT.DEVICE-REGISTER-TOKEN-EXPIRY}
 
-#logging:
-#  level:
-#      org.springframework.security: DEBUG
+logging:
+  level:
+    nl.basjes.parse.useragent: WARN
+#    org.springframework.security: DEBUG

@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.command.device.presentation;
 
-import com.whoz_in.main_api.command.device.application.DeviceInfoTempAdd;
 import com.whoz_in.main_api.command.device.application.DeviceInfoEdit;
+import com.whoz_in.main_api.command.device.application.DeviceInfoTempAdd;
 import com.whoz_in.main_api.command.device.application.DeviceRegister;
 import com.whoz_in.main_api.command.device.application.DeviceRemove;
 import com.whoz_in.main_api.command.device.presentation.docs.DeviceCommandApi;

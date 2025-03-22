@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import org.checkerframework.checker.units.qual.N;
 
 public record MemberConnectionInfo(
         UUID memberId,

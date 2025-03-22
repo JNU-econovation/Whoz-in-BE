@@ -8,10 +8,10 @@ import com.whoz_in.main_api.command.member.application.command.LoginSuccessToken
 import com.whoz_in.main_api.command.member.application.command.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.command.MemberOAuth2LoginHandler;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
-import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
-import com.whoz_in.main_api.shared.utils.CookieFactory;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
+import com.whoz_in.main_api.shared.presentation.CookieFactory;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,9 +1,8 @@
 package com.whoz_in.main_api.query.device.view;
 
-import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DevicesStatus;
-import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.shared.application.Viewer;
 import java.util.List;
 import java.util.UUID;

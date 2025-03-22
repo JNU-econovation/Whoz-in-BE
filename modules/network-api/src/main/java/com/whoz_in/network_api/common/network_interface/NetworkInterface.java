@@ -1,8 +1,6 @@
 package com.whoz_in.network_api.common.network_interface;
 
 import jakarta.annotation.Nullable;
-import java.net.Inet4Address;
-import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

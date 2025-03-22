@@ -1,21 +1,14 @@
 package com.whoz_in.main_api.command.member.presentation.docs;
 
-import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
-import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
-
 import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "회원, 인증, 인가", description = "회원 Command Api")
