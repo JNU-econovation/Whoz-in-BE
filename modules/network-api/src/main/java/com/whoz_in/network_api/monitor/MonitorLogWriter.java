@@ -26,7 +26,7 @@ public class MonitorLogWriter {
         this.process = ResilientContinuousProcess.create(config.getMonitorProfile().command());
     }
 
-    @Scheduled(initialDelay = 10000, fixedDelay = 10000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 3000)
     private void saveLogs(){
         //프로세스 죽었으면 기록 안함
         if (!process.isAlive()) return;

@@ -10,15 +10,15 @@ public class ManagedLogConverter extends BaseConverter<ManagedLogEntity, Managed
     @Override
     public ManagedLogEntity from(ManagedLog log) {
         return new ManagedLogEntity(
-                new ManagedLogEntity.LogId(log.getMac(), log.getIp()),
-                log.getSsid(), log.getRoom(), log.getDeviceName());
+                new ManagedLogEntity.LogId(log.getMac(), log.getSsid()),
+                log.getIp(), log.getRoom(), log.getDeviceName());
     }
 
     @Override
     public ManagedLog to(ManagedLogEntity entity) {
         return new ManagedLog(
-                entity.getLogId().getMac(), entity.getLogId().getIp(),
-                entity.getDeviceName(), entity.getSsid(), entity.getRoom(),
+                entity.getLogId().getMac(), entity.getIp(),
+                entity.getDeviceName(), entity.getLogId().getSsid(), entity.getRoom(),
                 entity.getCreatedAt(), entity.getUpdatedAt());
     }
 }

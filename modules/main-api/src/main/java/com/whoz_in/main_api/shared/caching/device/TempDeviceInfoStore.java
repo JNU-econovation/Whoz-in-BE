@@ -31,7 +31,7 @@ public final class TempDeviceInfoStore {
         return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.equals(deviceInfo));
     }
 
-    //DeviceInfo 추가
+    //DeviceInfo 추가 TODO: 동시성
     public void add(UUID ownerId, TempDeviceInfo newDeviceInfo) {
         try {
             List<TempDeviceInfo> deviceInfos = store.get(ownerId, CopyOnWriteArrayList::new);
