@@ -79,10 +79,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         Duration term = Duration.between(activeDeviceConnectedTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-        if(term.compareTo(MEASURE) > 0){
-            return true;
-        }
-        return false;
+        return term.compareTo(MEASURE) > 0;
     }
 
     @Override
