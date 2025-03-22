@@ -1,8 +1,7 @@
 package com.whoz_in.main_api.query.device.application;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.whoz_in.main_api.query.shared.application.Response;
-import com.whoz_in.main_api.shared.caching.device.TempDeviceInfoStore;
+import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStore;
 import java.util.Map;
 
 

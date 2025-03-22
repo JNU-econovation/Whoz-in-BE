@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.caching.device;
+package com.whoz_in.main_api.shared.application.caching.device;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
