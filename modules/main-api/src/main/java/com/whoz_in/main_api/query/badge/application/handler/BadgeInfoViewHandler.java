@@ -19,4 +19,3 @@ public class BadgeInfoViewHandler implements QueryHandler<BadgeInfoGet, BadgeInf
         return badgeInfo;
     }
 }
-

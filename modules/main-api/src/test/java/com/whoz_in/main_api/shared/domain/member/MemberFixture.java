@@ -4,7 +4,6 @@ import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.OAuthCredentials;
 import com.whoz_in.domain.member.model.Position;
 import com.whoz_in.domain.member.model.SocialProvider;
-import java.util.HashMap;
 
 public class MemberFixture {
 

@@ -5,7 +5,6 @@ import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeInfo;
 import com.whoz_in.domain.badge.model.BadgeType;
 import com.whoz_in.domain.badge.service.BadgeFinderService;
-import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;

@@ -2,8 +2,6 @@ package com.whoz_in.domain.badge.model;
 
 import com.whoz_in.domain.badge.exception.InvalidFormColorCodeException;
 import com.whoz_in.domain.member.model.MemberId;
-import java.awt.Color;
-import java.util.Random;
 import java.util.regex.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
