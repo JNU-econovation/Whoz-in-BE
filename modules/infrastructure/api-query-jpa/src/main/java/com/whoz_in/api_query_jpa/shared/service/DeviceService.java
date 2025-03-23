@@ -6,7 +6,6 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -34,7 +33,10 @@ public class DeviceService {
      * @return
      */
     public boolean isLastConnectedDevice(UUID deviceId) {
-        Member owner = memberRepository.getByDeviceId(deviceId);
+//        Member owner = memberRepository.getByDeviceId(deviceId);
+
+        ActiveDeviceEntity ad = activeDeviceRepository.findByDeviceId(deviceId).get();
+        Member owner = memberRepository.findById(ad.getMemberId()).get();
 
         List<ActiveDeviceEntity> ownerDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
