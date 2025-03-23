@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component("ActiveDeviceDeletedEventHandler")
 @RequiredArgsConstructor
+@Slf4j
 public class ActiveDeviceDeletedEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
@@ -30,6 +32,7 @@ public class ActiveDeviceDeletedEventHandler {
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @EventListener(DeviceDeletedEvent.class)
     public void handle(DeviceDeletedEvent event) {
+        log.info("[DeviceDeletedEvent] ActiveDevice 삭제 (deviceId) : {}", event.deviceId());
         UUID deviceId = event.deviceId();
         ActiveDeviceEntity activeDevice =
                 activeDeviceRepository.findByDeviceId(deviceId)

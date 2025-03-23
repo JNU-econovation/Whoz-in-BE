@@ -33,6 +33,7 @@ public class ActiveDeviceDayEndEventHandler {
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public void handle(){
+        log.info("[DayEndEvent] 발생 : 접속 중인 기기를 shutdown 하고, DailyTime 을 초기화 합니다.");
         List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findAll();
 
         List<ActiveDeviceEntity> actives = filterActive(activeDevices);
