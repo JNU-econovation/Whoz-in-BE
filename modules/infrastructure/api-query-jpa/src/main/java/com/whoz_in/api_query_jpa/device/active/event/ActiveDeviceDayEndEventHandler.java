@@ -33,6 +33,7 @@ public class ActiveDeviceDayEndEventHandler {
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public void handle(){
+        log.info("[DayEndEvent] 발생 : 접속 중인 기기를 shutdown 하고, DailyTime 을 초기화 합니다.");
         List<ActiveDeviceEntity> activeDevices = activeDeviceRepository.findAll();
 
         List<ActiveDeviceEntity> actives = filterActive(activeDevices);
@@ -47,14 +48,12 @@ public class ActiveDeviceDayEndEventHandler {
 
         // totalTime 업데이트 및 dailyTime 초기화
         actives.stream()
-                .map(ActiveDeviceEntity::getDeviceId)
-                .map(deviceService::findDeviceOwner)
-                .forEach(owner->owner.ifPresent(memberConnectionService::updateTotalTime));
+                .map(ActiveDeviceEntity::getMemberId)
+                .forEach(memberConnectionService::updateTotalTime);
 
         inActives.stream()
-                .map(ActiveDeviceEntity::getDeviceId)
-                .map(deviceService::findDeviceOwner)
-                .forEach(ownerId -> ownerId.ifPresent(memberConnectionService::updateTotalTime));
+                .map(ActiveDeviceEntity::getMemberId)
+                .forEach(memberConnectionService::updateTotalTime);
 
     }
 

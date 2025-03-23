@@ -11,29 +11,19 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 // Device 들을 받으면, 정해진 기준에 맞춰 거르는 역할이라는 뜻
 @Component
+@RequiredArgsConstructor
 public abstract class DeviceFilter {
 
     protected final DeviceRepository deviceRepository;
     protected final MonitorLogRepository monitorLogRepository;
     protected final ActiveDeviceViewer activeDeviceViewer;
     protected final MemberViewer memberViewer;
-    protected static final Duration MEASURE = Duration.ofMinutes(10);
-
-    public DeviceFilter(
-            DeviceRepository deviceRepository,
-            MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer,
-            MemberViewer memberViewer
-    ) {
-        this.deviceRepository = deviceRepository;
-        this.monitorLogRepository = monitorLogRepository;
-        this.activeDeviceViewer = activeDeviceViewer;
-        this.memberViewer = memberViewer;
-    }
+    protected static final Duration MEASURE = Duration.ofMinutes(5);
 
     public void execute(){
         List<Device> devices = find();

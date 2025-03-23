@@ -3,6 +3,7 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
+import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,6 +20,7 @@ public class InActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
     private final DeviceConnectionService deviceConnectionService;
+    private final DeviceService deviceService;
 
     // ActiveDeviceEvent 핸들러에서 데이터를 수정할 수 있으므로 격리 수준을 serializable 로 설정
     @Transactional(isolation = Isolation.SERIALIZABLE)
@@ -30,12 +32,15 @@ public class InActiveDeviceEventHandler {
         List<UUID> devices = event.getDevices();
         List<ActiveDeviceEntity> inActives = activeDeviceRepository.findByDeviceIds(devices);
 
-        LocalDateTime disConnectedAt = LocalDateTime.now();
+//        LocalDateTime disConnectedAt = LocalDateTime.now();
 
         // 기기 disConnect
         inActives.stream()
                 .map(ActiveDeviceEntity::getDeviceId)
-                .forEach(id -> deviceConnectionService.disconnectDevice(id, disConnectedAt));
+                .forEach(id -> {
+                    LocalDateTime disConnectedAt = deviceService.findLatestMonitorLogAt(id).getUpdatedAt();
+                    deviceConnectionService.disconnectDevice(id, disConnectedAt);
+                });
     }
 
 }

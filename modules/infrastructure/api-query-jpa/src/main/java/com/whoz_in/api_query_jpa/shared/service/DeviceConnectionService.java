@@ -48,10 +48,8 @@ public class DeviceConnectionService {
         }
 
         if(isLastDevice){
-            Optional<ActiveDeviceEntity> activeDevice = activeDeviceRepository.findByDeviceId(deviceId);
-            Optional<UUID> ownerId = deviceService.findDeviceOwner(deviceId);
-
-            ownerId.ifPresent(id -> memberConnectionService.disconnectMember(id, disconnectedAt));
+            Optional<ActiveDeviceEntity> ad = activeDeviceRepository.findByDeviceId(deviceId);
+            ad.ifPresent(activeDevice -> memberConnectionService.disconnectMember(activeDevice.getMemberId(), disconnectedAt));
         }
     }
 
