@@ -11,16 +11,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ManagedLogEntityRepository extends JpaRepository<ManagedLogEntity, String> {
 
-//    @Query("SELECT m FROM ManagedLogEntity m WHERE m.ip = :ip AND m.updatedAt > :time")
     @Query(value = "SELECT * " +
             "FROM managed_log_entity " +
             "WHERE mac = (" +
             "    SELECT mac " +
             "    FROM managed_log_entity " +
             "    WHERE ip = :ip  AND updated_at >= :time " +
-            "    ORDER BY updated_at DESC " +
-            "    LIMIT 1" +
-            ")",
+            "    ORDER BY updated_at DESC" +
+            "    LIMIT 1)"
+            + " AND ip = :ip",
             nativeQuery = true)
     List<ManagedLogEntity> findAllByIpLatestMac(@Param("ip") String ip, @Param("time") LocalDateTime time);
 
