@@ -39,6 +39,6 @@ public class BadgeCommandController extends CommandController implements BadgeCo
     @PatchMapping("/badges/members")
     public ResponseEntity<SuccessBody<Void>> update(@RequestBody BadgeSwitchVisibility request) {
         dispatch(request);
-        return ResponseEntityGenerator.success( "뱃지 보여주기 또는 숨기기 변환 완료", HttpStatus.CREATED);
+        return ResponseEntityGenerator.success( "뱃지 보여주기 또는 숨기기 변환 완료", HttpStatus.OK);
     }
 }
