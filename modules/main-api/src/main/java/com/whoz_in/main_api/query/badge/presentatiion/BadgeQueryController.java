@@ -12,10 +12,11 @@ import com.whoz_in.main_api.query.shared.presentation.QueryController;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,7 +28,8 @@ public class BadgeQueryController extends QueryController implements BadgeQueryA
 
     @Override
     @GetMapping("/badges")
-    public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestBody BadgeInfoGet request) {
+    public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestParam("badgeId") UUID badgeId) {
+        BadgeInfoGet request = new BadgeInfoGet(badgeId);
         BadgeInfoResponse r = ask(request);
         return ResponseEntityGenerator.success(r, CrudResponseCode.READ);
     }

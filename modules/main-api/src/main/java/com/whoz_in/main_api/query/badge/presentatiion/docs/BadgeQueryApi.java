@@ -1,14 +1,14 @@
 package com.whoz_in.main_api.query.badge.presentatiion.docs;
 
-import com.whoz_in.main_api.query.badge.application.query.BadgeInfoGet;
 import com.whoz_in.main_api.query.badge.application.response.BadgeInfoResponse;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.UUID;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "뱃지", description = "뱃지 Query Api")
 public interface BadgeQueryApi {
@@ -17,7 +17,7 @@ public interface BadgeQueryApi {
             summary = "뱃지 아이디로 뱃지 정보 조회",
             description = "뱃지에 관한 정보(이름, 색상코드)를 조회합니다."
     )
-    ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestBody BadgeInfoGet request);
+    ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestParam("badgeId") UUID badgeId);
 
     @Operation(
             summary = "등록 가능한 뱃지 조회",
