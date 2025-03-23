@@ -23,13 +23,12 @@ public class CreateBadgeOnMemberCreated {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Void handleMemberCreatedEvent(MemberCreated event) {
+    public void handleMemberCreatedEvent(MemberCreated event) {
         Member member = event.getMember();
         String position = member.getMainPosition().getPosition();
         Badge badge = badgeRepo.findByName(position).orElseThrow(()-> new NoBadgeException());
         member.addBadge(badge.getId());
         memberRepo.save(member);
         eventBus.publish(member.pullDomainEvents());
-        return null;
     }
 }
