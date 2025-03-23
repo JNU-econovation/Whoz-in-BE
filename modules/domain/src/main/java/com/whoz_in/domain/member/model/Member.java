@@ -102,8 +102,6 @@ public final class Member extends AggregateRoot {
 
     public void addBadge(BadgeId badgeId) {
         this.badges.put(badgeId, true);
-        Map<String, Boolean> badges = this.badges.entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
     }
 
     public Map<BadgeId, Boolean> getBadges() {
