@@ -22,7 +22,7 @@ public class MemberSignUpHandler implements CommandHandler<MemberSignUp, Void> {
     public Void handle(MemberSignUp cmd) {
         Member member = Member.create(
                 cmd.name(), cmd.position(), cmd.generation(),
-                AuthCredentials.create(cmd.loginId(), cmd.password(), encoder),null
+                AuthCredentials.create(cmd.loginId(), cmd.password(), encoder)
         );
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());

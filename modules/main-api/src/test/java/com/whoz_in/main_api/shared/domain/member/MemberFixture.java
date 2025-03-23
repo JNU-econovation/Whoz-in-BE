@@ -17,8 +17,7 @@ public class MemberFixture {
                 testName,
                 testPosition,
                 26,
-                testOAuthCredentials,
-                new HashMap<>()
+                testOAuthCredentials
         );
     }
 

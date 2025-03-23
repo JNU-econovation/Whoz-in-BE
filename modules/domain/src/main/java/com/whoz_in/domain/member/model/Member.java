@@ -41,16 +41,16 @@ public final class Member extends AggregateRoot {
     }
 
     //일반 회원가입
-    public static Member create(String name, Position mainPosition, int generation, AuthCredentials authCredentials, Map<BadgeId, Boolean> badges){
-        return create(name, mainPosition, generation, authCredentials, null, new HashMap<>());
+    public static Member create(String name, Position mainPosition, int generation, AuthCredentials authCredentials){
+        return create(name, mainPosition, generation, authCredentials, null);
     }
     //소셜 회원가입
-    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
-        return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>());
+    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials){
+        return create(name, mainPosition, generation, null, oAuthCredentials);
     }
 
     private static Member create(String name, Position mainPosition, int generation,
-                                 AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
+                                 AuthCredentials authCredentials, OAuthCredentials oAuthCredentials){
         if (authCredentials == null && oAuthCredentials == null)
             throw new IllegalStateException("no auth and oauth");
         Member member = builder()
@@ -61,7 +61,6 @@ public final class Member extends AggregateRoot {
                 .statusMessage("")
                 .authCredentials(authCredentials)
                 .oAuthCredentials(oAuthCredentials)
-                .badges(badges)
                 .build();
         member.register(new MemberCreated(member));
         return member;

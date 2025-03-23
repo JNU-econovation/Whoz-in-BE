@@ -23,7 +23,7 @@ public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2Sig
         }
 
         Member member = Member.create(cmd.name(), cmd.position(), cmd.generation(),
-                OAuthCredentials.create(cmd.socialProvider(), cmd.socialId()),null);
+                OAuthCredentials.create(cmd.socialProvider(), cmd.socialId()));
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());
         return null;
