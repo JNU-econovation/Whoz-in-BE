@@ -2,6 +2,7 @@ package com.whoz_in.api_query_jpa.monitor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface MonitorLogRepository extends JpaRepository<MonitorLog, String> {
 
@@ -9,6 +10,6 @@ public interface MonitorLogRepository extends JpaRepository<MonitorLog, String> 
     MonitorLog findByMac(String mac);
 
     @Query("SELECT m FROM MonitorLog m WHERE m.mac = :mac ORDER BY m.updatedAt DESC LIMIT 1")
-    MonitorLog findLatestByMac(String mac);
+    MonitorLog findLatestByMac(@Param("mac") String mac);
 
 }
