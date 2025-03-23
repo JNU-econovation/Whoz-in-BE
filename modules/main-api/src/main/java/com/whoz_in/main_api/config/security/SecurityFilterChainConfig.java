@@ -151,7 +151,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/badges/members"
                         //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
-                        "/api/v1/device/info"
+                        "/api/v1/device/info",
+                        "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.DELETE,
                         "/api/v1/device"
                 )

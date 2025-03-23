@@ -92,8 +92,8 @@ public final class Member extends AggregateRoot {
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
 
-    public void changeBadgeShowOrHide(BadgeId badgeId) {
-        this.badges.computeIfPresent(badgeId, (id, isShown) -> !isShown);
+    public void changeBadgeShow(BadgeId badgeId, boolean show) {
+        this.badges.put(badgeId, show);
         Map<String, Boolean> badges = this.badges.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
         this.register(new MemberBadgeChanged(this.getId().id().toString(), badges));

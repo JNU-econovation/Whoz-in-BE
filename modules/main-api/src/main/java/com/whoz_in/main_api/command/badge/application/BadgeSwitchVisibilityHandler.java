@@ -24,7 +24,7 @@ public class BadgeSwitchVisibilityHandler implements CommandHandler<BadgeSwitchV
     public Void handle(BadgeSwitchVisibility req) {
         MemberId requesterId = requesterInfo.getMemberId();
         Member member = repository.findByMemberId(requesterId).orElseThrow(()-> NoMemberException.EXCEPTION);
-        member.changeBadgeShowOrHide(new BadgeId(req.badgeId()));
+        member.changeBadgeShow(new BadgeId(req.badgeId()), req.show());
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());
         return null;
