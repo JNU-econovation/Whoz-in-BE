@@ -6,7 +6,6 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,7 +27,7 @@ public class DeviceService {
      *
      *  어떻게 판단하는가? 파라미터로 전달 받은 device 이외의 다른 device 가 active 상태인지 아닌지 판단.
      *  파라미터로 전달 받은 기기는 active 상태임을 가정.
-     *  
+     *
      *
      * @param deviceId
      * @return

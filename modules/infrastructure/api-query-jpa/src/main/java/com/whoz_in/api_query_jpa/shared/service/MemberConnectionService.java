@@ -1,6 +1,5 @@
 package com.whoz_in.api_query_jpa.shared.service;
 
-import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
@@ -22,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 // Device - ActiveDevice
 // Member - MemberConnectionInfo
 public class MemberConnectionService {
-    
+
     private final MemberConnectionInfoRepository connectionInfoRepository;
     private final MemberRepository memberRepository;
     private final DeviceService deviceService;
@@ -30,7 +29,7 @@ public class MemberConnectionService {
     /**
      * inActive 처리된 기기 주인을 disconnect 시킨다.
      * (필요한 데이터는 다 있다고 가정.)
-     * 
+     *
      * 1. 어떤 멤버가 접속 종료가 되면, 마지막으로 접속이 종료된 기기를 찾는다.
      * 2. 찾은 기기에서 연속 접속 시간을 가져온다.
      * 3. connection 정보에 반영한다.

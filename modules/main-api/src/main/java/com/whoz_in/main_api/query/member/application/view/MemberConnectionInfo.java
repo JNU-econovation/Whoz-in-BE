@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
-import org.checkerframework.checker.units.qual.N;
 
 public record MemberConnectionInfo(
         UUID memberId,
@@ -21,7 +20,7 @@ public record MemberConnectionInfo(
         if(Objects.isNull(totalTime)) return Duration.ZERO;
         return totalTime;
     }
-    
+
     public Duration dailyTime(){
         if(Objects.isNull(dailyTime)) return Duration.ZERO;
         return dailyTime;

@@ -24,4 +24,5 @@ public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long
     @Query("SELECT d FROM DeviceEntity d WHERE d.id IN :deviceIds")
     List<DeviceEntity> findByDeviceIds(@Param("deviceIds") List<UUID> deviceIds);
 
+    List<DeviceEntity> findAllByMemberId(UUID memberId);
 }

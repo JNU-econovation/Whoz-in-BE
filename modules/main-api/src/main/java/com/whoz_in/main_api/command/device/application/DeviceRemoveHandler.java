@@ -2,7 +2,6 @@ package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.event.DeviceDeleted;
-import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;

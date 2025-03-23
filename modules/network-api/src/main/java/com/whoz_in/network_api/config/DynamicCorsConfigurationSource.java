@@ -50,4 +50,3 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
             log.warn("{}는 origin 목록에 존재하지 않습니다.", origin);
     }
 }
-

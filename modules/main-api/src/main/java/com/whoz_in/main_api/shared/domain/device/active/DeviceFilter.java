@@ -21,7 +21,7 @@ public abstract class DeviceFilter {
     protected final MonitorLogRepository monitorLogRepository;
     protected final ActiveDeviceViewer activeDeviceViewer;
     protected final MemberViewer memberViewer;
-    protected static final Duration MEASURE = Duration.ofMinutes(5);
+    protected static final Duration MEASURE = Duration.ofMinutes(10);
 
     public DeviceFilter(
             DeviceRepository deviceRepository,

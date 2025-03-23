@@ -21,5 +21,5 @@ public enum SocialProvider {
                 .findFirst()
                 .orElseThrow(() -> new IllegalStateException("no social provider"));
     }
-    
+
 }

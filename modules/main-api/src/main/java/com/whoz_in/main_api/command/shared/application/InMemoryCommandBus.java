@@ -14,4 +14,3 @@ public final class InMemoryCommandBus implements CommandBus {
         return handler.handle(command);
     }
 }
-

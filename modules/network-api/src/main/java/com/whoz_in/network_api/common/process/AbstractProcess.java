@@ -1,6 +1,10 @@
 package com.whoz_in.network_api.common.process;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public abstract class AbstractProcess {
     protected final ProcessCommand command;

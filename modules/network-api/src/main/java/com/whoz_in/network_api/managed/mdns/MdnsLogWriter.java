@@ -2,10 +2,9 @@ package com.whoz_in.network_api.managed.mdns;
 
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
-import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
@@ -41,7 +40,7 @@ public class MdnsLogWriter {
     }
 
     //주기적으로 로그를 저장함
-    @Scheduled(initialDelay = 10000, fixedDelay = 5000)
+    @Scheduled(initialDelay = 10000, fixedDelay = 3000)
     private void saveLogs() {
         List<ManagedLog> totalLogs = this.processes.entrySet().parallelStream()
                 .filter(niProc -> niProc.getValue().isAlive())
@@ -68,5 +67,15 @@ public class MdnsLogWriter {
                         log.getCreatedAt(), log.getCreatedAt()
                 ))
                 .toList();
+    }
+
+    // 오랫동안 켜진 tshark는 모든 대역의 mdns 패킷을 받지 못하는 것으로 확인되어 오전 9시, 오후 9시에 재실행한다.
+    @Scheduled(cron = "0 0 9,21 * * *")
+    private void restartTshark(){
+        this.processes.forEach((profile, process)-> {
+                    if (!process.isAlive()) return;
+                    process.restart();
+                    log.info("[managed - mdns({})] tshark가 재실행되었습니다.", profile.ssid());
+                });
     }
 }

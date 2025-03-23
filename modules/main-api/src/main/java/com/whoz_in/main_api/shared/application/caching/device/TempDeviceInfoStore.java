@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.caching.device;
+package com.whoz_in.main_api.shared.application.caching.device;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -31,7 +31,7 @@ public final class TempDeviceInfoStore {
         return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.equals(deviceInfo));
     }
 
-    //DeviceInfo 추가
+    //DeviceInfo 추가 TODO: 동시성
     public void add(UUID ownerId, TempDeviceInfo newDeviceInfo) {
         try {
             List<TempDeviceInfo> deviceInfos = store.get(ownerId, CopyOnWriteArrayList::new);
