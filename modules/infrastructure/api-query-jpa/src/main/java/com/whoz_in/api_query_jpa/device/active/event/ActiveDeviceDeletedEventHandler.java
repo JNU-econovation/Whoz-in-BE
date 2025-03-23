@@ -1,5 +1,6 @@
 package com.whoz_in.api_query_jpa.device.active.event;
 
+import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
@@ -29,27 +30,32 @@ public class ActiveDeviceDeletedEventHandler {
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     @EventListener(DeviceDeletedEvent.class)
     public void handle(DeviceDeletedEvent event) {
+        UUID deviceId = event.deviceId();
+        ActiveDeviceEntity activeDevice =
+                activeDeviceRepository.findByDeviceId(deviceId)
+                                        .orElseThrow(() -> new RuntimeException("activeDevice not found"));
+
+        UUID memberId = activeDevice.getMemberId();
         activeDeviceRepository.deleteById(event.deviceId());
 
-//        disconnectIfLastActiveDevice(event.deviceId());
+        disconnectIfLastActiveDevice(activeDevice);
     }
 
     // 마지막 기기일 경우 memberConnectionInfo 의 continuousTime 을 병합
-    private void disconnectIfLastActiveDevice(UUID deviceId){
-        Optional<UUID> ownerId = deviceService.findDeviceOwner(deviceId);
-        if(ownerId.isPresent()) {
-            LocalDateTime disconnectedAt = LocalDateTime.now();
-            Optional<MemberConnectionInfo> connectionInfo = connectionInfoRepository.findByMemberId(ownerId.get());
+    private void disconnectIfLastActiveDevice(ActiveDeviceEntity ad){
+        UUID ownerId = ad.getMemberId();
+        UUID deviceId = ad.getDeviceId();
 
-            connectionInfo.ifPresent(ci -> {
-                // TODO: 마지막 기기인지 검증 로직 필요
-                if(ci.isActive()) {
-                    // 활동 중인데 삭제할 경우 and 삭제한 기기가 Active 인 마지막 기기이면 disconnect
-                    deviceConnectionService.disconnectDevice(deviceId, disconnectedAt);
+        LocalDateTime disconnectedAt = LocalDateTime.now();
+        Optional<MemberConnectionInfo> connectionInfo = connectionInfoRepository.findByMemberId(ownerId);
+
+        connectionInfo.ifPresent(ci -> {
+            // TODO: 마지막 기기인지 검증 로직 필요
+            if(ci.isActive()) {
+                // 활동 중인데 삭제할 경우 and 삭제한 기기가 Active 인 마지막 기기이면 disconnect
+                deviceConnectionService.disconnectDevice(deviceId, disconnectedAt);
                 }
                 // 활동 중이 아닌데 삭제할 경우, 부가 처리 없음
             });
-        }
     }
-
 }
