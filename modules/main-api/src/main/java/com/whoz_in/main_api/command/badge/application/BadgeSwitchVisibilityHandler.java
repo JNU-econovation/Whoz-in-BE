@@ -14,14 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
-public class SwitchBadgeVisibilityHandler implements CommandHandler<SwitchBadgeVisibility,Void> {
+public class BadgeSwitchVisibilityHandler implements CommandHandler<BadgeSwitchVisibility,Void> {
     private final MemberRepository repository;
     private final EventBus eventBus;
     private final RequesterInfo requesterInfo;
 
     @Transactional
     @Override
-    public Void handle(SwitchBadgeVisibility req) {
+    public Void handle(BadgeSwitchVisibility req) {
         MemberId requesterId = requesterInfo.getMemberId();
         Member member = repository.findByMemberId(requesterId).orElseThrow(()-> NoMemberException.EXCEPTION);
         member.changeBadgeShowOrHide(new BadgeId(req.badgeId()));

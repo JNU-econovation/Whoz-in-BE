@@ -2,7 +2,7 @@ package com.whoz_in.main_api.command.badge.presentation.docs;
 
 import com.whoz_in.main_api.command.badge.application.BadgeAttach;
 import com.whoz_in.main_api.command.badge.application.BadgeRegister;
-import com.whoz_in.main_api.command.badge.application.SwitchBadgeVisibility;
+import com.whoz_in.main_api.command.badge.application.BadgeSwitchVisibility;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,5 +28,5 @@ public interface BadgeCommandApi {
             summary = "뱃지 보여주기 또는 숨기기",
             description = "사용자는 뱃지를 보여주고 숨김으로써 자신의 뱃지 조회 상태를 관리할 수 있습니다."
     )
-    ResponseEntity<SuccessBody<Void>> update(@RequestBody SwitchBadgeVisibility request);
+    ResponseEntity<SuccessBody<Void>> update(@RequestBody BadgeSwitchVisibility request);
 }
