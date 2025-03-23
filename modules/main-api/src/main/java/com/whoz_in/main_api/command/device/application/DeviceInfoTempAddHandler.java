@@ -75,8 +75,8 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
         });
 
-        //모니터 로그에서 현재 접속 중인 맥이 있어야 한다. (넉넉하게 15분)
-        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusMinutes(15));
+        //모니터 로그에서 현재 접속 중인 맥이 있어야 한다.
+        monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusHours(3));
 
         String ssid = managedLog.getSsid();
         if (MacAddressUtil.isFixedMac(mac)){ // 고정 맥일 때
