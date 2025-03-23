@@ -3,6 +3,7 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
+import com.whoz_in.api_query_jpa.monitor.MonitorLog;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
@@ -34,13 +35,14 @@ public class ActiveDeviceEventHandler {
         List<UUID> deviceIds = event.getDevices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
 
-        LocalDateTime connectedAt = LocalDateTime.now();
+//        LocalDateTime connectedAt = LocalDateTime.now();
         // TODO: 이 부분 배치로 바꿔서 일괄처리 해도 될 듯
 
         activeDeviceEntities
                 .forEach(ad -> {
                         UUID deviceId = ad.getDeviceId();
                         UUID memberId = ad.getMemberId();
+                        LocalDateTime connectedAt = deviceService.findLatestMonitorLogAt(deviceId).getUpdatedAt();
                         deviceConnectionService.connectDevice(deviceId, connectedAt);
                         memberConnectionService.connectMember(memberId, connectedAt);
                     });
