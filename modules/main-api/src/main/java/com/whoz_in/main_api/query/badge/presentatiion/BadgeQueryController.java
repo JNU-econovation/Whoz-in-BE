@@ -3,7 +3,7 @@ package com.whoz_in.main_api.query.badge.presentatiion;
 import com.whoz_in.main_api.query.badge.application.query.BadgeInfoGet;
 import com.whoz_in.main_api.query.badge.application.query.MemberBadgeQuery;
 import com.whoz_in.main_api.query.badge.application.query.RegistrableBadgeQuery;
-import com.whoz_in.main_api.query.badge.application.response.BadgeInfoResponse;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import com.whoz_in.main_api.query.badge.presentatiion.docs.BadgeQueryApi;
@@ -28,9 +28,9 @@ public class BadgeQueryController extends QueryController implements BadgeQueryA
 
     @Override
     @GetMapping("/badges")
-    public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestParam("badgeId") UUID badgeId) {
+    public ResponseEntity<SuccessBody<BadgeInfo>> viewBadgeInfo(@RequestParam("badgeId") UUID badgeId) {
         BadgeInfoGet request = new BadgeInfoGet(badgeId);
-        BadgeInfoResponse r = ask(request);
+        BadgeInfo r = ask(request);
         return ResponseEntityGenerator.success(r, CrudResponseCode.READ);
     }
 
