@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.query.badge.presentatiion;
 
-import com.whoz_in.main_api.query.badge.application.query.BadgeId;
+import com.whoz_in.main_api.query.badge.application.query.BadgeInfoGet;
 import com.whoz_in.main_api.query.badge.application.query.MemberBadgeQuery;
 import com.whoz_in.main_api.query.badge.application.query.RegistrableBadgeQuery;
 import com.whoz_in.main_api.query.badge.application.response.BadgeInfoResponse;
@@ -27,7 +27,7 @@ public class BadgeQueryController extends QueryController implements BadgeQueryA
 
     @Override
     @GetMapping("/badges")
-    public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestBody BadgeId request) {
+    public ResponseEntity<SuccessBody<BadgeInfoResponse>> viewBadgeInfo(@RequestBody BadgeInfoGet request) {
         BadgeInfoResponse r = ask(request);
         return ResponseEntityGenerator.success(r, CrudResponseCode.READ);
     }
