@@ -3,7 +3,6 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import com.whoz_in.api_query_jpa.monitor.MonitorLog;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
