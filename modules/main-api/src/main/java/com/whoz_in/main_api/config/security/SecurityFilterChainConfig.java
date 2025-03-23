@@ -89,7 +89,7 @@ public class SecurityFilterChainConfig {
     @Order(3)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->{
-            matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
+            matcher.requestMatchers(HttpMethod.OPTIONS, "/", "/**")
                     .requestMatchers(HttpMethod.POST, "/api/v1/signup/oauth")
                     .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
         });
