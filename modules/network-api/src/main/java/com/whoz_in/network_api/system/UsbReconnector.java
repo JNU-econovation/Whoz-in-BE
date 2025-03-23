@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.concurrent.*;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +22,7 @@ public class UsbReconnector {
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
     public void scheduleReconnection(String interfaceName) {
-        if (scheduledTasks.containsKey(interfaceName)) {
+        if (isScheduled(interfaceName)) {
             log.info("{}의 USB 초기화가 이미 예약되어 있습니다.", interfaceName);
             return;
         }
@@ -30,13 +33,20 @@ public class UsbReconnector {
         }, 10, TimeUnit.SECONDS);
 
         scheduledTasks.put(interfaceName, scheduledTask);
+        log.info("{}의 USB 초기화가 예약됐습니다. (10초 후 실행)", interfaceName);
+    }
+
+    public boolean isScheduled(String interfaceName){
+        return scheduledTasks.containsKey(interfaceName);
     }
 
     public void cancelReconnection(String interfaceName) {
+        if (!isScheduled(interfaceName)) return;
         ScheduledFuture<?> scheduledTask = scheduledTasks.remove(interfaceName);
         if (scheduledTask != null) {
             scheduledTask.cancel(false);
         }
+        log.info("{}의 USB 초기화 예약이 취소됐습니다. (다시 연결됨)", interfaceName);
     }
 
     private void reconnect(String interfaceName) {

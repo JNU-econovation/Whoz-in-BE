@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.command.device.presentation;
 
 import com.whoz_in.main_api.command.device.presentation.docs.DeviceRegisterTokenApi;
-import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;

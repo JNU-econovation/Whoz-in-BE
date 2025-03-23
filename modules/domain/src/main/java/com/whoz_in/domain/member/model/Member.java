@@ -91,7 +91,7 @@ public final class Member extends AggregateRoot {
         this.statusMessage = newStatusMessage;
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
-
+  
     public void changeBadgeShow(BadgeId badgeId, boolean show) {
         this.badges.put(badgeId, show);
         Map<String, Boolean> badges = this.badges.entrySet().stream()

@@ -1,11 +1,8 @@
 package com.whoz_in.api_query_jpa.member;
 
-import com.whoz_in.main_api.query.member.application.view.MemberInfo;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

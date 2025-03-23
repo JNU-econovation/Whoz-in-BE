@@ -3,7 +3,7 @@ package com.whoz_in.main_api.query.network_api;
 import com.whoz_in.main_api.query.network_api.docs.InternalAccessUrlQueryApi;
 import com.whoz_in.main_api.query.shared.application.QueryBus;
 import com.whoz_in.main_api.query.shared.presentation.QueryController;
-import com.whoz_in.main_api.shared.caching.network_api.InternalAccessUrlStore;
+import com.whoz_in.main_api.shared.application.caching.network_api.InternalAccessUrlStore;
 import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;

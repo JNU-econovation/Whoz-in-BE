@@ -45,4 +45,3 @@ public final class IpRouteManager {
         log.info("[ip route] {} 삭제됨", table);
     }
 }
-

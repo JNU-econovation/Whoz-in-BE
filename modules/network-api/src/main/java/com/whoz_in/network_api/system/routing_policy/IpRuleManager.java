@@ -1,14 +1,13 @@
 package com.whoz_in.network_api.system.routing_policy;
 
 import com.whoz_in.network_api.common.process.TransientProcess;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
@@ -61,4 +60,3 @@ public final class IpRuleManager {
         log.info("[ip rule] 초기화됨");
     }
 }
-

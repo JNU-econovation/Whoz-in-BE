@@ -2,8 +2,8 @@ package com.whoz_in.api_query_jpa.device;
 
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
-import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
+import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DevicesStatus;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.device.view.DeviceViewer;

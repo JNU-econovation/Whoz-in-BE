@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.caching.device;
+package com.whoz_in.main_api.shared.application.caching.device;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

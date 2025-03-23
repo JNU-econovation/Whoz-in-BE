@@ -1,6 +1,5 @@
 package com.whoz_in.network_api.monitor;
 
-import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;

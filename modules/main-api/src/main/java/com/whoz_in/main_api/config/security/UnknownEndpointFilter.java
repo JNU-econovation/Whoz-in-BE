@@ -8,10 +8,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.servlet.HandlerExecutionChain;
-import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /*
@@ -50,4 +47,3 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
         response.getWriter().flush();
     }
 }
-
