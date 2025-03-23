@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.query.badge.presentatiion;
 
 import com.whoz_in.main_api.query.badge.application.query.BadgeId;
-import com.whoz_in.main_api.query.badge.application.query.EmptyMemberBadgeQuery;
-import com.whoz_in.main_api.query.badge.application.query.EmptyRegisterableBadgeQuery;
+import com.whoz_in.main_api.query.badge.application.query.MemberBadgeQuery;
+import com.whoz_in.main_api.query.badge.application.query.RegisterableBadgeQuery;
 import com.whoz_in.main_api.query.badge.application.response.BadgeInfoResponse;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegisterableBadges;
@@ -35,14 +35,14 @@ public class BadgeQueryController extends QueryController implements BadgeQueryA
     @Override
     @GetMapping("/badges/register")
     public ResponseEntity<SuccessBody<RegisterableBadges>> viewRegisterable() {
-        RegisterableBadges r = ask(new EmptyRegisterableBadgeQuery());
+        RegisterableBadges r = ask(new RegisterableBadgeQuery());
         return ResponseEntityGenerator.success(r,CrudResponseCode.READ);
     }
 
     @Override
     @GetMapping("/badges/members")
     public ResponseEntity<SuccessBody<BadgesOfMember>> viewBadgesOfMember() {
-         BadgesOfMember r = ask(new EmptyMemberBadgeQuery());
+         BadgesOfMember r = ask(new MemberBadgeQuery());
         return ResponseEntityGenerator.success(r,CrudResponseCode.READ);
     }
 }
