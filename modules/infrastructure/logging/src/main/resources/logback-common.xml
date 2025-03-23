@@ -1,18 +1,19 @@
 <!-- 스프링 컨텍스트가 완전히 초기화되기 전에 환경변수를 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
 
 <configuration>
-  <springProfile name="!prod">
+  <springProfile name="prod">
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <root level="INFO">
       <appender-ref ref="COLOR_CONSOLE"/>
     </root>
   </springProfile>
 
-  <springProfile name="prod">
+  <springProfile name="!prod">
     <root level="INFO">
       <appender-ref ref="NO_COLOR_CONSOLE"/>
       <appender-ref ref="FILE"/>
       <appender-ref ref="ASYNC_DISCORD_ERROR"/>
+      <appender-ref ref="ASYNC_DISCORD_ALERT"/>
     </root>
   </springProfile>
 
@@ -69,4 +70,24 @@
   <appender name="ASYNC_DISCORD_ERROR" class="ch.qos.logback.classic.AsyncAppender">
     <appender-ref ref="DISCORD_ERROR"/>
   </appender>
+
+  <!-- 웹훅을 과도하게 사용하면 디스코드에서 제한을 거니까 필요한 로그만(ALERT) 로깅 -->
+  <appender name="DISCORD_ALERT" class="com.whoz_in.logging.DiscordAppender">
+    <webhookUri>${DISCORD_WEBHOOK_URL}</webhookUri>
+    <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+      <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+        <marker>ALERT</marker>
+      </evaluator>
+      <OnMatch>ACCEPT</OnMatch>
+      <onMismatch>DENY</onMismatch>
+    </filter>
+    <encoder>
+      <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
+    </encoder>
+  </appender>
+  <!-- AsyncAppender가 Appender를 감싸서 디스코드 로깅을 비동기로 처리할 수 있도록 함. -->
+  <appender name="ASYNC_DISCORD_ALERT" class="ch.qos.logback.classic.AsyncAppender">
+    <appender-ref ref="DISCORD_ALERT"/>
+  </appender>
+
 </configuration>
