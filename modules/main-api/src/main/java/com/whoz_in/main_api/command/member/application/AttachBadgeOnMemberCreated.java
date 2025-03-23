@@ -16,7 +16,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
-public class CreateBadgeOnMemberCreated {
+public class AttachBadgeOnMemberCreated {
     private final BadgeRepository badgeRepo;
     private final MemberRepository memberRepo;
     private final EventBus eventBus;
@@ -26,8 +26,8 @@ public class CreateBadgeOnMemberCreated {
     public void handleMemberCreatedEvent(MemberCreated event) {
         Member member = event.getMember();
         String position = member.getMainPosition().getPosition();
-        Badge badge = badgeRepo.findByName(position).orElseThrow(()-> new NoBadgeException());
-        member.addBadge(badge.getId());
+        Badge badge = badgeRepo.findByName(position).orElseThrow(NoBadgeException::new);
+        member.attachBadge(badge.getId());
         memberRepo.save(member);
         eventBus.publish(member.pullDomainEvents());
     }

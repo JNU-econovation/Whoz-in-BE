@@ -100,7 +100,7 @@ public final class Member extends AggregateRoot {
         this.register(new MemberBadgeChanged(this.getId().id().toString(), badges));
     }
 
-    public void addBadge(BadgeId badgeId) {
+    public void attachBadge(BadgeId badgeId) {
         this.badges.put(badgeId, true);
     }
 

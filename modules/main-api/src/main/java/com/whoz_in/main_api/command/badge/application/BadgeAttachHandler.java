@@ -32,7 +32,7 @@ public class BadgeAttachHandler implements CommandHandler<BadgeAttach, Void> {
         Member member = memberFinderService.find(requesterId);
         Badge badge = badgeFinderService.find(new BadgeId(req.badgeId()));
         badgeOwnershipService.validateType(badge.getBadgeInfo().getBadgeType());
-        member.addBadge(new BadgeId(req.badgeId()));
+        member.attachBadge(new BadgeId(req.badgeId()));
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());
         return null;
