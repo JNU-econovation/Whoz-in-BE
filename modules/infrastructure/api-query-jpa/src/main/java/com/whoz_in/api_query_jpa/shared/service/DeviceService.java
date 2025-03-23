@@ -10,7 +10,6 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.monitor.MonitorLog;
 import com.whoz_in.api_query_jpa.monitor.MonitorLogRepository;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
