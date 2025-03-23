@@ -92,7 +92,7 @@ public final class Member extends AggregateRoot {
         this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
     }
 
-    public void changeBadgeShow(BadgeId badgeId, boolean show) {
+    public void changeBadgeVisibility(BadgeId badgeId, boolean show) {
         this.badges.put(badgeId, show);
         Map<String, Boolean> badges = this.badges.entrySet().stream()
                 .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
