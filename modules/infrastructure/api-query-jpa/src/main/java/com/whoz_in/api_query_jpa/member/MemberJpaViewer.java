@@ -1,18 +1,15 @@
 package com.whoz_in.api_query_jpa.member;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.main_api.query.member.application.view.MemberAuthInfo;
-import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
-import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
-import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.query.member.application.view.MemberAuthInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
+import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 @Component

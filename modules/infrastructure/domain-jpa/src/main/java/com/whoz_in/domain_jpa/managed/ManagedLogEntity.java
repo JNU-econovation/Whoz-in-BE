@@ -5,9 +5,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,8 +20,8 @@ public class ManagedLogEntity extends BaseEntity {
     @EmbeddedId
     private LogId logId;
 
-    @Column(nullable = false)
-    private String ssid;
+    @Column(name = "ip", nullable = false)
+    private String ip;
 
     @Column(nullable = false)
     private String room;
@@ -31,28 +31,16 @@ public class ManagedLogEntity extends BaseEntity {
 
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @EqualsAndHashCode
     @Embeddable
     public static class LogId {
 
         @Column(name = "mac", nullable = false)
         private String mac;
 
-        @Column(name = "ip", nullable = false)
-        private String ip;
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            LogId logId = (LogId) o;
-            return logId.mac.equals(mac) && logId.ip.equals(ip);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(mac, ip);
-        }
+        @Column(name = "ssid", nullable = false)
+        private String ssid;
     }
 
 }

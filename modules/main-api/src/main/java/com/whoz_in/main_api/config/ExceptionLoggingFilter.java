@@ -1,13 +1,11 @@
 package com.whoz_in.main_api.config;
 
 import com.whoz_in.main_api.shared.presentation.ExceptionLogger;
-import com.whoz_in.main_api.shared.presentation.HttpRequestInfoExtractor;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;

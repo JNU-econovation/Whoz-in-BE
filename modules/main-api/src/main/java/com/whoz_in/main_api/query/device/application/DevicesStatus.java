@@ -17,4 +17,3 @@ public record DevicesStatus(
             @Nullable String connectedSsid
     ) {}
 }
-

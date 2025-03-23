@@ -2,17 +2,12 @@ package com.whoz_in.api_query_jpa.device.active.event;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
-import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
 import com.whoz_in.main_api.shared.domain.member.event.DayEndEvent;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.common.network_interface;
 
+import static com.whoz_in.logging.LogMarkers.ALERT;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED_AND_RECONNECTED;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.DISCONNECTED;
@@ -102,12 +103,12 @@ public final class NetworkInterfaceManager {
         for (String niName : added) {
             NetworkInterface nowInterface = nowInterfaces.get(niName);
             if (nowInterface.isConnected()) {
-                log.info("{}가 추가되고 연결되었습니다.", niName);
+                log.info(ALERT, "{}가 추가되고 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED_AND_RECONNECTED)
                 );
             } else {
-                log.info("{}가 새로 추가되었습니다.", niName);
+                log.info(ALERT, "{}가 새로 추가되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED)
                 );
@@ -128,7 +129,7 @@ public final class NetworkInterfaceManager {
                         new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, DISCONNECTED)
                 );
             } else if (!oldInterface.isConnected() && nowInterface.isConnected()) {
-                log.info("{}가 다시 네트워크에 연결되었습니다.", niName);
+                log.info(ALERT, "{}가 다시 네트워크에 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, RECONNECTED)
                 );

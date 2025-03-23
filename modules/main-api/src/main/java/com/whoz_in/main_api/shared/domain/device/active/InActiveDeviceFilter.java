@@ -7,9 +7,8 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.member.application.exception.NotFoundConnectionInfoException;
-import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
 import com.whoz_in.main_api.shared.event.Events;
 import java.time.Duration;
@@ -79,10 +78,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         Duration term = Duration.between(activeDeviceConnectedTime, now).abs();
 
         // 로그 발생 시간과의 차이가 기준치보다 클 경우 InActive
-        if(term.compareTo(MEASURE) > 0){
-            return true;
-        }
-        return false;
+        return term.compareTo(MEASURE) > 0;
     }
 
     @Override

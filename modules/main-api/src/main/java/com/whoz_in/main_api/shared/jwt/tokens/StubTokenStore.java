@@ -3,7 +3,6 @@ package com.whoz_in.main_api.shared.jwt.tokens;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
-import java.time.Duration;
 import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 

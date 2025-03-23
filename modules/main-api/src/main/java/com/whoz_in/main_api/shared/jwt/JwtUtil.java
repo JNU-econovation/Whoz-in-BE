@@ -51,7 +51,7 @@ public class JwtUtil {
         if (TokenType.findByName(getClaim(claims, TOKEN_TYPE)) != tokenType)
             throw new IllegalArgumentException("맞지 않은 토큰 타입");
     }
-    
+
     public void ensureNotExpired(Claims claims){
         if (getExpiryDate(claims).before(new Date()))
             throw new IllegalArgumentException("만료된 토큰");

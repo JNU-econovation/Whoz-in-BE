@@ -4,7 +4,6 @@ import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -16,7 +15,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @RequiredArgsConstructor
@@ -91,7 +89,7 @@ public class SecurityFilterChainConfig {
     @Order(3)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->{
-            matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
+            matcher.requestMatchers(HttpMethod.OPTIONS, "/", "/**")
                     .requestMatchers(HttpMethod.POST, "/api/v1/signup/oauth")
                     .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
         });
@@ -138,15 +136,21 @@ public class SecurityFilterChainConfig {
                         "/api/v1/private-ips",
                         "/api/v1/members/**",
                         "/api/v1/member/**",
-                        "/api/v1/internal-access-url"
+                        "/api/v1/internal-access-url",
+                        "/api/v1/badges",
+                        "/api/v1/badges/register",
+                        "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
                         "/api/v1/reissue",
                         "/api/v1/logout",
-                        "/api/v1/feedback/**"
+                        "/api/v1/feedback/**",
+                        "/api/v1/badges",
+                        "/api/v1/badges/members"
                         //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
-                        "/api/v1/device/info"
+                        "/api/v1/device/info",
+                        "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.DELETE,
                         "/api/v1/device"
                 )
@@ -187,4 +191,3 @@ public class SecurityFilterChainConfig {
         httpSecurity.requestCache(AbstractHttpConfigurer::disable);
     }
 }
-
