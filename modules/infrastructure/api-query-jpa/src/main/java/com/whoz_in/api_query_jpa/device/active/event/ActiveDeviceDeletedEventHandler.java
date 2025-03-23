@@ -33,12 +33,12 @@ public class ActiveDeviceDeletedEventHandler {
         UUID deviceId = event.deviceId();
         ActiveDeviceEntity activeDevice =
                 activeDeviceRepository.findByDeviceId(deviceId)
-                                        .orElseThrow(() -> new RuntimeException("activeDevice not found"));
-
-        UUID memberId = activeDevice.getMemberId();
-        activeDeviceRepository.deleteById(event.deviceId());
+                        .orElseThrow(()-> new IllegalArgumentException("active device not found"));
 
         disconnectIfLastActiveDevice(activeDevice);
+        activeDeviceRepository.deleteById(event.deviceId());
+
+
     }
 
     // 마지막 기기일 경우 memberConnectionInfo 의 continuousTime 을 병합
