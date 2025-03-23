@@ -40,8 +40,10 @@ public class DeviceService {
     public boolean isLastConnectedDevice(UUID deviceId) {
 //        Member owner = memberRepository.getByDeviceId(deviceId);
 
-        ActiveDeviceEntity ad = activeDeviceRepository.findByDeviceId(deviceId).get();
-        Member owner = memberRepository.findById(ad.getMemberId()).get();
+ActiveDeviceEntity ad = activeDeviceRepository.findByDeviceId(deviceId)
+        .orElseThrow(() -> new IllegalStateException("Device not found with ID: " + deviceId));
+Member owner = memberRepository.findById(ad.getMemberId())
+        .orElseThrow(() -> new IllegalStateException("Member not found with ID: " + ad.getMemberId()));
 
         List<ActiveDeviceEntity> ownerDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
