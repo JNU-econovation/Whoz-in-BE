@@ -4,7 +4,7 @@ import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember.BadgeOfMember;
-import com.whoz_in.main_api.query.badge.application.view.RegisterableBadges;
+import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +27,7 @@ public class BadgeJpaViewer implements BadgeViewer {
     }
 
     @Override
-    public RegisterableBadges findRegisterable(UUID memberId) {
+    public RegistrableBadges findRegisterable(UUID memberId) {
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         List<Badge> activeBadges = bageRepo.findAllActivatedBadges(threshold);
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
@@ -36,12 +36,12 @@ public class BadgeJpaViewer implements BadgeViewer {
                 .map(BadgeMember::getBadge_id)
                 .collect(Collectors.toSet());
 
-        List<RegisterableBadges.RegisterableBadge> registerableBadgeList = activeBadges.stream()
+        List<RegistrableBadges.RegistrableBadge> registerableBadgeList = activeBadges.stream()
                 .filter(badge -> !ownedBadgeIds.contains(badge.getId()))
-                .map(badge -> new RegisterableBadges.RegisterableBadge(badge.getId()))
+                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId()))
                 .toList();
 
-        return new RegisterableBadges(registerableBadgeList);
+        return new RegistrableBadges(registerableBadgeList);
     }
 
     @Override

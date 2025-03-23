@@ -5,9 +5,9 @@ import com.whoz_in.main_api.query.shared.application.View;
 import java.util.List;
 import java.util.UUID;
 
-public record RegisterableBadges(List<RegisterableBadge> registerableBadge)
+public record RegistrableBadges(List<RegistrableBadge> registerableBadge)
         implements Response, View {
-    public record RegisterableBadge(
+    public record RegistrableBadge(
             UUID badgeId
     ) {}
 }

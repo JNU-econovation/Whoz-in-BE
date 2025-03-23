@@ -3,7 +3,7 @@ package com.whoz_in.main_api.query.badge.presentatiion.docs;
 import com.whoz_in.main_api.query.badge.application.query.BadgeId;
 import com.whoz_in.main_api.query.badge.application.response.BadgeInfoResponse;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
-import com.whoz_in.main_api.query.badge.application.view.RegisterableBadges;
+import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ public interface BadgeQueryApi {
             summary = "등록 가능한 뱃지 조회",
             description = "사용자가 달 수 있는 등록 가능한 뱃지를 조회합니다. 등록 가능한 뱃지는 개발단에서 만든 뱃지가 아닌 후즈인 사용자가 만든 뱃지를 말합니다."
     )
-    ResponseEntity<SuccessBody<RegisterableBadges>> viewRegisterable();
+    ResponseEntity<SuccessBody<RegistrableBadges>> viewRegisterable();
 
     @Operation(
             summary = "사용자의 뱃지 조회",
