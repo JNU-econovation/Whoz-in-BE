@@ -11,7 +11,7 @@ log() {
 }
 
 # 100일 넘은 백업 파일 (오래된 순 정렬)
-mapfile -t DELETE_CANDIDATES < <(find "$TARGET_DIR" -type f  -name "*.${EXTENSION}" | sort)
+mapfile -t DELETE_CANDIDATES < <(find "$TARGET_DIR" -type f -mtime +100 -name "*.${EXTENSION}" | sort)
 NUM_CANDIDATES=${#DELETE_CANDIDATES[@]}
 
 # 항상 1개는 남기고 삭제
