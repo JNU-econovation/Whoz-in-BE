@@ -79,8 +79,8 @@ public class MemberConnectionService {
             LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
             LocalDateTime activeAt = connectionInfo.getActiveAt();
 
-            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
-            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
+//            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
+//            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
 
             Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 
