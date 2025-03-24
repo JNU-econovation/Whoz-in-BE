@@ -5,7 +5,6 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
