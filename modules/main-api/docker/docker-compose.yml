@@ -42,6 +42,21 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+  backup-service:
+    container_name: backup-service
+    build:
+      context: backup-service
+      dockerfile: Dockerfile
+    volumes:
+      - ${BASE_BACKUP_DIR}:/backup
+      - main-api-data:/main-api-data:ro
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    depends_on:
+      main-api:
+        condition: service_started
+      command-db:
+        condition: service_healthy
 
 volumes:
   main-api-data:

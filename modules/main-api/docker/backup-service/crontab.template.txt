@@ -1,0 +1,5 @@
+MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+# 매일 오전 6시 db 백업
+0 6 * * * /app/backup-command-db.sh >> /app/command-db-cron.log 2>&1
+# 매일 오전 6시 main-api 데이터 백업
+0 6 * * * /app/backup-main-api-data.sh >> /app/main-api-data-cron.log 2>&1

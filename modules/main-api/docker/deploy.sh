@@ -5,6 +5,7 @@ cd "$(dirname "$0")"
 
 docker container prune -f
 docker image prune -f
-# main-api 이외엔 재실행되지 않음
-# 빌드한 main-api가 변경 사항이 없어도 무조건 재실행 (환경 변수 파일을 변경해도 jar에 포함되지 않기 때문에)
-docker compose up -d --build --force-recreate main-api
+
+docker compose build main-api backup-service
+docker compose up -d --force-recreate main-api # 무조건 재시작 (환경변수 적용때문)
+docker compose up -d backup-service # 변경된 경우에만 재시작
