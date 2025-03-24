@@ -7,6 +7,7 @@ import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -30,6 +31,9 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
             if (mapping.getHandler(request) != null) {
                 log.warn("{}는 존재하지만 시큐리티 필터 체인에 등록되지 않은 엔드포인트입니다.", request.getRequestURI());
             }
+        } catch (HttpRequestMethodNotSupportedException e) {
+            log.warn("{}는 {}를 지원하지 않음", request.getRequestURI(), request.getMethod());
+            response405(response);
         } catch (Exception e) {
             throw new IllegalStateException("엔드포인트 확인 중 오류 발생", e);
         } finally {
@@ -43,5 +47,13 @@ public class UnknownEndpointFilter extends OncePerRequestFilter {
         response.setStatus(HttpServletResponse.SC_NOT_FOUND);
         response.getWriter().write("{\"message\": \"존재하지 않는 엔드포인트입니다.\"}");
         response.getWriter().flush();
+        response.getWriter().close();
+    }
+    private void response405(HttpServletResponse response) throws IOException {
+        response.setContentType("application/json; charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+        response.getWriter().write("{\"message\": \"이 엔드포인트는 해당 메소드를 지원하지 않습니다.\"}");
+        response.getWriter().flush();
+        response.getWriter().close();
     }
 }

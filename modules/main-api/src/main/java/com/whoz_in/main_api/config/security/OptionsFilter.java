@@ -22,6 +22,7 @@ public class OptionsFilter extends OncePerRequestFilter {
         if (request.getMethod().equals("OPTIONS")){
             response.setStatus(HttpServletResponse.SC_OK);
             response.getWriter().flush();
+            response.getWriter().close();
             return;
         }
 

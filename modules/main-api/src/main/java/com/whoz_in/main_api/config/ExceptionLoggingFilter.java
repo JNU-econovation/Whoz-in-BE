@@ -31,6 +31,7 @@ public class ExceptionLoggingFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.getWriter().write("{\"error_code\": \"UNEXPECTED_ERROR\", \"message\": \"알 수 없는 예외 발생\"}");
             response.getWriter().flush();
+            response.getWriter().close();
         }
     }
 }
