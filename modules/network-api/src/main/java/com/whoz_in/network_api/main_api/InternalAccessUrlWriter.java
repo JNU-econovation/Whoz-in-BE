@@ -48,7 +48,7 @@ public final class InternalAccessUrlWriter {
             );
             log.info("'internal access url' updated");
         } catch (ResourceAccessException e){
-            log.error("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
+            log.warn("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
         } catch (HttpClientErrorException.Forbidden e) {
             log.error("Api key 인증 실패 : {}", e.getMessage());
         } catch (Exception e) {
