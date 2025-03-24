@@ -73,6 +73,9 @@ public class MemberConnectionService {
 
     private void updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
         try {
+            // 선 비활성화
+            connectionInfo.inActiveOn(disConnectedAt);
+
             LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
             LocalDateTime activeAt = connectionInfo.getActiveAt();
 
@@ -81,7 +84,7 @@ public class MemberConnectionService {
 
             Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 
-            connectionInfo.inActiveOn(disConnectedAt);
+            // 후 DailyTime 계산
             connectionInfo.addDailyTime(continuousTime);
 
             connectionInfoRepository.save(connectionInfo);
