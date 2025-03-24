@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.session.DisableEncodeUrlFilter;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class SecurityFilterChainConfig {
     private final AccessTokenFilter accessTokenFilter;
     private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final OptionsFilter optionsFilter;
     private final UnknownEndpointFilter unknownEndpointFilter;
     private final DynamicCorsConfigurationSource corsConfigurationSource;
 
@@ -89,7 +91,7 @@ public class SecurityFilterChainConfig {
     @Order(3)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->{
-            matcher.requestMatchers(HttpMethod.OPTIONS, "/", "/**")
+            matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
                     .requestMatchers(HttpMethod.POST, "/api/v1/signup/oauth")
                     .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
         });
@@ -98,6 +100,8 @@ public class SecurityFilterChainConfig {
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.securityContext(AbstractHttpConfigurer::disable);
         httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
+        // OPTIONS 요청일 경우 바로 OK
+        httpSecurity.addFilterAfter(optionsFilter, CorsFilter.class);
         return httpSecurity.build();
     }
 

@@ -42,7 +42,16 @@ public class SecurityConfig {
 
     //위와 동일한 이유로 추가
     @Bean
-    public FilterRegistrationBean<UnknownEndpointFilter> unknownEndpointFilterFilterRegistrationBean(
+    public FilterRegistrationBean<OptionsFilter> optionsFilterRegistrationBean(
+            OptionsFilter optionsFilter) {
+        FilterRegistrationBean<OptionsFilter> registrationBean = new FilterRegistrationBean<>(optionsFilter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
+    //위와 동일한 이유로 추가
+    @Bean
+    public FilterRegistrationBean<UnknownEndpointFilter> unknownEndpointFilterRegistrationBean(
             UnknownEndpointFilter unknownEndpointFilter) {
         FilterRegistrationBean<UnknownEndpointFilter> registrationBean = new FilterRegistrationBean<>(unknownEndpointFilter);
         registrationBean.setEnabled(false);
