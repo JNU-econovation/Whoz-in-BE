@@ -34,14 +34,17 @@ public class ActiveDeviceEventHandler {
         List<UUID> deviceIds = event.getDevices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
 
-        LocalDateTime connectedAt = LocalDateTime.now();
+//        LocalDateTime connectedAt = LocalDateTime.now();
         // TODO: 이 부분 배치로 바꿔서 일괄처리 해도 될 듯
 
-        activeDeviceEntities.stream()
-                .map(ActiveDeviceEntity::getDeviceId)
-                .peek(ad -> deviceConnectionService.connectDevice(ad, connectedAt))
-                .map(deviceService::findDeviceOwner)
-                .forEach(owner -> owner.ifPresent(id -> memberConnectionService.connectMember(id, connectedAt)));
+        activeDeviceEntities
+                .forEach(ad -> {
+                        UUID deviceId = ad.getDeviceId();
+                        UUID memberId = ad.getMemberId();
+                        LocalDateTime connectedAt = deviceService.findLatestMonitorLogAt(deviceId).getUpdatedAt();
+                        deviceConnectionService.connectDevice(deviceId, connectedAt);
+                        memberConnectionService.connectMember(memberId, connectedAt);
+                    });
 
     }
 

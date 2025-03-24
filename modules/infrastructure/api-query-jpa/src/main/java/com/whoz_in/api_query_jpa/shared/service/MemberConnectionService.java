@@ -5,7 +5,6 @@ import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -73,15 +72,18 @@ public class MemberConnectionService {
 
     private void updateDailyTime(MemberConnectionInfo connectionInfo, LocalDateTime disConnectedAt) {
         try {
+            // 선 비활성화
+            connectionInfo.inActiveOn(disConnectedAt);
+
             LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
             LocalDateTime activeAt = connectionInfo.getActiveAt();
 
-            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
-            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
+//            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
+//            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
 
             Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 
-            connectionInfo.inActiveOn(disConnectedAt);
+            // 후 DailyTime 계산
             connectionInfo.addDailyTime(continuousTime);
 
             connectionInfoRepository.save(connectionInfo);

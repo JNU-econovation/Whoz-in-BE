@@ -1,11 +1,15 @@
 package com.whoz_in.api_query_jpa.shared.service;
 
+import com.whoz_in.api_query_jpa.device.Device;
+import com.whoz_in.api_query_jpa.device.DeviceInfo;
 import com.whoz_in.api_query_jpa.device.DeviceRepository;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
+import com.whoz_in.api_query_jpa.monitor.MonitorLog;
+import com.whoz_in.api_query_jpa.monitor.MonitorLogRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,6 +24,7 @@ public class DeviceService {
     private final MemberConnectionInfoRepository connectionInfoRepository;
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberRepository memberRepository;
+    private final MonitorLogRepository monitorLogRepository;
 
 
     /**
@@ -33,7 +38,12 @@ public class DeviceService {
      * @return
      */
     public boolean isLastConnectedDevice(UUID deviceId) {
-        Member owner = memberRepository.getByDeviceId(deviceId);
+//        Member owner = memberRepository.getByDeviceId(deviceId);
+
+ActiveDeviceEntity ad = activeDeviceRepository.findByDeviceId(deviceId)
+        .orElseThrow(() -> new IllegalStateException("Device not found with ID: " + deviceId));
+Member owner = memberRepository.findById(ad.getMemberId())
+        .orElseThrow(() -> new IllegalStateException("Member not found with ID: " + ad.getMemberId()));
 
         List<ActiveDeviceEntity> ownerDevices = activeDeviceRepository.findByMemberId(owner.getId());
 
@@ -79,6 +89,21 @@ public class DeviceService {
     public Optional<UUID> findDeviceOwner(UUID deviceId) {
         return memberRepository.findByDeviceId(deviceId)
                 .map(Member::getId);
+    }
+
+    public MonitorLog findLatestMonitorLogAt(UUID deviceId) {
+        Device device = deviceRepository.findById(deviceId).get();
+        List<DeviceInfo> deviceInfos = device.getDeviceInfos();
+
+        List<String> macs = deviceInfos.stream()
+                .map(DeviceInfo::getMac)
+                .toList();
+
+        List<MonitorLog> logs = macs.stream().map(monitorLogRepository::findLatestByMac).toList();
+
+        return logs.stream()
+                .max((log1, log2) -> log1.getUpdatedAt().isAfter(log2.getUpdatedAt()) ? 1 : -1)
+                .orElse(null);
     }
 
 }

@@ -32,7 +32,7 @@ public class Device {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "device_id", referencedColumnName = "id")
     private List<DeviceInfo> deviceInfos;
 

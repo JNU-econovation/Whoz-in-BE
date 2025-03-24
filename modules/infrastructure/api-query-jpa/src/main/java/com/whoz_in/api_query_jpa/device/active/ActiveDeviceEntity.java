@@ -18,12 +18,15 @@ public class ActiveDeviceEntity {
     @Id
     private UUID deviceId;
 
+    private UUID memberId;
+
     private LocalDateTime connectedAt;
 
     private LocalDateTime disConnectedAt;
 
-    private ActiveDeviceEntity(UUID deviceId) {
+    private ActiveDeviceEntity(UUID deviceId, UUID memberId){
         this.deviceId = deviceId;
+        this.memberId = memberId;
     }
 
     public void connect(LocalDateTime time){
@@ -46,8 +49,8 @@ public class ActiveDeviceEntity {
         return Duration.between(connectedAt, disConnectedAt).abs();
     }
 
-    public static ActiveDeviceEntity create(UUID deviceId){
-        return new ActiveDeviceEntity(deviceId);
+    public static ActiveDeviceEntity create(UUID deviceId, UUID memberId){
+        return new ActiveDeviceEntity(deviceId, memberId);
     }
 
 }
