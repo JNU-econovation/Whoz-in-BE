@@ -23,8 +23,8 @@ public class DeviceRemoveHandler implements CommandHandler<DeviceRemove, Void> {
     @Override
     public Void handle(DeviceRemove command) {
         memberFinderService.mustExist(requesterInfo.getMemberId());
-        deviceRepository.delete(command.getDeviceId());
-        eventBus.publish(List.of(new DeviceDeleted(command.getDeviceId().id())));
+        boolean result = deviceRepository.delete(command.getDeviceId());
+        if(result) eventBus.publish(List.of(new DeviceDeleted(command.getDeviceId().id())));
         return null;
     }
 }
