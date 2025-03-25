@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.config;
 
+import static jakarta.servlet.http.HttpServletResponse.SC_OK;
+
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -37,10 +39,11 @@ public class PingServletConfig {
 
     public static class PingServlet extends HttpServlet {
         @Override
-        protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-            resp.setStatus(200);
-            resp.setContentType("text/plain");
-            resp.getWriter().write("pong");
+        protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+            res.setStatus(SC_OK);
+            res.setContentType("text/plain");
+            res.getWriter().write("pong");
+            res.getWriter().flush();
         }
     }
 }
