@@ -3,13 +3,14 @@ package com.whoz_in.network_api.system.routing_policy;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Profile("prod")
 public final class IpRouteManager {
     private final Collection<String> rtTables;
 

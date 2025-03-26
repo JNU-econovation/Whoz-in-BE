@@ -4,7 +4,7 @@ import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
 import com.whoz_in.network_api.common.util.IpHolder;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.MyIpApi;
@@ -49,12 +49,12 @@ public class MyIpController implements MyIpApi {
 
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
-        if (event.status() == Status.DISCONNECTED || event.status() == Status.REMOVED) {
+        if (event.status() == NetworkInterfaceStatus.DISCONNECTED || event.status() == NetworkInterfaceStatus.REMOVED) {
             String disconnectedNI = event.pre().getName();
             if (disconnectedNIs.add(disconnectedNI))
                 log.warn("{}의 네트워크 연결이 끊겨 ip 반환 컨트롤러가 비활성화 상태입니다.", disconnectedNI);
         }
-        if (event.status() == Status.RECONNECTED || event.status() == Status.ADDED_AND_RECONNECTED) {
+        if (event.status() == NetworkInterfaceStatus.RECONNECTED || event.status() == NetworkInterfaceStatus.ADDED_AND_RECONNECTED) {
             disconnectedNIs.remove(event.interfaceName());
             if (!disconnectedNIs.isEmpty()) return;
             this.gateways = getGateways();

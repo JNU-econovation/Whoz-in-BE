@@ -2,7 +2,7 @@ package com.whoz_in.network_api.system;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class MonitorModeSwitcher {
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
         // 모드가 바꼈거나 새로 추가됐을때
-        if (event.status() == Status.MODE_CHANGED || event.status() == Status.ADDED) {
+        if (event.status() == NetworkInterfaceStatus.MODE_CHANGED || event.status() == NetworkInterfaceStatus.ADDED) {
             NetworkInterface now = event.now();
             // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
             if (this.interfaceName.equals(now.getName()) && !now.getWirelessInfo().mode().equals("monitor")){
