@@ -1,5 +1,7 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.badge.exception.BadgeHideException;
+import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.event.MemberBadgeChanged;
 import com.whoz_in.domain.member.event.MemberCreated;
@@ -112,6 +114,12 @@ public final class Member extends AggregateRoot {
     }
 
     public void changeMainBadge(BadgeId badgeId) {
+        if (!badges.containsKey(badgeId)) {
+            throw NoBadgeException.EXCEPTION;
+        }
+        if (!badges.get(badgeId)) {
+            throw BadgeHideException.EXCEPTION;
+        }
         this.mainBadge = badgeId;
     }
 }
