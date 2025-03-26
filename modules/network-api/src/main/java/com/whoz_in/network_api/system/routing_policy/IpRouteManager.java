@@ -11,10 +11,15 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public final class IpRouteManager {
+    private final Collection<String> rtTables;
+
+    public IpRouteManager(MappedRtTables mappedRtTables) {
+        this.rtTables = mappedRtTables.getTables();
+    }
 
     // 라우팅 테이블들에 대해 'ip route show table <table>' 명령어의 출력을 파싱하여 라우트 정보를 반환
     // Map<gateway, interfaceName>
-    public Map<String, String> getRoutes(Set<String> rtTables) {
+    public Map<String, String> getRoutes() {
         return rtTables.stream()
                 .map("ip route show table %s"::formatted)
                 .map(TransientProcess::create)
