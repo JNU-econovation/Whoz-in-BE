@@ -32,8 +32,4 @@ public record MemberConnectionInfo(
         return Duration.between(activeAt, inActiveAt).abs();
     }
 
-    public static MemberConnectionInfo empty(UUID memberId){
-        return new MemberConnectionInfo(memberId, null, null, null, null, false);
-    }
-
 }
