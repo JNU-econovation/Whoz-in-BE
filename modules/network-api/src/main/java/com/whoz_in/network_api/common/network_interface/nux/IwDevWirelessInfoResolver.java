@@ -2,6 +2,7 @@ package com.whoz_in.network_api.common.network_interface.nux;
 
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
+import com.whoz_in.network_api.common.network_interface.WirelessMode;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +22,7 @@ public final class IwDevWirelessInfoResolver implements WirelessInfoResolver {
     private static Map<String, WirelessInfo> parse(List<String> results) {
         Map<String, WirelessInfo> wirelessMap = new HashMap<>();
         String currentInterface = null;
-        String mode = null;
+        WirelessMode mode = null;
         String ssid = null;
 
         for (String line : results) {
@@ -35,7 +36,7 @@ public final class IwDevWirelessInfoResolver implements WirelessInfoResolver {
                 ssid = null;
             }
             if (line.contains("type") && currentInterface != null) {
-                mode = line.split("type")[1].trim();
+                mode = WirelessMode.fromString(line.split("type")[1].trim());
             }
             if (line.contains("ssid") && currentInterface != null) {
                 ssid = line.split("ssid")[1].trim();

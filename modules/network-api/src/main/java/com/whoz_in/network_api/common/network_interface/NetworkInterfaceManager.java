@@ -2,6 +2,7 @@ package com.whoz_in.network_api.common.network_interface;
 
 import static com.whoz_in.logging.LogMarkers.ALERT;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
@@ -191,11 +192,11 @@ public final class NetworkInterfaceManager {
         // 무선 모드 변화 감지
         NetworkInterface oldInterface = oldInterfaces.get(niName);
         NetworkInterface nowInterface = nowInterfaces.get(niName);
-        String oldMode = oldInterface.getWirelessInfo().mode();
-        String nowMode = nowInterface.getWirelessInfo().mode();
+        WirelessMode oldMode = oldInterface.getWirelessInfo().mode();
+        WirelessMode nowMode = nowInterface.getWirelessInfo().mode();
         if (Objects.equals(oldMode, nowMode)) return;
 
-        if (nowMode.equals("managed")){
+        if (nowMode == MANAGED){
             // monitor여야 하는게 managed로 바뀐거니 에러로 판단
             unavailableInterfaces.put(niName, MODE_CHANGED);
             log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
