@@ -6,6 +6,7 @@ import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANA
 
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -40,10 +41,10 @@ public final class NetworkInterfaceManager {
     }
 
     public NetworkInterfaceManager(
-    NetworkInterfaceProfileConfig profileConfig,
-    ApplicationEventPublisher eventPublisher,
-    NetworkAddressResolver networkAddressResolver,
-    WirelessInfoResolver wirelessInfoResolver) {
+        NetworkInterfaceProfileConfig profileConfig,
+        ApplicationEventPublisher eventPublisher,
+        NetworkAddressResolver networkAddressResolver,
+        WirelessInfoResolver wirelessInfoResolver) {
         this.allProfiles =  profileConfig.getAllProfiles().stream()
                 .map(NetworkInterfaceProfile::interfaceName)
                 .toList();
