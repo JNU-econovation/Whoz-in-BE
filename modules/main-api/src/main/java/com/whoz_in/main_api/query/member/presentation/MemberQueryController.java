@@ -2,8 +2,10 @@ package com.whoz_in.main_api.query.member.presentation;
 
 import com.whoz_in.main_api.query.member.application.query.MemberCountInRoom;
 import com.whoz_in.main_api.query.member.application.query.MemberDetailInfoGet;
+import com.whoz_in.main_api.query.member.application.query.MemberProfile;
 import com.whoz_in.main_api.query.member.application.query.MembersInRoom;
 import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.presentation.docs.MemberQueryApi;
@@ -14,6 +16,7 @@ import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,6 +49,11 @@ public class MemberQueryController extends QueryController implements MemberQuer
     @GetMapping("/member")
     public ResponseEntity<SuccessBody<MemberDetailInfo>> getDetailInfo(){
         return ResponseEntityGenerator.success(ask(new MemberDetailInfoGet()), CrudResponseCode.READ);
+    }
+
+    @GetMapping("/member/profile/{memberId}")
+    public ResponseEntity<SuccessBody<MemberProfileInfo>> getProfileInfo(@PathVariable("memberId") String memberId){
+        return ResponseEntityGenerator.success(ask(new MemberProfile(memberId)), CrudResponseCode.READ);
     }
 
 }

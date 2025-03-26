@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
 import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Tag(name = "회원", description = "회원 Api")
 public interface MemberQueryApi {
@@ -35,5 +37,11 @@ public interface MemberQueryApi {
             description = "회원 상세정보 (Id, 이름, 기수, 포지션, 상태메세지) 를 조회합니다."
     )
     ResponseEntity<SuccessBody<MemberDetailInfo>> getDetailInfo();
+
+    @Operation(
+            summary = "회원 프로필 조회",
+            description = "memberId에 해당하는 회원의 정보(기수, 이름, 분야, 누적 접속 시간)를 조회합니다."
+    )
+    ResponseEntity<SuccessBody<MemberProfileInfo>> getProfileInfo(@PathVariable("memberId") String memberId);
 
 }
