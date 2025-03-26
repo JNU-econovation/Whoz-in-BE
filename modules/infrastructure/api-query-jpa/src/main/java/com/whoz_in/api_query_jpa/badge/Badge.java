@@ -18,7 +18,8 @@ import org.hibernate.annotations.UuidGenerator;
         + "b.name AS name, "
         + "b.color_code AS color_code, "
         + "b.badge_type AS badge_type, "
-        + "b.created_at AS created_at "
+        + "b.created_at AS created_at, "
+        + "b.description AS description "
         + "FROM badge_entity b")
 @Synchronize({"badge_entity"})
 public class Badge {
@@ -29,4 +30,5 @@ public class Badge {
     private String color_code;
     private String badge_type;
     private LocalDateTime created_at;
+    private String description;
 }

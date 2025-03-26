@@ -38,15 +38,19 @@ public class BadgeEntity extends BaseEntity {
     @Column(columnDefinition = "BINARY(16)", nullable = true)
     private UUID creator;
 
+    @Column(nullable = false)
+    private String description;
+
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "badge_id")
     private List<BadgeMemberEntity> badgeMembers;
 
-    public BadgeEntity(UUID id, String name, BadgeType badgeType, String colorCode, UUID creator) {
+    public BadgeEntity(UUID id, String name, BadgeType badgeType, String colorCode, UUID creator, String description) {
         this.id = id;
         this.name = name;
         this.badgeType = badgeType;
         this.creator = creator;
         this.colorCode = colorCode;
+        this.description = description;
     }
 }
