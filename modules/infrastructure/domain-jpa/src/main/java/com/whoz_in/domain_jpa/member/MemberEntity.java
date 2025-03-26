@@ -53,7 +53,7 @@ public class MemberEntity extends BaseEntity {
   @Column(unique = true)
   private String socialId;
 
-  @Column(nullable = true)
+  @Column(nullable = false)
   private UUID mainBadge;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)

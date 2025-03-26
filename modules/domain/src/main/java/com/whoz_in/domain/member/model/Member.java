@@ -48,8 +48,8 @@ public final class Member extends AggregateRoot {
         return create(name, mainPosition, generation, authCredentials, null, new HashMap<>(), null);
     }
     //소셜 회원가입
-    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials){
-        return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>(), null);
+    public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials, BadgeId mainBadge){
+        return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>(), mainBadge);
     }
 
     private static Member create(String name, Position mainPosition, int generation,
