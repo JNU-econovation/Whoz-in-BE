@@ -22,8 +22,9 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
-    public void delete(DeviceId deviceId) {
-        repository.deleteById(deviceId.id());
+    public boolean delete(DeviceId deviceId) {
+        int result = repository.deleteById(deviceId.id());
+        return result > 0;
     }
 
     @Override
