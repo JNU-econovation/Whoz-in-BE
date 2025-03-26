@@ -49,7 +49,7 @@ public class MyIpController implements MyIpApi {
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
         if (event.status() == RECONNECTED || event.status() == ADDED_AND_RECONNECTED) {
-            if (!manager.available(MANAGED)) return;
+            if (!manager.isAvailable(MANAGED)) return;
             this.gateways = renewGateways();
         }
     }
@@ -65,7 +65,7 @@ public class MyIpController implements MyIpApi {
     @Override
     @GetMapping("/my-ip")
     public ResponseEntity<String> getIp() throws UnknownHostException {
-        if (!manager.available(MANAGED))
+        if (!manager.isAvailable(MANAGED))
             return ResponseEntity.internalServerError().body("동아리방 서버의 와이파이가 불안정합니다.");
         String ip = ipHolder.getIp();
         log.info("Requester Info : " + ip);

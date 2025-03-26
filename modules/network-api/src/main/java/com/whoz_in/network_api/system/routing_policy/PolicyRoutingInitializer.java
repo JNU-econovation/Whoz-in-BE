@@ -26,7 +26,7 @@ public class PolicyRoutingInitializer {
     private void handle(NetworkInterfaceStatusEvent event) {
         // 다시 연결됐을때
         if (event.status() == RECONNECTED || event.status() == ADDED_AND_RECONNECTED) {
-            if (!networkInterfaceManager.available(MANAGED)) return;
+            if (!networkInterfaceManager.isAvailable(MANAGED)) return;
             this.initialize();
         }
     }

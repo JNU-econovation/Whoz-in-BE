@@ -64,10 +64,10 @@ public final class NetworkInterfaceManager {
         return ni;
     };
 
-    public boolean available(){
+    public boolean isAvailable(){
         return unavailableInterfaces.isEmpty();
     }
-    public boolean available(WirelessMode mode){
+    public boolean isAvailable(WirelessMode mode){
         if (mode == MANAGED){
             return unavailableInterfaces.keySet().stream().noneMatch(managedProfiles::contains);
         } else {
