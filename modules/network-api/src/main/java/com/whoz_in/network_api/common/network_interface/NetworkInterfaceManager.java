@@ -244,14 +244,18 @@ public final class NetworkInterfaceManager {
         //모든 인터페이스 중 프로파일로 설정된 인터페이스만 걸러냄
         return allProfiles.stream()
                 .filter(fetchedInterfaces::contains)
-                .collect(Collectors.toMap(
-                        interfaceName -> interfaceName,
-                        interfaceName -> NetworkInterface.of(
-                                interfaceName,
-                                connectionInfos.get(interfaceName),
-                                wirelessInfos.get(interfaceName)
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(
+                                interfaceName -> interfaceName,
+                                interfaceName -> NetworkInterface.of(
+                                        interfaceName,
+                                        connectionInfos.get(interfaceName),
+                                        wirelessInfos.get(interfaceName)
+                                ),
+                                (existing, replacement) -> existing  // 중복 시 기존 값 유지
                         ),
-                        (existing, replacement) -> existing  // 중복 시 기존 값 유지
-                ));
+                        Collections::unmodifiableMap
+                        )
+                );
     }
 }
