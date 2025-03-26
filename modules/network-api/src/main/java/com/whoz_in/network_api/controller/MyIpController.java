@@ -1,12 +1,12 @@
 package com.whoz_in.network_api.controller;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
 import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
 import com.whoz_in.network_api.common.util.IpHolder;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.MyIpApi;
@@ -48,7 +48,7 @@ public class MyIpController implements MyIpApi {
 
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
-        if (event.status() == NetworkInterfaceStatus.RECONNECTED || event.status() == NetworkInterfaceStatus.ADDED_AND_RECONNECTED) {
+        if (event.status() == RECONNECTED || event.status() == ADDED_AND_RECONNECTED) {
             if (!manager.available(MANAGED)) return;
             this.gateways = renewGateways();
         }

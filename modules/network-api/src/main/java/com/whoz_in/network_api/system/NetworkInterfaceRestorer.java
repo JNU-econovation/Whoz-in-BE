@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.system;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
+
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,9 @@ public class NetworkInterfaceRestorer {
         String interfaceName = event.interfaceName();
         NetworkInterfaceStatus status = event.status();
 
-        if (status == NetworkInterfaceStatus.DISCONNECTED || status == NetworkInterfaceStatus.REMOVED) {
+        if (status == DISCONNECTED || status == REMOVED) {
             reconnector.scheduleReconnection(interfaceName);
-        } else if (status == NetworkInterfaceStatus.RECONNECTED || status == NetworkInterfaceStatus.ADDED) {
+        } else if (status == RECONNECTED || status == ADDED) {
             reconnector.cancelReconnection(interfaceName);
         }
     }
