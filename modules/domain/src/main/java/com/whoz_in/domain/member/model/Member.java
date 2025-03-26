@@ -29,7 +29,7 @@ public final class Member extends AggregateRoot {
     @Getter private String statusMessage; //상태 메세지
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
-    private final Map<BadgeId, Boolean> badges;
+    private final Map<BadgeId, Boolean> badges; // Map<가진뱃지, 보여줌?>
     @Getter private BadgeId mainBadge; // 대표 뱃지
 
     //일반 로그인이 아닐수도 있으므로 Optional
