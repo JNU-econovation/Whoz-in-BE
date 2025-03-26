@@ -1,7 +1,6 @@
 package com.whoz_in.network_api.config;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.ADDED_AND_RECONNECTED;
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status.RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import lombok.extern.slf4j.Slf4j;

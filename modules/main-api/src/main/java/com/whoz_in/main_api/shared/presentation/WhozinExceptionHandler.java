@@ -1,7 +1,9 @@
 package com.whoz_in.main_api.shared.presentation;
 
 import com.whoz_in.domain.shared.BusinessException;
+import com.whoz_in.main_api.command.device.application.DeviceInfoTempAddFailedException;
 import com.whoz_in.main_api.shared.application.ApplicationException;
+import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
@@ -17,10 +19,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class WhozinExceptionHandler {
+    private final RequesterInfo requesterInfo;
+
+    @ExceptionHandler(DeviceInfoTempAddFailedException.class)
+    public ResponseEntity<FailureBody> handle(DeviceInfoTempAddFailedException e) {
+        log.error("기기 맥 주소 등록 실패:\n요청자: {}\nip: {}", requesterInfo.getMemberId().toString(), e.getIp());
+        return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<FailureBody> handle(ApplicationException e) {
         log.warn(e.getMessage());
-        //TODO: http status 예외에 따라 다르게 설정할 수 있어야 함
+        //TODO: http status를 예외에 따라 다르게 설정할 수 있어야 함
         return ResponseEntityGenerator.fail(e.getErrorCode(), e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 

@@ -7,6 +7,8 @@ import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +31,10 @@ public final class MappedRtTables {
 
     public Map<String, String> get(){
         return this.rtTables;
+    }
+
+    public Collection<String> getTables(){
+        return this.rtTables.values();
     }
 
     public MappedRtTables(
@@ -56,6 +62,8 @@ public final class MappedRtTables {
                 .filter(table-> !List.of("main", "default", "local", "unspec").contains(table)) // 기본 테이블 제외
                 .toList();
 
+        if (tables.size() != new HashSet<>(tables).size())
+            throw new IllegalStateException("중복 정의된 rt_table이 있습니다.");
         if (wirelessManagedNIs.size() != tables.size())
             throw new IllegalStateException("wireless인 managed 인터페이스 개수와(%d) rt_tables의 테이블 개수가(%d) 맞지 않습니다.".formatted(wirelessManagedNIs.size(), tables.size()));
 
