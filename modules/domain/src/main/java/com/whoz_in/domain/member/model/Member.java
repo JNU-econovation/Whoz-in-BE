@@ -30,6 +30,7 @@ public final class Member extends AggregateRoot {
     @Nullable private AuthCredentials authCredentials;
     @Nullable private OAuthCredentials oAuthCredentials;
     private final Map<BadgeId, Boolean> badges;
+    @Getter private BadgeId mainBadge; // 대표 뱃지
 
     //일반 로그인이 아닐수도 있으므로 Optional
     public Optional<AuthCredentials> getAuthCredentials(){
@@ -42,15 +43,15 @@ public final class Member extends AggregateRoot {
 
     //일반 회원가입
     public static Member create(String name, Position mainPosition, int generation, AuthCredentials authCredentials){
-        return create(name, mainPosition, generation, authCredentials, null, new HashMap<>());
+        return create(name, mainPosition, generation, authCredentials, null, new HashMap<>(), null);
     }
     //소셜 회원가입
     public static Member create(String name, Position mainPosition, int generation, OAuthCredentials oAuthCredentials){
-        return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>());
+        return create(name, mainPosition, generation, null, oAuthCredentials, new HashMap<>(), null);
     }
 
     private static Member create(String name, Position mainPosition, int generation,
-                                 AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
+                                 AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge){
         if (authCredentials == null && oAuthCredentials == null)
             throw new IllegalStateException("no auth and oauth");
         Member member = builder()
@@ -62,13 +63,14 @@ public final class Member extends AggregateRoot {
                 .authCredentials(authCredentials)
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
+                .mainBadge(mainBadge)
                 .build();
         member.register(new MemberCreated(member));
         return member;
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-                              AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges){
+                              AuthCredentials authCredentials, OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge){
         return builder()
                 .id(id)
                 .name(name)
@@ -78,6 +80,7 @@ public final class Member extends AggregateRoot {
                 .authCredentials(authCredentials)
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
+                .mainBadge(mainBadge)
                 .build();
     }
 
@@ -106,5 +109,9 @@ public final class Member extends AggregateRoot {
 
     public Map<BadgeId, Boolean> getBadges() {
         return Collections.unmodifiableMap(this.badges);
+    }
+
+    public void changeMainBadge(BadgeId badgeId) {
+        this.mainBadge = badgeId;
     }
 }

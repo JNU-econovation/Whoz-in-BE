@@ -28,6 +28,7 @@ public class AttachBadgeOnMemberCreated {
         String position = member.getMainPosition().getPosition();
         Badge badge = badgeRepo.findByName(position).orElseThrow(NoBadgeException::new);
         member.attachBadge(badge.getId());
+        member.changeMainBadge(badge.getId());
         memberRepo.save(member);
         eventBus.publish(member.pullDomainEvents());
     }
