@@ -11,7 +11,6 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.domain.network_log.NoManagedLogException;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.config.RoomSsidConfig;
-import com.whoz_in.main_api.shared.application.ApplicationException;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStore;
@@ -72,7 +71,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
 
             Duration duration = Duration.between(oldest.getCreatedAt(), secondOldest.getCreatedAt());
 
-            if (duration.toMinutes() <= 10) throw DeviceInfoTempAddFailedException.EXCEPTION;
+            if (duration.toMinutes() <= 10) throw new DeviceInfoTempAddFailedException(req.ip().toString());
             managedLog = oldest;
         }
 
@@ -105,12 +104,5 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         // DeviceInfo를 추가한다.
         tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
         return List.of(ssid);
-    }
-}
-
-class DeviceInfoTempAddFailedException extends ApplicationException {
-    public static final DeviceInfoTempAddFailedException EXCEPTION = new DeviceInfoTempAddFailedException();
-    private DeviceInfoTempAddFailedException() {
-        super("3033", "알 수 없는 오류로 와이파이 등록에 실패했습니다. 관리자에게 문의해주세요.");
     }
 }
