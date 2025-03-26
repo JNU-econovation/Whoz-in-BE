@@ -18,6 +18,7 @@ import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStor
 import com.whoz_in.main_api.shared.utils.MacAddressUtil;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,6 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     private final RoomSsidConfig ssidConfig;
 
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
-    // ❗️ssid 하드코딩 죄송합니다..❗️
     @Transactional
     @Override
     public List<String> handle(DeviceInfoTempAdd req) {
@@ -51,21 +51,22 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
         List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusHours(6));
 
+        ManagedLog managedLog;
+
         if (managedLogs.isEmpty()) {
             throw new NoManagedLogException(req.ip().toString());
         } else if (managedLogs.size() == 1){
-            // 1개면 정상
+            managedLog = managedLogs.get(0);
         } else if (managedLogs.size() == 2){
-            // ❗️JNU, eduroam 네트워크 구조 파악이 안돼서 일단 특징에 따라 하드코딩했음
-            // 2개인 경우는 jnu에 연결된 기기의 mdns 로그임
-            managedLogs.removeIf(ml-> ml.getSsid().equals("eduroam"));
+            managedLog = managedLogs.stream()
+                    .min(Comparator.comparing(ManagedLog::getCreatedAt))
+                    .orElseThrow();
         } else {
             // 만약 jnu, eduroam와 같은 네트워크에 존재하는 다른 와이파이가 또 생기면 이 로직 없애야 함
             log.error("managed log가 3개 이상임. ip: {}, log: {},", req.ip(), managedLogs);
             throw DeviceInfoTempAddFailedException.EXCEPTION;
         }
 
-        ManagedLog managedLog = managedLogs.get(0);
         String mac = managedLog.getMac();
         String room = managedLog.getRoom();
 
