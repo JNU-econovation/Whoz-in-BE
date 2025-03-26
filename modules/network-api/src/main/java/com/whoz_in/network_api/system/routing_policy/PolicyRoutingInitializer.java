@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.system.routing_policy;
 
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
+
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
@@ -24,7 +26,7 @@ public class PolicyRoutingInitializer {
     private void handle(NetworkInterfaceStatusEvent event) {
         // 다시 연결됐을때
         if (event.status() == NetworkInterfaceStatus.RECONNECTED || event.status() == NetworkInterfaceStatus.ADDED_AND_RECONNECTED) {
-//           TODO: manager로 정상인지 먼저 확인
+            if (!networkInterfaceManager.available(MANAGED)) return;
             this.initialize();
         }
     }

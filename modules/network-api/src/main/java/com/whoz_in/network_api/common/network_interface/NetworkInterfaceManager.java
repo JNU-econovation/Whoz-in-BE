@@ -24,35 +24,54 @@ import org.springframework.stereotype.Component;
 @Component
 public final class NetworkInterfaceManager {
     private final ApplicationEventPublisher eventPublisher;
-    private final NetworkInterfaceProfileConfig profileConfig;
     private final NetworkAddressResolver networkAddressResolver;
     private final WirelessInfoResolver wirelessInfoResolver;
     // TODO: VO로 만들기
     private Map<String, NetworkInterface> nowInterfaces;
     private final Map<String, NetworkInterfaceStatus> unavailableInterfaces;
 
-    public Map<String, NetworkInterface> get(){
+    // 아래 profile들은 NetworkInterfaceProfileConfig에서 얻을 수 있지만, 자주 쓰는 것들이니 파싱해둠
+    private final List<String> allProfiles;
+    private final List<String> managedProfiles; // 존재해야 하는 managed 인터페이스
+    private final String monitorProfile; // 존재해야 하는 monitor 인터페이스
+
+    public Map<String, NetworkInterface> get() {
         return nowInterfaces;
     }
 
-    public NetworkInterface getByName(String interfaceName){
-        NetworkInterface ni = this.nowInterfaces.get(interfaceName);
-        if (ni == null) throw new IllegalStateException(interfaceName + "라는 인터페이스는 없음");
-        return ni;
-    };
-
     public NetworkInterfaceManager(
-            NetworkInterfaceProfileConfig profileConfig,
-            ApplicationEventPublisher eventPublisher,
-            NetworkAddressResolver networkAddressResolver,
-            WirelessInfoResolver wirelessInfoResolver) {
-        this.profileConfig = profileConfig;
+    NetworkInterfaceProfileConfig profileConfig,
+    ApplicationEventPublisher eventPublisher,
+    NetworkAddressResolver networkAddressResolver,
+    WirelessInfoResolver wirelessInfoResolver) {
+        this.allProfiles =  profileConfig.getAllProfiles().stream()
+                .map(NetworkInterfaceProfile::interfaceName)
+                .toList();
+        this.managedProfiles = profileConfig.getManagedProfiles().stream()
+                .map(NetworkInterfaceProfile::interfaceName).toList();
+        this.monitorProfile = profileConfig.getMonitorProfile().interfaceName();
         this.eventPublisher = eventPublisher;
         this.networkAddressResolver = networkAddressResolver;
         this.wirelessInfoResolver = wirelessInfoResolver;
         this.nowInterfaces = fetch();
         this.unavailableInterfaces = new HashMap<>();
         logInterfaces();
+    }
+    public NetworkInterface getByName(String interfaceName){
+        NetworkInterface ni = this.nowInterfaces.get(interfaceName);
+        if (ni == null) throw new IllegalStateException(interfaceName + "라는 인터페이스는 없음");
+        return ni;
+    };
+
+    public boolean available(){
+        return unavailableInterfaces.isEmpty();
+    }
+    public boolean available(WirelessMode mode){
+        if (mode == MANAGED){
+            return unavailableInterfaces.keySet().stream().noneMatch(managedProfiles::contains);
+        } else {
+            return !unavailableInterfaces.containsKey(monitorProfile);
+        }
     }
 
     public void logInterfaces(){
@@ -84,11 +103,6 @@ public final class NetworkInterfaceManager {
 
     // 이전과 새로 조회된 네트워크 인터페이스를 비교하여 변경점이 있으면 이벤트 발생
     private void checkChanged(Map<String, NetworkInterface> oldInterfaces) {
-        // 존재해야 하는 managed/monitor 인터페이스들 (profile에 정의된 것들)
-        List<String> managedProfiles = profileConfig.getManagedProfiles().stream()
-                .map(NetworkInterfaceProfile::interfaceName).toList();
-        String monitorProfile = profileConfig.getMonitorProfile().interfaceName();
-
         // 이전/현재 모든 인터페이스들
         Set<String> oldSet = new HashSet<>(oldInterfaces.keySet());
         Set<String> nowSet = new HashSet<>(nowInterfaces.keySet());
@@ -226,13 +240,8 @@ public final class NetworkInterfaceManager {
         fetchedInterfaces.addAll(connectionInfos.keySet());
         fetchedInterfaces.addAll(wirelessInfos.keySet());
 
-        // 프로파일 리스트를 이름 리스트로 변경
-        List<String> profileInterfaces = profileConfig.getAllProfiles().stream()
-                .map(NetworkInterfaceProfile::interfaceName)
-                .toList();
-
         //모든 인터페이스 중 프로파일로 설정된 인터페이스만 걸러냄
-        return profileInterfaces.stream()
+        return allProfiles.stream()
                 .filter(fetchedInterfaces::contains)
                 .collect(Collectors.toMap(
                         interfaceName -> interfaceName,

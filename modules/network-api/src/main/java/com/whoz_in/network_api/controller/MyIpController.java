@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.controller;
 
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
+
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
@@ -12,7 +14,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +31,6 @@ public class MyIpController implements MyIpApi {
     private final NetworkInterfaceManager manager;
     private final IpHolder ipHolder;
     private Set<String> gateways;
-    private final Set<String> disconnectedNIs;
     private final List<String> hosts;
 
     public MyIpController(
@@ -42,27 +42,19 @@ public class MyIpController implements MyIpApi {
         this.profileConfig = profileConfig;
         this.manager = manager;
         this.ipHolder = ipHolder;
-        this.disconnectedNIs = new CopyOnWriteArraySet<>();
-        this.gateways = getGateways();
+        this.gateways = renewGateways();
         this.hosts = hosts;
     }
 
     @EventListener
     private void handle(NetworkInterfaceStatusEvent event) {
-        if (event.status() == NetworkInterfaceStatus.DISCONNECTED || event.status() == NetworkInterfaceStatus.REMOVED) {
-            String disconnectedNI = event.pre().getName();
-            if (disconnectedNIs.add(disconnectedNI))
-                log.warn("{}의 네트워크 연결이 끊겨 ip 반환 컨트롤러가 비활성화 상태입니다.", disconnectedNI);
-        }
         if (event.status() == NetworkInterfaceStatus.RECONNECTED || event.status() == NetworkInterfaceStatus.ADDED_AND_RECONNECTED) {
-            disconnectedNIs.remove(event.interfaceName());
-            if (!disconnectedNIs.isEmpty()) return;
-            this.gateways = getGateways();
-            log.info("ip 반환 컨트롤러가 정상화되었습니다.");
+            if (!manager.available(MANAGED)) return;
+            this.gateways = renewGateways();
         }
     }
 
-    private Set<String> getGateways(){
+    private Set<String> renewGateways(){
         return profileConfig.getManagedProfiles().stream()
                 .map(profile -> manager.get().get(profile.interfaceName()))
                 .map(NetworkInterface::getNetworkAddress)
@@ -73,8 +65,8 @@ public class MyIpController implements MyIpApi {
     @Override
     @GetMapping("/my-ip")
     public ResponseEntity<String> getIp() throws UnknownHostException {
-        if (!this.disconnectedNIs.isEmpty())
-            return ResponseEntity.internalServerError().body("서버가 와이파이에 연결되지 않음");
+        if (!manager.available(MANAGED))
+            return ResponseEntity.internalServerError().body("동아리방 서버의 와이파이가 불안정합니다.");
         String ip = ipHolder.getIp();
         log.info("Requester Info : " + ip);
         if (gateways.contains(ip) || !InetAddress.getByName(ip).isSiteLocalAddress()){ // 루프백도 외부 아이피로 간주된다.
