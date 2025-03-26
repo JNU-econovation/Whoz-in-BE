@@ -6,7 +6,6 @@ import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
-import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
