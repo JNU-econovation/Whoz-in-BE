@@ -17,13 +17,8 @@ import org.springframework.context.annotation.Profile;
 public class DiscordConfig {
 
     @Bean
-    public JDA jda(@Value("${discord.bot-token}") String discordBotToken) {
-        JDA jda = JDABuilder.createDefault(discordBotToken).build();
-        jda.addEventListener(new ListenerAdapter() {
-            @Override
-            public void onReady(ReadyEvent event) {log.info("디스코드 봇이 준비되었습니다.");}
-        });
-        return jda;
+    public JDA jda(@Value("${discord.bot-token}") String discordBotToken) throws InterruptedException {
+        return JDABuilder.createDefault(discordBotToken).build().awaitReady();
     }
 
     @Bean
