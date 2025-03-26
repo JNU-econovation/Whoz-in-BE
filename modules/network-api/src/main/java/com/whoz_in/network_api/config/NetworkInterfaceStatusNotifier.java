@@ -3,6 +3,9 @@ package com.whoz_in.network_api.config;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import jakarta.annotation.Nullable;
+import jakarta.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +29,7 @@ public class NetworkInterfaceStatusNotifier {
             @Value("${room-name}") String roomName,
             NetworkInterfaceManager networkInterfaceManager,
             TextChannel serverStatusChannel) {
-        this.tag = "["+roomName+"]"+" network interfaces status\n\n";
+        this.tag = "["+roomName+"]"+" network interfaces status";
         this.networkInterfaceManager = networkInterfaceManager;
         this.serverStatusChannel = serverStatusChannel;
         this.niStatusMessage = retrieveTagMessage();
@@ -34,7 +37,12 @@ public class NetworkInterfaceStatusNotifier {
 
     @EventListener(NetworkInterfaceStatusEvent.class)
     public void handle(){
-        String content = tag + networkInterfaceManager.toString();
+        String content =
+                tag +
+                "\n\n" +
+                networkInterfaceManager.toString() +
+                "\n\n마지막 상태 변경 시각: " +
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:m:ss"));
         if (niStatusMessage == null) {
             // 메시지가 없으면 새 메시지 전송
             serverStatusChannel.sendMessage(content).queue(message -> niStatusMessage = message);
