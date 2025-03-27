@@ -41,7 +41,7 @@ public class NetworkInterfaceStatusNotifier {
                 "\n\n" +
                 networkInterfaceManager.toString() +
                 "\n\n마지막 상태 변경 시각: " +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:m:ss"));
+                LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
         if (niStatusMessage == null) {
             // 메시지가 없으면 새 메시지 전송
             serverStatusChannel.sendMessage(content).queue(message -> niStatusMessage = message);
