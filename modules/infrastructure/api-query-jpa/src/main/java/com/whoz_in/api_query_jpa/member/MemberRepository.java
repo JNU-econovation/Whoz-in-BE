@@ -28,6 +28,9 @@ public interface MemberRepository extends JpaRepository<Member, UUID> {
             + "ORDER BY mci.isActive desc , mci.dailyTime desc , m.name asc")
     List<Member> findByStatus(@Param("isActive") boolean isActive);
 
+    @Query("SELECT m FROM Member m WHERE m.id NOT IN (SELECT d.memberId FROM Device d) ")
+    List<Member> findNotHaveAnyDevice();
+
     default Member getByDeviceId(UUID deviceId) {
         return findByDeviceId(deviceId).orElseThrow(() -> new IllegalArgumentException("기기의 주인을 찾을 수 없음"));
     }

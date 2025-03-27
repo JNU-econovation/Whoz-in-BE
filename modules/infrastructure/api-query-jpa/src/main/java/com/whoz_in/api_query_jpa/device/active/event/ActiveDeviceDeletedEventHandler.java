@@ -53,7 +53,6 @@ public class ActiveDeviceDeletedEventHandler {
         Optional<MemberConnectionInfo> connectionInfo = connectionInfoRepository.findByMemberId(ownerId);
 
         connectionInfo.ifPresent(ci -> {
-            // TODO: 마지막 기기인지 검증 로직 필요
             if(ci.isActive()) {
                 // 활동 중인데 삭제할 경우 and 삭제한 기기가 Active 인 마지막 기기이면 disconnect
                 deviceConnectionService.disconnectDevice(deviceId, disconnectedAt);
