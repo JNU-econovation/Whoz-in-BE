@@ -6,13 +6,12 @@ import lombok.Getter;
 @Getter
 public enum Position {
     AI("ai"),
-    AOS("aos"),
     BE("be"),
     DE("de"), //디자이너
     FE("fe"),
-    IOS("ios"),
     PM("pm"),
-    GAME("game");
+    GAME("game"),
+    APP("app");
 
     private final String position;
 

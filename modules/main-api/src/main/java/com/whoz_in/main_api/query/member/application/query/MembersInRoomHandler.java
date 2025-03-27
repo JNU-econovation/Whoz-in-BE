@@ -147,16 +147,10 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private Map<MemberId, MemberConnectionInfo> createMemberConnectionInfoMap(
             List<MemberConnectionInfo> memberConnectionInfos) {
 
-        Set<UUID> memberIds = new HashSet<>();
-        memberConnectionInfos.forEach(memberConnectionInfo -> memberIds.add(memberConnectionInfo.memberId()));
-        return memberIds.stream()
-                .parallel()
+        return memberConnectionInfos.stream()
                 .collect(Collectors.toMap(
-                        MemberId::new,
-                        memberId -> {
-                            return memberConnectionInfos.stream().filter(info -> info.memberId().equals(memberId)).findFirst()
-                                    .orElse(MemberConnectionInfo.empty(memberId));
-                        }
+                        mci -> new MemberId(mci.memberId()),
+                        memberConnectionInfo -> memberConnectionInfo
                 ));
     }
 

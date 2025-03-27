@@ -3,7 +3,6 @@ package com.whoz_in.network_api.config;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import jakarta.annotation.Nullable;
-import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;

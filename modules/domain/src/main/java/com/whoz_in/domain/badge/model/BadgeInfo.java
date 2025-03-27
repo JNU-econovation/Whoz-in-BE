@@ -15,15 +15,16 @@ public class BadgeInfo {
     private final BadgeType badgeType;
     private final MemberId creator;
     private final String colorCode;
+    private final String description;
 
-    public static BadgeInfo create(String name, BadgeType badgeType, String colorCode, MemberId creator) {
+    public static BadgeInfo create(String name, BadgeType badgeType, MemberId creator, String colorCode, String description) {
         if (!Pattern.matches(COLOR_CODE_REGEX,colorCode)) {
             throw InvalidFormColorCodeException.EXCEPTION;
         }
-        return new BadgeInfo(name,badgeType,creator,colorCode);
+        return new BadgeInfo(name,badgeType,creator,colorCode, description);
     }
 
-    public static BadgeInfo load(String name, BadgeType badgeType, MemberId creator, String colorCode) {
-        return new BadgeInfo(name,badgeType,creator,colorCode);
+    public static BadgeInfo load(String name, BadgeType badgeType, MemberId creator, String colorCode, String description) {
+        return new BadgeInfo(name,badgeType,creator,colorCode, description);
     }
 }

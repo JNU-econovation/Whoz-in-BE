@@ -53,13 +53,16 @@ public class MemberEntity extends BaseEntity {
   @Column(unique = true)
   private String socialId;
 
+  @Column(nullable = false)
+  private UUID mainBadge;
+
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
   @JoinColumn(name = "member_id")
   private Set<BadgeMemberEntity> badgeMembers;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
                       String loginId, String password,
-                      SocialProvider socialProvider, String socialId, Set<BadgeMemberEntity> badgeMembers) {
+                      SocialProvider socialProvider, String socialId, UUID mainBadge,Set<BadgeMemberEntity> badgeMembers) {
     this.id = id;
     this.name = name;
     this.generation = generation;
@@ -69,6 +72,7 @@ public class MemberEntity extends BaseEntity {
     this.password = password;
     this.socialProvider = socialProvider;
     this.socialId = socialId;
+    this.mainBadge = mainBadge;
     this.badgeMembers = badgeMembers;
   }
 }
