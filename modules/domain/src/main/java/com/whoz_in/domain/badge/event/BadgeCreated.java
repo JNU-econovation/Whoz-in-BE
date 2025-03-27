@@ -11,4 +11,5 @@ public final class BadgeCreated extends DomainEvent {
     private final String badgeType;
     private final String creatorId;
     private final String colorCode;
+    private final String description;
 }
