@@ -48,8 +48,8 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         MemberId requesterId = requesterInfo.getMemberId();
         memberFinderService.mustExist(requesterId);
 
-        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
-        List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusHours(6));
+        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다./ma
+        List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusMinutes(10));
 
         ManagedLog managedLog;
 
