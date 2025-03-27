@@ -1,6 +1,6 @@
 package com.whoz_in.domain.member.model;
 
-import com.whoz_in.domain.badge.exception.BadgeHideException;
+import com.whoz_in.domain.badge.exception.BadgeCurrentHidedException;
 import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.event.MemberBadgeChanged;
@@ -118,7 +118,7 @@ public final class Member extends AggregateRoot {
             throw NoBadgeException.EXCEPTION;
         }
         if (!badges.get(badgeId)) {
-            throw BadgeHideException.EXCEPTION;
+            throw BadgeCurrentHidedException.EXCEPTION;
         }
         this.mainBadge = badgeId;
     }
