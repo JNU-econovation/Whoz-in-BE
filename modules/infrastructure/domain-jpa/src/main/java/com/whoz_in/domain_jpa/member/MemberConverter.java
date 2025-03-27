@@ -26,6 +26,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                         entry.getValue()
                 ))
                 .collect(Collectors.toSet());
+        BadgeId mainBadge = member.getMainBadge();
         return new MemberEntity(
                 member.getId().id(),
                 member.getName(),
@@ -36,6 +37,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 auth != null ? auth.getEncodedPassword() : null,
                 oAuth != null ? oAuth.getSocialProvider() : null,
                 oAuth != null ? oAuth.getSocialId() : null,
+                mainBadge != null ? member.getMainBadge().id() : null,
                 badgeMembers
         );
     }
@@ -57,7 +59,8 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                         AuthCredentials.load(entity.getLoginId(), entity.getPassword()) : null,
                 (entity.getSocialProvider() != null && entity.getSocialId() != null) ?
                         OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()) : null,
-                badges
+                badges,
+                new BadgeId(entity.getMainBadge())
         );
     }
 }

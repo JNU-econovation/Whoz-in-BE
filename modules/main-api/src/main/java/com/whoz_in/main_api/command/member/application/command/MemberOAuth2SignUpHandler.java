@@ -1,5 +1,9 @@
 package com.whoz_in.main_api.command.member.application.command;
 
+import com.whoz_in.domain.badge.BadgeRepository;
+import com.whoz_in.domain.badge.exception.NoBadgeException;
+import com.whoz_in.domain.badge.model.Badge;
+import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.OAuthCredentials;
@@ -13,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2SignUp, Void> {
     private final MemberRepository repository;
+    private final BadgeRepository badgeRepo;
     private final EventBus eventBus;
 
     @Transactional
@@ -22,8 +27,10 @@ public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2Sig
             throw new IllegalArgumentException("이미 소셜 가입된 사용자입니다.");
         }
 
+        String position = cmd.position().getPosition();
+        Badge badge = badgeRepo.findByName(position).orElseThrow(NoBadgeException::new);
         Member member = Member.create(cmd.name(), cmd.position(), cmd.generation(),
-                OAuthCredentials.create(cmd.socialProvider(), cmd.socialId()));
+                OAuthCredentials.create(cmd.socialProvider(), cmd.socialId()), new BadgeId(badge.getId().id()));
         repository.save(member);
         eventBus.publish(member.pullDomainEvents());
         return null;
