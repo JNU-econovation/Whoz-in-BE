@@ -43,9 +43,9 @@
 <h1>📋 사용자 피드백 목록</h1>
 
 <div th:each="feedback : ${feedbackList}" class="feedback-card">
-    <div class="username" th:text="${feedback.username}">사용자 이름</div>
-    <div class="timestamp" th:text="${#templorals.format(feedback.submittedAt, 'yyyy-MM-dd HH:mm')}">작성 시각</div>
-    <div class="content" th:text="${feedback.content}">피드백 내용</div>
+    <div class="username" th:text="${feedback.memberName()}">사용자 이름</div>
+    <div class="timestamp" th:text="${#temporals.format(feedback.createdAt(), 'yyyy-MM-dd HH:mm')}">작성 시각</div>
+    <div class="content" th:text="${feedback.content()}">피드백 내용</div>
 </div>
 
 </body>
