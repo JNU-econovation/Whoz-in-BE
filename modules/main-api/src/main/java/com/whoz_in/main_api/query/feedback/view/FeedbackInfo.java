@@ -5,9 +5,7 @@ import com.whoz_in.main_api.query.shared.application.View;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Builder;
-import lombok.Getter;
 
-@Getter
 @Builder
 public record FeedbackInfo(
     UUID id,
