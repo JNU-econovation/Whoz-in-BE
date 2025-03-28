@@ -3,7 +3,6 @@ package com.whoz_in.api_query_jpa.badge;
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
-import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember.BadgeOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -52,10 +51,16 @@ public class BadgeJpaViewer implements BadgeViewer {
     public BadgesOfMember findBadgesOfMember(UUID memberId) {
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
 
-        List<BadgeOfMember> badgeOfMembers = badgeMembers.stream()
-                .map(bm -> new BadgeOfMember(bm.getBadge_id(), bm.getIs_badge_shown())) // getBadge()로 badgeId 가져오기
-                .collect(Collectors.toList());
+        List<BadgesOfMember.BadgeOfMember> badgeList = badgeMembers.stream()
+                .map(bm -> new BadgesOfMember.BadgeOfMember(
+                        bm.getBadge_id(),
+                        bm.getName(),
+                        bm.getColor_code(),
+                        bm.getDescription(),
+                        bm.getIs_badge_shown()
+                ))
+                .toList();
 
-        return new BadgesOfMember(badgeOfMembers);
+        return new BadgesOfMember(badgeList);
     }
 }
