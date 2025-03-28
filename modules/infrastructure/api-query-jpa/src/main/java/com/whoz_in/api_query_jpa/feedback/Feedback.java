@@ -13,7 +13,7 @@ import org.hibernate.annotations.Subselect;
 
 @Entity
 @Getter
-@Subselect("select * from feedback")
+@Subselect("select * from feedback_entity")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Feedback {
