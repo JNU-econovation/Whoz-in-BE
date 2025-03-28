@@ -30,7 +30,7 @@ public class BadgeRegisterHandler implements CommandHandler<BadgeRegister, Void>
         memberFinderService.mustExist(requesterId);
         badgeFinderService.mustNotExist(req.name());
         Badge badge = Badge.create(
-                BadgeInfo.create(req.name(),BadgeType.USERMADE,req.colorCode(),requesterId)
+                BadgeInfo.create(req.name(),BadgeType.USERMADE,requesterId, req.colorCode(), req.description())
         );
         repository.save(badge);
         eventBus.publish(badge.pullDomainEvents());

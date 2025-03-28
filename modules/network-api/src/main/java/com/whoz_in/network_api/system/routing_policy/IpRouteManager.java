@@ -3,18 +3,24 @@ package com.whoz_in.network_api.system.routing_policy;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Profile("prod")
 public final class IpRouteManager {
+    private final Collection<String> rtTables;
+
+    public IpRouteManager(MappedRtTables mappedRtTables) {
+        this.rtTables = mappedRtTables.getTables();
+    }
 
     // 라우팅 테이블들에 대해 'ip route show table <table>' 명령어의 출력을 파싱하여 라우트 정보를 반환
     // Map<gateway, interfaceName>
-    public Map<String, String> getRoutes(Set<String> rtTables) {
+    public Map<String, String> getRoutes() {
         return rtTables.stream()
                 .map("ip route show table %s"::formatted)
                 .map(TransientProcess::create)

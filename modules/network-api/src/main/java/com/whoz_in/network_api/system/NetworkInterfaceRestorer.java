@@ -1,7 +1,9 @@
 package com.whoz_in.network_api.system;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
+
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent.Status;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -17,11 +19,11 @@ public class NetworkInterfaceRestorer {
     @EventListener
     public void handle(NetworkInterfaceStatusEvent event) {
         String interfaceName = event.interfaceName();
-        Status status = event.status();
+        NetworkInterfaceStatus status = event.status();
 
-        if (status == Status.DISCONNECTED || status == Status.REMOVED) {
+        if (status == DISCONNECTED || status == REMOVED) {
             reconnector.scheduleReconnection(interfaceName);
-        } else if (status == Status.RECONNECTED || status == Status.ADDED) {
+        } else if (status == RECONNECTED || status == ADDED) {
             reconnector.cancelReconnection(interfaceName);
         }
     }

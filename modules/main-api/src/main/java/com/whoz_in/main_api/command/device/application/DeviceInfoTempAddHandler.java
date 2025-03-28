@@ -11,12 +11,12 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.domain.network_log.NoManagedLogException;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.config.RoomSsidConfig;
-import com.whoz_in.main_api.shared.application.ApplicationException;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStore;
 import com.whoz_in.main_api.shared.utils.MacAddressUtil;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -48,8 +48,8 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         MemberId requesterId = requesterInfo.getMemberId();
         memberFinderService.mustExist(requesterId);
 
-        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
-        List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusHours(6));
+        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다./ma
+        List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusMinutes(10));
 
         ManagedLog managedLog;
 
@@ -57,14 +57,22 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             throw new NoManagedLogException(req.ip().toString());
         } else if (managedLogs.size() == 1){
             managedLog = managedLogs.get(0);
-        } else if (managedLogs.size() == 2){
-            managedLog = managedLogs.stream()
-                    .min(Comparator.comparing(ManagedLog::getCreatedAt))
-                    .orElseThrow();
         } else {
-            // 만약 jnu, eduroam와 같은 네트워크에 존재하는 다른 와이파이가 또 생기면 이 로직 없애야 함
-            log.error("managed log가 3개 이상임. ip: {}, log: {},", req.ip(), managedLogs);
-            throw DeviceInfoTempAddFailedException.EXCEPTION;
+            ManagedLog[] logs = managedLogs.stream()
+                    .sorted(Comparator.comparing(ManagedLog::getCreatedAt))
+                    .limit(2)
+                    .toArray(ManagedLog[]::new);
+
+            // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
+            ManagedLog oldest = logs[0];
+            ManagedLog secondOldest = logs[1];
+
+            Duration duration = Duration.between(oldest.getCreatedAt(), secondOldest.getCreatedAt());
+
+            // 10초 이상 차이나면 올바른 1개만 뜨다가 2개가 뜬 경우이기 때문에 먼저 뜬 것을 고름
+            // 10초 미만은 처음부터 2개가 뜨는 경우라고 판단하여 오류를 발생
+            if (duration.toSeconds() <= 10) throw new DeviceInfoTempAddFailedException(req.ip().toString());
+            managedLog = oldest;
         }
 
         String mac = managedLog.getMac();
@@ -96,12 +104,5 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         // DeviceInfo를 추가한다.
         tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
         return List.of(ssid);
-    }
-}
-
-class DeviceInfoTempAddFailedException extends ApplicationException {
-    public static final DeviceInfoTempAddFailedException EXCEPTION = new DeviceInfoTempAddFailedException();
-    private DeviceInfoTempAddFailedException() {
-        super("3033", "알 수 없는 오류로 와이파이 등록에 실패했습니다. 관리자에게 문의해주세요.");
     }
 }

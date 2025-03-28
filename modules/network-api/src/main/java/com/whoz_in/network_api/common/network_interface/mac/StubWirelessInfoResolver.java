@@ -1,5 +1,7 @@
 package com.whoz_in.network_api.common.network_interface.mac;
 
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
+
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class StubWirelessInfoResolver implements WirelessInfoResolver {
     @Override
     public Map<String, WirelessInfo> resolve() {
         return Map.of(
-                "en0", new WirelessInfo("managed", "my_ssid")
+                "en0", new WirelessInfo(MANAGED, "my_ssid")
         );
     }
 }

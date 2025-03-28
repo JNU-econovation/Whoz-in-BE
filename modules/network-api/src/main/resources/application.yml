@@ -20,6 +20,10 @@ sudo-password: ${SUDO_PASSWORD:}
 
 my-ip-hosts: ${MY_IP_HOSTS}
 
+discord:
+  bot-token: ${DISCORD.BOT_TOKEN}
+  server-status-channel-id: ${DISCORD.SERVER_STATUS_CHANNEL_ID}
+
 command:
   managed:
     mdns: "tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
