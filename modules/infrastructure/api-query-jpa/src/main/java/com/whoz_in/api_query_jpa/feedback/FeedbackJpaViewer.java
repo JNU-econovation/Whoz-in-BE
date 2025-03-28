@@ -1,5 +1,7 @@
 package com.whoz_in.api_query_jpa.feedback;
 
+import com.whoz_in.api_query_jpa.member.Member;
+import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.main_api.query.feedback.view.FeedbackInfo;
 import com.whoz_in.main_api.query.feedback.view.FeedbackViewer;
 import java.util.List;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Component;
 public class FeedbackJpaViewer implements FeedbackViewer {
 
     private final FeedbackRepository repository;
+    private final MemberRepository memberRepository;
 
     @Override
     public List<FeedbackInfo> findAll() {
@@ -21,8 +24,9 @@ public class FeedbackJpaViewer implements FeedbackViewer {
     }
 
     private FeedbackInfo toFeedbackInfo(Feedback feedback) {
+        Member member = memberRepository.findById(feedback.getId()).get();
         return FeedbackInfo.builder()
-                .id(feedback.getId())
+                .memberName(member.getName())
                 .title(feedback.getTitle())
                 .content(feedback.getContent())
                 .build();
