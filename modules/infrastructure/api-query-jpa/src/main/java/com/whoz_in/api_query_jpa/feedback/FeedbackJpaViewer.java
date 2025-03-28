@@ -24,7 +24,7 @@ public class FeedbackJpaViewer implements FeedbackViewer {
     }
 
     private FeedbackInfo toFeedbackInfo(Feedback feedback) {
-        Member member = memberRepository.findById(feedback.getId()).get();
+        Member member = memberRepository.findById(feedback.getMemberId()).get();
         return FeedbackInfo.builder()
                 .memberName(member.getName())
                 .title(feedback.getTitle())
