@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8" />
-    <title>사용자 피드백 보기</title>
+    <title>📋 사용자 피드백 보기 | 관리자 페이지</title>
     <style>
         body {
             font-family: 'Helvetica Neue', sans-serif;
@@ -29,6 +29,13 @@
             color: #007bff;
         }
 
+        .feedback-card .title {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+            color: #212529;
+        }
+
         .feedback-card .timestamp {
             font-size: 0.85rem;
             color: #6c757d;
@@ -44,6 +51,7 @@
 
 <div th:each="feedback : ${feedbackList}" class="feedback-card">
     <div class="username" th:text="${feedback.memberName()}">사용자 이름</div>
+    <div class="title" th:text="${feedback.title()}">피드백 제목</div>
     <div class="timestamp" th:text="${#temporals.format(feedback.createdAt(), 'yyyy-MM-dd HH:mm')}">작성 시각</div>
     <div class="content" th:text="${feedback.content()}">피드백 내용</div>
 </div>
