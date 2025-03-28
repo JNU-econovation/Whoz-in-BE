@@ -14,10 +14,6 @@ spring:
   web:
     resources:
       add-mappings: false
-  thymeleaf:
-    prefix: classpath:/templates
-    suffix: .html
-    mode: HTML
 
 server:
   port: 2470 # 24시간 운영 + main-api니까 0번째
