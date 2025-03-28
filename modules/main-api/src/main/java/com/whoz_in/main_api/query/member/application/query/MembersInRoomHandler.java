@@ -11,6 +11,7 @@ import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
+import com.whoz_in.main_api.query.member.application.support.ConnectionTimeFormatter;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
@@ -188,8 +189,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 generation,
                 memberId.id().toString(),
                 memberName,
-                String.format("%s시간 %s분", continuousMinute / 60, continuousMinute % 60),
-                String.format("%s시간 %s분", dailyConnectedMinute / 60, dailyConnectedMinute % 60),
+                ConnectionTimeFormatter.hourMinuteTime(continuousMinute),
+                ConnectionTimeFormatter.hourMinuteTime(dailyConnectedMinute),
                 dailyConnectedMinute,
                 isActive
         );

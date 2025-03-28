@@ -5,6 +5,7 @@ import com.whoz_in.domain.member.model.Position;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
+import com.whoz_in.main_api.query.member.application.support.ConnectionTimeFormatter;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
@@ -42,6 +43,6 @@ public class MemberProfileHandler implements QueryHandler<MemberProfile, MemberP
     }
 
     private String timeFormat(Duration duration){
-        return String.format("%02d시 %02d분", duration.toHours(), duration.toMinutesPart());
+        return ConnectionTimeFormatter.dayHourMinuteTime(duration);
     }
 }
