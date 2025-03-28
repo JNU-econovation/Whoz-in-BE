@@ -58,20 +58,20 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
         } else if (managedLogs.size() == 1){
             managedLog = managedLogs.get(0);
         } else {
-            // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
-            // 10분 이상 차이나면 올바른 1개만 뜨다가 2개가 뜬 경우이기 때문에 먼저 뜬 것을 고름
-            // 10분 미만은 처음부터 2개가 뜨는 경우라고 판단하여 오류를 발생
             ManagedLog[] logs = managedLogs.stream()
                     .sorted(Comparator.comparing(ManagedLog::getCreatedAt))
                     .limit(2)
                     .toArray(ManagedLog[]::new);
 
+            // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
             ManagedLog oldest = logs[0];
             ManagedLog secondOldest = logs[1];
 
             Duration duration = Duration.between(oldest.getCreatedAt(), secondOldest.getCreatedAt());
 
-            if (duration.toMinutes() <= 10) throw new DeviceInfoTempAddFailedException(req.ip().toString());
+            // 10초 이상 차이나면 올바른 1개만 뜨다가 2개가 뜬 경우이기 때문에 먼저 뜬 것을 고름
+            // 10초 미만은 처음부터 2개가 뜨는 경우라고 판단하여 오류를 발생
+            if (duration.toSeconds() <= 10) throw new DeviceInfoTempAddFailedException(req.ip().toString());
             managedLog = oldest;
         }
 
