@@ -28,6 +28,10 @@ public class BadgeJpaViewer implements BadgeViewer {
 
     @Override
     public RegistrableBadges findRegisterable(UUID memberId) {
+        /*
+        등록가능한 뱃지는 생성된지 12시간이 지나고 개발단 뱃지가 아니어야 함
+        그리고 사용자가 이미 가지고 있는 뱃지가 아니어야 한다.
+         */
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         List<Badge> activeBadges = bageRepo.findAllActivatedBadges(threshold);
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
@@ -38,7 +42,7 @@ public class BadgeJpaViewer implements BadgeViewer {
 
         List<RegistrableBadges.RegistrableBadge> registerableBadgeList = activeBadges.stream()
                 .filter(badge -> !ownedBadgeIds.contains(badge.getId()))
-                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId()))
+                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColor_code(), badge.getDescription()))
                 .toList();
 
         return new RegistrableBadges(registerableBadgeList);
