@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>사용자 피드백 보기</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #343a40;
+            margin-bottom: 1.5rem;
+        }
+
+        .feedback-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .feedback-card .username {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .feedback-card .timestamp {
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .feedback-card .content {
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+<h1>📋 사용자 피드백 목록</h1>
+
+<div th:each="feedback : ${feedbackList}" class="feedback-card">
+    <div class="username" th:text="${feedback.username}">사용자 이름</div>
+    <div class="timestamp" th:text="${#templorals.format(feedback.submittedAt, 'yyyy-MM-dd HH:mm')}">작성 시각</div>
+    <div class="content" th:text="${feedback.content}">피드백 내용</div>
+</div>
+
+</body>
+</html>
