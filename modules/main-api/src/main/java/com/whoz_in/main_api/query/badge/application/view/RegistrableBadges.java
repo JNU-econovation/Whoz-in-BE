@@ -8,6 +8,9 @@ import java.util.UUID;
 public record RegistrableBadges(List<RegistrableBadge> registerableBadge)
         implements Response, View {
     public record RegistrableBadge(
-            UUID badgeId
+            UUID badgeId,
+            String name,
+            String colorCode,
+            String description
     ) {}
 }
