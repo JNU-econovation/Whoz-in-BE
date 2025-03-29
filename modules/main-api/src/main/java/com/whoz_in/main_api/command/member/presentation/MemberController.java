@@ -75,6 +75,7 @@ public class MemberController extends CommandController implements MemberCommand
     //사용자의 소셜 정보 가져오기
     OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue())
             .orElseThrow(() -> new TokenException("2002", "잘못된 oauth2 temp token"));
+    // 한 번 꺼내면 삭제됐기 때문에 api 재호출 불가
     OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey());
     //회원가입
     dispatch(new MemberOAuth2SignUp(oAuth2UserInfo.getSocialProvider(), oAuth2UserInfo.getSocialId(), req.name(), req.position(), req.generation()));
