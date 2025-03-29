@@ -1,5 +1,8 @@
 package com.whoz_in.main_api.command.device.application;
 
+import static com.whoz_in.main_api.command.device.application.AdditionStatus.ADDED;
+import static com.whoz_in.main_api.command.device.application.AdditionStatus.MULTIPLE_CANDIDATES;
+
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.exception.DeviceAlreadyRegisteredException;
 import com.whoz_in.domain.device.service.DeviceOwnershipService;
@@ -20,6 +23,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Handler
 @RequiredArgsConstructor
-public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAdd, List<String>> {
+public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAdd, DeviceInfoTempAddRes> {
+    private static final Map<MemberId, Object> locks = new ConcurrentHashMap<>();
     private final RequesterInfo requesterInfo;
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
@@ -44,45 +51,99 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
     @Transactional
     @Override
-    public List<String> handle(DeviceInfoTempAdd req) {
+    public DeviceInfoTempAddRes handle(DeviceInfoTempAdd req) {
         MemberId requesterId = requesterInfo.getMemberId();
+        Object lock = locks.computeIfAbsent(requesterId, k -> new Object());
+        // 현재 doHandle 메서드의 'store를 이용하여 exists로 확인하고 삽입하는 로직'이 원자적이지 않음
+        // 한 멤버의 맥 등록은 동시에 한 번만 수행돼도 되며, 오히려 중복 실행은 의미 없는 연산이라 락으로 해결함.
+        synchronized (lock) {
+            try {
+                return doHandle(req, requesterId);
+            } finally {
+                locks.remove(requesterId);
+            }
+        }
+    }
+
+    // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
+    // 이 경우 어떤 ssid인지 알 수 없으므로 적절하게 처리해야 하는데,
+    // 사용자의 개입을 최대한 줄이려고 하다가 복잡한 로직이 됐습니다....
+    private DeviceInfoTempAddRes doHandle(DeviceInfoTempAdd req, MemberId requesterId){
         memberFinderService.mustExist(requesterId);
 
-        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다./ma
+        //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
         List<ManagedLog> managedLogs = managedLogRepository.findAllByIpLatestMac(req.ip().toString(), LocalDateTime.now().minusMinutes(10));
 
         ManagedLog managedLog;
 
-        if (managedLogs.isEmpty()) {
+        if (managedLogs.isEmpty()) { //로그가 없을때
             throw new NoManagedLogException(req.ip().toString());
-        } else if (managedLogs.size() == 1){
+        } else if (managedLogs.size() == 1) { // 로그가 하나일 때
             managedLog = managedLogs.get(0);
-        } else {
+        } else { // 로그가 2개 이상일 때
             ManagedLog[] logs = managedLogs.stream()
-                    .sorted(Comparator.comparing(ManagedLog::getCreatedAt))
+                    .sorted(Comparator.comparing(ManagedLog::getUpdatedAt).reversed())
                     .limit(2)
                     .toArray(ManagedLog[]::new);
+            ManagedLog newest = logs[0];
+            ManagedLog secondNewest = logs[1];
+            Duration duration = Duration.between(newest.getUpdatedAt(), secondNewest.getUpdatedAt());
 
-            // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
-            ManagedLog oldest = logs[0];
-            ManagedLog secondOldest = logs[1];
-
-            Duration duration = Duration.between(oldest.getCreatedAt(), secondOldest.getCreatedAt());
-
-            // 10초 이상 차이나면 올바른 1개만 뜨다가 2개가 뜬 경우이기 때문에 먼저 뜬 것을 고름
-            // 10초 미만은 처음부터 2개가 뜨는 경우라고 판단하여 오류를 발생
-            if (duration.toSeconds() <= 10) throw new DeviceInfoTempAddFailedException(req.ip().toString());
-            managedLog = oldest;
+            // 1시간 이상 차이나면 2개가 뜨다가 1개만 뜨게 된 것이라고 판단하여 나중에 뜬 것을 고른다.
+            if (duration.toHours() >= 1){
+                managedLog = newest;
+            } else {
+                log.info("[로그 2개 이상] ip: {}, ssid:{}", req.ip(), req.ssid());
+                if (MacAddressUtil.isFixedMac(managedLogs.get(0).getMac())) { // 고정맥인 경우 바로 넘어감
+                    log.info("[로그 2개 이상] 고정 mac이라 넘어감 : {}", managedLogs.get(0).getMac());
+                    managedLog = managedLogs.get(0);
+                } else { // 랜덤맥인 경우
+                    // 요청의 ssid와 맞는 log를 찾기
+                    Optional<ManagedLog> matched = Optional.ofNullable(req.ssid())
+                            .flatMap(ssid ->
+                                    managedLogs.stream()
+                                            .filter(ml -> ml.getSsid().equals(ssid))
+                                            .findAny()
+                            );
+                    if (matched.isPresent()) { // 요청의 ssid와 맞는 log가 있는경우
+                        // 힌트인 ssid를 완전 믿을 수 없음. 그러므로 등록이 안된건지 확인
+                        Optional<ManagedLog> any = matched
+                                .filter(ml -> !tempDeviceInfoStore.existsBySsid(requesterId.id(),
+                                        ml.getSsid()))
+                                .filter(ml -> !tempDeviceInfoStore.existsByMac(requesterId.id(),
+                                        ml.getMac()));
+                        if (any.isEmpty())
+                            return new DeviceInfoTempAddRes(ADDED, List.of());
+                        managedLog = any.get();
+                    } else { // 없는경우
+                        // 등록되지 않은 로그로 필터링
+                        List<ManagedLog> notRegistered = managedLogs.stream()
+                                .filter(ml -> !tempDeviceInfoStore.existsBySsid(requesterId.id(),
+                                        ml.getSsid()))
+                                .filter(ml -> !tempDeviceInfoStore.existsByMac(requesterId.id(),
+                                        ml.getMac()))
+                                .toList();
+                        if (notRegistered.isEmpty()) { // 등록되지 않은게 없으면 리턴
+                            return new DeviceInfoTempAddRes(ADDED, List.of());
+                        }
+                        if (notRegistered.size() == 1) { // 등록되지 않은게 하나면 바로 진행
+                            managedLog = notRegistered.get(0);
+                        } else { // 2개 이상이면 - 고를 수 없다는 응답 보내기
+                            return new DeviceInfoTempAddRes(
+                                    MULTIPLE_CANDIDATES,
+                                    notRegistered.stream()
+                                            .map(ManagedLog::getSsid)
+                                            .toList());
+                        }
+                    }
+                }
+            }
         }
 
         String mac = managedLog.getMac();
         String room = managedLog.getRoom();
 
-        //해당 맥으로 등록된 기기가 있으면 예외
-        deviceRepository.findByMac(mac).ifPresent(d -> { //기기가 있을경우
-            deviceOwnershipService.validateIsMine(d, requesterId); //내꺼 아닐때 예외
-            throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
-        });
+        validateNotRegisteredDevice(requesterId, mac);
 
         //모니터 로그에서 현재 접속 중인 맥이 있어야 한다.
         monitorLogRepository.mustExistAfter(mac, LocalDateTime.now().minusHours(3));
@@ -96,13 +157,21 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                 ssidConfig.getSsids().stream()
                         .map(storedSsid -> new TempDeviceInfo(room, storedSsid, mac))
                         .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
-                return ssidConfig.getSsids();
+                return new DeviceInfoTempAddRes(ADDED, ssidConfig.getSsids());
             }
         }
 
         // 등록하려는 맥이 랜덤 맥일 때 / 고정 맥이더라도 이미 등록된 TempDeviceInfo 중 랜덤 맥이 있을때
         // DeviceInfo를 추가한다.
         tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
-        return List.of(ssid);
+        return new DeviceInfoTempAddRes(ADDED, List.of(ssid));
+    }
+
+    //해당 맥으로 등록된 기기가 없는지 검증
+    private void validateNotRegisteredDevice(MemberId requesterId, String mac){
+        deviceRepository.findByMac(mac).ifPresent(d -> { //기기가 있을경우
+            deviceOwnershipService.validateIsMine(d, requesterId); //내꺼 아닐때 예외
+            throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
+        });
     }
 }
