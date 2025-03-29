@@ -9,6 +9,9 @@ public record BadgesOfMember(List<BadgeOfMember> badgeMembers)
         implements Response, View {
     public record BadgeOfMember(
             UUID badgeId,
+            String name,
+            String colorCode,
+            String description,
             Boolean isBadgeShown
     ) {}
 }

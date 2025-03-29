@@ -3,7 +3,6 @@ package com.whoz_in.api_query_jpa.badge;
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
-import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember.BadgeOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +27,10 @@ public class BadgeJpaViewer implements BadgeViewer {
 
     @Override
     public RegistrableBadges findRegisterable(UUID memberId) {
+        /*
+        등록가능한 뱃지는 생성된지 12시간이 지나고 개발단 뱃지가 아니어야 함
+        그리고 사용자가 이미 가지고 있는 뱃지가 아니어야 한다.
+         */
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         List<Badge> activeBadges = bageRepo.findAllActivatedBadges(threshold);
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
@@ -38,7 +41,7 @@ public class BadgeJpaViewer implements BadgeViewer {
 
         List<RegistrableBadges.RegistrableBadge> registerableBadgeList = activeBadges.stream()
                 .filter(badge -> !ownedBadgeIds.contains(badge.getId()))
-                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId()))
+                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColor_code(), badge.getDescription()))
                 .toList();
 
         return new RegistrableBadges(registerableBadgeList);
@@ -48,10 +51,16 @@ public class BadgeJpaViewer implements BadgeViewer {
     public BadgesOfMember findBadgesOfMember(UUID memberId) {
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
 
-        List<BadgeOfMember> badgeOfMembers = badgeMembers.stream()
-                .map(bm -> new BadgeOfMember(bm.getBadge_id(), bm.getIs_badge_shown())) // getBadge()로 badgeId 가져오기
-                .collect(Collectors.toList());
+        List<BadgesOfMember.BadgeOfMember> badgeList = badgeMembers.stream()
+                .map(bm -> new BadgesOfMember.BadgeOfMember(
+                        bm.getBadge_id(),
+                        bm.getName(),
+                        bm.getColor_code(),
+                        bm.getDescription(),
+                        bm.getIs_badge_shown()
+                ))
+                .toList();
 
-        return new BadgesOfMember(badgeOfMembers);
+        return new BadgesOfMember(badgeList);
     }
 }
