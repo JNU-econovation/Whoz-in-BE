@@ -20,6 +20,7 @@ public class SpringSecurityRequesterInfo implements RequesterInfo {
             return Optional.of(authentication.getPrincipal());
         }
 
-        throw new IllegalStateException("Authentication 타입 오류");
+        // TODO: 현재 서버 간 통신은 처리하지 않고 있음. 새로운 Authentication 만들어야 할듯
+        return Optional.empty();
     }
 }
