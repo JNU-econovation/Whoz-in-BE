@@ -2,7 +2,7 @@ package com.whoz_in.domain.badge.service;
 
 import com.whoz_in.domain.badge.BadgeRepository;
 import com.whoz_in.domain.badge.exception.NoBadgeException;
-import com.whoz_in.domain.badge.exception.SameBadgeExistException;
+import com.whoz_in.domain.badge.exception.BadgeExistException;
 import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.shared.DomainService;
@@ -15,7 +15,7 @@ public class BadgeFinderService {
 
     public void mustNotExist(String name) {
         if (badgeRepository.findByName(name).isPresent()) {
-            throw SameBadgeExistException.EXCEPTION;
+            throw BadgeExistException.EXCEPTION;
         }
     }
 
