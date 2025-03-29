@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.presentation;
 
+import com.whoz_in.main_api.shared.presentation.logging.HttpRequestExceptionLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,12 +14,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class UnhandledExceptionHandler {
-    private final ExceptionLogger exceptionLogger;
+    private final HttpRequestExceptionLogger httpRequestExceptionLogger;
 
     // 나머지 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<FailureBody> handleException(HttpServletRequest request, Exception e) {
-        exceptionLogger.log("처리하지 못한 예외", request, e);
+        httpRequestExceptionLogger.log("처리하지 못한 예외", request, e);
         return ResponseEntityGenerator.fail("UNEXPECTED_ERROR", e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.presentation;
+package com.whoz_in.main_api.shared.presentation.logging;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class ExceptionLogger {
+public class HttpRequestExceptionLogger {
     private final HttpRequestInfoExtractor httpRequestInfoExtractor;
     public void log(String explain, HttpServletRequest request, Exception e) {
         // 내 프로젝트 코드 중 예외를 초래한 코드 찾기

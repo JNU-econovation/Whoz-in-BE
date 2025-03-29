@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.presentation;
+package com.whoz_in.main_api.shared.presentation.logging;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
