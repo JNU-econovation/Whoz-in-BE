@@ -20,6 +20,7 @@ import org.hibernate.annotations.UuidGenerator;
         + "m.generation,"
         + "m.name, "
         + "m.position, "
+        + "m.main_badge, "
         + "m.status_message "
         + "FROM member_entity m")
 @Synchronize({"member_entity"})
@@ -43,6 +44,9 @@ public class Member {
 
     @Column(name =  "position")
     private String position;
+
+    @Column(name = "main_badge")
+    private UUID mainBadgeId;
 
     @Column(name = "status_message")
     private String statusMessage;
