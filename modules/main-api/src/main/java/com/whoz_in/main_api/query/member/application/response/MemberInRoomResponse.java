@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.query.member.application.response;
 
-import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.badge.application.view.BadgeName;
 import com.whoz_in.main_api.query.shared.application.Response;
 
