@@ -22,7 +22,7 @@ public class BadgeJpaViewer implements BadgeViewer {
     @Override
     public Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId) {
         return bageRepo.findById(badgeId)
-                .map(badge -> new BadgeInfo(badge.getName(),badge.getColor_code(), badge.getDescription()));
+                .map(badge -> new BadgeInfo(badge.getName(),badge.getColorCode(), badge.getDescription()));
     }
 
     @Override
@@ -36,12 +36,12 @@ public class BadgeJpaViewer implements BadgeViewer {
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
 
         Set<UUID> ownedBadgeIds = badgeMembers.stream()
-                .map(BadgeMember::getBadge_id)
+                .map(BadgeMember::getBadgeId)
                 .collect(Collectors.toSet());
 
         List<RegistrableBadges.RegistrableBadge> registerableBadgeList = activeBadges.stream()
                 .filter(badge -> !ownedBadgeIds.contains(badge.getId()))
-                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColor_code(), badge.getDescription()))
+                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColorCode(), badge.getDescription()))
                 .toList();
 
         return new RegistrableBadges(registerableBadgeList);
@@ -53,11 +53,11 @@ public class BadgeJpaViewer implements BadgeViewer {
 
         List<BadgesOfMember.BadgeOfMember> badgeList = badgeMembers.stream()
                 .map(bm -> new BadgesOfMember.BadgeOfMember(
-                        bm.getBadge_id(),
+                        bm.getBadgeId(),
                         bm.getName(),
-                        bm.getColor_code(),
+                        bm.getColorCode(),
                         bm.getDescription(),
-                        bm.getIs_badge_shown()
+                        bm.getIsBadgeShown()
                 ))
                 .toList();
 
