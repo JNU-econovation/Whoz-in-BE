@@ -72,12 +72,4 @@ public class BadgeJpaViewer implements BadgeViewer {
                 .map(b -> new BadgeInfo(b.getName(), b.getColor_code(), b.getDescription()))
                 .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
     }
-
-    @Override
-    public BadgeName findRepresentativeBadgeName(UUID memberId) {
-        Optional<Badge> badge = bageRepo.findRepresentativeBadge(memberId);
-        return badge
-                .map(b -> new BadgeName(b.getName(), b.getColor_code()))
-                .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
-    }
 }

@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.query.badge.application;
 
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
-import com.whoz_in.main_api.query.badge.application.view.BadgeName;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import com.whoz_in.main_api.query.shared.application.Viewer;
@@ -17,6 +16,4 @@ public interface BadgeViewer extends Viewer {
     BadgesOfMember findBadgesOfMember(UUID memberId);
 
     BadgeInfo findRepresentativeBadge(UUID memberId);
-
-    BadgeName findRepresentativeBadgeName(UUID memberId);
 }
