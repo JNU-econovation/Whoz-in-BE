@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.command.member.application.command;
 
-import com.whoz_in.domain.badge.BadgeRepository;
 import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.badge.service.BadgeFinderService;

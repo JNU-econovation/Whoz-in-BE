@@ -7,7 +7,7 @@ import jakarta.annotation.Nullable;
 public record DeviceInfoTempAdd(
 //        String room, // 전산원 말고 다른 동방도 고려하여 구현하게 될 경우 추가할 것
         IpAddress ip,
-        @Nullable String ssid
+        @Nullable String ssidHint
 ) implements Command {
     public DeviceInfoTempAdd(String ip, String ssid) {
         this(IpAddress.create(ip), ssid);
