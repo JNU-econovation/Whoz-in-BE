@@ -16,6 +16,9 @@ public interface BadgeRepository extends JpaRepository<Badge, UUID> {
     @Query("SELECT b FROM Badge b WHERE b.created_at <= :threshold AND b.badge_type = 'USERMADE'")
     List<Badge> findAllActivatedBadges(@Param("threshold") LocalDateTime threshold);
 
+    @Query("SELECT b FROM Badge b JOIN Member m WHERE m.id=:memberId AND b.id=m.mainBadgeId")
+    Optional<Badge> findRepresentativeBadge(@Param("memberId") UUID memberId);
+
     @Query("SELECT BadgesOfMember.BadgeOfMember( " +
             "bm.badge_id, bm.name, bm.color_code, bm.description, bm.is_badge_shown) " +
             "FROM BadgeMember bm WHERE bm.member_id = :memberId")
