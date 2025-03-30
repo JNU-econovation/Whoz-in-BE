@@ -90,7 +90,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                     .toArray(ManagedLog[]::new);
             ManagedLog newest = logs[0];
             ManagedLog secondNewest = logs[1];
-            Duration duration = Duration.between(newest.getUpdatedAt(), secondNewest.getUpdatedAt());
+            Duration duration = Duration.between(secondNewest.getUpdatedAt(), newest.getUpdatedAt());
 
             // 1시간 이상 차이나면 2개가 뜨다가 1개만 뜨게 된 것이라고 판단하여 나중에 뜬 것을 고른다.
             if (duration.toHours() >= 1){
