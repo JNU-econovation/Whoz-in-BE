@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.command.member.presentation;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
-import static com.whoz_in.main_api.shared.jwt.JwtConst.OAUTH2_TEMP_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
 import com.whoz_in.main_api.command.member.application.command.LogOut;
@@ -19,8 +18,6 @@ import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
-import com.whoz_in.main_api.shared.jwt.tokens.TokenException;
-import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.presentation.CookieFactory;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
@@ -29,30 +26,20 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MemberController extends CommandController implements MemberCommandApi {
-  private final TokenSerializer<OAuth2TempToken> oAuth2TempTokenTokenSerializer;
-  private final TokenSerializer<AccessToken> accessTokenTokenSerializer;
-  private final TokenSerializer<RefreshToken> refreshTokenTokenSerializer;
   private final CookieFactory cookieFactory;
   private final JwtProperties jwtProperties;
   private final OAuth2UserInfoStore oAuth2UserInfoStore;
 
   public MemberController(CommandBus commandBus,
-          TokenSerializer<OAuth2TempToken> oAuth2TempTokenTokenSerializer,
-          TokenSerializer<AccessToken> accessTokenTokenSerializer,
-          TokenSerializer<RefreshToken> refreshTokenTokenSerializer,
           CookieFactory cookieFactory, JwtProperties jwtProperties,
           OAuth2UserInfoStore oAuth2UserInfoStore) {
     super(commandBus);
-    this.oAuth2TempTokenTokenSerializer = oAuth2TempTokenTokenSerializer;
-    this.accessTokenTokenSerializer = accessTokenTokenSerializer;
-    this.refreshTokenTokenSerializer = refreshTokenTokenSerializer;
     this.cookieFactory = cookieFactory;
     this.jwtProperties = jwtProperties;
     this.oAuth2UserInfoStore = oAuth2UserInfoStore;
@@ -68,15 +55,12 @@ public class MemberController extends CommandController implements MemberCommand
   @Override
   @PostMapping("/api/v1/signup/oauth")
   public ResponseEntity<SuccessBody<Void>> oAuthSignUp(
-          @CookieValue(name = OAUTH2_TEMP_TOKEN) Cookie oAuth2TempTokenCookie,
+          OAuth2TempToken oAuth2TempToken,
           @RequestBody MemberOAuthSignUpAdditionalInfo req,
           HttpServletResponse response
   ){
-    //사용자의 소셜 정보 가져오기
-    OAuth2TempToken token = oAuth2TempTokenTokenSerializer.deserialize(oAuth2TempTokenCookie.getValue())
-            .orElseThrow(() -> new TokenException("2002", "잘못된 oauth2 temp token"));
     // 한 번 꺼내면 삭제됐기 때문에 api 재호출 불가
-    OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(token.getUserInfoKey());
+    OAuth2UserInfo oAuth2UserInfo = oAuth2UserInfoStore.takeout(oAuth2TempToken.getUserInfoKey());
     //회원가입
     dispatch(new MemberOAuth2SignUp(oAuth2UserInfo.getSocialProvider(), oAuth2UserInfo.getSocialId(), req.name(), req.position(), req.generation()));
     //자동 로그인
@@ -87,14 +71,7 @@ public class MemberController extends CommandController implements MemberCommand
 
   @Override
   @PostMapping("/api/v1/reissue")
-  public ResponseEntity<SuccessBody<Void>> reissue(
-          @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
-          @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
-          HttpServletResponse response
-  ){
-    RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
-            .orElseThrow(()-> new TokenException("2003", "잘못된 refresh token"));
-
+  public ResponseEntity<SuccessBody<Void>> reissue(RefreshToken refreshToken, HttpServletResponse response){
     removeTokenCookies(response);
 
     // TODO: 다른 타입을 쓸까?
@@ -108,13 +85,9 @@ public class MemberController extends CommandController implements MemberCommand
   @Override
   @PostMapping("/api/v1/logout")
   public ResponseEntity<SuccessBody<Void>> logout(
-          @CookieValue(name = ACCESS_TOKEN) Cookie atCookie,
-          @CookieValue(name = REFRESH_TOKEN) Cookie rtCookie,
+          AccessToken accessToken,
+          RefreshToken refreshToken,
           HttpServletResponse response) {
-    RefreshToken refreshToken = refreshTokenTokenSerializer.deserialize(rtCookie.getValue())
-                    .orElseThrow(()-> new TokenException("2004", "잘못된 refresh token"));
-    AccessToken accessToken = accessTokenTokenSerializer.deserialize(atCookie.getValue())
-                    .orElseThrow(() -> new TokenException("2003", "잘못된 access token"));
 
     LogOut command = new LogOut(
             accessToken.getMemberId().toString(),
