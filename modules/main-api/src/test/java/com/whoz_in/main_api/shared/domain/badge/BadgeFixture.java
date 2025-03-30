@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.shared.domain.badge;
 
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
-import com.whoz_in.main_api.query.badge.application.view.BadgeName;
 
 public class BadgeFixture {
 
@@ -10,13 +9,6 @@ public class BadgeFixture {
                 "badgeName",
                 "badgeColorCode",
                 "badgeDescription"
-        );
-    }
-
-    public static BadgeName badgeName(){
-        return new BadgeName(
-                "badgeName",
-                "badgeColorCode"
         );
     }
 
