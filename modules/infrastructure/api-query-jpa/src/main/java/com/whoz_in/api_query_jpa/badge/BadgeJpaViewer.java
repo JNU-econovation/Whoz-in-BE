@@ -2,6 +2,7 @@ package com.whoz_in.api_query_jpa.badge;
 
 import com.whoz_in.main_api.query.badge.application.BadgeViewer;
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
+import com.whoz_in.main_api.query.badge.application.view.BadgeName;
 import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
 import java.time.LocalDateTime;
@@ -69,6 +70,14 @@ public class BadgeJpaViewer implements BadgeViewer {
         Optional<Badge> badge = bageRepo.findRepresentativeBadge(memberId);
         return badge
                 .map(b -> new BadgeInfo(b.getName(), b.getColor_code(), b.getDescription()))
+                .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
+    }
+
+    @Override
+    public BadgeName findRepresentativeBadgeName(UUID memberId) {
+        Optional<Badge> badge = bageRepo.findRepresentativeBadge(memberId);
+        return badge
+                .map(b -> new BadgeName(b.getName(), b.getColor_code()))
                 .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
     }
 }
