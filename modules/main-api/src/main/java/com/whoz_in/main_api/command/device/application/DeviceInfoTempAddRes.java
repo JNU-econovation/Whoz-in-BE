@@ -8,5 +8,5 @@ public record DeviceInfoTempAddRes(
 ) {}
 enum AdditionStatus{
     ADDED, // 새로 추가된 것만 포함함 (이미 등록된 것은 반환하지 않음)
-    MULTIPLE_CANDIDATES // 후보 로그가 2개 이상인 것을 나타냄 (등록됐다는 것이 아님)
+    MULTIPLE_CANDIDATES // 후보 로그가 2개 이상인 것을 나타냄 (등록됐다는 것이 아님) -> 사실 이 경우는 예외로 처리하는게 맞는거 같은데..
 }

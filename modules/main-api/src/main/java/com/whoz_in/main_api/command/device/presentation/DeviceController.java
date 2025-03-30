@@ -34,8 +34,8 @@ public class DeviceController extends CommandController implements DeviceCommand
             @RequestBody DeviceInfoTempAddReq req) {
         return ResponseEntityGenerator.success(
                 dispatch(new DeviceInfoTempAdd(token, req.ip(), req.ssidHint())),
-                "맥 정보 등록 완료",
-                HttpStatus.CREATED);
+                "OK",
+                HttpStatus.OK);
     }
 
     @PatchMapping("/device/info")
