@@ -1,6 +1,8 @@
 package com.whoz_in.main_api.shared.utils;
 
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.shared.domain.badge.BadgeFixture;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -14,19 +16,21 @@ public class SorterTest {
     @DisplayName("MemberInRoomResponse Active 상태 기준 정렬 테스트")
     public void Active상태인_Member가_상위에_위치한다(){
 
+        BadgeInfo badgeInfo = BadgeFixture.badgeInfo();
+
         // given
         List<MemberInRoomResponse> responses = new ArrayList<>(List.of(
-                new MemberInRoomResponse(1, "1", "1", "1", "1", 0, true),
-                new MemberInRoomResponse(2, "2", "2", "2", "2",0, false),
-                new MemberInRoomResponse(3, "3", "3", "3", "3", 0, true),
-                new MemberInRoomResponse(4, "4", "4", "4", "4",0, false)
+                new MemberInRoomResponse(1, "1", "1", "1", "1", badgeInfo, 0, true),
+                new MemberInRoomResponse(2, "2", "2", "2", "2",badgeInfo,0, false),
+                new MemberInRoomResponse(3, "3", "3", "3", "3", badgeInfo,0, true),
+                new MemberInRoomResponse(4, "4", "4", "4", "4",badgeInfo, 0, false)
         ));
 
         List<MemberInRoomResponse> answer = new ArrayList<>(List.of(
-                new MemberInRoomResponse(1, "1", "1", "1", "1", 0,true),
-                new MemberInRoomResponse(3, "3", "3", "3", "3", 0,true),
-                new MemberInRoomResponse(2, "2", "2", "2", "2", 0,false),
-            new MemberInRoomResponse(4, "4", "4", "4", "4", 0,false)
+                new MemberInRoomResponse(1, "1", "1", "1", "1", badgeInfo,0,true),
+                new MemberInRoomResponse(3, "3", "3", "3", "3", badgeInfo,0,true),
+                new MemberInRoomResponse(2, "2", "2", "2", "2", badgeInfo,0,false),
+            new MemberInRoomResponse(4, "4", "4", "4", "4", badgeInfo,0,false)
         ));
 
         // when
@@ -42,18 +46,19 @@ public class SorterTest {
     @Test
     @DisplayName("MemberInRoomResponse MemberName 기준 정렬 테스트")
     public void MemberName_기준_오름차순_정렬(){
+        BadgeInfo badgeInfo = BadgeFixture.badgeInfo();
         List<MemberInRoomResponse> responses = new ArrayList<>(List.of(
-            new MemberInRoomResponse(1, "1", "D", "1", "1", 0,true),
-            new MemberInRoomResponse(2, "2", "C", "2", "2", 0,false),
-            new MemberInRoomResponse(3, "3", "B", "3", "3", 0,true),
-            new MemberInRoomResponse(4, "4", "A", "4", "4", 0,false)
+            new MemberInRoomResponse(1, "1", "D", "1", "1", badgeInfo,0,true),
+            new MemberInRoomResponse(2, "2", "C", "2", "2", badgeInfo,0,false),
+            new MemberInRoomResponse(3, "3", "B", "3", "3", badgeInfo,0,true),
+            new MemberInRoomResponse(4, "4", "A", "4", "4", badgeInfo,0,false)
         ));
 
         List<MemberInRoomResponse> answer = new ArrayList<>(List.of(
-            new MemberInRoomResponse(4, "4", "A", "4", "4", 0,false),
-                new MemberInRoomResponse(3, "3", "B", "3", "3", 0,true),
-            new MemberInRoomResponse(2, "2", "C", "2", "2", 0,false),
-            new MemberInRoomResponse(1, "1", "D", "1", "1", 0,true)
+            new MemberInRoomResponse(4, "4", "A", "4", "4", badgeInfo,0,false),
+                new MemberInRoomResponse(3, "3", "B", "3", "3", badgeInfo,0,true),
+            new MemberInRoomResponse(2, "2", "C", "2", "2", badgeInfo,0,false),
+            new MemberInRoomResponse(1, "1", "D", "1", "1", badgeInfo,0,true)
         ));
 
         Sorter.<MemberInRoomResponse>builder()
