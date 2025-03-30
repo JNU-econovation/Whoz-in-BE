@@ -16,7 +16,10 @@ public interface MemberQueryApi {
 
     @Operation(
             summary = "동아리 방 현황 조회",
-            description = "동아리 방에 누가 있는지 현황을 조회합니다."
+            description = """
+                    동아리 방에 누가 있는지 현황을 조회합니다.
+                    (회원 id, 이름, 기수, 하루 접속 시간, 대표 뱃지, 회원 상태)
+                    """
     )
     ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveMembers(
             @Parameter(name="size") int size,
