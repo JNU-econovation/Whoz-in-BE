@@ -8,6 +8,7 @@ import com.whoz_in.main_api.command.device.application.DeviceRemove;
 import com.whoz_in.main_api.command.device.presentation.docs.DeviceCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
+import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import org.springframework.http.HttpStatus;
@@ -28,8 +29,13 @@ public class DeviceController extends CommandController implements DeviceCommand
     }
 
     @PostMapping("/device/info")
-    public ResponseEntity<SuccessBody<DeviceInfoTempAddRes>> addDeviceInfo(@RequestBody DeviceInfoTempAdd request) {
-        return ResponseEntityGenerator.success(dispatch(request), "맥 정보 등록 완료", HttpStatus.CREATED);
+    public ResponseEntity<SuccessBody<DeviceInfoTempAddRes>> addDeviceInfo(
+            DeviceRegisterToken token,
+            @RequestBody DeviceInfoTempAddReq req) {
+        return ResponseEntityGenerator.success(
+                dispatch(new DeviceInfoTempAdd(token, req.ip(), req.ssidHint())),
+                "맥 정보 등록 완료",
+                HttpStatus.CREATED);
     }
 
     @PatchMapping("/device/info")

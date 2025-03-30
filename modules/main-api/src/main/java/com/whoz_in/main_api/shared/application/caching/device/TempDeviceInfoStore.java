@@ -59,4 +59,8 @@ public final class TempDeviceInfoStore {
         if (deviceInfos == null) throw new IllegalStateException("저장된 device info가 없음");
         return deviceInfos;
     }
+
+    public void remove(UUID ownerId){
+        store.asMap().remove(ownerId);
+    }
 }

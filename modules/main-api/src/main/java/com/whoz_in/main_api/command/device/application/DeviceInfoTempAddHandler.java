@@ -17,6 +17,7 @@ import com.whoz_in.main_api.config.RoomSsidConfig;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStore;
+import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.utils.MacAddressUtil;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.time.Duration;
@@ -30,7 +31,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-
 // 기기 등록 전에 모든 와이파이에 대한 기기 정보가(맥) 있어야 한다.
 // 이 핸들러는 하나의 기기 정보를 임시로 저장하는 역할을 한다.
 @Slf4j
@@ -38,38 +38,40 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAdd, DeviceInfoTempAddRes> {
     private static final Map<MemberId, Object> locks = new ConcurrentHashMap<>();
+    private static final Map<MemberId, DeviceRegisterToken> lastUsedTokens = new ConcurrentHashMap<>();
     private final RequesterInfo requesterInfo;
     private final TempDeviceInfoStore tempDeviceInfoStore;
     private final MemberFinderService memberFinderService;
     private final DeviceRepository deviceRepository;
     private final DeviceOwnershipService deviceOwnershipService;
-    //얘네 도메인에서의 입지가 애매해서 일단 Repository로 다뤘습니다.
     private final ManagedLogRepository managedLogRepository;
     private final MonitorLogRepository monitorLogRepository;
     private final RoomSsidConfig ssidConfig;
 
     //연결 시마다 맥이 바뀌는 기기가 다시 똑같은 와이파이에 등록하려고 하는 경우는 막지 못함
-    @Transactional
     @Override
     public DeviceInfoTempAddRes handle(DeviceInfoTempAdd req) {
         MemberId requesterId = requesterInfo.getMemberId();
         Object lock = locks.computeIfAbsent(requesterId, k -> new Object());
-        // 현재 doHandle 메서드의 'store를 이용하여 exists로 확인하고 삽입하는 로직'이 원자적이지 않음
-        // 한 멤버의 맥 등록은 동시에 한 번만 수행돼도 되며, 오히려 중복 실행은 의미 없는 연산이라 락으로 해결함.
+
         synchronized (lock) {
-            try {
-                return doHandle(req, requesterId);
-            } finally {
-                locks.remove(requesterId);
+            DeviceRegisterToken prev = lastUsedTokens.get(requesterId);
+
+            // 새로운 토큰으로 맥 등록을 시작하는 경우 이전에 등록된 것들을 초기화함
+            if (prev == null || !prev.equals(req.token())) {
+                tempDeviceInfoStore.remove(requesterId.id());
+                lastUsedTokens.put(requesterId, req.token());
             }
+
+            return doHandle(req, requesterId);
         }
     }
 
-    // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함.
+    // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함. (mdns repeating)
     // 이 경우 어떤 ssid인지 알 수 없으므로 적절하게 처리해야 하는데,
-    // 사용자의 개입을 최대한 줄이려고 하다가 복잡한 로직이 됐습니다....
-    // TODO: 힌트가 있어도 없어야 등록이 되는 경우가 있을지?
-    private DeviceInfoTempAddRes doHandle(DeviceInfoTempAdd req, MemberId requesterId){
+    // 사용자의 개입을 최대한 줄이려고 하다가 복잡한 로직이 됐습니다... 죄송합니다...
+    @Transactional(readOnly = true)
+    protected DeviceInfoTempAddRes doHandle(DeviceInfoTempAdd req, MemberId requesterId){
         memberFinderService.mustExist(requesterId);
 
         //해당 룸에서 발생한 아이피로 ManagedLog들을 찾으며, 오래된 맥일 경우 신뢰할 수 없으므로 일정 기간 이내로 찾는다.
