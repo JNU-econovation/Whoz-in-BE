@@ -114,8 +114,9 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                                 .filter(ml -> !tempDeviceInfoStore.existsByMac(requesterId.id(),
                                         ml.getMac()));
                         log.info("로그 2개 이상] ssidHint와 맞는 ssid인 로그 존재: {}", any.isPresent());
-                        if (any.isEmpty())
-                            return new DeviceInfoTempAddRes(ADDED, List.of());
+                        if (any.isEmpty()) {
+                            return new DeviceInfoTempAddRes(ADDED, addedSsids(requesterId));
+                        }
                         managedLog = any.get();
                     } else { // 없는경우
                         // 등록되지 않은 로그로 필터링
@@ -127,7 +128,7 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                                 .toList();
                         if (notRegistered.isEmpty()) { // 등록되지 않은게 없으면 리턴
                             log.info("[로그 2개 이상] 이미 모든 로그는 등록되었음");
-                            return new DeviceInfoTempAddRes(ADDED, List.of());
+                            return new DeviceInfoTempAddRes(ADDED, addedSsids(requesterId));
                         }
                         if (notRegistered.size() == 1) { // 등록되지 않은게 하나면 바로 진행
                             log.info("[로그 2개 이상] 등록되지 않은 맥 하나 존재");
@@ -162,14 +163,14 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
                 ssidConfig.getSsids().stream()
                         .map(storedSsid -> new TempDeviceInfo(room, storedSsid, mac))
                         .forEach((tdi -> tempDeviceInfoStore.add(requesterId.id(), tdi)));
-                return new DeviceInfoTempAddRes(ADDED, ssidConfig.getSsids());
+                return new DeviceInfoTempAddRes(ADDED, addedSsids(requesterId));
             }
         }
 
         // 등록하려는 맥이 랜덤 맥일 때 / 고정 맥이더라도 이미 등록된 TempDeviceInfo 중 랜덤 맥이 있을때
         // DeviceInfo를 추가한다.
         tempDeviceInfoStore.add(requesterId.id(), new TempDeviceInfo(room, ssid, mac));
-        return new DeviceInfoTempAddRes(ADDED, List.of(ssid));
+        return new DeviceInfoTempAddRes(ADDED, addedSsids(requesterId));
     }
 
     //해당 맥으로 등록된 기기가 없는지 검증
@@ -178,5 +179,8 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
             deviceOwnershipService.validateIsMine(d, requesterId); //내꺼 아닐때 예외
             throw DeviceAlreadyRegisteredException.EXCEPTION;//내꺼일때 예외
         });
+    }
+    private List<String> addedSsids(MemberId ownerId){
+        return tempDeviceInfoStore.get(ownerId.id()).stream().map(TempDeviceInfo::getSsid).toList();
     }
 }
