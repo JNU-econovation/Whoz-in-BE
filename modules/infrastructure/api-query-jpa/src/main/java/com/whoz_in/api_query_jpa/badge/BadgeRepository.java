@@ -1,6 +1,5 @@
 package com.whoz_in.api_query_jpa.badge;
 
-import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -19,8 +18,6 @@ public interface BadgeRepository extends JpaRepository<Badge, UUID> {
     @Query("SELECT b FROM Badge b, Member m WHERE m.id=:memberId AND b.id=m.mainBadgeId")
     Optional<Badge> findRepresentativeBadge(@Param("memberId") UUID memberId);
 
-    @Query("SELECT BadgesOfMember.BadgeOfMember( " +
-            "bm.badge_id, bm.name, bm.color_code, bm.description, bm.is_badge_shown) " +
-            "FROM BadgeMember bm WHERE bm.member_id = :memberId")
-    List<BadgesOfMember.BadgeOfMember> findBadgesByMemberId(@Param("memberId") UUID memberId);
+    @Query("SELECT b FROM Badge b, Member m, BadgeMember bm WHERE bm.member_id=:memberId AND bm.badge_id=b.id")
+    List<Badge> findBadgesByMemberId(@Param("memberId") UUID memberId);
 }

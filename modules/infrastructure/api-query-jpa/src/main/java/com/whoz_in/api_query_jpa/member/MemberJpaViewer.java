@@ -94,7 +94,7 @@ public class MemberJpaViewer implements MemberViewer {
 
     private List<BadgeInfo> getBadgeInfo(com.whoz_in.api_query_jpa.member.Member entity){
         return badgeRepository.findBadgesByMemberId(entity.getId()).stream(
-                ).map(badge -> new BadgeInfo(badge.name(), badge.colorCode(), badge.description())).toList();
+                ).map(badge -> new BadgeInfo(badge.getName(), badge.getColor_code(), badge.getDescription())).toList();
     }
 
     private BadgeInfo getRepresentativeBadge(com.whoz_in.api_query_jpa.member.Member entity){
