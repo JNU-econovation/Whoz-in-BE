@@ -2,8 +2,7 @@ package com.whoz_in.main_api.query.member.application.query;
 
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.query.badge.application.BadgeViewer;
-import com.whoz_in.main_api.query.badge.application.view.BadgeName;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
@@ -12,6 +11,7 @@ import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountExceptio
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse.Badge;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.support.ConnectionTimeFormatter;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
@@ -40,7 +40,6 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     private final MemberViewer memberViewer;
     private final DeviceViewer deviceViewer;
     private final RequesterInfo requesterInfo;
-    private final BadgeViewer badgeViewer;
 
     @Override
     @Transactional(readOnly = true) // TODO: 병렬 스트림 내부에서 발생하는 Lazy 로딩 예외 방지를 위한 트랜잭셔널
@@ -89,14 +88,14 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
                 MemberId memberId = memberIds.get(i);
                 List<DeviceStatus> deviceStatuses = devicesStatusByMemberId.get(memberId);
-                BadgeName badgeName = badgeViewer.findRepresentativeBadgeName(memberId.id());
+                BadgeInfo badgeInfo = getMemberName(memberId.id().toString()).repBadge();
 
                 if(!deviceStatuses.isEmpty()) {
 
                     List<ActiveDevice> activeDevicesByMember = activeDevicesByMemberId.get(memberId);
                     MemberConnectionInfo connectionInfo = memberConnectionInfoByMemberId.get(memberId);
 
-                    MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo, badgeName);
+                    MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo, badgeInfo);
 
                     responses.add(oneResponse);
                 }
@@ -106,7 +105,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                             memberInfos.get(i).generation(),
                             memberInfos.get(i).memberId().toString(),
                             memberInfos.get(i).memberName(),
-                            badgeName));
+                            badgeInfo));
                 }
             }
 
@@ -178,7 +177,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         if(count.value()<1) throw RegisteredDeviceCountException.EXCEPTION;
     }
 
-    private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo, BadgeName badgeName){
+    private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo, BadgeInfo badgeInfo){
         MemberInfo ownerInfo = getMemberName(memberId.id().toString());
 
         int generation = ownerInfo.generation();
@@ -195,7 +194,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 memberName,
                 ConnectionTimeFormatter.hourMinuteTime(continuousMinute),
                 ConnectionTimeFormatter.hourMinuteTime(dailyConnectedMinute),
-                badgeName,
+                new Badge(badgeInfo),
                 dailyConnectedMinute,
                 isActive
         );
