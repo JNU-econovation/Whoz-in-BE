@@ -27,7 +27,8 @@ public class SecurityFilterChainConfig {
     private final ServerAuthenticationFilter serverAuthenticationFilter;
     private final AccessTokenFilter accessTokenFilter;
     private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private final AccessTokenEntryPoint accessTokenEntryPoint;
+    private final DeviceRegisterTokenEntryPoint deviceRegisterTokenEntryPoint;
     private final OptionsFilter optionsFilter;
     private final UnknownEndpointFilter unknownEndpointFilter;
     private final DynamicCorsConfigurationSource corsConfigurationSource;
@@ -123,7 +124,7 @@ public class SecurityFilterChainConfig {
         //jwt(device register token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(deviceRegisterTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
-        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(deviceRegisterTokenEntryPoint));
         httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
         return httpSecurity.build();
     }
@@ -166,7 +167,7 @@ public class SecurityFilterChainConfig {
         //jwt(access token)을 Authentication으로 만들어 등록하는 필터
         httpSecurity.addFilterAt(accessTokenFilter, LogoutFilter.class);
         //인증 실패 핸들러
-        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+        httpSecurity.exceptionHandling(ex-> ex.authenticationEntryPoint(accessTokenEntryPoint));
 
         return httpSecurity.build();
     }
