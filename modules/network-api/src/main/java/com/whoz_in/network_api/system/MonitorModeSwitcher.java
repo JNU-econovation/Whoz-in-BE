@@ -33,9 +33,9 @@ public class MonitorModeSwitcher {
     // 이미 모니터 모드였는지 확인 안함
     public void switchToMonitor(){
         log.info("{}를 모니터 모드로 전환합니다..", this.interfaceName);
-        TransientProcess.create(disableInterfaceCommand).waitTermination();
-        TransientProcess.create(setMonitorModeCommand).waitTermination();
-        TransientProcess.create(enableInterfaceCommand).waitTermination();
+        TransientProcess.create(disableInterfaceCommand).waitForTermination();
+        TransientProcess.create(setMonitorModeCommand).waitForTermination();
+        TransientProcess.create(enableInterfaceCommand).waitForTermination();
     }
 
     @EventListener
