@@ -35,14 +35,6 @@ public class TransientProcess extends AbstractProcess{
         return results(super.errorReader);
     }
 
-    public void waitForTermination(){
-        try {
-            process.waitFor();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     //종료되었을 때 출력을 얻는다.
     //종료되지 않았다면 블로킹된다.
     //출력이 없는 프로세스의 경우 빈 리스트를 출력한다.

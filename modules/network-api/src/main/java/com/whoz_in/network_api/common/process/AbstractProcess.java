@@ -53,9 +53,18 @@ public abstract class AbstractProcess {
         return process != null && process.isAlive();
     }
 
+    public void waitForTermination(){
+        try {
+            process.waitFor();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void terminate() {
         if (process != null && process.isAlive()) {
             process.destroy();
+            waitForTermination();
         }
     }
 }
