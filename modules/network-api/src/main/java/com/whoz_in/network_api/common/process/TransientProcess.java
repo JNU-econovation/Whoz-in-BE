@@ -35,19 +35,11 @@ public class TransientProcess extends AbstractProcess{
         return results(super.errorReader);
     }
 
-    public void waitTermination(){
-        try {
-            process.waitFor();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     //종료되었을 때 출력을 얻는다.
     //종료되지 않았다면 블로킹된다.
     //출력이 없는 프로세스의 경우 빈 리스트를 출력한다.
     private List<String> results(BufferedReader br){
-        waitTermination();
+        waitForTermination();
         List<String> logs = new ArrayList<>();
         try {
             String line;
@@ -62,7 +54,7 @@ public class TransientProcess extends AbstractProcess{
 
     //결과를 하나의 String으로 반환
     private String result(BufferedReader br){
-        waitTermination();
+        waitForTermination();
         StringBuilder sb = new StringBuilder();
         try {
             int size=1024;

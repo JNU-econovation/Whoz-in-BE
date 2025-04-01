@@ -2,11 +2,13 @@ package com.whoz_in.main_api.command.member.presentation.docs;
 
 import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
+import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
+import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
+import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
 import com.whoz_in.main_api.shared.presentation.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +34,7 @@ public interface MemberCommandApi {
                     """
     )
     ResponseEntity<SuccessBody<Void>> oAuthSignUp(
-            @Parameter(hidden = true) Cookie oAuth2TempTokenCookie,
+            @Parameter(hidden = true) OAuth2TempToken oAuth2TempToken,
             @RequestBody MemberOAuthSignUpAdditionalInfo req,
             HttpServletResponse response
     );
@@ -49,8 +51,7 @@ public interface MemberCommandApi {
                     """
     )
     ResponseEntity<SuccessBody<Void>> reissue(
-            @Parameter(hidden = true) Cookie accessTokenCookie,
-            @Parameter(hidden = true) Cookie refreshTokenCookie,
+            @Parameter(hidden = true) RefreshToken refreshToken,
             @Parameter(hidden = true) HttpServletResponse response
     );
 
@@ -59,8 +60,8 @@ public interface MemberCommandApi {
             description = "로그아웃을 수행합니다."
     )
     ResponseEntity<SuccessBody<Void>> logout(
-            @Parameter(hidden = true) Cookie accessTokenCookie,
-            @Parameter(hidden = true) Cookie refreshTokenCookie,
+            @Parameter(hidden = true) AccessToken accessToken,
+            @Parameter(hidden = true) RefreshToken refreshToken,
             @Parameter(hidden = true) HttpServletResponse response
     );
 

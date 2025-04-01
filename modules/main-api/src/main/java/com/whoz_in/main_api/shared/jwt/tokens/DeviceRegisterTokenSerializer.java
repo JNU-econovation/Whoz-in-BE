@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
 import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
+import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
@@ -19,13 +20,15 @@ public final class DeviceRegisterTokenSerializer extends TokenSerializer<DeviceR
     @Override
     protected DeviceRegisterToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
-        return new DeviceRegisterToken(memberId);
+        UUID tokenId = UUID.fromString(claims.get(TOKEN_ID, String.class));
+        return new DeviceRegisterToken(tokenId, memberId);
     }
 
     @Override
     public Map<String, String> buildClaims(DeviceRegisterToken deviceRegisterToken) {
         return Map.of(
-                MEMBER_ID, deviceRegisterToken.getMemberId().toString()
+                MEMBER_ID, deviceRegisterToken.getMemberId().toString(),
+                TOKEN_ID, deviceRegisterToken.getTokenId().toString()
         );
     }
 

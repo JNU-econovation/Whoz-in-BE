@@ -1,9 +1,8 @@
 package com.whoz_in.main_api.command.member.application.command;
 
-import com.whoz_in.domain.badge.BadgeRepository;
-import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.Badge;
 import com.whoz_in.domain.badge.model.BadgeId;
+import com.whoz_in.domain.badge.service.BadgeFinderService;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.OAuthCredentials;
@@ -17,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2SignUp, Void> {
     private final MemberRepository repository;
-    private final BadgeRepository badgeRepo;
     private final EventBus eventBus;
+    private final BadgeFinderService badgeFinderService;
 
     @Transactional
     @Override
@@ -28,7 +27,7 @@ public class MemberOAuth2SignUpHandler implements CommandHandler<MemberOAuth2Sig
         }
 
         String position = cmd.position().getPosition();
-        Badge badge = badgeRepo.findByName(position).orElseThrow(NoBadgeException::new);
+        Badge badge = badgeFinderService.findByName(position);
         Member member = Member.create(cmd.name(), cmd.position(), cmd.generation(),
                 OAuthCredentials.create(cmd.socialProvider(), cmd.socialId()), new BadgeId(badge.getId().id()));
         repository.save(member);
