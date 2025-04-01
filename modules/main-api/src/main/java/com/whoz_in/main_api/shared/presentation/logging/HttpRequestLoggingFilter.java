@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- HttpRequestLogger가 로깅한 정보를 제외하고 로깅함. <br>
+ http 레벨에서 요청 정보 로깅 <br>
  요청 바디를 로깅하기 위해 <br>
  {@link com.whoz_in.main_api.shared.presentation.RequestBodyCachingFilter} 이후로 등록
  **/

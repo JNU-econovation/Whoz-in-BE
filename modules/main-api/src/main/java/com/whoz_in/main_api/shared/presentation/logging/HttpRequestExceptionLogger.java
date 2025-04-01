@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+// HttpRequestLogger가 로깅한 정보를 제외하고 로깅
 @Slf4j
 @Component
 @RequiredArgsConstructor
