@@ -33,7 +33,7 @@ public class RequesterLoggingInterceptor implements HandlerInterceptor {
                                             () -> log.warn("[REQUESTER] id: {}", id) // 쿼리에 회원 정보가 없을 경우
                                     );
                         },
-                        () -> log.info("[REQUESTER] 알 수 없음 (비인증 사용자)")
+                        () -> log.info("[REQUESTER] 알 수 없음 (비인증 요청)")
                 );
 
         return true;

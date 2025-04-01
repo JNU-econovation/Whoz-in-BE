@@ -11,8 +11,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class HttpRequestLogger {
     public void log(HttpServletRequest request) {
+        String clientIp = request.getHeader("X-Forwarded-For");
+        if (clientIp == null || clientIp.isEmpty()) {
+            clientIp = request.getRemoteAddr();
+        }
         log.info("[HTTP REQUEST] ip: {}, url: {}({})",
-                request.getRemoteAddr(),
+                clientIp,
                 request.getRequestURI(),
                 request.getMethod()
         );
