@@ -17,15 +17,16 @@
     </root>
   </springProfile>
 
+  <conversionRule conversionWord="optionalTraceId" converterClass="com.whoz_in.logging.OptionalTraceIdConverter" />
 
-  <property name="COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] %boldWhite([%15.15thread]) %boldWhite([%36.36logger{36}]) %highlight(%-5level) - %msg%n"/>
+  <property name="COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] %boldWhite([%15.15thread]) %boldWhite([%36.36logger{36}]) %optionalTraceId %highlight(%-5level)- %msg%n"/>
   <appender name="COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>${COLOR_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
-  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %-5level - %msg%n"/>
+  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %optionalTraceId %-5level- %msg%n"/>
   <appender name="NO_COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
