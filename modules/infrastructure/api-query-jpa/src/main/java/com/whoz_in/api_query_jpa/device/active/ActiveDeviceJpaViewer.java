@@ -1,7 +1,7 @@
 package com.whoz_in.api_query_jpa.device.active;
 
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

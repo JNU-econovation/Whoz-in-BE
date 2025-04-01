@@ -6,8 +6,8 @@ import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DeviceOwner;
 import com.whoz_in.main_api.query.device.application.DevicesStatus;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
-import com.whoz_in.main_api.query.device.view.DeviceViewer;
-import com.whoz_in.main_api.query.device.view.RegisteredSsids;
+import com.whoz_in.main_api.query.device.application.DeviceViewer;
+import com.whoz_in.main_api.query.device.application.DeviceRegisteredSsids;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -23,8 +23,8 @@ public class DeviceJpaViewer implements DeviceViewer {
     private final MemberRepository memberRepository;
     private final DeviceInfoRepository deviceInfoRepository;
     @Override
-    public RegisteredSsids findRegisteredSsids(UUID ownerId, String room, String mac) {
-        return new RegisteredSsids(
+    public DeviceRegisteredSsids findRegisteredSsids(UUID ownerId, String room, String mac) {
+        return new DeviceRegisteredSsids(
                 deviceInfoRepository.findAllByMac(ownerId, room, mac).stream()
                         .map(DeviceInfo::getSsid)
                         .toList());

@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.query.member.application.query;
 
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;

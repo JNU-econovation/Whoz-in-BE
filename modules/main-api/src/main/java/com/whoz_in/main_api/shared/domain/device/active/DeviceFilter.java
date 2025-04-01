@@ -4,7 +4,7 @@ import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import java.time.Duration;
 import java.time.LocalDateTime;

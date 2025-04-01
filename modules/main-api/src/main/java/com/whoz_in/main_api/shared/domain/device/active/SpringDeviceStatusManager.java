@@ -1,8 +1,5 @@
 package com.whoz_in.main_api.shared.domain.device.active;
 
-import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -14,23 +11,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SpringDeviceStatusManager implements DeviceStatusManager {
 
-    private final DeviceRepository deviceRepository;
-    private final MonitorLogRepository monitorLogRepository;
-    private final ActiveDeviceViewer activeDeviceViewer;
-
     private final InActiveDeviceFilter inActiveDeviceFilter;
     private final ActiveDeviceFilter activeDeviceFilter;
 
     public SpringDeviceStatusManager(
-            DeviceRepository deviceRepository,
-            MonitorLogRepository monitorLogRepository,
-            ActiveDeviceViewer activeDeviceViewer,
             InActiveDeviceFilter inActiveDeviceFilter,
             ActiveDeviceFilter activeDeviceFilter
     ){
-        this.deviceRepository = deviceRepository;
-        this.monitorLogRepository = monitorLogRepository;
-        this.activeDeviceViewer = activeDeviceViewer;
         this.inActiveDeviceFilter = inActiveDeviceFilter;
         this.activeDeviceFilter = activeDeviceFilter;
     }

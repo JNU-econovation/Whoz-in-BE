@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.query.device.application;
 
-import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
