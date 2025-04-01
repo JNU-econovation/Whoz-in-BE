@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RequestLoggingInterceptor implements HandlerInterceptor {
+public class RequesterLoggingInterceptor implements HandlerInterceptor {
     private final RequesterInfo requesterInfo;
     private final MemberViewer memberViewer;
     private final HttpRequestIdentifier httpRequestIdentifier;
