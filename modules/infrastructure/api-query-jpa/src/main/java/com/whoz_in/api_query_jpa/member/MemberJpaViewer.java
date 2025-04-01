@@ -99,7 +99,7 @@ public class MemberJpaViewer implements MemberViewer {
 
     private BadgeInfo getRepresentativeBadge(com.whoz_in.api_query_jpa.member.Member entity){
         return badgeRepository.findRepresentativeBadge(entity.getId()).map(badge -> new BadgeInfo(badge.getName(), badge.getColor_code(), badge.getDescription()))
-                .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
+                .orElseThrow(() -> new IllegalStateException("Representative badge not found for member: " + entity.getId()));
     }
 
 
