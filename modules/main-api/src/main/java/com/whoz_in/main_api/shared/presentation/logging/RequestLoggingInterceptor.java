@@ -2,6 +2,7 @@ package com.whoz_in.main_api.shared.presentation.logging;
 
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,9 +17,11 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class RequestLoggingInterceptor implements HandlerInterceptor {
     private final RequesterInfo requesterInfo;
     private final MemberViewer memberViewer;
+    private final HttpRequestIdentifier httpRequestIdentifier;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+        if (httpRequestIdentifier.isInternal(request)) return true;
 
         requesterInfo.findMemberId()
                 .map(MemberId::id)
@@ -32,6 +35,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
                         },
                         () -> log.info("[REQUESTER] 알 수 없음 (비인증 사용자)")
                 );
+
         return true;
     }
 }

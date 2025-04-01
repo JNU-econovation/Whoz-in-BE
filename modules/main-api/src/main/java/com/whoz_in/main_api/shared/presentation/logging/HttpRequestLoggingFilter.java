@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.presentation.logging;
 
+import com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,11 +25,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class HttpRequestLoggingFilter extends OncePerRequestFilter {
     private final HttpRequestLogger httpRequestLogger;
     private final HttpRequestExceptionLogger httpRequestExceptionLogger;
+    private final HttpRequestIdentifier httpRequestIdentifier;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            httpRequestLogger.log(request);
+            if (httpRequestIdentifier.isPublic(request))
+                httpRequestLogger.log(request);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
             httpRequestExceptionLogger.log("필터에서 예외 발생!", request, e);

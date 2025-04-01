@@ -1,5 +1,7 @@
 package com.whoz_in.main_api.config.security;
 
+import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INTERNAL_PREFIX;
+
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
@@ -37,7 +39,7 @@ public class SecurityFilterChainConfig {
     @Order(0)
     public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/internal/**"
+                INTERNAL_PREFIX + "/**"
         );
 
         commonConfigurations(httpSecurity);
