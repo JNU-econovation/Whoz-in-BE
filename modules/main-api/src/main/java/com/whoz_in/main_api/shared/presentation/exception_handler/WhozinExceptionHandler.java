@@ -1,8 +1,10 @@
-package com.whoz_in.main_api.shared.presentation;
+package com.whoz_in.main_api.shared.presentation.exception_handler;
 
 import com.whoz_in.domain.shared.BusinessException;
 import com.whoz_in.main_api.command.device.application.DeviceInfoTempAddFailedException;
 import com.whoz_in.main_api.shared.application.ApplicationException;
+import com.whoz_in.main_api.shared.presentation.response.FailureBody;
+import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

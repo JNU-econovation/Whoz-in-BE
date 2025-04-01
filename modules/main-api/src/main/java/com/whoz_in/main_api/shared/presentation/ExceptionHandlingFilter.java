@@ -9,9 +9,11 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+// 필터에서 발생한 예외나 mvc에서 처리하지 못한 예외를 받아 응답 생성
+// 예상치 못한 예외가 떠도 일관적인 응답을 보내기 위한 것.
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class ExceptionHandlingFilter extends OncePerRequestFilter {
+public final class ExceptionHandlingFilter extends OncePerRequestFilter {
 
     // TODO: 알려진 예외 처리하기 및 응답 생성 클래스 만들기
     @Override

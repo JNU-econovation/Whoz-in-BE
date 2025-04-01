@@ -4,7 +4,7 @@ import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomR
 import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
-import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

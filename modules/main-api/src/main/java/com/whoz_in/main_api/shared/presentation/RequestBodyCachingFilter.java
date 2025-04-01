@@ -18,7 +18,7 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE+1)
-public class RequestBodyCachingFilter extends OncePerRequestFilter {
+public final class RequestBodyCachingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

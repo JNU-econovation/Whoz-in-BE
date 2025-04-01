@@ -1,6 +1,8 @@
-package com.whoz_in.main_api.shared.presentation;
+package com.whoz_in.main_api.shared.presentation.exception_handler;
 
 import com.whoz_in.main_api.shared.presentation.logging.HttpRequestExceptionLogger;
+import com.whoz_in.main_api.shared.presentation.response.FailureBody;
+import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

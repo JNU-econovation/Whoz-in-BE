@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.command.device.presentation.docs;
 
-import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;

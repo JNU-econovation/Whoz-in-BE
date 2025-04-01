@@ -5,7 +5,7 @@ import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditio
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
-import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
