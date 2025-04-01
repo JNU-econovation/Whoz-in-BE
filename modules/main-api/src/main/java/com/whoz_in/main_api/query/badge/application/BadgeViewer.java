@@ -14,4 +14,6 @@ public interface BadgeViewer extends Viewer {
 
     // 멤버의 뱃지 조회
     BadgesOfMember findBadgesOfMember(UUID memberId);
+
+    BadgeInfo findRepresentativeBadge(UUID memberId);
 }
