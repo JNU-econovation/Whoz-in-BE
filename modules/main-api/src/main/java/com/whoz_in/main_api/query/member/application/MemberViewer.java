@@ -11,8 +11,8 @@ import java.util.UUID;
 
 public interface MemberViewer extends Viewer {
     Optional<MemberAuthInfo> findAuthInfoByLoginId(String loginId);
-    Optional<MemberInfo> findNameByMemberId(String memberId); // TODO: UUID로 변경
-    Optional<MemberConnectionInfo> findConnectionInfo(String memberId); // TODO: UUID로 변경
+    Optional<MemberInfo> findNameByMemberId(UUID memberId);
+    Optional<MemberConnectionInfo> findConnectionInfo(UUID memberId);
     Optional<MemberDetailInfo> findDetailByMemberId(UUID memberId);
     List<MemberConnectionInfo> findAllMemberConnectionInfo();
     List<MemberConnectionInfo> findByMemberIds(List<UUID> memberIds);

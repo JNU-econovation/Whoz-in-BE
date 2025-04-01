@@ -27,8 +27,8 @@ public class MemberProfileHandler implements QueryHandler<MemberProfile, MemberP
 
         memberFinderService.mustExist(new MemberId(memberId));
 
-        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(memberId.toString()).get();
-        MemberInfo memberInfo = memberViewer.findNameByMemberId(memberId.toString()).get();
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(memberId).get();
+        MemberInfo memberInfo = memberViewer.findNameByMemberId(memberId).get();
 
         Duration duration = connectionInfo.totalTime();
 

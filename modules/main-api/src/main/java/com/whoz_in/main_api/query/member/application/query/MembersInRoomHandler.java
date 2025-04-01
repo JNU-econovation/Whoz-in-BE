@@ -175,7 +175,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo){
-        MemberInfo ownerInfo = getMemberName(memberId.id().toString());
+        MemberInfo ownerInfo = getMemberName(memberId.id());
 
         int generation = ownerInfo.generation();
         String memberName = ownerInfo.memberName();
@@ -239,7 +239,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         return deviceViewer.findDeviceOwner(deviceId).ownerId();
     }
 
-    private MemberInfo getMemberName(String memberId){
+    private MemberInfo getMemberName(UUID memberId){
         return memberViewer.findNameByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 기기와 사용자 이름 매핑 중 예상치 못한 에러 발생"));
     }

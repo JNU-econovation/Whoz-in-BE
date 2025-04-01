@@ -61,7 +61,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         UUID ownerId = device.getMemberId().id();
 
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
-        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId).orElse(null);
 
         if(connectionInfo == null){
             log.warn("[InActiveDeviceFilter] memberId 가 존재하지 않는 에러 {}", ownerId);

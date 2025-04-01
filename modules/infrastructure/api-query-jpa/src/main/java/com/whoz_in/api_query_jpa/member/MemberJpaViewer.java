@@ -26,14 +26,14 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     @Override
-    public Optional<MemberInfo> findNameByMemberId(String memberId) {
-        return repository.findById(UUID.fromString(memberId))
+    public Optional<MemberInfo> findNameByMemberId(UUID memberId) {
+        return repository.findById(memberId)
                 .map(this::toMemberInfo);
     }
 
     @Override
-    public Optional<MemberConnectionInfo> findConnectionInfo(String memberId) {
-        return connectionInfoRepository.findByMemberId(UUID.fromString(memberId))
+    public Optional<MemberConnectionInfo> findConnectionInfo(UUID memberId) {
+        return connectionInfoRepository.findByMemberId(memberId)
                 .map(this::toMemberConnectionInfo);
     }
 
