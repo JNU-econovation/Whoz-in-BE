@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.member;
 
-import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
+import com.whoz_in.api_query_jpa.badge.BadgeRepository;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.view.MemberAuthInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MemberJpaViewer implements MemberViewer {
     private final MemberRepository repository;
-    private final ActiveDeviceRepository activeDeviceRepository;
+    private final BadgeRepository badgeRepository;
     private final MemberConnectionInfoRepository connectionInfoRepository;
 
     @Override
@@ -72,7 +73,13 @@ public class MemberJpaViewer implements MemberViewer {
     }
 
     private MemberInfo toMemberInfo(com.whoz_in.api_query_jpa.member.Member entity){
-        return new MemberInfo(entity.getId(), entity.getPosition(), entity.getStatusMessage(), entity.getGeneration(), entity.getName());
+        List<BadgeInfo> badge = getBadgeInfo(entity);
+        BadgeInfo representativeBadge = getRepresentativeBadge(entity);
+        return new MemberInfo(entity.getId(),
+                entity.getPosition(),
+                entity.getStatusMessage(),
+                entity.getGeneration(),
+                entity.getName(), badge, representativeBadge);
     }
 
     private MemberAuthInfo toMemberAuthInfo(com.whoz_in.api_query_jpa.member.Member entity){
@@ -82,4 +89,16 @@ public class MemberJpaViewer implements MemberViewer {
     private MemberDetailInfo toMemberDetailInfo(com.whoz_in.api_query_jpa.member.Member entity){
         return new MemberDetailInfo(entity.getId(), entity.getName(), entity.getGeneration(), entity.getPosition(), entity.getStatusMessage());
     }
+
+    private List<BadgeInfo> getBadgeInfo(com.whoz_in.api_query_jpa.member.Member entity){
+        return badgeRepository.findBadgesByMemberId(entity.getId()).stream(
+                ).map(badge -> new BadgeInfo(badge.getName(), badge.getColorCode(), badge.getDescription())).toList();
+    }
+
+    private BadgeInfo getRepresentativeBadge(com.whoz_in.api_query_jpa.member.Member entity){
+        return badgeRepository.findRepresentativeBadge(entity.getId()).map(badge -> new BadgeInfo(badge.getName(), badge.getColorCode(), badge.getDescription()))
+                .orElseThrow(() -> new IllegalStateException("Representative badge not found for member: " + entity.getId()));
+    }
+
+
 }

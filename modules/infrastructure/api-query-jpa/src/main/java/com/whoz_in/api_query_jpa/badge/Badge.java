@@ -1,5 +1,6 @@
 package com.whoz_in.api_query_jpa.badge;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
@@ -14,21 +15,32 @@ import org.hibernate.annotations.UuidGenerator;
 @Entity
 @Immutable
 @Subselect("SELECT "
-        + "b.id AS id, "
-        + "b.name AS name, "
-        + "b.color_code AS color_code, "
-        + "b.badge_type AS badge_type, "
-        + "b.created_at AS created_at, "
-        + "b.description AS description "
+        + "b.id, "
+        + "b.name, "
+        + "b.color_code, "
+        + "b.badge_type, "
+        + "b.created_at, "
+        + "b.description "
         + "FROM badge_entity b")
 @Synchronize({"badge_entity"})
 public class Badge {
     @Id
     @UuidGenerator
+    @Column(name = "id")
     private UUID id;
+
+    @Column(name = "name")
     private String name;
-    private String color_code;
-    private String badge_type;
-    private LocalDateTime created_at;
+
+    @Column(name = "color_code")
+    private String colorCode;
+
+    @Column(name = "badge_type")
+    private String badgeType;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "description")
     private String description;
 }

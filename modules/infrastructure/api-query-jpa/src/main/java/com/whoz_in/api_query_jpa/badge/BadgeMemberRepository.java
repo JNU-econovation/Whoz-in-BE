@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BadgeMemberRepository extends JpaRepository<BadgeMember, Long> {
-    @Query("SELECT bm FROM BadgeMember bm WHERE bm.member_id = :memberId")
+    @Query("SELECT bm FROM BadgeMember bm WHERE bm.memberId = :memberId")
     List<BadgeMember> findByMemberId(@Param("memberId") UUID memberId);
 }
