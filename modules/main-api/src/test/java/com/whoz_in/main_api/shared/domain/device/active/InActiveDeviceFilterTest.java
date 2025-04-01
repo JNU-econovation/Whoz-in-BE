@@ -4,9 +4,6 @@ import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
-import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
-import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.shared.domain.device.DeviceFixture;
 import com.whoz_in.main_api.shared.domain.member.MemberFixture;
 import java.util.UUID;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -23,12 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class InActiveDeviceFilterTest {
 
     @Mock private DeviceRepository deviceRepository;
-    @Mock private MemberViewer memberViewer;
     @Mock private MemberRepository memberRepository;
-    @Mock private ActiveDeviceViewer activeDeviceViewer;
-    @Mock private MonitorLogRepository monitorLogRepository;
-
-    @InjectMocks private InActiveDeviceFilter inActiveDeviceFilter;
 
     @BeforeEach
     void setUp() {

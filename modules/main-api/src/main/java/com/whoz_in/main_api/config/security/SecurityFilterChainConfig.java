@@ -1,5 +1,7 @@
 package com.whoz_in.main_api.config.security;
 
+import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INTERNAL_PREFIX;
+
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
@@ -37,7 +39,7 @@ public class SecurityFilterChainConfig {
     @Order(0)
     public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                "/internal/**"
+                INTERNAL_PREFIX + "/**"
         );
 
         commonConfigurations(httpSecurity);
@@ -94,6 +96,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.securityMatchers(matcher->{
             matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
                     .requestMatchers(HttpMethod.POST, "/api/v1/signup/oauth")
+                    // ssid를 기기 등록 토큰으로만 요청하는게 아니라 AT로도 요청할 수 있어야 함. 필터를 새로 만들거나 다른 방법을 생각해봐야 함
                     .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
         });
 
@@ -152,7 +155,6 @@ public class SecurityFilterChainConfig {
                         "/api/v1/feedback/**",
                         "/api/v1/badges",
                         "/api/v1/badges/members"
-                        //TODO: 로그아웃 추가
                 ).requestMatchers(HttpMethod.PATCH,
                         "/api/v1/device/info",
                         "/api/v1/badges/members"

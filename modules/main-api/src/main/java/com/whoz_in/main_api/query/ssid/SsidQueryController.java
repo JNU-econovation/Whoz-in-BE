@@ -2,9 +2,9 @@ package com.whoz_in.main_api.query.ssid;
 
 import com.whoz_in.main_api.config.RoomSsidConfig;
 import com.whoz_in.main_api.query.ssid.docs.SsidQueryApi;
-import com.whoz_in.main_api.shared.presentation.CrudResponseCode;
-import com.whoz_in.main_api.shared.presentation.ResponseEntityGenerator;
-import com.whoz_in.main_api.shared.presentation.SuccessBody;
+import com.whoz_in.main_api.shared.presentation.response.CrudResponseCode;
+import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
+import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

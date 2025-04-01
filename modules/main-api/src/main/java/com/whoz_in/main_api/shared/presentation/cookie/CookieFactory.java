@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.shared.presentation;
+package com.whoz_in.main_api.shared.presentation.cookie;
 
 import jakarta.servlet.http.Cookie;
 import java.time.Duration;

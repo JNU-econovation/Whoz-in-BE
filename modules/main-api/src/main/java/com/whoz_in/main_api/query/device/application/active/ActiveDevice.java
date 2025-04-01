@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.query.device.application.active.view;
+package com.whoz_in.main_api.query.device.application.active;
 
 import com.whoz_in.domain.shared.Nullable;
 import com.whoz_in.main_api.query.shared.application.View;

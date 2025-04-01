@@ -18,7 +18,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
 @RequiredArgsConstructor
-public class TokenArgumentResolver implements HandlerMethodArgumentResolver {
+public final class TokenArgumentResolver implements HandlerMethodArgumentResolver {
 
     private final List<TokenSerializer<? extends Token>> serializers;
 

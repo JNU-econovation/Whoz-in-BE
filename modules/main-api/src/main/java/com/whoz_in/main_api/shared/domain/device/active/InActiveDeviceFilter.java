@@ -5,8 +5,8 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
@@ -61,7 +61,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
         UUID ownerId = device.getMemberId().id();
 
         ActiveDevice activeDevice = activeDeviceViewer.getByDeviceId(deviceId.toString());
-        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId.toString()).orElse(null);
+        MemberConnectionInfo connectionInfo = memberViewer.findConnectionInfo(ownerId).orElse(null);
 
         if(connectionInfo == null){
             log.warn("[InActiveDeviceFilter] memberId 가 존재하지 않는 에러 {}", ownerId);

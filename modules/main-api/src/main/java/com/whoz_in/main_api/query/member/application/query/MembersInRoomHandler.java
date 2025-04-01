@@ -5,10 +5,10 @@ import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
-import com.whoz_in.main_api.query.device.application.active.view.ActiveDeviceViewer;
+import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
+import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountException;
-import com.whoz_in.main_api.query.device.view.DeviceViewer;
+import com.whoz_in.main_api.query.device.application.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse.Badge;
@@ -88,7 +88,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
                 MemberId memberId = memberIds.get(i);
                 List<DeviceStatus> deviceStatuses = devicesStatusByMemberId.get(memberId);
-                BadgeInfo badgeInfo = getMemberName(memberId.id().toString()).repBadge();
+                BadgeInfo badgeInfo = getMemberName(memberId.id()).repBadge();
 
                 if(!deviceStatuses.isEmpty()) {
 
@@ -178,7 +178,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
     }
 
     private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo, BadgeInfo badgeInfo){
-        MemberInfo ownerInfo = getMemberName(memberId.id().toString());
+        MemberInfo ownerInfo = getMemberName(memberId.id());
 
         int generation = ownerInfo.generation();
         String memberName = ownerInfo.memberName();
@@ -224,7 +224,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         return deviceViewer.findDeviceOwner(deviceId).ownerId();
     }
 
-    private MemberInfo getMemberName(String memberId){
+    private MemberInfo getMemberName(UUID memberId){
         return memberViewer.findNameByMemberId(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자 기기와 사용자 이름 매핑 중 예상치 못한 에러 발생"));
     }

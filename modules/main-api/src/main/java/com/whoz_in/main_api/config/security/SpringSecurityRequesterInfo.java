@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 /*
 SpringSecurity 를 이용한 RequesterInfo
+요청이 인증정보를 담고 있더라도 인증을 요구하지 않는 엔드포인트는 MemberId가 없다.
  */
 @Component
 @RequiredArgsConstructor
