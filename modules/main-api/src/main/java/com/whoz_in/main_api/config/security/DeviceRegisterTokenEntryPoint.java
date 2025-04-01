@@ -1,0 +1,23 @@
+package com.whoz_in.main_api.config.security;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
+
+//JwtAuthentication이 없을경우 실행됨 (유효한 device register token이 없음)
+@Component
+public class DeviceRegisterTokenEntryPoint implements AuthenticationEntryPoint {
+
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException)
+            throws IOException{
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401
+        response.getWriter().write("{\"message\": \"유효한 기기 등록 토큰이 없습니다. 다시 시도해주세요.\", \"error_code\": \"2001\"}");
+        response.getWriter().flush();
+    }
+}

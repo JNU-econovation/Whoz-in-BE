@@ -67,14 +67,14 @@ public class UsbReconnector {
 
         try {
             // 네트워크 인터페이스 비활성화
-            TransientProcess.create("sudo ip link set " + interfaceName + " down").waitTermination();
+            TransientProcess.create("sudo ip link set " + interfaceName + " down").waitForTermination();
             // USB 장치 언바인드
             writeToFile("/sys/bus/usb/drivers/usb/unbind", usbPath);
             sleep(1000);
             // USB 장치 바인드
             writeToFile("/sys/bus/usb/drivers/usb/bind", usbPath);
             // 네트워크 인터페이스 활성화
-            TransientProcess.create("sudo ip link set " + interfaceName + " up").waitTermination();
+            TransientProcess.create("sudo ip link set " + interfaceName + " up").waitForTermination();
             log.info("{}의 USB 초기화 완료", interfaceName);
 
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public final class IpRuleManager {
         rules.forEach((ip, table) -> {
             if (table.equals(tableName)) {
                 String delCmd = String.format("sudo ip rule del from %s table %s", ip, tableName);
-                TransientProcess.create(delCmd).waitTermination();
+                TransientProcess.create(delCmd).waitForTermination();
                 log.info("[ip rule] {}({}) 삭제됨", table, ip);
             }
         });
@@ -46,7 +46,7 @@ public final class IpRuleManager {
     // IP와 테이블 이름으로 ip rule을 추가
     public void addRule(String ip, String table) {
         String addCmd = String.format("sudo ip rule add from %s table %s", ip, table);
-        TransientProcess.create(addCmd).waitTermination();
+        TransientProcess.create(addCmd).waitForTermination();
         log.info("[ip rule] {}({}) 추가됨", table, ip);
     }
 
@@ -55,7 +55,7 @@ public final class IpRuleManager {
         Map<String, String> rules = getRules();
         rules.forEach((ip, table) -> {
             String delCmd = String.format("sudo ip rule del from %s table %s", ip, table);
-            TransientProcess.create(delCmd).waitTermination();
+            TransientProcess.create(delCmd).waitForTermination();
         });
         log.info("[ip rule] 초기화됨");
     }

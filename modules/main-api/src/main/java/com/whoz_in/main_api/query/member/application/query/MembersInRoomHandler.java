@@ -2,6 +2,7 @@ package com.whoz_in.main_api.query.member.application.query;
 
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.member.model.MemberId;
+import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
 import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
 import com.whoz_in.main_api.query.device.application.active.view.ActiveDevice;
@@ -10,6 +11,7 @@ import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountExceptio
 import com.whoz_in.main_api.query.device.view.DeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse;
+import com.whoz_in.main_api.query.member.application.response.MemberInRoomResponse.Badge;
 import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
 import com.whoz_in.main_api.query.member.application.support.ConnectionTimeFormatter;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
@@ -18,7 +20,6 @@ import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import com.whoz_in.main_api.shared.utils.Sorter;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -87,13 +88,14 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
 
                 MemberId memberId = memberIds.get(i);
                 List<DeviceStatus> deviceStatuses = devicesStatusByMemberId.get(memberId);
+                BadgeInfo badgeInfo = getMemberName(memberId.id().toString()).repBadge();
 
                 if(!deviceStatuses.isEmpty()) {
 
                     List<ActiveDevice> activeDevicesByMember = activeDevicesByMemberId.get(memberId);
                     MemberConnectionInfo connectionInfo = memberConnectionInfoByMemberId.get(memberId);
 
-                    MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo);
+                    MemberInRoomResponse oneResponse = toResponse(memberId, activeDevicesByMember, connectionInfo, badgeInfo);
 
                     responses.add(oneResponse);
                 }
@@ -102,7 +104,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                     responses.add(MemberInRoomResponse.nonDeviceRegisterer(
                             memberInfos.get(i).generation(),
                             memberInfos.get(i).memberId().toString(),
-                            memberInfos.get(i).memberName()));
+                            memberInfos.get(i).memberName(),
+                            badgeInfo));
                 }
             }
 
@@ -174,7 +177,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         if(count.value()<1) throw RegisteredDeviceCountException.EXCEPTION;
     }
 
-    private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo){
+    private MemberInRoomResponse toResponse(MemberId memberId, List<ActiveDevice> devices, MemberConnectionInfo connectionInfo, BadgeInfo badgeInfo){
         MemberInfo ownerInfo = getMemberName(memberId.id().toString());
 
         int generation = ownerInfo.generation();
@@ -191,28 +194,10 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
                 memberName,
                 ConnectionTimeFormatter.hourMinuteTime(continuousMinute),
                 ConnectionTimeFormatter.hourMinuteTime(dailyConnectedMinute),
+                new Badge(badgeInfo),
                 dailyConnectedMinute,
                 isActive
         );
-    }
-
-    private Long getContinuousMinute(List<ActiveDevice> activeDevices){
-        Long continuousMinute;
-        if(activeDevices.size()>1)
-            return activeDevices.stream()
-                .filter(ActiveDevice::isActive)
-                .map(ActiveDevice::continuousTime)
-                .max(Duration::compareTo)
-                .orElse(Duration.ZERO)
-                .toMinutes();
-
-        else
-            return activeDevices.stream()
-                .map(ActiveDevice::continuousTime)
-                .findAny()
-                .orElse(Duration.ZERO)
-                .toMinutes();
-
     }
 
     private Long getDailyConnectedTime(MemberConnectionInfo connectionInfo, Long continuousMinute){

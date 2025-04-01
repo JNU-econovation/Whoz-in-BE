@@ -25,13 +25,17 @@ public final class TempDeviceInfoStore {
             .build();
 
 
-    //이전에 등록되지 않은 TempDeviceInfo인지 검증
-    public boolean exists(UUID ownerId, TempDeviceInfo deviceInfo){
+    // 이전에 등록된 ssid인지 확인
+    public boolean existsBySsid(UUID ownerId, String ssid){
         List<TempDeviceInfo> deviceInfos = store.getIfPresent(ownerId);
-        return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.equals(deviceInfo));
+        return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.getSsid().equals(ssid));
+    }
+    public boolean existsByMac(UUID ownerId, String mac){
+        List<TempDeviceInfo> deviceInfos = store.getIfPresent(ownerId);
+        return (deviceInfos != null) && deviceInfos.stream().anyMatch(di->di.getMac().equals(mac));
     }
 
-    //DeviceInfo 추가 TODO: 동시성
+    //DeviceInfo 추가
     public void add(UUID ownerId, TempDeviceInfo newDeviceInfo) {
         try {
             List<TempDeviceInfo> deviceInfos = store.get(ownerId, CopyOnWriteArrayList::new);
@@ -54,5 +58,9 @@ public final class TempDeviceInfoStore {
         List<TempDeviceInfo> deviceInfos = store.asMap().remove(ownerId);
         if (deviceInfos == null) throw new IllegalStateException("저장된 device info가 없음");
         return deviceInfos;
+    }
+
+    public void remove(UUID ownerId){
+        store.asMap().remove(ownerId);
     }
 }

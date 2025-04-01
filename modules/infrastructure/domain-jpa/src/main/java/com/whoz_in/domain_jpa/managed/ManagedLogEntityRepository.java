@@ -16,10 +16,10 @@ public interface ManagedLogEntityRepository extends JpaRepository<ManagedLogEnti
             "WHERE mac = (" +
             "    SELECT mac " +
             "    FROM managed_log_entity " +
-            "    WHERE ip = :ip  AND updated_at >= :time " +
+            "    WHERE ip = :ip " +
             "    ORDER BY updated_at DESC" +
             "    LIMIT 1)"
-            + " AND ip = :ip",
+            + " AND ip = :ip AND updated_at >= :time",
             nativeQuery = true)
     List<ManagedLogEntity> findAllByIpLatestMac(@Param("ip") String ip, @Param("time") LocalDateTime time);
 
