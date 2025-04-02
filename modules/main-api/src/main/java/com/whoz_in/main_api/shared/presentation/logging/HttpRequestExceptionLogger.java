@@ -34,7 +34,7 @@ public class HttpRequestExceptionLogger {
                 origin.getMethodName(),
                 e.getClass().getName(),
                 e.getMessage(),
-                httpRequestInfoExtractor.extractInfoFrom(request),
+                httpRequestInfoExtractor.extractAll(request),
                 e);
     }
 }

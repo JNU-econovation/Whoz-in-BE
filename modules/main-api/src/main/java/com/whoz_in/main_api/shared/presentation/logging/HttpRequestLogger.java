@@ -10,15 +10,11 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class HttpRequestLogger {
+    private final HttpRequestInfoExtractor httpRequestInfoExtractor;
     public void log(HttpServletRequest request) {
-        String clientIp = request.getHeader("X-Forwarded-For");
-        if (clientIp == null || clientIp.isEmpty()) {
-            clientIp = request.getRemoteAddr();
-        }
-        log.info("[HTTP REQUEST] ip: {}, url: {}({})",
-                clientIp,
-                request.getRequestURI(),
-                request.getMethod()
+        log.info("[HTTP REQUEST] ip: {}, url: {}",
+                httpRequestInfoExtractor.extractIp(request),
+                httpRequestInfoExtractor.extractUriAndMethod(request)
         );
     }
 }

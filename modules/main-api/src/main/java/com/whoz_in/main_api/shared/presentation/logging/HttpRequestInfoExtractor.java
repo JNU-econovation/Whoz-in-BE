@@ -11,28 +11,36 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
+// 사람이 읽을 수 있게 파싱하는 역할
 @Component
 @RequiredArgsConstructor
 public class HttpRequestInfoExtractor {
     private final ObjectMapper objectMapper;
-    public String extractInfoFrom(HttpServletRequest request) {
+    public String extractAll(HttpServletRequest request) {
+        return "IP: " + extractIp(request) + "\n"
+                + "URL: " + extractUriAndMethod(request) + "\n"
+                + "QUERY PARAMS: " + extractQueryParams(request) + "\n"
+                + "COOKIES: " + extractCookies(request) + "\n"
+                + "BODY: " + extractRequestBody(request);
+    }
+    public String extractIp(HttpServletRequest request){
         String clientIp = request.getHeader("X-Forwarded-For");
         if (clientIp == null || clientIp.isEmpty()) {
             clientIp = request.getRemoteAddr();
         }
-        return "IP: " + clientIp + "\n"
-                + "URL: " + request.getRequestURI() + ", METHOD: " + request.getMethod() + "\n"
-                + "QUERY PARAMS: " + getQueryParams(request) + "\n"
-                + "COOKIES: " + getCookies(request) + "\n"
-                + "BODY: " + getRequestBody(request);
+        return clientIp;
     }
-    private String getQueryParams(HttpServletRequest request) {
+    public String extractUriAndMethod(HttpServletRequest request){
+        return request.getRequestURI() + "(" + request.getMethod() +")";
+    }
+
+    public String extractQueryParams(HttpServletRequest request) {
         Map<String, String[]> paramMap = request.getParameterMap();
         return paramMap.isEmpty() ? "없음" : paramMap.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + Arrays.toString(entry.getValue()))
                 .collect(Collectors.joining(", "));
     }
-    private String getCookies(HttpServletRequest request) {
+    public String extractCookies(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies == null || cookies.length == 0) return "없음";
         return Arrays.stream(cookies)
@@ -43,7 +51,7 @@ public class HttpRequestInfoExtractor {
                     return cookie.getName() + "=" + cookieValue;
                 }).toList().toString();
     }
-    private String getRequestBody(HttpServletRequest request) {
+    public String extractRequestBody(HttpServletRequest request) {
         if (request.getContentLength() == 0) return "없음";
 
         if (!(request instanceof ContentCachingRequestWrapper wrapper)) return "감싸지 않은 요청은 읽을 수 없음";
