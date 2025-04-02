@@ -89,7 +89,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         return new MembersInRoomResponse(paged, activeCount);
     }
 
-    @EventListener(DeviceCreatedEvent.class)
+    @EventListener(DeviceCreatedEvent.class) // TODO: device가 쿼리에 적용됐을때 하는게 베스트
     @Scheduled(fixedRate = 1000 * 60) // 1분마다 현황 업데이트하니까 1분마다 함
     private void updateMembers(){
         Map<UUID, MemberInfo> memberInfoMap = memberViewer.findAllMemberInfoOrderByStatus().stream()
