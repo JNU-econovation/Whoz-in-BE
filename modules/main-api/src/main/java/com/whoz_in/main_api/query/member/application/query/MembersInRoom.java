@@ -9,12 +9,8 @@ public record MembersInRoom(
         String status
 ) implements Query {
 
-    public MembersInRoom(int page, int size, String sortType, String status) {
+    public MembersInRoom {
         validateParameter(page, size, sortType, status);
-        this.page = page;
-        this.size = size;
-        this.sortType = sortType;
-        this.status = status;
     }
 
     private void validateParameter(int page, int size, String sortType, String status) {
