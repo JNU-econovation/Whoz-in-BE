@@ -30,7 +30,8 @@ public class HttpRequestLoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            if (httpRequestIdentifier.isPublic(request))
+            // 분기 로직을 따로 뺄 수 있겠음.
+            if (!"OPTIONS".equalsIgnoreCase(request.getMethod()) && httpRequestIdentifier.isPublic(request))
                 httpRequestLogger.log(request);
             filterChain.doFilter(request, response);
         } catch (Exception e) {
