@@ -9,6 +9,7 @@ import com.whoz_in.main_api.command.device.presentation.docs.DeviceCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
 import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
+import com.whoz_in.main_api.shared.presentation.logging.LogBody;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class DeviceController extends CommandController implements DeviceCommand
         super(commandBus);
     }
 
+    @LogBody
     @PostMapping("/device/info")
     public ResponseEntity<SuccessBody<DeviceInfoTempAddRes>> addDeviceInfo(
             DeviceRegisterToken token,

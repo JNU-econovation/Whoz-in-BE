@@ -12,9 +12,8 @@ import org.springframework.stereotype.Component;
 public class HttpRequestLogger {
     private final HttpRequestInfoExtractor httpRequestInfoExtractor;
     public void log(HttpServletRequest request) {
-        log.info("[HTTP REQUEST] ip: {}, url: {}",
-                httpRequestInfoExtractor.extractIp(request),
-                httpRequestInfoExtractor.extractUriAndMethod(request)
-        );
+        String ip = httpRequestInfoExtractor.extractIp(request);
+        String uriAndMethod = httpRequestInfoExtractor.extractUriAndMethod(request);
+        log.info("[HTTP REQUEST] IP: {}, URI: {}", ip, uriAndMethod);
     }
 }

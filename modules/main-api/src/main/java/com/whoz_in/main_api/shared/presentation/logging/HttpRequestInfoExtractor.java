@@ -3,6 +3,7 @@ package com.whoz_in.main_api.shared.presentation.logging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Map;
@@ -53,16 +54,24 @@ public class HttpRequestInfoExtractor {
     }
     public String extractRequestBody(HttpServletRequest request) {
         if (request.getContentLength() == 0) return "없음";
-
-        if (!(request instanceof ContentCachingRequestWrapper wrapper)) return "감싸지 않은 요청은 읽을 수 없음";
+        ContentCachingRequestWrapper wrapper = unwrap(request);
+        if (wrapper == null)
+            return "감싸지 않은 요청은 읽을 수 없음";
 
         byte[] buf = wrapper.getContentAsByteArray();
         // 요청 inputstream이 소비될 때 ContentCachingRequestWrapper이 바디를 캐싱함
-        if (buf.length == 0) return "바디가 읽히지 않았음";
+        if (buf.length == 0) return "바디가 없거나 읽히지 않았음";
         try {
             return objectMapper.readTree(buf).toPrettyString();
         } catch (IOException e) {
             return "바디 JSON 변환 실패";
         }
+    }
+
+    private ContentCachingRequestWrapper unwrap(HttpServletRequest request) {
+        while (!(request instanceof ContentCachingRequestWrapper) && request instanceof HttpServletRequestWrapper) {
+            request = (HttpServletRequest) ((HttpServletRequestWrapper) request).getRequest();
+        }
+        return (request instanceof ContentCachingRequestWrapper) ? (ContentCachingRequestWrapper) request : null;
     }
 }
