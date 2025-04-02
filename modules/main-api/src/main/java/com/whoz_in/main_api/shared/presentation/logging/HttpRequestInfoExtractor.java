@@ -16,7 +16,13 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 public class HttpRequestInfoExtractor {
     private final ObjectMapper objectMapper;
     public String extractInfoFrom(HttpServletRequest request) {
-        return "QUERY PARAMS: " + getQueryParams(request) + "\n"
+        String clientIp = request.getHeader("X-Forwarded-For");
+        if (clientIp == null || clientIp.isEmpty()) {
+            clientIp = request.getRemoteAddr();
+        }
+        return "IP: " + clientIp + "\n"
+                + "URL: " + request.getRequestURI() + ", METHOD: " + request.getMethod() + "\n"
+                + "QUERY PARAMS: " + getQueryParams(request) + "\n"
                 + "COOKIES: " + getCookies(request) + "\n"
                 + "BODY: " + getRequestBody(request);
     }
