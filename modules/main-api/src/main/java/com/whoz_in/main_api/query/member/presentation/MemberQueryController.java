@@ -51,7 +51,7 @@ public class MemberQueryController extends QueryController implements MemberQuer
         return ResponseEntityGenerator.success(ask(new MemberDetailInfoGet()), CrudResponseCode.READ);
     }
 
-    @GetMapping("/member/profile/{memberId}")
+    @GetMapping("/member/{memberId}/profile")
     public ResponseEntity<SuccessBody<MemberProfileInfo>> getProfileInfo(@PathVariable("memberId") String memberId){
         return ResponseEntityGenerator.success(ask(new MemberProfile(memberId)), CrudResponseCode.READ);
     }
