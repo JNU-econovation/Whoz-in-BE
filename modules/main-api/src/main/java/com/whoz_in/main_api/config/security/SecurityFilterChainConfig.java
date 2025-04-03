@@ -5,7 +5,10 @@ import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INT
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -69,11 +72,17 @@ public class SecurityFilterChainConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain oauth2FilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.securityMatcher(
-                "/login", //시큐리티 기본 로그인 페이지
-                "/oauth2/authorization/*", //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
-                "/login/oauth2/code/*"  //redirect uri
+    public SecurityFilterChain oauth2FilterChain(
+            HttpSecurity httpSecurity,
+            @Value("${spring.profiles.active}") String profile
+    ) throws Exception {
+        List<String> endpoints = new ArrayList<>();
+        endpoints.add("/oauth2/authorization/*"); //소셜 로그인 페이지 (OAuth2LoginConfigurer에서 자동 생성)
+        endpoints.add("/login/oauth2/code/*"); //redirect uri
+        if (profile.equals("local")) endpoints.add("/login"); // 로컬에서만 사용되는 로그인 페이지
+
+        httpSecurity.securityMatchers(matcher ->
+                matcher.requestMatchers(endpoints.toArray(String[]::new))
         );
 
         commonConfigurations(httpSecurity);
