@@ -13,3 +13,6 @@ include ':logging'
 project(':logging').projectDir = file('modules/infrastructure/logging')
 include ':api-redis'
 project(':api-redis').projectDir = file('modules/infrastructure/api-redis')
+include ':shared'
+project(':shared').projectDir = file('modules/shared')
+
