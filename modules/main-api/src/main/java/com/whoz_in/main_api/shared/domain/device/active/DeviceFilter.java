@@ -35,7 +35,7 @@ public abstract class DeviceFilter {
 
     protected Set<MonitorLog> getUniqueMonitorLogs(){
         LocalDateTime before = LocalDateTime.now().minus(MEASURE);
-        List<MonitorLog> logs = monitorLogRepository.findByUpdatedAtAfterOrderByUpdatedAtDesc(before); // 몇 분 간의 로그 조회
+        List<MonitorLog> logs = monitorLogRepository.findAllByUpdatedAtAfter(before); // 몇 분 간의 로그 조회
         return new HashSet<>(logs); // TODO: 중복 제거
     }
 

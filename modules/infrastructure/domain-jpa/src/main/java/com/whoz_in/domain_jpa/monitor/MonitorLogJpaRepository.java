@@ -42,15 +42,8 @@ public class MonitorLogJpaRepository implements MonitorLogRepository {
     }
 
     @Override
-    public List<MonitorLog> findAll() {
-        return repository.findAll().stream()
-                .map(converter::to)
-                .toList();
-    }
-
-    @Override
-    public List<MonitorLog> findByUpdatedAtAfterOrderByUpdatedAtDesc(LocalDateTime updatedAt) {
-        return repository.findByUpdatedAtAfterOrderByUpdatedAtDesc(updatedAt).stream()
+    public List<MonitorLog> findAllByUpdatedAtAfter(LocalDateTime updatedAt) {
+        return repository.findAllByUpdatedAtAfter(updatedAt).stream()
                 .map(converter::to)
                 .toList();
     }
