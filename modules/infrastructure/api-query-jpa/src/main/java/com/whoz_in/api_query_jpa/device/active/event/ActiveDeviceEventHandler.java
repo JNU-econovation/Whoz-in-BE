@@ -31,8 +31,6 @@ public class ActiveDeviceEventHandler {
     public void saveActiveDevices(ActiveDeviceFound event) {
         List<UUID> deviceIds = event.devices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
-        System.out.println("event.devices() = " + event.devices());
-//        LocalDateTime connectedAt = LocalDateTime.now();
         // TODO: 이 부분 배치로 바꿔서 일괄처리 해도 될 듯
 
         activeDeviceEntities

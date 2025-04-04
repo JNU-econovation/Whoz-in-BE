@@ -1,10 +1,7 @@
 package com.whoz_in.api_query_jpa.shared.service;
 
-import com.whoz_in.api_query_jpa.device.DeviceRepository;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
-import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -20,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class DeviceConnectionService {
 
     private final ActiveDeviceRepository activeDeviceRepository;
-    private final MemberConnectionInfoRepository connectionInfoRepository;
-    private final DeviceRepository deviceRepository;
-    private final MemberRepository memberRepository;
     private final DeviceService deviceService;
     private final MemberConnectionService memberConnectionService;
     /**

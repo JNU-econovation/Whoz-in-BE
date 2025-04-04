@@ -14,6 +14,7 @@ import com.whoz_in.main_api.config.RoomSsidConfig;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfo;
 import com.whoz_in.main_api.shared.application.caching.device.TempDeviceInfoStore;
+import com.whoz_in.main_api.shared.enums.DeviceType;
 import com.whoz_in.main_api.shared.utils.RequestDeviceInfo;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import java.util.List;
@@ -46,9 +47,9 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
         memberFinderService.mustExist(requesterId);
 
         // 등록하려는 기기가 첫 기기인데 pc가 아닌 경우
-//        if (deviceRepository.findByMemberId(requesterId).isEmpty()
-//                && requestDeviceInfo.getDeviceType() != DeviceType.PC)
-//            throw NoPcDeviceException.EXCEPTION;
+        if (deviceRepository.findByMemberId(requesterId).isEmpty()
+                && requestDeviceInfo.getDeviceType() != DeviceType.PC)
+            throw NoPcDeviceException.EXCEPTION;
         // 이미 등록된 Device 가져오기
         Optional<Device> registeredDevice = cmd.getDeviceId().map(deviceFinderService::find);
         // 내꺼인지 검증
