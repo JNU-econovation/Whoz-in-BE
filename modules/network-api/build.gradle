@@ -10,6 +10,7 @@ jar.enabled=false
 dependencies {
     implementation project(':logging')
     implementation project(':domain')
+    implementation project(':shared')
     runtimeOnly project(':domain-jpa')
 
     implementation 'org.springframework.boot:spring-boot-starter'

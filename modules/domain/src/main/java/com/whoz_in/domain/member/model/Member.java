@@ -10,7 +10,7 @@ import com.whoz_in.domain.member.event.MemberStatusMessageChanged;
 import com.whoz_in.domain.member.exception.NotAuthMemberException;
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.domain.shared.AggregateRoot;
-import com.whoz_in.domain.shared.Nullable;
+import com.whoz_in.shared.Nullable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

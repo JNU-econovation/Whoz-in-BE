@@ -1,8 +1,8 @@
 package com.whoz_in.domain.device.exception;
 
-import com.whoz_in.domain.shared.BusinessException;
+import com.whoz_in.shared.WhozinException;
 
-public class DeviceInfoAlreadyRegisteredException extends BusinessException {
+public class DeviceInfoAlreadyRegisteredException extends WhozinException {
     private DeviceInfoAlreadyRegisteredException(String errorMessage) {
         super("3050", errorMessage);
     }

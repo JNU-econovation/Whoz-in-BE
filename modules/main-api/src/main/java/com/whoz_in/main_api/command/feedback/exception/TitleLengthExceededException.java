@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.command.feedback.exception;
 
-import com.whoz_in.main_api.shared.application.ApplicationException;
+import com.whoz_in.shared.WhozinException;
 
-public class TitleLengthExceededException extends ApplicationException {
+public class TitleLengthExceededException extends WhozinException {
   public static final TitleLengthExceededException EXCEPTION = new TitleLengthExceededException();
     public TitleLengthExceededException() {
         super(

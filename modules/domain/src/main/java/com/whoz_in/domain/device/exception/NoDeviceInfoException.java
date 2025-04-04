@@ -1,8 +1,8 @@
 package com.whoz_in.domain.device.exception;
 
-import com.whoz_in.domain.shared.BusinessException;
+import com.whoz_in.shared.WhozinException;
 
-public class NoDeviceInfoException extends BusinessException {
+public class NoDeviceInfoException extends WhozinException {
     private NoDeviceInfoException(String errorMessage) {
         super("3040", errorMessage);
     }
