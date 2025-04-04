@@ -7,7 +7,6 @@ import com.whoz_in.main_api.command.member.application.LogOut;
 import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
-import com.whoz_in.main_api.command.member.application.MemberSignUp;
 import com.whoz_in.main_api.command.member.application.Reissue;
 import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
@@ -43,13 +42,6 @@ public class MemberController extends CommandController implements MemberCommand
     this.cookieFactory = cookieFactory;
     this.jwtProperties = jwtProperties;
     this.oAuth2UserInfoStore = oAuth2UserInfoStore;
-  }
-
-  @Override
-  @PostMapping("/api/v1/signup")
-  public ResponseEntity<SuccessBody<Void>> signup(@RequestBody MemberSignUp request){
-    dispatch(request);
-    return ResponseEntityGenerator.success( "회원가입 완료", HttpStatus.CREATED);
   }
 
   @Override

@@ -22,7 +22,7 @@ public class MemberOAuth2LoginHandler implements CommandHandler<MemberOAuth2Logi
     private final TokenSerializer<AccessToken> accessTokenSerializer;
     private final TokenSerializer<RefreshToken> refreshTokenSerializer;
 
-    @Transactional(readOnly = true) //아직은 readOnly
+    @Transactional(readOnly = true)
     @Override
     public LoginSuccessTokens handle(MemberOAuth2Login cmd) {
         Member member = memberFinderService.findBySocialId(cmd.socialId());

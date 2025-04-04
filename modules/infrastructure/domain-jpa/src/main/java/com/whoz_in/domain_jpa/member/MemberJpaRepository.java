@@ -22,11 +22,6 @@ public class MemberJpaRepository implements MemberRepository {
   }
 
   @Override
-  public Optional<Member> findByLoginId(String loginId) {
-    return memberRepo.findByLoginId(loginId).map(memberConverter::to);
-  }
-
-  @Override
   public boolean existsBySocialId(String socialId) {
     return memberRepo.existsBySocialId(socialId);
   }

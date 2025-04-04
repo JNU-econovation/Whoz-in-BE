@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.command.member.presentation.docs;
 
-import com.whoz_in.main_api.command.member.application.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
@@ -15,13 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "회원, 인증, 인가", description = "회원 Command Api")
 public interface MemberCommandApi {
-
-    @Operation(
-            summary = "회원가입",
-            description = "ID/PW로 회원가입을 진행합니다."
-    )
-    ResponseEntity<SuccessBody<Void>> signup(@RequestBody MemberSignUp request);
-
 
     @Operation(
             summary = "소셜 회원가입",

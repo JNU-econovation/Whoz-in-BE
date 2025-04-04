@@ -2,7 +2,6 @@ package com.whoz_in.api_query_jpa.device.active.event;
 
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
-import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
@@ -23,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ActiveDeviceEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
-    private final MemberRepository memberRepository;
     private final DeviceConnectionService deviceConnectionService;
     private final MemberConnectionService memberConnectionService;
     private final DeviceService deviceService;
@@ -33,7 +31,7 @@ public class ActiveDeviceEventHandler {
     public void saveActiveDevices(ActiveDeviceFound event) {
         List<UUID> deviceIds = event.devices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
-
+        System.out.println("event.devices() = " + event.devices());
 //        LocalDateTime connectedAt = LocalDateTime.now();
         // TODO: 이 부분 배치로 바꿔서 일괄처리 해도 될 듯
 

@@ -6,7 +6,7 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
 import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
-import com.whoz_in.main_api.command.member.application.MemberOAuth2LoginHandler;
+import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
@@ -34,7 +34,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     private final UriBuilderFactory uriBuilderFactory;
     private final JwtProperties jwtProperties;
     private final TokenSerializer<OAuth2TempToken> oAuth2TempTokenSerializer;
-    private final MemberOAuth2LoginHandler handler;
+    private final CommandBus commandBus;
     private final OAuth2UserInfoStore oAuth2UserInfoStore;
 
     //이미 회원가입한 회원이면 Access/Refresh를 제공
@@ -47,7 +47,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         if(userInfo.isRegistered()) {
             //이미 소셜 회원이 존재할 때
             //소셜 로그인 핸들러를 호출하여 AccessToken과 RefreshToken을 받고 클라이언트로 전송합니다.
-            LoginSuccessTokens tokens = handler.handle(new MemberOAuth2Login(userInfo.getSocialId()));
+            LoginSuccessTokens tokens = commandBus.dispatch(new MemberOAuth2Login(userInfo.getSocialId()));
             response.addCookie(cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS)));
             response.addCookie(cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH)));
         } else {

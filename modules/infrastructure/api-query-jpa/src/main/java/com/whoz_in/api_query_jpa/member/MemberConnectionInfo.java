@@ -1,6 +1,5 @@
 package com.whoz_in.api_query_jpa.member;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
@@ -22,10 +21,8 @@ public class MemberConnectionInfo {
 
     private Duration dailyTime;
 
-    @Column(nullable = true)
     private LocalDateTime activeAt;
 
-    @Column(nullable = true)
     private LocalDateTime inActiveAt;
 
     private Duration totalTime;

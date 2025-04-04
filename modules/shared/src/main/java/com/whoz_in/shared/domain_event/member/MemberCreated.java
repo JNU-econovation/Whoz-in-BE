@@ -1,6 +1,5 @@
 package com.whoz_in.shared.domain_event.member;
 
-import com.whoz_in.shared.Nullable;
 import com.whoz_in.shared.domain_event.DomainEvent;
 import java.util.Map;
 import java.util.UUID;
@@ -15,10 +14,8 @@ public final class MemberCreated extends DomainEvent {
     private final String mainPosition;
     private final int generation;
     private final String statusMessage;
-
-    @Nullable private final String loginId;
-    @Nullable private final String socialProvider;
-    @Nullable private final String socialId;
+    private final String socialProvider;
+    private final String socialId;
 
     private final Map<UUID, Boolean> badges;
     private final UUID mainBadge;
