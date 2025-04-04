@@ -13,7 +13,6 @@ import com.whoz_in.main_api.shared.presentation.logging.LogBody;
 import com.whoz_in.main_api.shared.presentation.response.CrudResponseCode;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;

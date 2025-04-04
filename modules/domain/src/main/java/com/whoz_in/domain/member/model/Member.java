@@ -1,16 +1,17 @@
 package com.whoz_in.domain.member.model;
 
+
 import com.whoz_in.domain.badge.exception.BadgeCurrentHidedException;
 import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
-import com.whoz_in.domain.member.event.MemberBadgeChanged;
-import com.whoz_in.domain.member.event.MemberCreated;
-import com.whoz_in.domain.member.event.MemberPasswordChanged;
-import com.whoz_in.domain.member.event.MemberStatusMessageChanged;
 import com.whoz_in.domain.member.exception.NotAuthMemberException;
 import com.whoz_in.domain.member.service.PasswordEncoder;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.shared.Nullable;
+import com.whoz_in.shared.domain_event.member.MemberBadgeVisibilityChanged;
+import com.whoz_in.shared.domain_event.member.MemberCreated;
+import com.whoz_in.shared.domain_event.member.MemberPasswordChanged;
+import com.whoz_in.shared.domain_event.member.MemberStatusMessageChanged;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,7 +68,22 @@ public final class Member extends AggregateRoot {
                 .badges(badges)
                 .mainBadge(mainBadge)
                 .build();
-        member.register(new MemberCreated(member));
+        member.register(new MemberCreated(
+                member.getId().id(),
+                name,
+                mainPosition.getName(),
+                generation,
+                "",
+                authCredentials != null ? authCredentials.getLoginId() : null,
+                oAuthCredentials != null ? oAuthCredentials.getSocialProvider().name() : null,
+                oAuthCredentials != null ? oAuthCredentials.getSocialId() : null,
+                badges.entrySet().stream()
+                        .collect(Collectors.toMap(
+                                (Map.Entry<BadgeId, Boolean> e) -> e.getKey().id(),
+                                Map.Entry::getValue
+                        )),
+                mainBadge != null ? mainBadge.id() : null     // 대표 뱃지
+        ));
         return member;
     }
 
@@ -90,19 +106,17 @@ public final class Member extends AggregateRoot {
         if (authCredentials == null)
             throw NotAuthMemberException.EXCEPTION;
         this.authCredentials = this.authCredentials.changePassword(rawOldPassword, rawNewPassword, passwordEncoder);
-        this.register(new MemberPasswordChanged(this.getId(), this.authCredentials.getEncodedPassword()));
+        this.register(new MemberPasswordChanged(this.getId().id()));
     }
 
     public void changeStatusMessage(String newStatusMessage){
         this.statusMessage = newStatusMessage;
-        this.register(new MemberStatusMessageChanged(this.getId(), this.statusMessage));
+        this.register(new MemberStatusMessageChanged(this.getId().id(), this.statusMessage));
     }
 
     public void changeBadgeVisibility(BadgeId badgeId, boolean show) {
         this.badges.put(badgeId, show);
-        Map<String, Boolean> badges = this.badges.entrySet().stream()
-                .collect(Collectors.toMap(entry -> entry.getKey().toString(), Map.Entry::getValue));
-        this.register(new MemberBadgeChanged(this.getId().id().toString(), badges));
+        this.register(new MemberBadgeVisibilityChanged(this.getId().id(), badgeId.id(), show));
     }
 
     public void attachBadge(BadgeId badgeId) {

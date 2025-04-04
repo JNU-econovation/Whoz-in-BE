@@ -14,9 +14,9 @@ import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
 import com.whoz_in.main_api.query.member.application.view.MemberInfo;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.domain.device.active.event.DeviceCreatedEvent;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import com.whoz_in.main_api.shared.utils.Sorter;
+import com.whoz_in.shared.domain_event.device.DeviceCreated;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -89,7 +89,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoom, Members
         return new MembersInRoomResponse(paged, activeCount);
     }
 
-    @EventListener(DeviceCreatedEvent.class) // TODO: device가 쿼리에 적용됐을때 하는게 베스트
+    @EventListener(DeviceCreated.class) // TODO: device가 쿼리에 적용됐을때 하는게 베스트
     @Scheduled(fixedRate = 1000 * 60) // 1분마다 현황 업데이트하니까 1분마다 함
     private void updateMembers(){
         Map<UUID, MemberInfo> memberInfoMap = memberViewer.findAllMemberInfoOrderByStatus().stream()

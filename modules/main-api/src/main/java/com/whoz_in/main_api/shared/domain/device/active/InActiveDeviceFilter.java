@@ -9,7 +9,7 @@ import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
 import com.whoz_in.main_api.query.member.application.view.MemberConnectionInfo;
-import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFinded;
+import com.whoz_in.main_api.shared.domain.device.active.event.InActiveDeviceFound;
 import com.whoz_in.main_api.shared.event.Events;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -89,7 +89,7 @@ public class InActiveDeviceFilter extends DeviceFilter{
                 .map(DeviceId::id)
                 .toList();
 
-        Events.raise(new InActiveDeviceFinded(deviceIds));
+        Events.raise(new InActiveDeviceFound(deviceIds));
     }
 
     private List<UUID> getDeviceInMonitorLog(Set<String> macs) {

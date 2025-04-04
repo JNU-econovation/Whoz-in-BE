@@ -13,15 +13,15 @@ public enum Position {
     GAME("game"),
     APP("app");
 
-    private final String position;
+    private final String name;
 
-    Position(String position) {
-        this.position = position;
+    Position(String name) {
+        this.name = name;
     }
 
     public static Position findByName(String position){
         return Arrays.stream(Position.values())
-                .filter(pos -> pos.getPosition().equalsIgnoreCase(position))
+                .filter(pos -> pos.getName().equalsIgnoreCase(position))
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("no position"));
     }

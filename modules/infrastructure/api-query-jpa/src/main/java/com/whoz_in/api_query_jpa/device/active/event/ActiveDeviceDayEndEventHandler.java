@@ -3,9 +3,8 @@ package com.whoz_in.api_query_jpa.device.active.event;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
-import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
-import com.whoz_in.main_api.shared.domain.member.event.DayEndEvent;
+import com.whoz_in.main_api.shared.domain.DayEndEvent;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class ActiveDeviceDayEndEventHandler {
     private final ActiveDeviceRepository activeDeviceRepository;
     private final DeviceConnectionService deviceConnectionService;
     private final MemberConnectionService memberConnectionService;
-    private final DeviceService deviceService;
 
     @EventListener(DayEndEvent.class)
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)

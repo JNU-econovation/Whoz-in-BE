@@ -6,7 +6,7 @@ import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
 import com.whoz_in.api_query_jpa.shared.service.DeviceService;
 import com.whoz_in.api_query_jpa.shared.service.MemberConnectionService;
-import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
+import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFound;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -29,9 +29,9 @@ public class ActiveDeviceEventHandler {
     private final DeviceService deviceService;
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
-    @EventListener(ActiveDeviceFinded.class)
-    public void saveActiveDevices(ActiveDeviceFinded event) {
-        List<UUID> deviceIds = event.getDevices();
+    @EventListener(ActiveDeviceFound.class)
+    public void saveActiveDevices(ActiveDeviceFound event) {
+        List<UUID> deviceIds = event.devices();
         List<ActiveDeviceEntity> activeDeviceEntities = activeDeviceRepository.findByDeviceIds(deviceIds);
 
 //        LocalDateTime connectedAt = LocalDateTime.now();

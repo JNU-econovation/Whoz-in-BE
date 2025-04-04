@@ -3,12 +3,12 @@ package com.whoz_in.main_api.command.member.presentation;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
-import com.whoz_in.main_api.command.member.application.command.LogOut;
-import com.whoz_in.main_api.command.member.application.command.LoginSuccessTokens;
-import com.whoz_in.main_api.command.member.application.command.MemberOAuth2Login;
-import com.whoz_in.main_api.command.member.application.command.MemberOAuth2SignUp;
-import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
-import com.whoz_in.main_api.command.member.application.command.Reissue;
+import com.whoz_in.main_api.command.member.application.LogOut;
+import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
+import com.whoz_in.main_api.command.member.application.MemberSignUp;
+import com.whoz_in.main_api.command.member.application.Reissue;
 import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;

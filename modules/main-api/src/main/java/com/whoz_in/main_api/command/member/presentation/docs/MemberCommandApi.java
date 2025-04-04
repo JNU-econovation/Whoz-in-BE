@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.command.member.presentation.docs;
 
-import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
+import com.whoz_in.main_api.command.member.application.MemberSignUp;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;

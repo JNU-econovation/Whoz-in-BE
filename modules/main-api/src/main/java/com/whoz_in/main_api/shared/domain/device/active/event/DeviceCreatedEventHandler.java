@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.domain.device.active.event;
 
-import com.whoz_in.domain.device.event.DeviceCreated;
 import com.whoz_in.main_api.shared.event.Events;
+import com.whoz_in.shared.domain_event.device.DeviceCreated;
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +17,7 @@ public class DeviceCreatedEventHandler {
     public void processDeviceCreatedEvent(DeviceCreated event) {
         UUID deviceId = event.getDeviceId();
 
-        Events.raise(new DeviceCreatedEvent(deviceId));
-        Events.raise(new ActiveDeviceFinded(List.of(deviceId)));
+        Events.raise(new ActiveDeviceFound(List.of(deviceId)));
     }
 
 }

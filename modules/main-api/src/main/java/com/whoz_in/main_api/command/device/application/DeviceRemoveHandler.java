@@ -1,12 +1,12 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.DeviceRepository;
-import com.whoz_in.domain.device.event.DeviceDeleted;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
+import com.whoz_in.shared.domain_event.device.DeviceDeleted;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
