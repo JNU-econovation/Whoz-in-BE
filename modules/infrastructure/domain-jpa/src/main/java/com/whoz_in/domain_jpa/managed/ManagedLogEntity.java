@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -20,7 +21,7 @@ public class ManagedLogEntity extends BaseEntity {
     @EmbeddedId
     private LogId logId;
 
-    @Column(name = "ip", nullable = false)
+    @Column(nullable = false)
     private String ip;
 
     @Column(nullable = false)
@@ -31,15 +32,15 @@ public class ManagedLogEntity extends BaseEntity {
 
     @Getter
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     @EqualsAndHashCode
     @Embeddable
-    public static class LogId {
+    public static class LogId implements Serializable {
 
-        @Column(name = "mac", nullable = false)
+        @Column(nullable = false)
         private String mac;
 
-        @Column(name = "ssid", nullable = false)
+        @Column(nullable = false)
         private String ssid;
     }
 

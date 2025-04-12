@@ -4,9 +4,9 @@ import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.member.model.MemberId;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,13 +22,7 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
-    public boolean delete(DeviceId deviceId) {
-        int result = repository.deleteById(deviceId.id());
-        return result > 0;
-    }
-
-    @Override
-    public List<Device> findByMemberId(MemberId ownerId) {
+    public List<Device> findByOwnerId(MemberId ownerId) {
         return repository.findAllByMemberId(ownerId.id()).stream().map(converter::to).toList();
     }
 
@@ -43,12 +37,13 @@ public class DeviceJpaRepository implements DeviceRepository {
     }
 
     @Override
-    public List<Device> findByMacs(Set<String> macs) {
+    public List<Device> findByMacs(List<String> macs) {
+        if (macs.isEmpty()) return List.of();
         return repository.findByMacs(macs).stream().map(converter::to).toList();
     }
 
     @Override
-    public List<Device> findByDeviceIds(List<DeviceId> deviceIds) {
+    public List<Device> findByDeviceIds(Collection<DeviceId> deviceIds) {
         List<UUID> ids = deviceIds.stream().map(DeviceId::id).toList();
         return repository.findByDeviceIds(ids).stream().map(converter::to).toList();
     }

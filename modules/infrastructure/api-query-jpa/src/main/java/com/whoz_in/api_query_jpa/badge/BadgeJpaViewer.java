@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class BadgeJpaViewer implements BadgeViewer {
-    private final BadgeRepository bageRepo;
+    private final BadgeRepository badgeRepo;
     private final BadgeMemberRepository badgeMemberRepo;
 
     @Override
     public Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId) {
-        return bageRepo.findById(badgeId)
+        return badgeRepo.findById(badgeId)
                 .map(badge -> new BadgeInfo(badge.getName(),badge.getColorCode(), badge.getDescription()));
     }
 
@@ -32,7 +32,7 @@ public class BadgeJpaViewer implements BadgeViewer {
         그리고 사용자가 이미 가지고 있는 뱃지가 아니어야 한다.
          */
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
-        List<Badge> activeBadges = bageRepo.findAllActivatedBadges(threshold);
+        List<Badge> activeBadges = badgeRepo.findAllActivatedBadges(threshold);
         List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
 
         Set<UUID> ownedBadgeIds = badgeMembers.stream()
@@ -62,13 +62,5 @@ public class BadgeJpaViewer implements BadgeViewer {
                 .toList();
 
         return new BadgesOfMember(badgeList);
-    }
-
-    @Override
-    public BadgeInfo findRepresentativeBadge(UUID memberId) {
-        Optional<Badge> badge = bageRepo.findRepresentativeBadge(memberId);
-        return badge
-                .map(b -> new BadgeInfo(b.getName(), b.getColorCode(), b.getDescription()))
-                .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
     }
 }

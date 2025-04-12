@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.presentation.logging;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.query.member.application.MemberViewer;
+import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
 import com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,7 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class RequesterLoggingInterceptor implements HandlerInterceptor {
     private final RequesterInfo requesterInfo;
-    private final MemberViewer memberViewer;
+    private final MemberInfoViewer memberInfoViewer;
     private final HttpRequestIdentifier httpRequestIdentifier;
 
     @Override
@@ -27,9 +27,9 @@ public class RequesterLoggingInterceptor implements HandlerInterceptor {
                 .map(MemberId::id)
                 .ifPresentOrElse(
                         id -> {
-                            memberViewer.findNameByMemberId(id)
+                            memberInfoViewer.findByMemberId(id)
                                     .ifPresentOrElse(
-                                            memberInfo -> log.info("[REQUESTER] id: {}, name: {}", id, memberInfo.memberName()),
+                                            memberInfo -> log.info("[REQUESTER] id: {}, name: {}", id, memberInfo.name()),
                                             () -> log.warn("[REQUESTER] id: {}", id) // 쿼리에 회원 정보가 없을 경우
                                     );
                         },

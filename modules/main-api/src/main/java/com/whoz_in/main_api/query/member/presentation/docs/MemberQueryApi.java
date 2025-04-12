@@ -1,9 +1,8 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
-import com.whoz_in.main_api.query.member.application.response.MemberCountInRoomResponse;
-import com.whoz_in.main_api.query.member.application.response.MemberProfileInfo;
-import com.whoz_in.main_api.query.member.application.response.MembersInRoomResponse;
-import com.whoz_in.main_api.query.member.application.view.MemberDetailInfo;
+import com.whoz_in.main_api.query.member.application.detail.MemberDetail;
+import com.whoz_in.main_api.query.member.application.in_room.MembersInRoom;
+import com.whoz_in.main_api.query.member.application.profile.MemberProfile;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,11 +16,10 @@ public interface MemberQueryApi {
     @Operation(
             summary = "동아리 방 현황 조회",
             description = """
-                    동아리 방에 누가 있는지 현황을 조회합니다.
-                    (회원 id, 이름, 기수, 하루 접속 시간, 대표 뱃지, 회원 상태)
+                    동아리 방 현황을 조회합니다.
                     """
     )
-    ResponseEntity<SuccessBody<MembersInRoomResponse>> getActiveMembers(
+    ResponseEntity<SuccessBody<MembersInRoom>> getActiveMembers(
             @Parameter(name="size") int size,
             @Parameter(name="page") int page,
             @Parameter(name="sortType") String sortType,
@@ -29,22 +27,15 @@ public interface MemberQueryApi {
     );
 
     @Operation(
-            summary = "동아리 방 회원 수 조회",
-            description = "동아리 방에 있는 회원 수를 조회합니다."
-    )
-    ResponseEntity<SuccessBody<MemberCountInRoomResponse>> getActiveMemberCount();
-
-
-    @Operation(
             summary = "회원 상세정보 조회",
-            description = "회원 상세정보 (Id, 이름, 기수, 포지션, 상태메세지) 를 조회합니다."
+            description = "자신의 상세정보를 조회합니다."
     )
-    ResponseEntity<SuccessBody<MemberDetailInfo>> getDetailInfo();
+    ResponseEntity<SuccessBody<MemberDetail>> getDetailInfo();
 
     @Operation(
             summary = "회원 프로필 조회",
-            description = "memberId에 해당하는 회원의 정보(기수, 이름, 분야, 누적 접속 시간)를 조회합니다."
+            description = "다른 사람의 회원의 정보를 조회합니다."
     )
-    ResponseEntity<SuccessBody<MemberProfileInfo>> getProfileInfo(@PathVariable("memberId") String memberId);
+    ResponseEntity<SuccessBody<MemberProfile>> getProfileInfo(@PathVariable("memberId") String memberId);
 
 }
