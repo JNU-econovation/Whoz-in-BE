@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+// 삭제된 기기가 연결되어있으면 연결 해제
 @Component
 @RequiredArgsConstructor
 public class DisconnectOnDeviceDeactivated {

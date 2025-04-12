@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+
 @Component
 @RequiredArgsConstructor
 public class DeviceConnectionScheduler {
@@ -23,17 +24,18 @@ public class DeviceConnectionScheduler {
     private final DeviceDisconnectedChecker disconnectedChecker;
     private final MonitorLogRepository monitorLogRepository;
 
+    // 연결됨, 연결끊김을 확인하기 위한 모니터 로그들을 캐시해둠
     private final Cache<String, MonitorLog> monitorLogCache = CacheBuilder.newBuilder()
             .expireAfterWrite(DISCONNECTED_TERM_MINUTE, TimeUnit.MINUTES)
             .build();
 
+    // 서버 시작 시 캐시된 로그가 없으므로 범위 내로 모두 가져옴
     @PostConstruct
     private void preloadLogs() {
-        // 처음가져올 땐 모두 가져옴
         fetchLogs(DISCONNECTED_TERM_MINUTE);
     }
 
-
+    // 로그 가져와서 캐시에 추가하는 메서드
     public void fetchLogs(int termMinute){
         LocalDateTime since = LocalDateTime.now()
                 .minusMinutes(termMinute)
@@ -56,8 +58,8 @@ public class DeviceConnectionScheduler {
     */
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
     public void update() {
-        fetchLogs(UPDATE_TERM_MINUTE);
-        connectedChecker.updateConnected(getNewLogs());
+        fetchLogs(UPDATE_TERM_MINUTE); // 확인 주기마다 로그 업데이트
+        connectedChecker.updateConnected(getNewLogs()); // 캐시된 로그 중 최근 가져온 로그만 넘김
         disconnectedChecker.updateDisconnected(monitorLogCache.asMap().keySet());
     }
 
