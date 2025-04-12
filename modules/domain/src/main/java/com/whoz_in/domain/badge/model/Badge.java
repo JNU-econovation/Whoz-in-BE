@@ -1,7 +1,7 @@
 package com.whoz_in.domain.badge.model;
 
-import com.whoz_in.domain.badge.event.BadgeCreated;
 import com.whoz_in.domain.shared.AggregateRoot;
+import com.whoz_in.shared.domain_event.badge.BadgeCreated;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

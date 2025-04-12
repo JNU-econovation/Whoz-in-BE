@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 // 기기 등록 전에 모든 와이파이에 대한 기기 정보가(맥) 있어야 한다.
 // 이 핸들러는 하나의 기기 정보를 임시로 저장하는 역할을 한다.
@@ -70,7 +69,6 @@ public class DeviceInfoTempAddHandler implements CommandHandler<DeviceInfoTempAd
     // 기기가 jnu나 eduroam에 연결하면 둘 다 log가 뜨는 현상이 종종 발생함. (mdns repeating)
     // 이 경우 어떤 ssid인지 알 수 없으므로 적절하게 처리해야 하는데,
     // 사용자의 개입을 최대한 줄이려고 하다가 복잡한 로직이 됐습니다... 죄송합니다...
-    @Transactional(readOnly = true)
     protected DeviceInfoTempAddRes doHandle(DeviceInfoTempAdd req, MemberId requesterId){
         memberFinderService.mustExist(requesterId);
 

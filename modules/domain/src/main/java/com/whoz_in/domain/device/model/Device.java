@@ -1,12 +1,13 @@
 package com.whoz_in.domain.device.model;
 
-import com.whoz_in.domain.device.event.DeviceCreated;
-import com.whoz_in.domain.device.event.DeviceInfoRegistered;
-import com.whoz_in.domain.device.event.DeviceInfoUpdated;
 import com.whoz_in.domain.device.exception.DeviceInfoAlreadyRegisteredException;
 import com.whoz_in.domain.device.exception.NoDeviceInfoException;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
+import com.whoz_in.shared.domain_event.device.DeviceCreated;
+import com.whoz_in.shared.domain_event.device.DeviceInfoPayload;
+import com.whoz_in.shared.domain_event.device.DeviceInfoRegistered;
+import com.whoz_in.shared.domain_event.device.DeviceInfoUpdated;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -35,7 +36,11 @@ public final class Device extends AggregateRoot {
         if (this.deviceInfos.contains(deviceInfo)) //이미 존재하면 예외
             throw DeviceInfoAlreadyRegisteredException.of(deviceInfo.getSsid());
         this.deviceInfos.add(deviceInfo);
-        this.register(new DeviceInfoRegistered());
+        this.register(new DeviceInfoRegistered(
+                deviceInfo.getSsid(),
+                deviceInfo.getRoom(),
+                deviceInfo.getMac().toString()
+        ));
     }
 
     public void updateDeviceInfo(DeviceInfo deviceInfo){
@@ -43,7 +48,11 @@ public final class Device extends AggregateRoot {
             throw NoDeviceInfoException.of(deviceInfo.getSsid());
         }
         this.deviceInfos.add(deviceInfo);
-        this.register(new DeviceInfoUpdated());
+        this.register(new DeviceInfoUpdated(
+                deviceInfo.getSsid(),
+                deviceInfo.getRoom(),
+                deviceInfo.getMac().toString()
+        ));
     }
 
     public static Device create(MemberId memberId, Set<DeviceInfo> deviceInfos, String deviceName){
@@ -53,7 +62,18 @@ public final class Device extends AggregateRoot {
                 .deviceInfos(deviceInfos)
                 .deviceName(deviceName)
                 .build();
-        device.register(new DeviceCreated(device.getId().id()));
+        device.register(new DeviceCreated(
+                device.getId().id(),
+                device.getMemberId().id(),
+                device.getDeviceName(),
+                device.getDeviceInfos().stream()
+                        .map(info -> new DeviceInfoPayload(
+                                info.getSsid(),
+                                info.getRoom(),
+                                info.getMac().toString()
+                        ))
+                        .toList()
+        ));
         return device;
     }
 

@@ -8,7 +8,7 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.main_api.query.device.application.active.ActiveDevice;
 import com.whoz_in.main_api.query.device.application.active.ActiveDeviceViewer;
 import com.whoz_in.main_api.query.member.application.MemberViewer;
-import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFinded;
+import com.whoz_in.main_api.shared.domain.device.active.event.ActiveDeviceFound;
 import com.whoz_in.main_api.shared.event.Events;
 import java.util.List;
 import java.util.Optional;
@@ -55,7 +55,6 @@ public class ActiveDeviceFilter extends DeviceFilter {
     @Override
     protected boolean judge(Device device) {
         UUID deviceId = device.getId().id();
-        UUID ownerId = device.getMemberId().id();
 
         Optional<ActiveDevice> opt = activeDeviceViewer.findByDeviceId(deviceId.toString());
 
@@ -71,6 +70,6 @@ public class ActiveDeviceFilter extends DeviceFilter {
     @Override
     protected void raiseEvent(List<Device> devices) {
         List<UUID> deviceIds = devices.stream().map(Device::getId).map(DeviceId::id).toList();
-        Events.raise(new ActiveDeviceFinded(deviceIds));
+        Events.raise(new ActiveDeviceFound(deviceIds));
     }
 }

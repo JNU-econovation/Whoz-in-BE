@@ -6,7 +6,6 @@ import com.whoz_in.api_query_jpa.device.DeviceRepository;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceEntity;
 import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.Member;
-import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.member.MemberRepository;
 import com.whoz_in.api_query_jpa.monitor.MonitorLog;
 import com.whoz_in.api_query_jpa.monitor.MonitorLogRepository;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 public class DeviceService {
 
     private final DeviceRepository deviceRepository;
-    private final MemberConnectionInfoRepository connectionInfoRepository;
     private final ActiveDeviceRepository activeDeviceRepository;
     private final MemberRepository memberRepository;
     private final MonitorLogRepository monitorLogRepository;
@@ -38,7 +36,6 @@ public class DeviceService {
      * @return
      */
     public boolean isLastConnectedDevice(UUID deviceId) {
-//        Member owner = memberRepository.getByDeviceId(deviceId);
 
 ActiveDeviceEntity ad = activeDeviceRepository.findByDeviceId(deviceId)
         .orElseThrow(() -> new IllegalStateException("Device not found with ID: " + deviceId));
@@ -73,22 +70,9 @@ Member owner = memberRepository.findById(ad.getMemberId())
         return 0;
     }
 
-    public Optional<ActiveDeviceEntity> findLastConnectedDevice(UUID memberId) {
-        List<ActiveDeviceEntity> activeDevices =
-                activeDeviceRepository.findByMemberId(memberId);
-
-        return activeDevices.stream()
-                .max((ad1, ad2) -> ad1.getDisConnectedAt().isAfter(ad2.getDisConnectedAt()) ? 1 : -1);
-    }
-
     public boolean isActive(UUID deviceId) {
         ActiveDeviceEntity activeDevice = activeDeviceRepository.findByDeviceId(deviceId).get(); // 기기 등록은 되었지만, ActiveDeviceEntity 가 없다면 에러 발생함
         return activeDevice.isActive();
-    }
-
-    public Optional<UUID> findDeviceOwner(UUID deviceId) {
-        return memberRepository.findByDeviceId(deviceId)
-                .map(Member::getId);
     }
 
     public MonitorLog findLatestMonitorLogAt(UUID deviceId) {

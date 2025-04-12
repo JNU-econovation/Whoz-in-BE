@@ -5,41 +5,37 @@ import com.whoz_in.api_query_jpa.device.active.ActiveDeviceRepository;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
 import com.whoz_in.api_query_jpa.shared.service.DeviceConnectionService;
-import com.whoz_in.api_query_jpa.shared.service.DeviceService;
-import com.whoz_in.main_api.shared.domain.device.active.event.DeviceDeletedEvent;
+import com.whoz_in.shared.domain_event.device.DeviceDeleted;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
-@Component("ActiveDeviceDeletedEventHandler")
 @RequiredArgsConstructor
 @Slf4j
 public class ActiveDeviceDeletedEventHandler {
 
     private final ActiveDeviceRepository activeDeviceRepository;
     private final DeviceConnectionService deviceConnectionService;
-    private final DeviceService deviceService;
     private final MemberConnectionInfoRepository connectionInfoRepository;
 
 
     @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
-    @EventListener(DeviceDeletedEvent.class)
-    public void handle(DeviceDeletedEvent event) {
-        log.info("[DeviceDeletedEvent] ActiveDevice 삭제 (deviceId) : {}", event.deviceId());
-        UUID deviceId = event.deviceId();
+    @TransactionalEventListener(DeviceDeleted.class)
+    public void handle(DeviceDeleted event) {
+        log.info("[DeviceDeletedEvent] ActiveDevice 삭제 (deviceId) : {}", event.getDeviceId());
+        UUID deviceId = event.getDeviceId();
         ActiveDeviceEntity activeDevice =
                 activeDeviceRepository.findByDeviceId(deviceId)
                         .orElseThrow(()-> new IllegalArgumentException("active device not found"));
 
         disconnectIfLastActiveDevice(activeDevice);
-        activeDeviceRepository.deleteById(event.deviceId());
+        activeDeviceRepository.deleteById(event.getDeviceId());
 
 
     }

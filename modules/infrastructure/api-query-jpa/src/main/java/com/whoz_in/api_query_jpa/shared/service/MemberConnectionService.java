@@ -2,7 +2,6 @@ package com.whoz_in.api_query_jpa.shared.service;
 
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfo;
 import com.whoz_in.api_query_jpa.member.MemberConnectionInfoRepository;
-import com.whoz_in.api_query_jpa.member.MemberRepository;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberConnectionService {
 
     private final MemberConnectionInfoRepository connectionInfoRepository;
-    private final MemberRepository memberRepository;
-    private final DeviceService deviceService;
 
     /**
      * inActive 처리된 기기 주인을 disconnect 시킨다.
@@ -77,9 +74,6 @@ public class MemberConnectionService {
 
             LocalDateTime inActiveAt = connectionInfo.getInActiveAt();
             LocalDateTime activeAt = connectionInfo.getActiveAt();
-
-//            if(Objects.isNull(activeAt)) activeAt = LocalDateTime.now();
-//            if(Objects.isNull(inActiveAt)) inActiveAt = LocalDateTime.now();
 
             Duration continuousTime = Duration.between(activeAt, inActiveAt).abs();
 

@@ -1,7 +1,6 @@
 package com.whoz_in.domain_jpa.member;
 
 import com.whoz_in.domain.badge.model.BadgeId;
-import com.whoz_in.domain.member.model.AuthCredentials;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.model.OAuthCredentials;
@@ -17,8 +16,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
 
     @Override
     public MemberEntity from(Member member) {
-        AuthCredentials auth = member.getAuthCredentials().orElse(null);
-        OAuthCredentials oAuth = member.getOAuthCredentials().orElse(null);
+        OAuthCredentials oAuth = member.getOAuthCredentials();
         Set<BadgeMemberEntity> badgeMembers = member.getBadges().entrySet().stream()
                 .map(entry -> new BadgeMemberEntity(
                         member.getId().id(),
@@ -33,10 +31,8 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 member.getGeneration(),
                 member.getMainPosition(),
                 member.getStatusMessage(),
-                auth != null ? auth.getLoginId() : null,
-                auth != null ? auth.getEncodedPassword() : null,
-                oAuth != null ? oAuth.getSocialProvider() : null,
-                oAuth != null ? oAuth.getSocialId() : null,
+                oAuth.getSocialProvider(),
+                oAuth.getSocialId(),
                 mainBadge != null ? member.getMainBadge().id() : null,
                 badgeMembers
         );
@@ -47,7 +43,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
         Map<BadgeId, Boolean> badges = entity.getBadgeMembers().stream()
                 .collect(Collectors.toMap(
                         badgeMember -> new BadgeId(badgeMember.getBadgeId()),
-                        badgeMember -> badgeMember.getIsBadgeShown()
+                        BadgeMemberEntity::getIsBadgeShown
                 ));
         return Member.load(
                 new MemberId(entity.getId()),
@@ -55,10 +51,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 entity.getPosition(),
                 entity.getGeneration(),
                 entity.getStatusMessage(),
-                (entity.getLoginId() != null && entity.getPassword() != null) ?
-                        AuthCredentials.load(entity.getLoginId(), entity.getPassword()) : null,
-                (entity.getSocialProvider() != null && entity.getSocialId() != null) ?
-                        OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()) : null,
+                OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()),
                 badges,
                 new BadgeId(entity.getMainBadge())
         );

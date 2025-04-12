@@ -42,15 +42,11 @@ public class MemberEntity extends BaseEntity {
   @Column(nullable = false)
   private String statusMessage;
 
-  @Column(unique = true)
-  private String loginId;
-
-  private String password;
-
   @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
   private SocialProvider socialProvider;
 
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private String socialId;
 
   @Column(nullable = false)
@@ -61,15 +57,12 @@ public class MemberEntity extends BaseEntity {
   private Set<BadgeMemberEntity> badgeMembers;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
-                      String loginId, String password,
                       SocialProvider socialProvider, String socialId, UUID mainBadge,Set<BadgeMemberEntity> badgeMembers) {
     this.id = id;
     this.name = name;
     this.generation = generation;
     this.position = position;
     this.statusMessage = statusMessage;
-    this.loginId = loginId;
-    this.password = password;
     this.socialProvider = socialProvider;
     this.socialId = socialId;
     this.mainBadge = mainBadge;

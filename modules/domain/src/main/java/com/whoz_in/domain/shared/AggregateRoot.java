@@ -1,6 +1,6 @@
 package com.whoz_in.domain.shared;
 
-import com.whoz_in.domain.shared.event.DomainEvent;
+import com.whoz_in.shared.domain_event.DomainEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.command.feedback.exception;
 
-import com.whoz_in.main_api.shared.application.ApplicationException;
+import com.whoz_in.shared.WhozinException;
 
-public class ContentLengthExceedException extends ApplicationException {
+public class ContentLengthExceedException extends WhozinException {
     public static final ContentLengthExceedException EXCEPTION = new ContentLengthExceedException();
     public ContentLengthExceedException() {
         super(

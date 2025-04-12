@@ -3,12 +3,11 @@ package com.whoz_in.main_api.command.member.presentation;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ACCESS_TOKEN;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.REFRESH_TOKEN;
 
-import com.whoz_in.main_api.command.member.application.command.LogOut;
-import com.whoz_in.main_api.command.member.application.command.LoginSuccessTokens;
-import com.whoz_in.main_api.command.member.application.command.MemberOAuth2Login;
-import com.whoz_in.main_api.command.member.application.command.MemberOAuth2SignUp;
-import com.whoz_in.main_api.command.member.application.command.MemberSignUp;
-import com.whoz_in.main_api.command.member.application.command.Reissue;
+import com.whoz_in.main_api.command.member.application.LogOut;
+import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
+import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
+import com.whoz_in.main_api.command.member.application.Reissue;
 import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
@@ -43,13 +42,6 @@ public class MemberController extends CommandController implements MemberCommand
     this.cookieFactory = cookieFactory;
     this.jwtProperties = jwtProperties;
     this.oAuth2UserInfoStore = oAuth2UserInfoStore;
-  }
-
-  @Override
-  @PostMapping("/api/v1/signup")
-  public ResponseEntity<SuccessBody<Void>> signup(@RequestBody MemberSignUp request){
-    dispatch(request);
-    return ResponseEntityGenerator.success( "회원가입 완료", HttpStatus.CREATED);
   }
 
   @Override

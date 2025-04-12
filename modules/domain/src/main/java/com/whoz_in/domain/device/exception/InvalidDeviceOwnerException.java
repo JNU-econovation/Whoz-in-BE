@@ -1,8 +1,8 @@
 package com.whoz_in.domain.device.exception;
 
-import com.whoz_in.domain.shared.BusinessException;
+import com.whoz_in.shared.WhozinException;
 
-public class InvalidDeviceOwnerException extends BusinessException {
+public class InvalidDeviceOwnerException extends WhozinException {
     private InvalidDeviceOwnerException(String errorMessage) {
         super("3020", errorMessage);
     }

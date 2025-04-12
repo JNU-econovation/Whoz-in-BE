@@ -1,8 +1,8 @@
 package com.whoz_in.domain.feedback.model;
 
-import com.whoz_in.domain.feedback.event.FeedbackCreated;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
+import com.whoz_in.shared.domain_event.feedback.FeedbackCreated;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.infrastructure.domain;
 
-import com.whoz_in.domain.shared.event.DomainEvent;
 import com.whoz_in.domain.shared.event.EventBus;
+import com.whoz_in.shared.domain_event.DomainEvent;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

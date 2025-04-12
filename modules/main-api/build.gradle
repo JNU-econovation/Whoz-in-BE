@@ -31,14 +31,14 @@ dependencies {
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    //domain
-    implementation project(':domain')
-    runtimeOnly project(":domain-jpa") // 구현 모듈
-
-    //logging
     implementation project(":logging")
+    implementation project(':shared')
+
+    implementation project(':domain') //domain
+    runtimeOnly project(":domain-jpa") // domain 구현 모듈
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
     runtimeOnly project(":api-query-jpa")
     runtimeOnly project(":api-redis")
+
 }

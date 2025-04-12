@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.model.DeviceId;
-import com.whoz_in.domain.shared.Nullable;
 import com.whoz_in.main_api.command.shared.application.Command;
+import com.whoz_in.shared.Nullable;
 import java.util.Optional;
 import java.util.UUID;
 
