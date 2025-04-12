@@ -15,6 +15,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 
+// 기기가 연결된 상태인지 확인하고 연결 처리함
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -23,7 +24,7 @@ public class DeviceConnectedChecker {
     private final DeviceConnectionRepository deviceConnectionRepository;
     private final DeviceConnector connector;
 
-    // TODO: disconnectedAt이 일정 범위 내에 있을경우 이어서 연결된 것으로 판단할 수 있음
+    // TODO: monitor log가 잘 안뜨는 기기를 위해 disconnectedAt이 일정 범위 내에 있을경우 이어서 연결된 것으로 판단할 수 있음
         // 이때 연결된 방이 다르면 x
         // 새 하루가 시작돼서 끊긴 것과는 다르게 처리해야 됨
     @Async
@@ -39,6 +40,7 @@ public class DeviceConnectedChecker {
                 .forEach(entry -> connectDevice(entry.getKey(), entry.getValue()));
     }
 
+    // Map<mac, Device> 반환
     private Map<String, Device> mapMacToDevice(List<MonitorLog> logs) {
         List<String> macs = logs.stream().map(MonitorLog::getMac).toList();
         return deviceRepository.findByMacs(macs).stream()
@@ -51,12 +53,14 @@ public class DeviceConnectedChecker {
                 ));
     }
 
+    // 기기가 연결되어 있지 않거나 방이 다를 경우 다시 연결해야 함
     private boolean shouldConnect(MonitorLog log, Device device) {
         return deviceConnectionRepository.findLatestByDeviceId(device.getId())
                 .map(conn -> !conn.isConnectedIn(log.getRoom()))
                 .orElse(true);
     }
 
+    // 이전 연결이 있으면 끊고 다시 연결, 없으면 새로 연결
     private void connectDevice(MonitorLog monitorLog, Device device) {
         Optional<DeviceConnection> existing = deviceConnectionRepository.findLatestByDeviceId(device.getId());
         DeviceConnection newOrUpdated = existing

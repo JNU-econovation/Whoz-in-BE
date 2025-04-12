@@ -8,11 +8,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+// 하루가 끝났을때 연결된 기기들을 초기화(연결 해제)
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class DisconnectDevicesOnDayEnded {
-
     private final DeviceConnectionRepository deviceConnectionRepository;
     private final DeviceDisconnector deviceDisconnector;
 

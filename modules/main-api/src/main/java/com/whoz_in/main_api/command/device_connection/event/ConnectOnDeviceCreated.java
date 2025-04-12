@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+// 새로 등록된 기기가 생겼을땐 연결된 기기이므로 바로 연결 처리
 @Component
 @RequiredArgsConstructor
 public class ConnectOnDeviceCreated {
