@@ -9,16 +9,21 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+@Getter
 @MappedSuperclass
-@EntityListeners({AuditingEntityListener.class, SoftDeleteListener.class})
+@SuperBuilder(toBuilder = true)
+@EntityListeners({AuditingEntityListener.class})
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@SuperBuilder(toBuilder = true)
+@FilterDef(name = "softDeleteFilter", parameters = @ParamDef(name = "enabled", type = Boolean.class))
+@Filter(name = "softDeleteFilter", condition = "(:enabled = true AND deleted_at IS NULL) OR :enabled = false")
 public abstract class BaseEntity {
 
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -31,11 +36,5 @@ public abstract class BaseEntity {
 
   @Column(name = "deleted_at")
   private LocalDateTime deletedAt;
-
-  public void delete() {
-    if (this.deletedAt == null) {
-      this.deletedAt = LocalDateTime.now();
-    }
-  }
 
 }

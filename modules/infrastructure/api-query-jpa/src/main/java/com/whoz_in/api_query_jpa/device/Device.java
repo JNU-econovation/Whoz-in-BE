@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 
-@Entity
 @Getter
+@Entity
 @Subselect("SELECT d.id , d.member_id, d.name "
         + "FROM device_entity d")
 @Immutable
