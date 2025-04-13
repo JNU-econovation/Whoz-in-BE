@@ -8,8 +8,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 // 한 멤버에 대한 오늘의 재실 상태를 나타내는 클래스
+@Slf4j
 @Getter
 public final class DailyActivityStatus {
     private final UUID memberId;
@@ -60,8 +62,7 @@ public final class DailyActivityStatus {
     }
 
     public void disconnect(UUID deviceId, LocalDateTime disconnectedAt) {
-        connectedDeviceIds.remove(deviceId);
-        if (connectedDeviceIds.isEmpty()) {
+        if (connectedDeviceIds.remove(deviceId) && connectedDeviceIds.isEmpty()) {
             prevActiveTime = prevActiveTime.plus(getContinuousActiveTime());
             activeAt = null;
             this.inactiveAt = disconnectedAt;
