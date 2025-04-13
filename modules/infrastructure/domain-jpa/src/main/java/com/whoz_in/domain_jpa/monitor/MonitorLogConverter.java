@@ -14,6 +14,6 @@ public class MonitorLogConverter extends BaseConverter<MonitorLogEntity, Monitor
 
     @Override
     public MonitorLog to(MonitorLogEntity entity) {
-        return new MonitorLog(entity.getMac(), entity.getRoom(), entity.getCreatedAt());
+        return new MonitorLog(entity.getMac(), entity.getRoom(), entity.getUpdatedAt());
     }
 }
