@@ -15,7 +15,8 @@ public class MemberProfileHandler implements QueryHandler<MemberProfileGet, Memb
 
     @Override
     public MemberProfile handle(MemberProfileGet query) {
-        MemberInfoView memberInfoView = memberInfoViewer.findByMemberId(query.memberId()).get();
+        MemberInfoView memberInfoView = memberInfoViewer.findByMemberId(query.memberId())
+                .orElseThrow(()-> new IllegalStateException("회원 정보 없음: " + query.memberId()));
         return new MemberProfile(
                 memberInfoView.memberId(),
                 memberInfoView.generation(),
