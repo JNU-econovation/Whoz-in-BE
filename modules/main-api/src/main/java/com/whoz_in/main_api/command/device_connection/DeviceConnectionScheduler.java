@@ -32,14 +32,15 @@ public class DeviceConnectionScheduler {
     // 서버 시작 시 캐시된 로그가 없으므로 범위 내로 모두 가져옴
     @PostConstruct
     private void preloadLogs() {
-        fetchLogs(DISCONNECTED_TERM_MINUTE);
+        LocalDateTime since = LocalDateTime.now()
+                .minusMinutes(DISCONNECTED_TERM_MINUTE)
+                .truncatedTo(ChronoUnit.MINUTES);
+        fetchLogs(since);
     }
 
     // 로그 가져와서 캐시에 추가하는 메서드
-    public void fetchLogs(int termMinute){
-        LocalDateTime since = LocalDateTime.now()
-                .minusMinutes(termMinute)
-                .truncatedTo(ChronoUnit.MINUTES); // 분 단위로 자르기
+    public void fetchLogs(LocalDateTime since){
+         // 분 단위로 자르기
         monitorLogRepository.findAllByUpdatedAtAfter(since).forEach(log -> {
             monitorLogCache.asMap().merge(
                     log.getMac(),
@@ -58,13 +59,15 @@ public class DeviceConnectionScheduler {
     */
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
     public void update() {
-        fetchLogs(UPDATE_TERM_MINUTE); // 확인 주기마다 로그 업데이트
-        connectedChecker.updateConnected(getNewLogs()); // 캐시된 로그 중 최근 가져온 로그만 넘김
+        LocalDateTime since = LocalDateTime.now()
+                .minusMinutes(UPDATE_TERM_MINUTE)
+                .truncatedTo(ChronoUnit.MINUTES);
+        fetchLogs(since); // 확인 주기마다 로그 업데이트
+        connectedChecker.updateConnected(getNewLogs(since)); // 캐시된 로그 중 최근 가져온 로그만 넘김
         disconnectedChecker.updateDisconnected(monitorLogCache.asMap().keySet());
     }
 
-    private List<MonitorLog> getNewLogs() {
-        LocalDateTime since = LocalDateTime.now().minusMinutes(UPDATE_TERM_MINUTE);
+    private List<MonitorLog> getNewLogs(LocalDateTime since) {
         return monitorLogCache.asMap().values().stream()
                 .filter(log -> log.getUpdatedAt().isAfter(since))
                 .toList();
