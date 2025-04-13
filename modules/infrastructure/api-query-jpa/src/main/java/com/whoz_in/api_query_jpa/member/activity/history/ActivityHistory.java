@@ -48,6 +48,9 @@ public class ActivityHistory {
     private Duration activeTime;
 
     public void add(Duration more) {
+        if (more == null || more.isNegative()) {
+            throw new IllegalArgumentException("추가할 시간이 잘못되었습니다");
+        }
         this.activeTime = this.activeTime.plus(more);
     }
 }
