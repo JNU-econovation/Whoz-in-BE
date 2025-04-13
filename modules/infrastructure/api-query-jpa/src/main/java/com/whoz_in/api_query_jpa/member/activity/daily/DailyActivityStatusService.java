@@ -1,6 +1,7 @@
 package com.whoz_in.api_query_jpa.member.activity.daily;
 
 import static com.whoz_in.shared.DayEndedEventPublisher.DAY_END_HOUR;
+import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
 
 import com.whoz_in.api_query_jpa.device.DeviceRepository;
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnection;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 // DailyActivityStatus를 제공하는 클래스
 @Slf4j
@@ -83,7 +85,7 @@ public class DailyActivityStatusService {
     }
 
     // 연결이 생겼을때 상태 업데이트
-    @EventListener(DeviceConnected.class)
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     private void updateOnDeviceConnected(DeviceConnected event) {
         UUID deviceId = event.getDeviceId();
         UUID memberId = getMemberId(deviceId);
