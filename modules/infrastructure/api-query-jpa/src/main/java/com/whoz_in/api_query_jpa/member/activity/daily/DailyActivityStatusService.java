@@ -100,7 +100,7 @@ public class DailyActivityStatusService {
     }
 
     // 연결이 끊겼을때 상태 업데이트
-    @EventListener(DeviceDisconnected.class)
+    @TransactionalEventListener(phase = AFTER_COMMIT)
     private void updatedOnDeviceDisconnected(DeviceDisconnected event) {
         UUID deviceId = event.getDeviceId();
         UUID memberId = getMemberId(deviceId);
