@@ -26,6 +26,7 @@ public class DeviceConnection extends AggregateRoot {
     private final LocalDateTime connectedAt;
     @Nullable private LocalDateTime disconnectedAt;
 
+    // 새로 만들 땐 연결 상태여야 함
     public static DeviceConnection create(DeviceId deviceId, String room, LocalDateTime connectedAt) {
         DeviceConnectionId id = new DeviceConnectionId();
         DeviceConnection deviceConnection = new DeviceConnection(id, deviceId, room, connectedAt);

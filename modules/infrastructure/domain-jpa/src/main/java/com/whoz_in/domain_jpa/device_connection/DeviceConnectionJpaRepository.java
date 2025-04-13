@@ -19,12 +19,6 @@ public class DeviceConnectionJpaRepository implements DeviceConnectionRepository
         entityRepository.save(converter.from(connection));
     }
 
-    @Override
-    public Optional<DeviceConnection> findLatestByDeviceId(DeviceId id) {
-        return entityRepository.findTopByDeviceIdOrderByConnectedAtDesc(id.id())
-                .map(converter::to);
-    }
-
     // 여러 연결 나오면 애플리케이션에서 connection 관리 잘못한거
     @Override
     public Optional<DeviceConnection> findConnectedByDeviceId(DeviceId id) {

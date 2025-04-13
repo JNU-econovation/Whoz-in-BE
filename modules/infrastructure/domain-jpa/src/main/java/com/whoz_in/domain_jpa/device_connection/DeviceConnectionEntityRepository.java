@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DeviceConnectionEntityRepository extends JpaRepository<DeviceConnectionEntity, UUID> {
-    Optional<DeviceConnectionEntity> findTopByDeviceIdOrderByConnectedAtDesc(UUID deviceId);
     Optional<DeviceConnectionEntity> findByDeviceIdAndDisconnectedAtIsNull(UUID deviceId);
     List<DeviceConnectionEntity> findByDisconnectedAtIsNull();
 }

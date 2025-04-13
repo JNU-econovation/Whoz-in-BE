@@ -21,23 +21,37 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class DeviceConnectedChecker {
     private final DeviceRepository deviceRepository;
-    private final DeviceConnectionRepository deviceConnectionRepository;
+    private final DeviceConnectionRepository connectionRepository;
     private final DeviceConnector connector;
 
     // TODO: monitor log가 잘 안뜨는 기기를 위해 disconnectedAt이 일정 범위 내에 있을경우 이어서 연결된 것으로 판단할 수 있음
         // 이때 연결된 방이 다르면 x
         // 새 하루가 시작돼서 끊긴 것과는 다르게 처리해야 됨
     @Async
-    public void updateConnected(List<MonitorLog> recentLogs){
-        // 기기를 로그의 맥으로 매핑
+    public void updateConnected(List<MonitorLog> recentLogs) {
+        // 로그의 맥으로 기기를 빠르게 찾기 위한 맵
         Map<String, Device> deviceByMac = mapMacToDevice(recentLogs);
 
-        // 기기들 중에서 방이 다르거나 연결되지 않은 기기들 연결
         recentLogs.stream()
-                .filter(log -> deviceByMac.containsKey(log.getMac()))
-                .map(log -> Map.entry(log, deviceByMac.get(log.getMac())))
-                .filter(entry -> shouldConnect(entry.getKey(), entry.getValue()))
-                .forEach(entry -> connectDevice(entry.getKey(), entry.getValue()));
+                .filter(monitorLog -> deviceByMac.containsKey(monitorLog.getMac()))
+                .forEach(monitorLog -> {
+                    Device device = deviceByMac.get(monitorLog.getMac());
+                    Optional<DeviceConnection> existingConn = connectionRepository.findConnectedByDeviceId(device.getId());
+
+                    // 연결 필요 여부 판단
+                    if (!shouldConnect(existingConn, monitorLog.getRoom())) return;
+
+                    // 연결 처리
+                    DeviceConnection newOrUpdated = existingConn
+                            .map(conn -> {
+                                conn.disconnect(monitorLog.getUpdatedAt());
+                                return conn;
+                            })
+                            .orElse(DeviceConnection.create(device.getId(), monitorLog.getRoom(), monitorLog.getUpdatedAt()));
+
+                    connector.connect(newOrUpdated);
+                    log.info("[Connected Device] {}가 {}에서 연결됨", device.getId(), newOrUpdated.getRoom());
+                });
     }
 
     // Map<mac, Device> 반환
@@ -54,22 +68,9 @@ public class DeviceConnectedChecker {
     }
 
     // 기기가 연결되어 있지 않거나 방이 다를 경우 다시 연결해야 함
-    private boolean shouldConnect(MonitorLog log, Device device) {
-        return deviceConnectionRepository.findLatestByDeviceId(device.getId())
-                .map(conn -> !conn.isConnectedIn(log.getRoom()))
+    private boolean shouldConnect(Optional<DeviceConnection> connection, String roomToCheck) {
+        return connection
+                .map(conn -> !conn.isConnectedIn(roomToCheck))
                 .orElse(true);
-    }
-
-    // 이전 연결이 있으면 끊고 다시 연결, 없으면 새로 연결
-    private void connectDevice(MonitorLog monitorLog, Device device) {
-        Optional<DeviceConnection> existing = deviceConnectionRepository.findLatestByDeviceId(device.getId());
-        DeviceConnection newOrUpdated = existing
-                .map(conn -> {
-                    conn.disconnect(monitorLog.getUpdatedAt());
-                    return conn;
-                })
-                .orElse(DeviceConnection.create(device.getId(), monitorLog.getRoom(), monitorLog.getUpdatedAt()));
-        connector.connect(newOrUpdated);
-        log.info("[Connected Device] {}가 {}에서 연결됨", device.getId(), newOrUpdated.getRoom());
     }
 }
