@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -17,6 +19,13 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "monitor_log_entity", indexes = {
+        /*
+            updated_at을 통해 최근 로그를 조회할 일이 많으므로 추가함
+            updated_at으로 내림차순 정렬이나 limit이 필요한 경우 DESC 인덱스 고려
+         */
+        @Index(name = "idx_updated_at", columnList = "updated_at")
+})
 public class MonitorLogEntity extends BaseEntity {
     @EmbeddedId
     private LogId logId;
