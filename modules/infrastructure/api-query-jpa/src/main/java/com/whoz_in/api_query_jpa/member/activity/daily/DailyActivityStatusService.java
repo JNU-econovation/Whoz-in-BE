@@ -86,7 +86,7 @@ public class DailyActivityStatusService {
     @EventListener(DeviceConnected.class)
     private void updateOnDeviceConnected(DeviceConnected event) {
         UUID deviceId = event.getDeviceId();
-        UUID memberId = deviceRepository.findById(deviceId).orElseThrow().getMemberId();
+        UUID memberId = getMemberId(deviceId);
         this.get(memberId)
                 .ifPresentOrElse(
                         s -> s.connect(deviceId, event.getConnectedAt()),
@@ -101,10 +101,16 @@ public class DailyActivityStatusService {
     @EventListener(DeviceDisconnected.class)
     private void updatedOnDeviceDisconnected(DeviceDisconnected event) {
         UUID deviceId = event.getDeviceId();
-        UUID memberId = deviceRepository.findById(deviceId).orElseThrow().getMemberId();
+        UUID memberId = getMemberId(deviceId);
         this.get(memberId)
                 .ifPresent(
                         s -> s.disconnect(deviceId, event.getDisconnectedAt())
                 );
+    }
+
+    private UUID getMemberId(UUID deviceId) {
+        return deviceRepository.findById(deviceId)
+                .orElseThrow(()-> new IllegalStateException("기기 없음: " + deviceId))
+                .getMemberId();
     }
 }
