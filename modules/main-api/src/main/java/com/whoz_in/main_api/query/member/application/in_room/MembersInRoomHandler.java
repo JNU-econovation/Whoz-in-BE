@@ -13,6 +13,7 @@ import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import com.whoz_in.main_api.shared.utils.TimeFormatter;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +31,11 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
     private final DeviceViewer deviceViewer;
     private final RequesterInfo requesterInfo;
     private volatile List<MemberInRoom> cachedMembers; // 여러 스레드에서 동시에 읽기/쓰기가 가능하므로 volatile
+
+    @PostConstruct
+    protected void init() {
+        refresh(); // 초기화 시 멤버 현황을 채운다.
+    }
 
     @Override
     public MembersInRoom handle(MembersInRoomGet query) {
