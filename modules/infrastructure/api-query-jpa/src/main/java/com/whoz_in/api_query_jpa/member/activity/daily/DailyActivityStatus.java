@@ -36,13 +36,14 @@ public final class DailyActivityStatus {
         if (activeAt == null && inactiveAt == null) {
             throw new IllegalArgumentException("재실 시각과 퇴실 시각이 둘 다 null일 수 없음");
         }
-        boolean activeMismatch = (activeAt == null) != connectedDeviceIds.isEmpty();
-        boolean inactiveMismatch = (inactiveAt == null) == connectedDeviceIds.isEmpty();
-        if (activeMismatch || inactiveMismatch) {
+        // 활성 상태와 연결된 디바이스 상태가 일치하는지 검증
+        boolean hasConnectedDevices = !connectedDeviceIds.isEmpty();
+        if ((activeAt == null) == hasConnectedDevices || (inactiveAt == null) != hasConnectedDevices) {
             throw new IllegalArgumentException("재실 상태와 연결된 디바이스 상태가 맞지 않음");
         }
         this.memberId = memberId;
         this.activeAt = activeAt;
+        this.inactiveAt = inactiveAt;
         this.prevActiveTime = prevActiveTime;
         this.connectedDeviceIds = new ArrayList<>(connectedDeviceIds);
     }
