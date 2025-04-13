@@ -51,7 +51,7 @@ public class DeviceConnection extends AggregateRoot {
     }
 
     public void disconnect(@NonNull LocalDateTime at) { // 같은 방에 있는지도 검증해야 하나
-        if (isDisconnected()) throw DeviceAlreadyDisconnectedException.EXCEPTION;
+        if (isDisconnected()) return;
         this.disconnectedAt = at;
         this.register(new DeviceDisconnected(id.id(), deviceId.id(), room, connectedAt, disconnectedAt));
     }
