@@ -60,7 +60,7 @@ public class DeviceConnectionScheduler {
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
     public void update() {
         LocalDateTime since = LocalDateTime.now()
-                .minusMinutes(UPDATE_TERM_MINUTE)
+                .minusMinutes(UPDATE_TERM_MINUTE) // TODO: 이거 최대 2분됨
                 .truncatedTo(ChronoUnit.MINUTES);
         fetchLogs(since); // 확인 주기마다 로그 업데이트
         connectedChecker.updateConnected(getNewLogs(since)); // 캐시된 로그 중 최근 가져온 로그만 넘김
