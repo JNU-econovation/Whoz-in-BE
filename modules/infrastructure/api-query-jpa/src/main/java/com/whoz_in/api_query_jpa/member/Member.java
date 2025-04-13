@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.Duration;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import org.hibernate.annotations.Synchronize;
@@ -13,6 +15,7 @@ import org.hibernate.annotations.UuidGenerator;
 
 @Getter
 @Entity
+@Immutable
 @Subselect("SELECT "
         + "m.id,"
         + "m.login_id,"
@@ -29,9 +32,8 @@ import org.hibernate.annotations.UuidGenerator;
         + "LEFT JOIN badge_entity b ON m.main_badge = b.id "
         + "LEFT JOIN activity_history a ON m.id = a.member_id AND a.time_unit = 'TOTAL'"
 )
-@Immutable
 @Synchronize({"member_entity", "badge_entity", "activity_history"})
-
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member {
     @Id
     @UuidGenerator

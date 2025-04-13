@@ -1,7 +1,9 @@
 package com.whoz_in.api_query_jpa.device.connection;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -10,6 +12,7 @@ import java.util.UUID;
 @Entity
 @Immutable
 @Table(name = "device_connection_entity")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DeviceConnection {
     @Id
     @Column(name = "id")
