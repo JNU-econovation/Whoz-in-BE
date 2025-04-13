@@ -75,15 +75,16 @@ public class DailyActivityStatusService {
         return Optional.ofNullable(memberIdToStatus.get(memberId));
     }
 
+
     // 새로운 하루가 시작되면 모든 상태 초기화
     @EventListener(DayEnded.class)
-    public void onDayEnded() {
+    private void clearOnDayEnded() {
         memberIdToStatus.clear();
     }
 
     // 연결이 생겼을때 상태 업데이트
     @EventListener(DeviceConnected.class)
-    public void onDeviceConnected(DeviceConnected event) {
+    private void updateOnDeviceConnected(DeviceConnected event) {
         UUID deviceId = event.getDeviceId();
         UUID memberId = deviceRepository.findById(deviceId).orElseThrow().getMemberId();
         this.get(memberId)
@@ -98,7 +99,7 @@ public class DailyActivityStatusService {
 
     // 연결이 끊겼을때 상태 업데이트
     @EventListener(DeviceDisconnected.class)
-    public void onDeviceDisconnected(DeviceDisconnected event) {
+    private void updatedOnDeviceDisconnected(DeviceDisconnected event) {
         UUID deviceId = event.getDeviceId();
         UUID memberId = deviceRepository.findById(deviceId).orElseThrow().getMemberId();
         this.get(memberId)
