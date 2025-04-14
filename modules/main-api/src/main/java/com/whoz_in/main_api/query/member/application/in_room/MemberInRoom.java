@@ -1,9 +1,10 @@
 package com.whoz_in.main_api.query.member.application.in_room;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
 import com.whoz_in.main_api.query.member.application.shared.TodayActivityView;
 import com.whoz_in.main_api.query.shared.application.Response;
-import com.whoz_in.main_api.shared.utils.TimeFormatter;
+import com.whoz_in.main_api.query.shared.presentation.DurationToHourMinuteSerializer;
 import com.whoz_in.shared.Nullable;
 import java.time.Duration;
 
@@ -13,7 +14,8 @@ public record MemberInRoom(
     String memberName,
     String mainBadgeName,
     String mainBadgeColor,
-    String todayActiveTime,
+    @JsonSerialize(using = DurationToHourMinuteSerializer.class)
+    Duration todayActiveTime,
     boolean isActive
 ) implements Response {
     public MemberInRoom(MemberInfoView info, @Nullable TodayActivityView today) {
@@ -23,7 +25,7 @@ public record MemberInRoom(
                 info.name(),
                 info.mainBadgeName(),
                 info.mainBadgeColor(),
-                TimeFormatter.hourMinuteTime(today != null ? today.activeTime() : Duration.ZERO),
+                today != null ? today.activeTime() : Duration.ZERO,
                 today != null && today.isActive()
         );
     }

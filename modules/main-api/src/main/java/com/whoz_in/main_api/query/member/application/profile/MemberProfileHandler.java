@@ -4,7 +4,6 @@ import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
-import com.whoz_in.main_api.shared.utils.TimeFormatter;
 import lombok.RequiredArgsConstructor;
 
 @Handler
@@ -22,7 +21,7 @@ public class MemberProfileHandler implements QueryHandler<MemberProfileGet, Memb
                 memberInfoView.generation(),
                 memberInfoView.name(),
                 memberInfoView.position(),
-                TimeFormatter.dayHourMinuteTime(memberInfoView.totalActiveTime())
+                memberInfoView.totalActiveTime()
         );
     }
 }
