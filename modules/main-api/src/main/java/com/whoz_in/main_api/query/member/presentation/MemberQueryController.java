@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 public class MemberQueryController extends QueryController implements MemberQueryApi {
-
     public MemberQueryController(QueryBus queryBus) {
         super(queryBus);
     }
@@ -31,11 +30,9 @@ public class MemberQueryController extends QueryController implements MemberQuer
     @GetMapping("/members")
     public ResponseEntity<SuccessBody<MembersInRoom>> getActiveMembers(
             @RequestParam("size") int size,
-            @RequestParam("page") int page,
-            @RequestParam("sortType") String sortType,
-            @RequestParam(value = "status", required = false) String status
+            @RequestParam("page") int page
     ) {
-        MembersInRoomGet query = new MembersInRoomGet(page, size, sortType, status);
+        MembersInRoomGet query = new MembersInRoomGet(page, size);
         MembersInRoom response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }

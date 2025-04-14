@@ -21,9 +21,7 @@ public interface MemberQueryApi {
     )
     ResponseEntity<SuccessBody<MembersInRoom>> getActiveMembers(
             @Parameter(name="size") int size,
-            @Parameter(name="page") int page,
-            @Parameter(name="sortType") String sortType,
-            @Parameter(name="status") String status
+            @Parameter(name="page") int page
     );
 
     @Operation(
