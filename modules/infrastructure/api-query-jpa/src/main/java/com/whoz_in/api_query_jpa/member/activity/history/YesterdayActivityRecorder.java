@@ -29,7 +29,7 @@ public class YesterdayActivityRecorder {
     @EventListener(DayEnded.class)
     private void aggregate(DayEnded event) {
         LocalDateTime yesterdayEnd = event.endedAt();
-        LocalDateTime yesterdayStart = yesterdayEnd.minusDays(1); // 어제 오전 6시
+        LocalDateTime yesterdayStart = yesterdayEnd.minusDays(1); // 어제의 하루 시작 시각
 
         // 멤버별 Connection들
         Map<UUID, List<DeviceConnection>> memberToConnections = memberConnectionService.get(
