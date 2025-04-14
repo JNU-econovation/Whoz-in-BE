@@ -9,7 +9,6 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import jakarta.annotation.PostConstruct;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -23,18 +22,22 @@ public class DeviceConnectionScheduler {
     private final DeviceConnectedChecker connectedChecker;
     private final DeviceDisconnectedChecker disconnectedChecker;
     private final MonitorLogRepository monitorLogRepository;
+    private LocalDateTime lastUpdatedAt;
 
     // 연결됨, 연결끊김을 확인하기 위한 모니터 로그들을 캐시해둠
     private final Cache<String, MonitorLog> monitorLogCache = CacheBuilder.newBuilder()
             .expireAfterWrite(DISCONNECTED_TERM_MINUTE, TimeUnit.MINUTES)
             .build();
 
-    // 서버 시작 시 캐시된 로그가 없으므로 범위 내로 모두 가져옴
+    /*
+        서버 시작 시 캐시된 로그가 없으므로 범위 내로 모두 가져온다.
+        *참고(중요한건 아님)*
+        서버가 시작되기 전에 연결 중이었던 기기는
+        (로그가 발생하고 지난 시각 + DISCONNECTED_TERM_MINUTE)분이 지나야 기기가 끊겼다고 판단하게 될 수 있다.
+     */
     @PostConstruct
-    private void preloadLogs() {
-        LocalDateTime since = LocalDateTime.now()
-                .minusMinutes(DISCONNECTED_TERM_MINUTE)
-                .truncatedTo(ChronoUnit.MINUTES);
+    private void init() {
+        LocalDateTime since = LocalDateTime.now().minusMinutes(DISCONNECTED_TERM_MINUTE);
         fetchLogs(since);
     }
 
@@ -59,11 +62,11 @@ public class DeviceConnectionScheduler {
     */
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
     public void update() {
-        LocalDateTime since = LocalDateTime.now()
-                .minusMinutes(UPDATE_TERM_MINUTE) // TODO: 이거 최대 2분됨
-                .truncatedTo(ChronoUnit.MINUTES);
-        fetchLogs(since); // 확인 주기마다 로그 업데이트
-        connectedChecker.updateConnected(getNewLogs(since)); // 캐시된 로그 중 최근 가져온 로그만 넘김
+        if (lastUpdatedAt == null) lastUpdatedAt = LocalDateTime.now().minusMinutes(UPDATE_TERM_MINUTE * 2);
+
+        lastUpdatedAt = lastUpdatedAt.plusMinutes(UPDATE_TERM_MINUTE);
+        fetchLogs(lastUpdatedAt); // 확인 주기마다 로그 업데이트
+        connectedChecker.updateConnected(getNewLogs(lastUpdatedAt)); // 캐시된 로그 중 최근 가져온 로그만 넘김
         disconnectedChecker.updateDisconnected(monitorLogCache.asMap().keySet());
     }
 
