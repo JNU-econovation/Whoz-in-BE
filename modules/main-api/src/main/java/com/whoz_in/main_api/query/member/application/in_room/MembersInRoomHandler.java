@@ -13,6 +13,7 @@ import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import jakarta.annotation.PostConstruct;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -47,7 +48,6 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
     }
 
     private MembersInRoom filter(MembersInRoomGet query) {
-        // TODO: 애플리케이션에서 정렬하지 말고, DB에서 정렬 후 페이지에 맞는 데이터만 가져올수도
         int page = query.page() - 1;
         int size = query.size();
         int start = page * size;
@@ -61,12 +61,25 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
     protected void refresh() {
         Map<UUID, TodayActivityView> activities = todayActivityViewer.findAll().stream()
                 .collect(Collectors.toMap(TodayActivityView::memberId, activity -> activity));
-        // TODO: 정렬
+
         this.cachedMembers = memberInfoViewer.findAll().stream()
                 .map(info -> {
                     TodayActivityView activityView = activities.get(info.memberId());
                     return new MemberInRoom(info, activityView);
                 })
+                .sorted(
+                        // 오늘 동방에 온 사람 우선
+                        Comparator.comparing(MemberInRoom::hasBeenActive).reversed()
+                                // active인 사람 우선
+                                .thenComparing(MemberInRoom::isActive, Comparator.reverseOrder())
+                                // activeTime이 큰 순
+                                .thenComparing(MemberInRoom::todayActiveTime, Comparator.reverseOrder())
+                                // generation 내림차순
+                                .thenComparing(MemberInRoom::generation, Comparator.reverseOrder())
+                                // 이름순 정렬
+                                .thenComparing(MemberInRoom::memberName)
+                )
                 .toList();
     }
+
 }
