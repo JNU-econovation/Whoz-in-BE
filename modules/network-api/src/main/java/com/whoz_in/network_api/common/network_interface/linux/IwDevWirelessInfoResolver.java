@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common.network_interface.nux;
+package com.whoz_in.network_api.common.network_interface.linux;
 
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
@@ -7,10 +7,10 @@ import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 @Component
 public final class IwDevWirelessInfoResolver implements WirelessInfoResolver {
 

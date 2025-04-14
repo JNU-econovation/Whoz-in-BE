@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common.network_interface.nux;
+package com.whoz_in.network_api.common.network_interface.linux;
 
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
@@ -6,10 +6,10 @@ import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 @Component
 public final class NmcliNetworkAddressResolver implements NetworkAddressResolver {
     private static final Pattern IP_PATTERN = Pattern.compile(

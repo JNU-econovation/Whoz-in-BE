@@ -1,14 +1,14 @@
-package com.whoz_in.network_api.common.network_interface.mac;
+package com.whoz_in.network_api.common.network_interface.nonLinux;
 
 import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
 import java.util.Map;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
-@Profile("local")
+@Conditional(NonLinuxCondition.class)
 @Component
 public class StubWirelessInfoResolver implements WirelessInfoResolver {
     @Override

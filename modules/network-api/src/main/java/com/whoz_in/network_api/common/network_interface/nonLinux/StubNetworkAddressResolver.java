@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common.network_interface.mac;
+package com.whoz_in.network_api.common.network_interface.nonLinux;
 
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
@@ -9,10 +9,10 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
-@Profile("local")
+@Conditional(NonLinuxCondition.class)
 @Component
 public class StubNetworkAddressResolver implements NetworkAddressResolver {
     @Override
