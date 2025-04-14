@@ -64,7 +64,7 @@ public final class TodayActivityStatus {
 
     public void disconnect(UUID deviceId, LocalDateTime disconnectedAt) {
         if (connectedDeviceIds.remove(deviceId) && connectedDeviceIds.isEmpty()) {
-            prevActiveTime = prevActiveTime.plus(getContinuousActiveTime());
+            prevActiveTime = prevActiveTime.plus(Duration.between(activeAt, disconnectedAt));
             activeAt = null;
             this.inactiveAt = disconnectedAt;
         }
