@@ -1,6 +1,6 @@
 package com.whoz_in.api_query_jpa.member;
 
-import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityAggregator;
+import com.whoz_in.api_query_jpa.member.activity.history.YesterdayActivityRecorder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -66,7 +66,7 @@ public class Member {
     private Duration totalActiveTime;
 
     /**
-     * {@link TodayActivityAggregator}가
+     * {@link YesterdayActivityRecorder}가
      * {@link com.whoz_in.api_query_jpa.member.activity.history.ActivityHistory}에 캐싱한
      * total active time임
      * 따라서 오늘의 데이터는 아직 반영이 안된 상태니까 사용하는 쪽에서 오늘의 active time을 더해줘야 함.

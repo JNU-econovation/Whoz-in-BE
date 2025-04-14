@@ -1,11 +1,8 @@
-package com.whoz_in.api_query_jpa.member.activity.today;
+package com.whoz_in.api_query_jpa.member.activity.history;
 
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnection;
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnectionUtil;
 import com.whoz_in.api_query_jpa.member.activity.MemberConnectionService;
-import com.whoz_in.api_query_jpa.member.activity.history.ActivityHistory;
-import com.whoz_in.api_query_jpa.member.activity.history.ActivityHistoryRepository;
-import com.whoz_in.api_query_jpa.member.activity.history.TimeUnit;
 import com.whoz_in.main_api.shared.utils.TimeRanges;
 import com.whoz_in.shared.DayEnded;
 import java.time.Duration;
@@ -24,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TodayActivityAggregator {
+public class YesterdayActivityRecorder {
     private final MemberConnectionService memberConnectionService;
     private final ActivityHistoryRepository activityHistoryRepository;
 
