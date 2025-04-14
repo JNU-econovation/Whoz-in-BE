@@ -14,19 +14,21 @@ public record MemberInRoom(
     String memberName,
     String mainBadgeName,
     String mainBadgeColor,
+    boolean hasBeenActive,
     @JsonSerialize(using = DurationToHourMinuteSerializer.class)
     Duration todayActiveTime,
     boolean isActive
 ) implements Response {
-    public MemberInRoom(MemberInfoView info, @Nullable TodayActivityView today) {
+    public MemberInRoom(MemberInfoView info, @Nullable TodayActivityView todayActivity) {
         this(
                 info.memberId().toString(),
                 info.generation(),
                 info.name(),
                 info.mainBadgeName(),
                 info.mainBadgeColor(),
-                today != null ? today.activeTime() : Duration.ZERO,
-                today != null && today.isActive()
+                todayActivity != null,
+                todayActivity != null ? todayActivity.activeTime() : Duration.ZERO,
+                todayActivity != null && todayActivity.isActive()
         );
     }
 }
