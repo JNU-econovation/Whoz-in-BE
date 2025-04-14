@@ -34,12 +34,13 @@ public final class IwDevWirelessInfoResolver implements WirelessInfoResolver {
                 currentInterface = line.replace("Interface", "").trim();
                 mode = null;
                 ssid = null;
-            }
-            if (line.contains("type") && currentInterface != null) {
-                mode = WirelessMode.fromString(line.split("type")[1].trim());
-            }
-            if (line.contains("ssid") && currentInterface != null) {
-                ssid = line.split("ssid")[1].trim();
+            } else if (currentInterface != null) {
+                if (mode == null && line.startsWith("type")) {
+                    mode = WirelessMode.fromString(line.substring("type".length()).trim());
+                }
+                if (ssid == null && line.startsWith("ssid")) {
+                    ssid = line.substring("ssid".length()).trim();
+                }
             }
         }
         if (currentInterface != null) {
