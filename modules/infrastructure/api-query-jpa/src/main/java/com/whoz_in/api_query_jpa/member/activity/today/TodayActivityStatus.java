@@ -24,14 +24,15 @@ public final class TodayActivityStatus {
     // 새로운 DeviceConnection으로 만들때 사용
     public TodayActivityStatus(
             UUID memberId,
-            LocalDateTime activeAt, LocalDateTime inactiveAt,
+            @Nullable LocalDateTime activeAt, @Nullable LocalDateTime inactiveAt,
             Duration prevActiveTime, UUID connectedDeviceId) {
         this(memberId, activeAt, inactiveAt, prevActiveTime, List.of(connectedDeviceId));
     }
 
     // 기존 DeviceConnection들로 만들때 사용
     public TodayActivityStatus(
-            UUID memberId, LocalDateTime activeAt, LocalDateTime inactiveAt,
+            UUID memberId,
+            @Nullable LocalDateTime activeAt, @Nullable LocalDateTime inactiveAt,
             Duration prevActiveTime, List<UUID> connectedDeviceIds) {
         if (activeAt == null && inactiveAt == null) {
             throw new IllegalArgumentException("재실 시각과 퇴실 시각이 둘 다 null일 수 없음");
