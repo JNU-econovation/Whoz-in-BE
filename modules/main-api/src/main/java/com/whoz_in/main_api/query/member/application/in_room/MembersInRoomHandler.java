@@ -7,8 +7,8 @@ import com.whoz_in.main_api.query.device.application.DeviceCount;
 import com.whoz_in.main_api.query.device.application.DeviceViewer;
 import com.whoz_in.main_api.query.device.exception.RegisteredDeviceCountException;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
-import com.whoz_in.main_api.query.member.application.shared.MemberActivityView;
-import com.whoz_in.main_api.query.member.application.shared.MemberActivityViewer;
+import com.whoz_in.main_api.query.member.application.shared.TodayActivityView;
+import com.whoz_in.main_api.query.member.application.shared.TodayActivityViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
@@ -27,7 +27,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 @RequiredArgsConstructor
 public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, MembersInRoom> {
     private final MemberInfoViewer memberInfoViewer;
-    private final MemberActivityViewer memberActivityViewer;
+    private final TodayActivityViewer todayActivityViewer;
     private final DeviceViewer deviceViewer;
     private final RequesterInfo requesterInfo;
     private volatile List<MemberInRoom> cachedMembers; // 여러 스레드에서 동시에 읽기/쓰기가 가능하므로 volatile
@@ -61,12 +61,12 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
 
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
     protected void refresh() {
-        Map<UUID, MemberActivityView> activities = memberActivityViewer.findAll().stream()
-                .collect(Collectors.toMap(MemberActivityView::memberId, activity -> activity));
+        Map<UUID, TodayActivityView> activities = todayActivityViewer.findAll().stream()
+                .collect(Collectors.toMap(TodayActivityView::memberId, activity -> activity));
         // TODO: 정렬
         this.cachedMembers = memberInfoViewer.findAll().stream()
                 .map(info -> {
-                    MemberActivityView activityView = activities.get(info.memberId());
+                    TodayActivityView activityView = activities.get(info.memberId());
                     if (activityView == null) return null;
                     return new MemberInRoom(
                             info.memberId().toString(),

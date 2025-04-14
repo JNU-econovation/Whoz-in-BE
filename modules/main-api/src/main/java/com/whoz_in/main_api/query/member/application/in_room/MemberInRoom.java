@@ -8,6 +8,6 @@ public record MemberInRoom(
     String memberName,
     String mainBadgeName,
     String mainBadgeColor,
-    String dailyActiveTime,
+    String todayActiveTime,
     boolean isActive
 ) implements Response {}

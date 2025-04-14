@@ -4,7 +4,7 @@ import com.whoz_in.main_api.query.shared.application.View;
 import java.time.Duration;
 import java.util.UUID;
 
-public record MemberActivityView(
+public record TodayActivityView(
         UUID memberId,
         boolean isActive,
         Duration activeTime

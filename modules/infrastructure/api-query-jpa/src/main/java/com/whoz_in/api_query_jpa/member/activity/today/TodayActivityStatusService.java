@@ -1,4 +1,4 @@
-package com.whoz_in.api_query_jpa.member.activity.daily;
+package com.whoz_in.api_query_jpa.member.activity.today;
 
 import static com.whoz_in.shared.DayEndedEventPublisher.DAY_END_HOUR;
 import static org.springframework.transaction.event.TransactionPhase.AFTER_COMMIT;
@@ -29,10 +29,10 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DailyActivityStatusService {
+public class TodayActivityStatusService {
     private final DeviceRepository deviceRepository;
     private final MemberConnectionService memberConnectionService;
-    private final Map<UUID, DailyActivityStatus> memberIdToStatus = new HashMap<>();
+    private final Map<UUID, TodayActivityStatus> memberIdToStatus = new HashMap<>();
 
     // 상태를 인메모리로 저장하기 때문에 서버 시작 시 초기 상태를 구성한다.
     @PostConstruct
@@ -53,7 +53,7 @@ public class DailyActivityStatusService {
             // 연결된 디바이스가 하나라도 있으면 재실 중으로 판단
             boolean isActive = !connectedDeviceIds.isEmpty();
 
-            DailyActivityStatus status = new DailyActivityStatus(
+            TodayActivityStatus status = new TodayActivityStatus(
                     memberId,
                     isActive ? timeRanges.getLastRangeStart() : null,
                     isActive ? null : timeRanges.getLastRangeEnd(),
@@ -65,15 +65,15 @@ public class DailyActivityStatusService {
     }
 
     // 모든 멤버의 상태 조회
-    public Map<UUID, DailyActivityStatus> getMap() {
+    public Map<UUID, TodayActivityStatus> getMap() {
         return memberIdToStatus;
     }
-    public List<DailyActivityStatus> getList() {
+    public List<TodayActivityStatus> getList() {
         return memberIdToStatus.values().stream().toList();
     }
 
     // 한 멤버의 상태 조회
-    public Optional<DailyActivityStatus> get(UUID memberId) {
+    public Optional<TodayActivityStatus> get(UUID memberId) {
         return Optional.ofNullable(memberIdToStatus.get(memberId));
     }
 
@@ -93,7 +93,7 @@ public class DailyActivityStatusService {
                 .ifPresentOrElse(
                         s -> s.connect(deviceId, event.getConnectedAt()),
                         () -> {
-                            DailyActivityStatus newStatus = new DailyActivityStatus(memberId, event.getConnectedAt(), null, Duration.ZERO, deviceId);
+                            TodayActivityStatus newStatus = new TodayActivityStatus(memberId, event.getConnectedAt(), null, Duration.ZERO, deviceId);
                             memberIdToStatus.put(memberId, newStatus);
                         }
                 );

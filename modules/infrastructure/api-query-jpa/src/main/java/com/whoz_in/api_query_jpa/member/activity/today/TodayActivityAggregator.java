@@ -1,4 +1,4 @@
-package com.whoz_in.api_query_jpa.member.activity.daily;
+package com.whoz_in.api_query_jpa.member.activity.today;
 
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnection;
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnectionUtil;
@@ -24,10 +24,11 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class DailyActivityAggregator {
+public class TodayActivityAggregator {
     private final MemberConnectionService memberConnectionService;
     private final ActivityHistoryRepository activityHistoryRepository;
 
+    // 하루가 끝나면 어제 멤버들의 활동 시간을 기록하고 전체 시간에 추가함
     @EventListener(DayEnded.class)
     private void aggregate(DayEnded event) {
         LocalDateTime yesterdayEnd = event.endedAt();
@@ -37,7 +38,7 @@ public class DailyActivityAggregator {
         Map<UUID, List<DeviceConnection>> memberToConnections = memberConnectionService.get(
                 yesterdayStart, yesterdayEnd);
         // 멤버별 어제 활동 시간
-        Map<UUID, ActivityHistory> dayHistories = calculateDaily(memberToConnections, yesterdayEnd);
+        Map<UUID, ActivityHistory> dayHistories = calculateYesterday(memberToConnections, yesterdayEnd);
         // 멤버별 총 활동 시간
         List<ActivityHistory> totalHistories = calculateTotal(dayHistories);
 
@@ -45,7 +46,7 @@ public class DailyActivityAggregator {
         activityHistoryRepository.saveAll(totalHistories);
     }
 
-    private Map<UUID, ActivityHistory> calculateDaily(
+    private Map<UUID, ActivityHistory> calculateYesterday(
             Map<UUID, List<DeviceConnection>> memberToConnections,
             LocalDateTime yesterdayEnd
     ){
