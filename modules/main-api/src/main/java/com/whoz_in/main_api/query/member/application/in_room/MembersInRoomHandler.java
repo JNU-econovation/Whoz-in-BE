@@ -12,11 +12,9 @@ import com.whoz_in.main_api.query.member.application.shared.TodayActivityViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
-import com.whoz_in.main_api.shared.utils.TimeFormatter;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -67,18 +65,8 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
         this.cachedMembers = memberInfoViewer.findAll().stream()
                 .map(info -> {
                     TodayActivityView activityView = activities.get(info.memberId());
-                    if (activityView == null) return null;
-                    return new MemberInRoom(
-                            info.memberId().toString(),
-                            info.generation(),
-                            info.name(),
-                            info.mainBadgeName(),
-                            info.mainBadgeColor(),
-                            TimeFormatter.hourMinuteTime(activityView.activeTime()),
-                            activityView.isActive()
-                    );
+                    return new MemberInRoom(info, activityView);
                 })
-                .filter(Objects::nonNull)
                 .toList();
     }
 }
