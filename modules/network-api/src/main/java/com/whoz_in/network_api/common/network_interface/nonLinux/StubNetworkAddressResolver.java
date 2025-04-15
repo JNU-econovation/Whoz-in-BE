@@ -2,6 +2,7 @@ package com.whoz_in.network_api.common.network_interface.nonLinux;
 
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
+import com.whoz_in.network_api.common.NonLinuxCondition;
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;

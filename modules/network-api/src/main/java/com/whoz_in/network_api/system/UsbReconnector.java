@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.system;
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.io.File;
 import java.io.FileWriter;
@@ -13,10 +14,12 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Conditional(LinuxCondition.class)
 public class UsbReconnector {
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();

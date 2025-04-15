@@ -1,4 +1,4 @@
-package com.whoz_in.network_api.common.network_interface.linux;
+package com.whoz_in.network_api.common;
 
 import org.springframework.context.annotation.Condition;
 import org.springframework.context.annotation.ConditionContext;

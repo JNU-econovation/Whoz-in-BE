@@ -2,6 +2,7 @@ package com.whoz_in.network_api.common.network_interface.nonLinux;
 
 import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
+import com.whoz_in.network_api.common.NonLinuxCondition;
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
 import java.util.Map;

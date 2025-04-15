@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.common.network_interface.linux;
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
 import com.whoz_in.network_api.common.network_interface.WirelessMode;
