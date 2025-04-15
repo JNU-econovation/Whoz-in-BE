@@ -1,14 +1,14 @@
 <!-- 스프링 컨텍스트가 완전히 초기화되기 전에 환경변수를 읽으므로 @PropertyConfig가 아닌 yml에서 env를 로드해야 함-->
 
 <configuration>
-  <springProfile name="!prod">
+  <springProfile name="local">
     <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
     <root level="INFO">
       <appender-ref ref="COLOR_CONSOLE"/>
     </root>
   </springProfile>
 
-  <springProfile name="prod">
+  <springProfile name="dev,prod">
     <root level="INFO">
       <appender-ref ref="NO_COLOR_CONSOLE"/>
       <appender-ref ref="FILE"/>
