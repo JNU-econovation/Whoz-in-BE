@@ -5,6 +5,7 @@ import com.whoz_in.api_query_jpa.device.connection.DeviceConnectionUtil;
 import com.whoz_in.api_query_jpa.member.activity.MemberConnectionService;
 import com.whoz_in.main_api.shared.utils.TimeRanges;
 import com.whoz_in.shared.DayEnded;
+import com.whoz_in.shared.DayBoundaryUtil;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -47,7 +48,7 @@ public class YesterdayActivityRecorder {
             Map<UUID, List<DeviceConnection>> memberToConnections,
             LocalDateTime yesterdayEnd
     ){
-        LocalDate yesterday = yesterdayEnd.toLocalDate();
+        LocalDate yesterday = DayBoundaryUtil.yesterday();
         return memberToConnections.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,

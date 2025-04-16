@@ -13,9 +13,13 @@ import lombok.NoArgsConstructor;
  * - 해당 시각이 {@code DAY_END_HOUR} 이후면, 해당 날짜는 '당일'로 간주됩니다.
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TodayUtil {
+public class DayBoundaryUtil {
     public static LocalDate today(){
         return LocalDateTime.now().minusHours(DAY_END_HOUR).toLocalDate();
+    }
+
+    public static LocalDate yesterday(){
+        return today().minusDays(1);
     }
 
     public static LocalDate someday(LocalDateTime at){

@@ -7,7 +7,7 @@ import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityService;
 import com.whoz_in.main_api.query.member.application.shared.ActivitiesView;
 import com.whoz_in.main_api.query.member.application.shared.ActivitiesView.Activity;
 import com.whoz_in.main_api.query.member.application.shared.ActivityViewer;
-import com.whoz_in.shared.TodayUtil;
+import com.whoz_in.shared.DayBoundaryUtil;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.List;
@@ -30,7 +30,7 @@ public class ActivityJpaViewer implements ActivityViewer {
                 ).stream()
                 .map(history -> new Activity(history.getReferenceDate(), history.getActiveTime()))
                 .collect(Collectors.toList());
-        LocalDate today = TodayUtil.today();
+        LocalDate today = DayBoundaryUtil.today();
         if (!start.isAfter(today) && !inclusiveEnd.isBefore(today)) {
             todayActivityService.get(memberId)
                     .map(ta-> new Activity(today, ta.getActiveTime()))
