@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DayEndedEventPublisher {
-
+    // 후즈인에서 새로운 하루의 시작을 나타내는 시각
     public static final int DAY_END_HOUR = 6;
     private static final String CRON = "0 0 " + DAY_END_HOUR + " * * *";
 

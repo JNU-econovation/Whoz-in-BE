@@ -1,5 +1,7 @@
 package com.whoz_in.main_api.query.member.presentation;
 
+import com.whoz_in.main_api.query.member.application.block.MemberBlock;
+import com.whoz_in.main_api.query.member.application.block.MemberBlockGet;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetail;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetailGet;
 import com.whoz_in.main_api.query.member.application.in_room.MembersInRoomGet;
@@ -40,6 +42,20 @@ public class MemberQueryController extends QueryController implements MemberQuer
     @GetMapping("/member")
     public ResponseEntity<SuccessBody<MemberDetail>> getDetailInfo(){
         return ResponseEntityGenerator.success(ask(new MemberDetailGet()), CrudResponseCode.READ);
+    }
+
+    @GetMapping("/members/{memberId}/block")
+    public ResponseEntity<SuccessBody<MemberBlock>> getBlock(
+            @PathVariable("memberId") String memberId,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month
+    ){
+        return ResponseEntityGenerator.success(
+                ask(new MemberBlockGet(
+                        UUID.fromString(memberId), year, month)
+                ),
+                CrudResponseCode.READ
+        );
     }
 
     @GetMapping("/members/{memberId}/profile")

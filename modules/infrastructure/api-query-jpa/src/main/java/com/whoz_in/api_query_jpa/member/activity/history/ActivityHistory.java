@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "activity_history",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"member_id", "time_unit", "reference_date"})
+                @UniqueConstraint(columnNames = {"member_id", "reference_date", "time_unit"})
         }
 )
 public class ActivityHistory {

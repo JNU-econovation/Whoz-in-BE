@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
+import com.whoz_in.main_api.query.member.application.block.MemberBlock;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetail;
 import com.whoz_in.main_api.query.member.application.in_room.MembersInRoom;
 import com.whoz_in.main_api.query.member.application.profile.MemberProfile;
@@ -9,6 +10,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "회원", description = "회원 Api")
 public interface MemberQueryApi {
@@ -32,8 +34,17 @@ public interface MemberQueryApi {
 
     @Operation(
             summary = "회원 프로필 조회",
-            description = "다른 사람의 회원의 정보를 조회합니다."
+            description = "특정 회원의 정보를 조회합니다."
     )
     ResponseEntity<SuccessBody<MemberProfile>> getProfileInfo(@PathVariable("memberId") String memberId);
 
+    @Operation(
+            summary = "회원의 블록 조회",
+            description = "특정 회원의 블록(한 달 단위 재실 현황)을 조회합니다."
+    )
+    ResponseEntity<SuccessBody<MemberBlock>> getBlock(
+            @PathVariable("memberId") String memberId,
+            @RequestParam("year") int year,
+            @RequestParam("month") int month
+    );
 }

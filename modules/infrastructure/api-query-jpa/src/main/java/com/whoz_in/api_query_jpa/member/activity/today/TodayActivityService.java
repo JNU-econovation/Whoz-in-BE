@@ -19,20 +19,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
-// DailyActivityStatus를 제공하는 클래스
+/**
+ * {@link com.whoz_in.api_query_jpa.member.activity.today.TodayActivity}를 메모리 캐시로 제공하는 클래스
+  */
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class TodayActivityStatusService {
+public class TodayActivityService {
     private final DeviceRepository deviceRepository;
     private final MemberConnectionService memberConnectionService;
-    private final Map<UUID, TodayActivityStatus> memberIdToStatus = new HashMap<>();
+    private final Map<UUID, TodayActivity> todayActivityByMemberId = new ConcurrentHashMap<>();
 
     // 상태를 인메모리로 저장하기 때문에 서버 시작 시 초기 상태를 구성한다.
     @PostConstruct
@@ -53,35 +56,35 @@ public class TodayActivityStatusService {
             // 연결된 디바이스가 하나라도 있으면 재실 중으로 판단
             boolean isActive = !connectedDeviceIds.isEmpty();
 
-            TodayActivityStatus status = new TodayActivityStatus(
+            TodayActivity todayActivity = new TodayActivity(
                     memberId,
                     isActive ? timeRanges.getLastRangeStart() : null,
                     isActive ? null : timeRanges.getLastRangeEnd(),
                     isActive ? timeRanges.getDurationWithoutLastRange() : timeRanges.getTotalDuration(),
                     connectedDeviceIds
             );
-            memberIdToStatus.put(memberId, status);
+            todayActivityByMemberId.put(memberId, todayActivity);
         });
     }
 
     // 모든 멤버의 상태 조회
-    public Map<UUID, TodayActivityStatus> getMap() {
-        return memberIdToStatus;
+    public Map<UUID, TodayActivity> getMap() {
+        return todayActivityByMemberId;
     }
-    public List<TodayActivityStatus> getList() {
-        return memberIdToStatus.values().stream().toList();
+    public List<TodayActivity> getList() {
+        return todayActivityByMemberId.values().stream().toList();
     }
 
     // 한 멤버의 상태 조회
-    public Optional<TodayActivityStatus> get(UUID memberId) {
-        return Optional.ofNullable(memberIdToStatus.get(memberId));
+    public Optional<TodayActivity> get(UUID memberId) {
+        return Optional.ofNullable(todayActivityByMemberId.get(memberId));
     }
 
 
     // 새로운 하루가 시작되면 모든 상태 초기화
     @EventListener(DayEnded.class)
     private void clearOnDayEnded() {
-        memberIdToStatus.clear();
+        todayActivityByMemberId.clear();
     }
 
     // 연결이 생겼을때 상태 업데이트
@@ -93,8 +96,8 @@ public class TodayActivityStatusService {
                 .ifPresentOrElse(
                         s -> s.connect(deviceId, event.getConnectedAt()),
                         () -> {
-                            TodayActivityStatus newStatus = new TodayActivityStatus(memberId, event.getConnectedAt(), null, Duration.ZERO, deviceId);
-                            memberIdToStatus.put(memberId, newStatus);
+                            TodayActivity newActivity = new TodayActivity(memberId, event.getConnectedAt(), null, Duration.ZERO, deviceId);
+                            todayActivityByMemberId.put(memberId, newActivity);
                         }
                 );
     }

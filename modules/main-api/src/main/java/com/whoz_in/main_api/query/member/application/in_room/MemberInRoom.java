@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
 import com.whoz_in.main_api.query.member.application.shared.TodayActivityView;
 import com.whoz_in.main_api.query.shared.application.Response;
-import com.whoz_in.main_api.query.shared.presentation.DurationToHourMinuteSerializer;
+import com.whoz_in.main_api.query.shared.presentation.HourMinuteSerializer;
 import com.whoz_in.shared.Nullable;
 import java.time.Duration;
 
@@ -15,7 +15,7 @@ public record MemberInRoom(
     String mainBadgeName,
     String mainBadgeColor,
     boolean hasBeenActive,
-    @JsonSerialize(using = DurationToHourMinuteSerializer.class)
+    @JsonSerialize(using = HourMinuteSerializer.class)
     Duration todayActiveTime,
     boolean isActive
 ) implements Response {

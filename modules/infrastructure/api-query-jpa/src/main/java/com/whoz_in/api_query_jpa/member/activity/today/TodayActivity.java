@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 // 한 멤버에 대한 오늘의 재실 상태를 나타내는 클래스
 @Slf4j
 @Getter
-public final class TodayActivityStatus {
+public final class TodayActivity {
     private final UUID memberId;
     @Nullable private LocalDateTime activeAt;
     @Nullable private LocalDateTime inactiveAt;
@@ -22,7 +22,7 @@ public final class TodayActivityStatus {
     // active room 추가 가능
 
     // 새로운 DeviceConnection으로 만들때 사용
-    public TodayActivityStatus(
+    public TodayActivity(
             UUID memberId,
             @Nullable LocalDateTime activeAt, @Nullable LocalDateTime inactiveAt,
             Duration prevActiveTime, UUID connectedDeviceId) {
@@ -30,7 +30,7 @@ public final class TodayActivityStatus {
     }
 
     // 기존 DeviceConnection들로 만들때 사용
-    public TodayActivityStatus(
+    public TodayActivity(
             UUID memberId,
             @Nullable LocalDateTime activeAt, @Nullable LocalDateTime inactiveAt,
             Duration prevActiveTime, List<UUID> connectedDeviceIds) {

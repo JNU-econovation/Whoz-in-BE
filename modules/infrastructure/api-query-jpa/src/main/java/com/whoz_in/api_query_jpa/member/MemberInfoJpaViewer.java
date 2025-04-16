@@ -1,7 +1,7 @@
 package com.whoz_in.api_query_jpa.member;
 
-import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityStatus;
-import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityStatusService;
+import com.whoz_in.api_query_jpa.member.activity.today.TodayActivity;
+import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityService;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
 import java.time.Duration;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class MemberInfoJpaViewer implements MemberInfoViewer {
-    private final TodayActivityStatusService statusService;
+    private final TodayActivityService todayActivityService;
     private final MemberRepository repository;
 
     @Override
@@ -35,8 +35,8 @@ public class MemberInfoJpaViewer implements MemberInfoViewer {
                 entity.getPosition(),
                 entity.getStatusMessage(),
                 entity.getTotalActiveTime().plus(
-                        statusService.get(entity.getId())
-                                .map(TodayActivityStatus::getActiveTime)
+                        todayActivityService.get(entity.getId())
+                                .map(TodayActivity::getActiveTime)
                                 .orElse(Duration.ZERO)
                 ),
                 entity.getMainBadgeName(),

@@ -6,20 +6,13 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import java.io.IOException;
 import java.time.Duration;
 
-public class DurationToHourMinuteSerializer extends JsonSerializer<Duration> {
+public class ColonHourMinuteSerializer extends JsonSerializer<Duration> {
     @Override
     public void serialize(Duration duration, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         long totalMinutes = duration.toMinutes();
         long hours = totalMinutes / 60;
         long minutes = totalMinutes % 60;
-        String formatted;
-
-        if (hours > 0) {
-            formatted = String.format("%d시간 %d분", hours, minutes);
-        } else {
-            formatted = String.format("%d분", minutes);
-        }
-
+        String formatted = String.format("%d:%02d", hours, minutes);
         gen.writeString(formatted);
     }
 }
