@@ -4,6 +4,8 @@ import com.whoz_in.api_query_jpa.member.activity.today.TodayActivityStatusServic
 import com.whoz_in.main_api.query.member.application.shared.TodayActivityView;
 import com.whoz_in.main_api.query.member.application.shared.TodayActivityViewer;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -19,5 +21,12 @@ public class TodayActivityJpaViewer implements TodayActivityViewer {
                 s.isActive(),
                 s.getActiveTime()
             )).toList();
+    }
+
+    @Override
+    public Optional<TodayActivityView> findByMemberId(UUID memberId) {
+        return statusService.get(memberId).map(
+                status-> new TodayActivityView(memberId, status.isActive(), status.getActiveTime())
+        );
     }
 }
