@@ -4,10 +4,9 @@ import com.whoz_in.api_query_jpa.device.connection.DeviceConnection;
 import com.whoz_in.api_query_jpa.device.connection.DeviceConnectionUtil;
 import com.whoz_in.api_query_jpa.member.activity.MemberConnectionService;
 import com.whoz_in.main_api.shared.utils.TimeRanges;
-import com.whoz_in.shared.DayEnded;
 import com.whoz_in.shared.DayBoundaryUtil;
+import com.whoz_in.shared.DayEnded;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,6 @@ public class YesterdayActivityRecorder {
             Map<UUID, List<DeviceConnection>> memberToConnections,
             LocalDateTime yesterdayEnd
     ){
-        LocalDate yesterday = DayBoundaryUtil.yesterday();
         return memberToConnections.entrySet().stream()
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
@@ -57,7 +55,7 @@ public class YesterdayActivityRecorder {
                             TimeRanges timeRanges = DeviceConnectionUtil.toTimeRanges(entry.getValue(), yesterdayEnd);
                             return ActivityHistory.builder()
                                     .memberId(memberId)
-                                    .referenceDate(yesterday)
+                                    .referenceDate(DayBoundaryUtil.yesterday())
                                     .timeUnit(TimeUnit.DAY)
                                     .activeTime(timeRanges.getTotalDuration())
                                     .build();
@@ -84,7 +82,7 @@ public class YesterdayActivityRecorder {
                         return ActivityHistory.builder()
                                 .memberId(memberId)
                                 .timeUnit(TimeUnit.TOTAL)
-                                .referenceDate(LocalDate.now())
+                                .referenceDate(DayBoundaryUtil.yesterday())
                                 .activeTime(dailyDuration)
                                 .build();
                     }
