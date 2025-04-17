@@ -62,7 +62,7 @@ public abstract class AbstractProcess {
     }
 
     public void terminate() {
-        if (process != null && process.isAlive()) {
+        if (process != null) {
             process.destroy();
             waitForTermination();
         }
