@@ -14,7 +14,6 @@ import com.whoz_in.shared.domain_event.device_connection.DeviceDisconnected;
 import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +26,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
- * {@link com.whoz_in.api_query_jpa.member.activity.today.TodayActivity}를 메모리 캐시로 제공하는 클래스
+ * 원본 데이터인 {@link com.whoz_in.api_query_jpa.device.connection.DeviceConnection}으로 하루 재실 기록을 계산할 수 있지만 <br>
+ * 비효율적이기 때문에 {@link com.whoz_in.api_query_jpa.member.activity.today.TodayActivity}를 메모리 캐시로 제공하는 클래스
   */
 @Slf4j
 @Component
@@ -67,15 +67,11 @@ public class TodayActivityService {
         });
     }
 
-    // 모든 멤버의 상태 조회
-    public Map<UUID, TodayActivity> getMap() {
-        return todayActivityByMemberId;
-    }
+    // 모든 멤버의 상태 조회 (원본 객체 반환하니 수정 금지)
     public List<TodayActivity> getList() {
         return todayActivityByMemberId.values().stream().toList();
     }
-
-    // 한 멤버의 상태 조회
+    // 한 멤버의 상태 조회 (원본 객체 반환하니 수정 금지)
     public Optional<TodayActivity> get(UUID memberId) {
         return Optional.ofNullable(todayActivityByMemberId.get(memberId));
     }

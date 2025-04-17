@@ -18,7 +18,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 멤버들의 재실 기록 projection
+/**
+ 멤버들의 재실 기록 projection입니다. <br>
+ 원본 데이터인 {@link com.whoz_in.api_query_jpa.device.connection.DeviceConnection}을 가지고도 재실 기록을 계산할 수 있지만 비효율적이기 때문에 이 테이블에 미리 집계해두고 조회합니다.
+ */
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
