@@ -80,9 +80,8 @@ public final class TodayActivity {
         return prevActiveTime.plus(getContinuousActiveTime());
     }
 
-    // 수정 불가능한 리스트로 제공
-    public List<UUID> getConnectedDeviceIds() {
-        return Collections.unmodifiableList(connectedDeviceIds);
+    // 연결이 끊겼는데 활동 시간이 없을경우
+    public boolean isInactiveWithoutActiveTime() {
+        return !isActive() && getPrevActiveTime().isZero();
     }
-
 }

@@ -26,15 +26,23 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 /**
- * 원본 데이터인 {@link com.whoz_in.api_query_jpa.device.connection.DeviceConnection}으로 하루 재실 기록을 계산할 수 있지만 <br>
- * 비효율적이기 때문에 {@link com.whoz_in.api_query_jpa.member.activity.today.TodayActivity}를 메모리 캐시로 제공하는 클래스
+ *  원본 데이터인 {@link com.whoz_in.api_query_jpa.device.connection.DeviceConnection}으로 하루 재실 기록을 계산할 수 있지만, <br>
+ *  반복 계산이 비효율적이기 때문에 {@link com.whoz_in.api_query_jpa.member.activity.today.TodayActivity}를 메모리 캐시로 제공하는 클래스
   */
+/*
+ TODO: 현재 클래스는 책임 분리가 안돼있음
+       TodayActivity를 관리하는 CacheRepository(store?)와 해당 Repo를 이용해 관련 이벤트를 처리하는 서비스(?) 클래스로 분리할 것.
+       이때 @Transactional을 사용할 수 없으므로 동시성 문제에 주의해야 함.
+       Repository의 find들은 TodayActivity를 복사해서 반환하고 save를 제공할지,
+       find가 현재처럼 원본 객체를 반환하되, read-only로만 사용하도록 약속하고 내부 상태 변경은 Repo의 메서드로만 허용할지 고려해볼 수 있을듯
+*/
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class TodayActivityService {
     private final DeviceRepository deviceRepository;
     private final MemberConnectionService memberConnectionService;
+    // Map<memberId, TodayActivity>
     private final Map<UUID, TodayActivity> todayActivityByMemberId = new ConcurrentHashMap<>();
 
     // 상태를 인메모리로 저장하기 때문에 서버 시작 시 초기 상태를 구성한다.
@@ -83,7 +91,7 @@ public class TodayActivityService {
         todayActivityByMemberId.clear();
     }
 
-    // 연결이 생겼을때 상태 업데이트
+    // 디바이스 연결 시 해당 멤버의 재실 상태를 업데이트
     @TransactionalEventListener(phase = AFTER_COMMIT)
     private void updateOnDeviceConnected(DeviceConnected event) {
         UUID deviceId = event.getDeviceId();
@@ -105,7 +113,12 @@ public class TodayActivityService {
         UUID memberId = getMemberId(deviceId);
         this.get(memberId)
                 .ifPresent(
-                        s -> s.disconnect(deviceId, event.getDisconnectedAt())
+                        s -> {
+                            s.disconnect(deviceId, event.getDisconnectedAt());
+                            if (s.isInactiveWithoutActiveTime()) {
+                                this.todayActivityByMemberId.remove(memberId);
+                            }
+                        }
                 );
     }
 
