@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public abstract class AbstractProcess {
     protected final ProcessCommand command;
     protected Process process;
