@@ -19,14 +19,17 @@
 
   <conversionRule conversionWord="optionalTraceId" converterClass="com.whoz_in.logging.OptionalTraceIdConverter" />
 
+  <!-- 로그 구조를 한 곳에서 관리할 수 있도록 모아둔 것-->
   <property name="COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] %boldWhite([%15.15thread]) %boldWhite([%36.36logger{36}]) %optionalTraceId %highlight(%-5level)- %msg%n"/>
+  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %optionalTraceId %-5level- %msg%n"/>
+  <property name="FILE_LOG_PATTERN" value="[%d{HH:mm:ss}] [%thread] %optionalTraceId %level %logger{0} - %msg%n"/>
+
   <appender name="COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>${COLOR_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
-  <property name="NO_COLOR_LOG_PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%15.15thread] [%36.36logger{36}] %optionalTraceId %-5level- %msg%n"/>
   <appender name="NO_COLOR_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
       <pattern>${NO_COLOR_LOG_PATTERN}</pattern>
@@ -51,7 +54,7 @@
       <totalSizeCap>5GB</totalSizeCap>
     </rollingPolicy>
     <encoder>
-      <pattern>[%d{HH:mm:ss}] [%thread] %level %logger{0} - %msg %n</pattern>
+      <pattern>${FILE_LOG_PATTERN}</pattern>
     </encoder>
   </appender>
 
