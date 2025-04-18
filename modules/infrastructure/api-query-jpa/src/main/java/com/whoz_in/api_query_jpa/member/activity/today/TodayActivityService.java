@@ -71,7 +71,8 @@ public class TodayActivityService {
                     isActive ? timeRanges.getDurationWithoutLastRange() : timeRanges.getTotalDuration(),
                     connectedDeviceIds
             );
-            todayActivityByMemberId.put(memberId, todayActivity);
+            if (!todayActivity.isInactiveWithoutActiveTime())
+                todayActivityByMemberId.put(memberId, todayActivity);
         });
     }
 
