@@ -35,7 +35,7 @@ public class NetworkInterfaceStatusNotifier {
     }
 
     @EventListener(NetworkInterfaceStatusEvent.class)
-    public void handle(){
+    private void handle(){
         String content =
                 tag +
                 "\n\n" +

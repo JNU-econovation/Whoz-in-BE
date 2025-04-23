@@ -20,7 +20,7 @@ public class NetworkInterfaceRestorer {
     private final UsbReconnector reconnector;
 
     @EventListener
-    public void handle(NetworkInterfaceStatusEvent event) {
+    private void handle(NetworkInterfaceStatusEvent event) {
         String interfaceName = event.interfaceName();
         NetworkInterfaceStatus status = event.status();
 
