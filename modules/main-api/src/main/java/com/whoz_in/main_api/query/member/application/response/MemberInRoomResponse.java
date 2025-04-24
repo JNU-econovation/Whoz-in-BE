@@ -30,7 +30,7 @@ public record MemberInRoomResponse(
     // 이 응답 내에서만 사용하는 레코드
     public record Badge(
             String badgeName,
-            String colorCode
+            String colorString
     ){
         public Badge(BadgeInfo badge) {
             this(badge.name(), badge.colorString());
