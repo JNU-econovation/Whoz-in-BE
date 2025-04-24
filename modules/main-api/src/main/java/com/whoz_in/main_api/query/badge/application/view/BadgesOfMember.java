@@ -10,7 +10,7 @@ public record BadgesOfMember(List<BadgeOfMember> badgeMembers)
     public record BadgeOfMember(
             UUID badgeId,
             String name,
-            String colorCode,
+            String colorString,
             String description,
             Boolean isBadgeShown
     ) {}

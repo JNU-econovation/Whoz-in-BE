@@ -5,7 +5,7 @@ import com.whoz_in.main_api.query.shared.application.View;
 
 public record BadgeInfo(
         String name,
-        String colorCode,
+        String colorString,
         String description
 ) implements View, Response {
 }
