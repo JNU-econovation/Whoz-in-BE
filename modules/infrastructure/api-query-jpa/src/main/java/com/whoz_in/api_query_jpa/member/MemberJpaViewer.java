@@ -92,11 +92,11 @@ public class MemberJpaViewer implements MemberViewer {
 
     private List<BadgeInfo> getBadgeInfo(com.whoz_in.api_query_jpa.member.Member entity){
         return badgeRepository.findBadgesByMemberId(entity.getId()).stream(
-                ).map(badge -> new BadgeInfo(badge.getName(), badge.getColorCode(), badge.getDescription())).toList();
+                ).map(badge -> new BadgeInfo(badge.getName(), badge.getColorString(), badge.getDescription())).toList();
     }
 
     private BadgeInfo getRepresentativeBadge(com.whoz_in.api_query_jpa.member.Member entity){
-        return badgeRepository.findRepresentativeBadge(entity.getId()).map(badge -> new BadgeInfo(badge.getName(), badge.getColorCode(), badge.getDescription()))
+        return badgeRepository.findRepresentativeBadge(entity.getId()).map(badge -> new BadgeInfo(badge.getName(), badge.getColorString(), badge.getDescription()))
                 .orElseThrow(() -> new IllegalStateException("Representative badge not found for member: " + entity.getId()));
     }
 
