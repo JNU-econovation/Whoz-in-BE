@@ -22,7 +22,7 @@ public class BadgeJpaViewer implements BadgeViewer {
     @Override
     public Optional<BadgeInfo> findBadgeInfoByBadgeId(UUID badgeId) {
         return bageRepo.findById(badgeId)
-                .map(badge -> new BadgeInfo(badge.getName(),badge.getColorCode(), badge.getDescription()));
+                .map(badge -> new BadgeInfo(badge.getName(),badge.getColorString(), badge.getDescription()));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BadgeJpaViewer implements BadgeViewer {
 
         List<RegistrableBadges.RegistrableBadge> registerableBadgeList = activeBadges.stream()
                 .filter(badge -> !ownedBadgeIds.contains(badge.getId()))
-                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColorCode(), badge.getDescription()))
+                .map(badge -> new RegistrableBadges.RegistrableBadge(badge.getId(), badge.getName(), badge.getColorString(), badge.getDescription()))
                 .toList();
 
         return new RegistrableBadges(registerableBadgeList);
@@ -55,7 +55,7 @@ public class BadgeJpaViewer implements BadgeViewer {
                 .map(bm -> new BadgesOfMember.BadgeOfMember(
                         bm.getBadgeId(),
                         bm.getName(),
-                        bm.getColorCode(),
+                        bm.getColorString(),
                         bm.getDescription(),
                         bm.getIsBadgeShown()
                 ))
@@ -68,7 +68,7 @@ public class BadgeJpaViewer implements BadgeViewer {
     public BadgeInfo findRepresentativeBadge(UUID memberId) {
         Optional<Badge> badge = bageRepo.findRepresentativeBadge(memberId);
         return badge
-                .map(b -> new BadgeInfo(b.getName(), b.getColorCode(), b.getDescription()))
+                .map(b -> new BadgeInfo(b.getName(), b.getColorString(), b.getDescription()))
                 .orElseThrow(() -> new IllegalArgumentException("Representative badge not found"));
     }
 }
