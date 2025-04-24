@@ -33,7 +33,7 @@ public record MemberInRoomResponse(
             String colorCode
     ){
         public Badge(BadgeInfo badge) {
-            this(badge.name(), badge.colorCode());
+            this(badge.name(), badge.colorString());
         }
     }
 }

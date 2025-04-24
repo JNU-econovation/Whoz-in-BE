@@ -27,7 +27,7 @@ public class BadgeConverter extends BaseConverter<BadgeEntity, Badge> {
                 entity.getName(),
                 entity.getBadgeType(),
                 new MemberId(entity.getCreator()),
-                entity.getColorCode(),
+                entity.getColorString(),
                 entity.getDescription()
         );
 
