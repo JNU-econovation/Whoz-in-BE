@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -65,6 +66,15 @@ public abstract class AbstractProcess {
 
     public void terminate() {
         if (process != null) {
+            process.descendants().forEach(child -> {
+                try {
+                    child.destroy();
+                    if (child.onExit().get(3, TimeUnit.SECONDS).isAlive())
+                        child.destroyForcibly();
+                } catch (Exception e) {
+                    child.destroyForcibly();
+                }
+            });
             process.destroy();
             waitForTermination();
         }

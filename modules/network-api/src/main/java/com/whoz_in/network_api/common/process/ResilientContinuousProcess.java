@@ -25,7 +25,6 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     public static ResilientContinuousProcess create(String command){
         ResilientContinuousProcess rcp = new ResilientContinuousProcess(command);
         rcp.start();
-        log.info("[ResilientContinuousProcess] 시작 (pid: {})", rcp.process.pid());
         return rcp;
     }
 
@@ -41,7 +40,7 @@ public class ResilientContinuousProcess extends ContinuousProcess {
             if (isAlive()){
                 backoffCount = 0;
             }else {
-                log.warn("[ResilientContinuousProcess] 프로세스가 종료되었습니다. (pid: {}) 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", process.pid(), backoffCount, command, readErrorLines());
+                log.warn("[ResilientContinuousProcess] 종료 감지! 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", process.pid(), backoffCount, command, readErrorLines());
                 restart();
                 backoffCount++;
             }
@@ -53,7 +52,6 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     public synchronized void restart() {
         super.terminate(); // 프로세스 종료
         this.start(); // 프로세스 시작
-        log.info("[{}] 프로세스 재실행 완료 (pid: {})", command, process.pid());
     }
 
     // 완전히 종료하는 것. 이 객체는 재사용 불가능해짐
