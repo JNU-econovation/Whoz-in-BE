@@ -40,7 +40,7 @@ public class MemberJpaRepository implements MemberRepository {
   @Override
   public Optional<Member> findByMemberId(MemberId id) {
     UUID memberId = id.id();
-    Optional<MemberEntity> entity = memberRepo.findById(memberId);
+    Optional<MemberEntity> entity = memberRepo.findOneById(memberId);
     return entity.map(memberConverter::to);
   }
 

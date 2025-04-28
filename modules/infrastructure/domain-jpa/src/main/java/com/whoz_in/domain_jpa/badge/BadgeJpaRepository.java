@@ -24,6 +24,6 @@ public class BadgeJpaRepository implements BadgeRepository {
 
     @Override
     public Optional<Badge> findByBadgeId(BadgeId badgeId) {
-        return badgeRepo.findById(badgeId.id()).map(converter::to);
+        return badgeRepo.findOneById(badgeId.id()).map(converter::to);
     }
 }

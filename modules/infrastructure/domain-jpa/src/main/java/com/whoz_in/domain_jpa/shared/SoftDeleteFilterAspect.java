@@ -9,29 +9,31 @@ import org.hibernate.Filter;
 import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 
+
+/**
+ * @WithDeleted 어노테이션이 붙은 메서드에서만 SoftDelete 필터를 껐다 켬
+ */
 @Aspect
 @Component
 @RequiredArgsConstructor
 public class SoftDeleteFilterAspect {
     private final EntityManager entityManager;
 
-    @Around("@annotation(WithDeleted)")
-    public Object includeDeleted(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("@annotation(com.whoz_in.domain_jpa.shared.WithDeleted)")
+    public Object aroundWithDeleted(ProceedingJoinPoint joinPoint) throws Throwable {
         Session session = entityManager.unwrap(Session.class);
 
-        // 필터가 켜져 있다면 parameter를 false로 바꿔 일시적으로 삭제된 것도 조회
         Filter filter = session.getEnabledFilter("softDeleteFilter");
-        boolean hadFilter = filter != null;
-
-        if (hadFilter) {
-            filter.setParameter("enabled", false);
-        }
+        boolean wasFilterEnabled = (filter != null);
 
         try {
+            if (wasFilterEnabled) {
+                session.disableFilter("softDeleteFilter");
+            }
             return joinPoint.proceed();
         } finally {
-            if (hadFilter) {
-                session.enableFilter("softDeleteFilter").setParameter("enabled", true);
+            if (wasFilterEnabled) {
+                session.enableFilter("softDeleteFilter");
             }
         }
     }

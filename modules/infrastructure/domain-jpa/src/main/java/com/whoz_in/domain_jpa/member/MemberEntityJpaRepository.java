@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberEntityJpaRepository extends JpaRepository<MemberEntity, UUID> {
+    Optional<MemberEntity> findOneById(UUID memberId);
     List<MemberEntity> findByName(String name);
     boolean existsBySocialId(String socialId);
     Optional<MemberEntity> findBySocialId(String socialId);

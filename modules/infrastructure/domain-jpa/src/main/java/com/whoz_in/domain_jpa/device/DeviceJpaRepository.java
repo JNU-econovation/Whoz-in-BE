@@ -33,7 +33,7 @@ public class DeviceJpaRepository implements DeviceRepository {
 
     @Override
     public Optional<Device> findByDeviceId(DeviceId deviceId) {
-        return repository.findById(deviceId.id()).map(converter::to);
+        return repository.findOneById(deviceId.id()).map(converter::to);
     }
 
     @Override

@@ -9,10 +9,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, Long> {
+public interface DeviceEntityRepository extends JpaRepository<DeviceEntity, UUID> {
     @Query("SELECT d FROM DeviceEntity d JOIN FETCH d.deviceInfoEntity di WHERE di.mac = :mac")
     Optional<DeviceEntity> findByMac(@Param("mac") String mac);
-    Optional<DeviceEntity> findById(UUID deviceId);
+
+    @Query("SELECT d FROM DeviceEntity d JOIN FETCH d.deviceInfoEntity di WHERE d.id = :deviceId")
+    Optional<DeviceEntity> findOneById(@Param("deviceId") UUID deviceId);
+
     @Query("SELECT d FROM DeviceEntity d JOIN d.deviceInfoEntity di WHERE di.mac IN (:macs)")
     List<DeviceEntity> findByMacs(@Param("macs") List<String> macs);
 
