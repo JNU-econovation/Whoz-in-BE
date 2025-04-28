@@ -9,6 +9,7 @@ import com.whoz_in.domain.device_connection.DeviceConnection;
 import com.whoz_in.domain.device_connection.DeviceConnectionRepository;
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
+import com.whoz_in.domain.shared.event.EventBus;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Slf4j
@@ -26,16 +28,16 @@ public class DeviceDisconnectedChecker {
     private final DeviceRepository deviceRepository;
     private final DeviceConnectionRepository deviceConnectionRepository;
     private final MonitorLogRepository monitorLogRepository;
-    private final DeviceDisconnector disconnecter;
+    private final EventBus eventBus;
 
     @Async
+    @Transactional
     public void updateDisconnected(Set<String> activeMacs) {
         // DeviceId에 연결된 DeviceConnection 매핑
-        Map<DeviceId, DeviceConnection> connectionByDeviceId = deviceConnectionRepository.findAllConnected().stream()
+        Map<DeviceId, DeviceConnection> deviceIdToConnection = deviceConnectionRepository.findAllConnected().stream()
                 .collect(Collectors.toMap(DeviceConnection::getDeviceId, conn -> conn));
-        // 연결된 Device들 찾기
         List<Device> connectedDevices = deviceRepository.findByDeviceIds(
-                connectionByDeviceId.keySet()
+                deviceIdToConnection.keySet()
         );
 
         connectedDevices.stream()
@@ -44,9 +46,11 @@ public class DeviceDisconnectedChecker {
                         .noneMatch(info -> activeMacs.contains(info.getMac().toString())))
                 // 연결 해제
                 .forEach(device -> { // 같은 업데이트 주기에 끊기는 기기는 많지 않을거라 배치 처리 안함
-                    DeviceConnection connection = connectionByDeviceId.get(device.getId());
+                    DeviceConnection connection = deviceIdToConnection.get(device.getId());
                     MonitorLog latestLog = findDeviceLatestLogByRoom(device, connection.getRoom());
-                    disconnecter.disconnect(connection, latestLog.getUpdatedAt());
+                    connection.disconnect(latestLog.getUpdatedAt());
+                    deviceConnectionRepository.save(connection);
+                    eventBus.publish(connection.pullDomainEvents());
                 });
     }
 

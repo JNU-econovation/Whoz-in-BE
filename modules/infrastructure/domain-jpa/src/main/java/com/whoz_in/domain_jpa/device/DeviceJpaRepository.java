@@ -44,6 +44,7 @@ public class DeviceJpaRepository implements DeviceRepository {
 
     @Override
     public List<Device> findByDeviceIds(Collection<DeviceId> deviceIds) {
+        if (deviceIds.isEmpty()) return List.of();
         List<UUID> ids = deviceIds.stream().map(DeviceId::id).toList();
         return repository.findByDeviceIds(ids).stream().map(converter::to).toList();
     }

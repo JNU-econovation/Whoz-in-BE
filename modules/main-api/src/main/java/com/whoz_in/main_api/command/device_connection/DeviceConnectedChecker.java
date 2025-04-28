@@ -5,6 +5,7 @@ import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device_connection.DeviceConnection;
 import com.whoz_in.domain.device_connection.DeviceConnectionRepository;
 import com.whoz_in.domain.network_log.MonitorLog;
+import com.whoz_in.domain.shared.event.EventBus;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 
 // 기기가 연결된 상태인지 확인하고 연결 처리함
@@ -22,12 +24,13 @@ import org.springframework.stereotype.Component;
 public class DeviceConnectedChecker {
     private final DeviceRepository deviceRepository;
     private final DeviceConnectionRepository connectionRepository;
-    private final DeviceConnector connector;
+    private final EventBus eventBus;
 
     // TODO: monitor log가 잘 안뜨는 기기를 위해 disconnectedAt이 일정 범위 내에 있을경우 이어서 연결된 것으로 판단할 수 있음
         // 이때 연결된 방이 다르면 x
         // 새 하루가 시작돼서 끊긴 것과는 다르게 처리해야 됨
     @Async
+    @Transactional
     public void updateConnected(List<MonitorLog> recentLogs) {
         // 로그의 맥으로 기기를 빠르게 찾기 위한 맵
         Map<String, Device> deviceByMac = mapMacToDevice(recentLogs);
@@ -49,7 +52,8 @@ public class DeviceConnectedChecker {
                             })
                             .orElse(DeviceConnection.create(device.getId(), monitorLog.getRoom(), monitorLog.getUpdatedAt()));
 
-                    connector.connect(newOrUpdated);
+                    connectionRepository.save(newOrUpdated);
+                    eventBus.publish(newOrUpdated.pullDomainEvents());
                     log.info("[Connected Device] {}가 {}에서 연결됨", device.getId(), newOrUpdated.getRoom());
                 });
     }
