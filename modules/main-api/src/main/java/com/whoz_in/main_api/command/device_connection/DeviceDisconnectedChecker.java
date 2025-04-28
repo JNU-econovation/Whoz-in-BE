@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +29,6 @@ public class DeviceDisconnectedChecker {
     private final MonitorLogRepository monitorLogRepository;
     private final EventBus eventBus;
 
-    @Async
     @Transactional
     public void updateDisconnected(Set<String> activeMacs) {
         // DeviceId에 연결된 DeviceConnection 매핑

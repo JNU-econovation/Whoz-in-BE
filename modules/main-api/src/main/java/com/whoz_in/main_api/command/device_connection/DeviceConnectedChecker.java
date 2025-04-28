@@ -12,7 +12,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +28,6 @@ public class DeviceConnectedChecker {
     // TODO: monitor log가 잘 안뜨는 기기를 위해 disconnectedAt이 일정 범위 내에 있을경우 이어서 연결된 것으로 판단할 수 있음
         // 이때 연결된 방이 다르면 x
         // 새 하루가 시작돼서 끊긴 것과는 다르게 처리해야 됨
-    @Async
     @Transactional
     public void updateConnected(List<MonitorLog> recentLogs) {
         // 로그의 맥으로 기기를 빠르게 찾기 위한 맵
