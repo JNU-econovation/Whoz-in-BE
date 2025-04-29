@@ -33,7 +33,7 @@ public class BadgeJpaViewer implements BadgeViewer {
          */
         LocalDateTime threshold = LocalDateTime.now().minusHours(12);
         List<Badge> activeBadges = badgeRepo.findAllActivatedBadges(threshold);
-        List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
+        List<BadgeMember> badgeMembers = badgeMemberRepo.findAllByMemberId(memberId);
 
         Set<UUID> ownedBadgeIds = badgeMembers.stream()
                 .map(BadgeMember::getBadgeId)
@@ -49,7 +49,7 @@ public class BadgeJpaViewer implements BadgeViewer {
 
     @Override
     public BadgesOfMember findBadgesOfMember(UUID memberId) {
-        List<BadgeMember> badgeMembers = badgeMemberRepo.findByMemberId(memberId);
+        List<BadgeMember> badgeMembers = badgeMemberRepo.findAllByMemberId(memberId);
 
         List<BadgesOfMember.BadgeOfMember> badgeList = badgeMembers.stream()
                 .map(bm -> new BadgesOfMember.BadgeOfMember(
