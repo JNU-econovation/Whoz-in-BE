@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 
 /**
- * @WithDeleted 어노테이션이 붙은 메서드에서만 SoftDelete 필터를 껐다 켬
+ * 레포지토리 구현체의 메서드 중 {@link WithDeleted}가 붙어있으면 SoftDelete 필터를 꺼서 삭제된 것까지 조회하도록 함
  */
 @Aspect
 @Component

@@ -5,12 +5,9 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.Filter;
-import org.hibernate.annotations.FilterDef;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -19,10 +16,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @MappedSuperclass
 @SuperBuilder(toBuilder = true)
 @EntityListeners({AuditingEntityListener.class})
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@FilterDef(name = "softDeleteFilter", autoEnabled = true)
-@Filter(name = "softDeleteFilter", condition = "deleted_at IS NULL")
 public abstract class BaseEntity {
 
   @Column(name = "created_at", nullable = false, updatable = false)
@@ -32,8 +26,4 @@ public abstract class BaseEntity {
   @Column(name = "updated_at", nullable = false)
   @LastModifiedDate
   private LocalDateTime updatedAt;
-
-  @Column(name = "deleted_at")
-  private LocalDateTime deletedAt;
-
 }

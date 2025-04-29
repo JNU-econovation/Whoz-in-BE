@@ -1,6 +1,6 @@
 package com.whoz_in.domain_jpa.device;
 
-import com.whoz_in.domain_jpa.shared.BaseEntity;
+import com.whoz_in.domain_jpa.shared.SoftDeletableEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class DeviceEntity extends BaseEntity {
+public class DeviceEntity extends SoftDeletableEntity {
     @Id
     @Column(columnDefinition = "BINARY(16)", nullable = false)
     private UUID id;
