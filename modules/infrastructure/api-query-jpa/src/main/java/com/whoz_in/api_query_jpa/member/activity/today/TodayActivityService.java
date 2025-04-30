@@ -53,14 +53,13 @@ public class TodayActivityService {
                 .minusHours(DAY_END_HOUR).toLocalDate()
                 .atTime(DAY_END_HOUR, 0);
 
-        memberConnectionService.get(dayStartTime, now).forEach((memberId, connections) -> {
-            // 현재 연결 중인 디바이스 목록: 연결이 끊기지 않은 deviceId들 (중복 제거)
+        memberConnectionService.getMemberConnections(dayStartTime, now).forEach((memberId, connections) -> {
+            TimeRanges timeRanges = DeviceConnectionUtil.toTimeRanges(connections, now);
             List<UUID> connectedDeviceIds = connections.stream()
                     .filter(conn -> conn.getDisconnectedAt() == null)
                     .map(DeviceConnection::getDeviceId)
                     .distinct()
                     .toList();
-            TimeRanges timeRanges = DeviceConnectionUtil.toTimeRanges(connections, now);
             // 연결된 디바이스가 하나라도 있으면 재실 중으로 판단
             boolean isActive = !connectedDeviceIds.isEmpty();
 
@@ -124,7 +123,7 @@ public class TodayActivityService {
     }
 
     private UUID getMemberId(UUID deviceId) {
-        return deviceRepository.findById(deviceId)
+        return deviceRepository.findOneById(deviceId)
                 .orElseThrow(()-> new IllegalStateException("기기 없음: " + deviceId))
                 .getMemberId();
     }

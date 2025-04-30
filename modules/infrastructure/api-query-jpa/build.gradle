@@ -1,5 +1,6 @@
 dependencies {
     implementation project(":shared")
+    implementation project(":shared-jpa")
     compileOnly project(":main-api")
 
     implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")

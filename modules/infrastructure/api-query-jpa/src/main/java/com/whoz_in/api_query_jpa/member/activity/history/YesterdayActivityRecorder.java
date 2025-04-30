@@ -32,7 +32,7 @@ public class YesterdayActivityRecorder {
         LocalDateTime yesterdayStart = yesterdayEnd.minusDays(1); // 어제의 하루 시작 시각
 
         // 멤버별 Connection들
-        Map<UUID, List<DeviceConnection>> memberToConnections = memberConnectionService.get(
+        Map<UUID, List<DeviceConnection>> memberToConnections = memberConnectionService.getMemberConnections(
                 yesterdayStart, yesterdayEnd);
         // 멤버별 어제 활동 시간
         Map<UUID, ActivityHistory> dayHistories = calculateYesterday(memberToConnections, yesterdayEnd);

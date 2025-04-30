@@ -1,0 +1,3 @@
+#domain-jpa:
+#  hibernate:
+#    show_sql: true

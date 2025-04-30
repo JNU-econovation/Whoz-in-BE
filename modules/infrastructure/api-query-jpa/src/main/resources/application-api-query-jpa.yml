@@ -1,11 +1,11 @@
+spring:
+  config:
+    import:
+      - "classpath:application-shared-jpa.yml"
+
 api-query-jpa:
-  datasource:
-    url: ${DOMAIN_JPA.DB_URL}
-    username: ${DOMAIN_JPA.DB_USERNAME}
-    password: ${DOMAIN_JPA.DB_PASSWORD}
-    driver-class-name: ${DOMAIN_JPA.DB_DRIVER_CLASS}
   hibernate:
     show_sql: false
     format_sql: false
-    ddl-auto: ${DOMAIN_JPA.DDL_AUTO}
+    ddl-auto: validate
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy

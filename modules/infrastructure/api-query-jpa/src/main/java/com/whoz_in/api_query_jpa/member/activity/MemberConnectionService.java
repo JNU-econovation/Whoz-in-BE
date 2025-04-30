@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 // 주체가 member이며 재실과 강하게 연결되어있으므로 activity 패키지에 위치
 @Component
@@ -20,8 +21,9 @@ public class MemberConnectionService {
     private final DeviceRepository deviceRepository;
     private final DeviceConnectionRepository deviceConnectionRepository;
 
-    // 멤버가 가진 device들의 연결들을 가져오는 메서드
-    public Map<UUID, List<DeviceConnection>> get(LocalDateTime start, LocalDateTime end){
+    // 반환하는 Map의 key는 MemberId
+    @Transactional(readOnly = true)
+    public Map<UUID, List<DeviceConnection>> getMemberConnections(LocalDateTime start, LocalDateTime end){
         // 범위 내의 연결들을 deviceId로 그룹화한다.
         Map<UUID, List<DeviceConnection>> deviceIdToConnections = deviceConnectionRepository.findByConnectedAtBetween(start, end).stream()
                 .collect(Collectors.groupingBy(DeviceConnection::getDeviceId));

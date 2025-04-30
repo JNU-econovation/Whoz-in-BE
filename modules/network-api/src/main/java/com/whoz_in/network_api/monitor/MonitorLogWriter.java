@@ -40,7 +40,9 @@ public class MonitorLogWriter {
         repository.saveAll(macs.stream().map(mac -> new MonitorLog(mac, room)).toList());
     }
 
-    // 오랫동안 켜진 tshark는 모니터 로그가 발생하지 않는 것으로 확인되어 오전 6시에 재실행한다.
+    // TODO: 모니터 모드로 변경됨 이벤트 받으면 재실행
+
+    // 오랫동안 켜진 tshark는 패킷을 제대로 잡지 못하는것으로 확인되어 오전 6시에 재실행한다.
     @Scheduled(cron = "0 0 6 * * *")
     private void refreshTshark(){
         if (!this.process.isAlive()) return;

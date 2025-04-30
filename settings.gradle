@@ -15,4 +15,5 @@ include ':api-redis'
 project(':api-redis').projectDir = file('modules/infrastructure/api-redis')
 include ':shared'
 project(':shared').projectDir = file('modules/shared')
-
+include ':shared-jpa'
+project(':shared-jpa').projectDir = file('modules/infrastructure/shared-jpa')

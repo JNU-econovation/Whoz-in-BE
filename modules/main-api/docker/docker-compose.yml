@@ -8,8 +8,9 @@ services:
     env_file:
       - .env
     environment:
-      - DOMAIN_JPA.DB_URL=jdbc:mysql://command-db:3306/whozin?useSSL=false&allowPublicKeyRetrieval=true
-      - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      # 도커에 맞게 설정 덮어씌움
+      - SHARED_JPA.DB_URL=jdbc:mysql://command-db:3306/whozin?useSSL=false&allowPublicKeyRetrieval=true
+      - SHARED_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
       - main-api-data:/root/whozin # 컨테이너의 HOME은 /root임

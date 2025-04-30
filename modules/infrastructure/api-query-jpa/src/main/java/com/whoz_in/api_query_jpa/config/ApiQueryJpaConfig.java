@@ -47,7 +47,7 @@ public class ApiQueryJpaConfig {
     //세팅값 객체를 빈으로 등록함
     //@Bean 메서드를 통해 자동으로 빈 등록이 되기 때문에 @ConfigurationPropertiesScan 없이도 동작함
     @Bean
-    @ConfigurationProperties("api-query-jpa.datasource")
+    @ConfigurationProperties("shared-jpa.datasource")
     public DataSourceProperties apiQueryJpaDataSourceProperties(){
         return new DataSourceProperties();
     }

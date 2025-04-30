@@ -1,15 +1,11 @@
 spring:
-  jpa:
-    open-in-view: false
+  config:
+    import:
+      - "classpath:application-shared-jpa.yml"
 
 domain-jpa:
-  datasource:
-    url: ${DOMAIN_JPA.DB_URL}
-    username: ${DOMAIN_JPA.DB_USERNAME}
-    password: ${DOMAIN_JPA.DB_PASSWORD}
-    driver-class-name: ${DOMAIN_JPA.DB_DRIVER_CLASS}
   hibernate:
-    ddl-auto: ${DOMAIN_JPA.DDL_AUTO}
+    ddl-auto: validate
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show_sql: false
     format-sql: false

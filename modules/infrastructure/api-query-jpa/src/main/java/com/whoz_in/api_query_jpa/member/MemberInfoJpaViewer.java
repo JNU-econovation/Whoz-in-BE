@@ -19,7 +19,7 @@ public class MemberInfoJpaViewer implements MemberInfoViewer {
 
     @Override
     public Optional<MemberInfoView> findByMemberId(UUID memberId) {
-        return repository.findById(memberId)
+        return repository.findOneById(memberId)
                 .map(this::toMemberInfo);
     }
 

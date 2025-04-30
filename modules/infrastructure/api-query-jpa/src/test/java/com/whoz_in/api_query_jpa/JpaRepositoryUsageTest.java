@@ -1,4 +1,4 @@
-package com.whoz_in.domain_jpa;
+package com.whoz_in.api_query_jpa;
 
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
