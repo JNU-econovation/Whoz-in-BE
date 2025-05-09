@@ -1,3 +1,0 @@
-api-query-jpa:
-  hibernate:
-    show_sql: true

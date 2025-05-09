@@ -1,0 +1,29 @@
+spring:
+  jpa:
+    open-in-view: false
+  flyway:
+    enabled: true
+    url: ${INFRA_JPA.DB_URL}
+    user: ${INFRA_JPA.DB_USERNAME}
+    password: ${INFRA_JPA.DB_PASSWORD}
+    # 처음 마이그레이션 적용할 땐 변경 이력 테이블이 없으므로 baseline 자동 생성
+    baseline-on-migrate: true
+
+infra-jpa:
+  datasource:
+    url: ${INFRA_JPA.DB_URL}
+    username: ${INFRA_JPA.DB_USERNAME}
+    password: ${INFRA_JPA.DB_PASSWORD}
+    driver-class-name: ${INFRA_JPA.DB_DRIVER_CLASS}
+  domain:
+    hibernate:
+      ddl-auto: validate
+      physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      show_sql: false
+      format-sql: false
+  query:
+    hibernate:
+      ddl-auto: validate
+      physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+      show_sql: false
+      format_sql: false

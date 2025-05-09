@@ -5,15 +5,11 @@ include ':network-api'
 project(':network-api').projectDir = file('modules/network-api')
 include ':domain'
 project(':domain').projectDir = file('modules/domain')
-include ':domain-jpa'
-project(':domain-jpa').projectDir = file('modules/infrastructure/domain-jpa')
-include ':api-query-jpa'
-project(':api-query-jpa').projectDir = file('modules/infrastructure/api-query-jpa')
 include ':logging'
 project(':logging').projectDir = file('modules/infrastructure/logging')
 include ':api-redis'
 project(':api-redis').projectDir = file('modules/infrastructure/api-redis')
 include ':shared'
 project(':shared').projectDir = file('modules/shared')
-include ':shared-jpa'
-project(':shared-jpa').projectDir = file('modules/infrastructure/shared-jpa')
+include ':infra-jpa'
+project(':infra-jpa').projectDir = file('modules/infrastructure/infra-jpa')

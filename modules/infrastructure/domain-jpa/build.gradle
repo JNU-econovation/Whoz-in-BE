@@ -1,8 +1,0 @@
-dependencies {
-    compileOnly project(':domain')
-    implementation project(":shared-jpa")
-
-    implementation platform("org.springframework.boot:spring-boot-dependencies:${springBootVersion}")
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'
-}
