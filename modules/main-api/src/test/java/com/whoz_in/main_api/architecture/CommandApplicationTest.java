@@ -6,13 +6,13 @@ import com.tngtech.archunit.lang.ArchRule;
 import com.tngtech.archunit.lang.syntax.ArchRuleDefinition;
 import org.junit.jupiter.api.Test;
 
-class ApplicationTest {
+class CommandApplicationTest {
         private final JavaClasses importedClasses = new ClassFileImporter().importPackages("com.whoz_in.main_api");
 
         @Test
-        void Application은_Presentation을_의존하지않아야합니다() {
+        void Command의_Application은_Presentation을_의존하지않아야합니다() {
             ArchRule rule = ArchRuleDefinition.noClasses()
-                    .that().resideInAPackage("..application..")
+                    .that().resideInAPackage("..command..application..")
                     .should().dependOnClassesThat()
                     .resideInAnyPackage(
                             "..presentation..",
