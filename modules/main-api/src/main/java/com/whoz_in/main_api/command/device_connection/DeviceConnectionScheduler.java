@@ -33,9 +33,10 @@ public class DeviceConnectionScheduler {
                 LocalDateTime.now() :
                 lastUpdatedAt.plusMinutes(UPDATE_TERM_MINUTE);
 
-        monitorLogStore.updateCache(lastUpdatedAt.minusMinutes(UPDATE_TERM_MINUTE));
+        LocalDateTime since = lastUpdatedAt.minusMinutes(UPDATE_TERM_MINUTE);
+        monitorLogStore.updateCache(since);
 
-        connectedChecker.updateConnected(monitorLogStore.getLogs(lastUpdatedAt));
+        connectedChecker.updateConnected(monitorLogStore.getLogs(since));
         disconnectedChecker.updateDisconnected(monitorLogStore.getActiveMacs());
     }
 }
