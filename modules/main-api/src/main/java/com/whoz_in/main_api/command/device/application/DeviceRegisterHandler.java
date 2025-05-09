@@ -47,7 +47,7 @@ public class DeviceRegisterHandler implements CommandHandler<DeviceRegister, Voi
         memberFinderService.mustExist(requesterId);
 
         // 등록하려는 기기가 첫 기기인데 pc가 아닌 경우
-        if (deviceRepository.findByMemberId(requesterId).isEmpty()
+        if (deviceRepository.findByOwnerId(requesterId).isEmpty()
                 && requestDeviceInfo.getDeviceType() != DeviceType.PC)
             throw NoPcDeviceException.EXCEPTION;
         // 이미 등록된 Device 가져오기

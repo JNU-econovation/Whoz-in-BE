@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 // 변경된 내부 아이피가 대표 내부 아이피인 경우(network api에서 실행되는 프론트로 접근하는 아이피) CORS에 추가함
 @Slf4j
-@Profile("prod")
+@Profile({"dev", "prod"})
 @Component
 public class CorsUpdateListener {
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;

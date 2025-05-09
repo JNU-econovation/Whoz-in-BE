@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.Subselect;
 import org.hibernate.annotations.Synchronize;
@@ -23,6 +25,7 @@ import org.hibernate.annotations.UuidGenerator;
         + "b.description "
         + "FROM badge_entity b")
 @Synchronize({"badge_entity"})
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Badge {
     @Id
     @UuidGenerator

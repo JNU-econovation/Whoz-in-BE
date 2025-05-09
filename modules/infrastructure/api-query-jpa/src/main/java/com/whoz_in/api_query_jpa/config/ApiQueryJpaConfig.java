@@ -24,7 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 )
 public class ApiQueryJpaConfig {
     //DB 연결 세팅값 객체
-    //잠깐쓸거라 밖으로 빼지 않았음
+    //여기서 잠깐쓸거라 밖으로 빼지 않았음
     //설정마다 필드가 다를 수 있으므로 공통 모듈로 빼지 않았음
     @Getter
     @Setter

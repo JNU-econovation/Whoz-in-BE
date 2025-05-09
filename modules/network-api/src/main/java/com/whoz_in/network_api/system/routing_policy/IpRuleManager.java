@@ -1,5 +1,6 @@
 package com.whoz_in.network_api.system.routing_policy;
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import java.util.HashMap;
 import java.util.List;
@@ -7,10 +8,12 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@Conditional(LinuxCondition.class)
 public final class IpRuleManager {
 
     // 'ip rule list' 출력에서 'from <IP> lookup <TABLE>' 형태를 파싱하는 정규표현식

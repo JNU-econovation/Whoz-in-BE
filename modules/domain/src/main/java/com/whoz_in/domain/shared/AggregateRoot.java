@@ -9,7 +9,7 @@ public abstract class AggregateRoot {
     //애그리거트 루트는 자신에 관한 도메인 이벤트를 가지고 있습니다.
     private List<DomainEvent> domainEvents = new ArrayList<>();
 
-    //응용 로직에게 발행할 이벤트를 제공합니다.
+    //응용 로직이 발행할 이벤트를 제공합니다.
     public final List<DomainEvent> pullDomainEvents() {
         List<DomainEvent> events = domainEvents;
         this.domainEvents = Collections.emptyList();

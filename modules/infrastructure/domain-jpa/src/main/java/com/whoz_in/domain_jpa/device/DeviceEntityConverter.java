@@ -20,7 +20,13 @@ public class DeviceEntityConverter extends BaseConverter<DeviceEntity, Device> {
                         .mac(deviceInfo.getMac().toString())
                         .build())
                 .toList();
-        return new DeviceEntity(device.getId().id(), device.getMemberId().id(), device.getDeviceName(), deviceInfoEntities);
+        return DeviceEntity.builder()
+                .id(device.getId().id())
+                .memberId(device.getMemberId().id())
+                .name(device.getDeviceName())
+                .deviceInfoEntity(deviceInfoEntities)
+                .deletedAt(device.getDeactivatedAt())
+                .build();
     }
 
     @Override
@@ -34,7 +40,8 @@ public class DeviceEntityConverter extends BaseConverter<DeviceEntity, Device> {
                                 deviceInfoEntity.getSsid(),
                                 deviceInfoEntity.getMac()))
                         .collect(Collectors.toSet()),
-                entity.getName()
+                entity.getName(),
+                entity.getDeletedAt()
         );
     }
 }

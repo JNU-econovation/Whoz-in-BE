@@ -1,4 +1,4 @@
-name: whozin
+name: whozin-main
 services:
   main-api:
     container_name: main-api
@@ -32,7 +32,10 @@ services:
     volumes:
       - mysql-data:/var/lib/mysql # 데이터 백업
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
-    command: ["--character-set-server=utf8mb4"]
+    command: [
+      "--character-set-server=utf8mb4",
+      "--binlog-expire-logs-seconds=604800" # binlog 자동 삭제 (7일)
+    ]
     ports: # network-api가 접근하므로 열어둠
       - "4306:3306" # 도커 네트워크 바깥에선 4306으로 접근
     restart: always

@@ -2,18 +2,19 @@ package com.whoz_in.network_api.system.validation;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.validation.CustomValidator;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 @Component
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 @RequiredArgsConstructor
 public class NetworkInterfaceValidator extends CustomValidator<NetworkInterfaceValidation> {
     private final NetworkInterfaceProfileConfig config;
