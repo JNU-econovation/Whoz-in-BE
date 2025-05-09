@@ -2,7 +2,6 @@ package com.whoz_in_infra.infra_jpa.query.config;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -14,10 +13,9 @@ import org.springframework.stereotype.Component;
 // 트랜잭션이 있어야 Filter 조작이 가능하다.
 @Aspect
 @Component("querySoftDeleteFilterAspect")
-@RequiredArgsConstructor
 public class SoftDeleteFilterAspect {
     @PersistenceContext(unitName = "query")
-    private final EntityManager entityManager;
+    private EntityManager entityManager;
 
     @Around("execution(* com.whoz_in_infra.infra_jpa.query..*(..)) && @annotation(com.whoz_in_infra.infra_jpa.shared.WithDeleted)")
     public Object aroundWithDeleted(ProceedingJoinPoint joinPoint) throws Throwable {

@@ -1,6 +1,5 @@
 package com.whoz_in_infra.infra_jpa.query.device;
 
-import com.whoz_in_infra.infra_jpa.shared.WithDeleted;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
