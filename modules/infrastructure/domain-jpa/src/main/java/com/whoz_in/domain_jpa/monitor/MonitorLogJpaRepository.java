@@ -5,6 +5,7 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,19 +39,22 @@ public class MonitorLogJpaRepository implements MonitorLogRepository {
 
     @Override
     public boolean existsAfter(String mac, LocalDateTime time) {
-        return repository.existsByMacAndUpdatedAtAfter(mac, time);
+        return repository.existsByLogIdMacAndUpdatedAtAfter(mac, time);
     }
 
     @Override
-    public List<MonitorLog> findAll() {
-        return repository.findAll().stream()
-                .map(converter::to)
-                .toList();
+    public Optional<MonitorLog> findLatestByMacs(Collection<String> macs) {
+        return repository.findTopByLogIdMacInOrderByUpdatedAtDesc(macs).map(converter::to);
     }
 
     @Override
-    public List<MonitorLog> findByUpdatedAtAfterOrderByUpdatedAtDesc(LocalDateTime updatedAt) {
-        return repository.findByUpdatedAtAfterOrderByUpdatedAtDesc(updatedAt).stream()
+    public Optional<MonitorLog> findLatestByRoomAndMacs(String room, Collection<String> macs) {
+        return repository.findTopByLogIdRoomAndLogIdMacInOrderByUpdatedAtDesc(room, macs).map(converter::to);
+    }
+
+    @Override
+    public List<MonitorLog> findAllByUpdatedAtAfter(LocalDateTime updatedAt) {
+        return repository.findAllByUpdatedAtAfter(updatedAt).stream()
                 .map(converter::to)
                 .toList();
     }

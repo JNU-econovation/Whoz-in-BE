@@ -1,5 +1,5 @@
 #⚠️리눅스에서만 제대로 동작합니다!
-name: whozin
+name: whozin-network
 services:
   network-api:
     container_name: network-api
