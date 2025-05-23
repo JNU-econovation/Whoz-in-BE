@@ -40,7 +40,7 @@ public class ResilientContinuousProcess extends ContinuousProcess {
             if (isAlive()){
                 backoffCount = 0;
             }else {
-                log.warn("[ResilientContinuousProcess] 종료 감지! 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", process.pid(), backoffCount, command, readErrorLines());
+                log.warn("[ResilientContinuousProcess] 종료 감지! 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", backoffCount, command, readErrorLines());
                 restart();
                 backoffCount++;
             }
