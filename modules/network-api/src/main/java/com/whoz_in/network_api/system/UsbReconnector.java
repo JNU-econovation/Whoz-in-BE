@@ -7,21 +7,25 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Conditional;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 @Conditional(LinuxCondition.class)
+@RequiredArgsConstructor
 public class UsbReconnector {
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+    @Qualifier("threadPoolTaskScheduler")
+    private final TaskScheduler scheduler;
     private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
 
     public void scheduleReconnection(String interfaceName) {
@@ -33,7 +37,7 @@ public class UsbReconnector {
         ScheduledFuture<?> scheduledTask = scheduler.schedule(() -> {
             reconnect(interfaceName);
             scheduledTasks.remove(interfaceName);
-        }, 10, TimeUnit.SECONDS);
+        }, Instant.now().plus(10, ChronoUnit.SECONDS));
 
         scheduledTasks.put(interfaceName, scheduledTask);
         log.info("{}의 USB 초기화가 예약됐습니다. (10초 후 실행)", interfaceName);
