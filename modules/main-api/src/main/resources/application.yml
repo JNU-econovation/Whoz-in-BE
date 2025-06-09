@@ -7,39 +7,41 @@ spring:
       - "file:./env/main-api.properties"
       - "file:./env/main-api.yml"
       #모듈 별 application.yml
-      - "classpath:application-domain-jpa.yml"
-      - "classpath:application-api-query-jpa.yml"
+      - "classpath:application-infra-jpa.yml"
       - "classpath:application-logging.yml"
       - "classpath:application-redis.yml"
   web:
     resources:
       add-mappings: false
 
-server:
-  port: 2470 # 24시간 운영 + main-api니까 0번째
-
 frontend:
   main: # 메인 프론트 서버
     base-url: ${FRONTEND.MAIN.BASE-URL} # 배열이면 안됨
-
 api-key: ${API_KEY}
-
 https-enabled: ${HTTPS_ENABLED}
-
 oauth:
   redirect-uri: ${OAUTH_REDIRECT_URL}
   kakao:
     secret: ${KAKAO_SECRET}
     clientId : ${KAKAO_CLIENT_ID}
-
 jwt:
   secret: ${JWT.SECRET}
   access-token-expiry: ${JWT.ACCESS-TOKEN-EXPIRY}
   refresh-token-expiry: ${JWT.REFRESH-TOKEN-EXPIRY}
   oauth2-temp-token-expiry: ${JWT.OAUTH2-TEMP-TOKEN-EXPIRY}
   device-register-token-expiry: ${JWT.DEVICE-REGISTER-TOKEN-EXPIRY}
+server:
+  port: 2470 # 24시간 운영 + main-api니까 0번째
+
+####### 아래는 다른 모듈의 설정
 
 logging:
   level:
     nl.basjes.parse.useragent: WARN
 #    org.springframework.security: DEBUG
+
+infra-jpa:
+  domain:
+    enabled: true
+  query:
+    enabled: true

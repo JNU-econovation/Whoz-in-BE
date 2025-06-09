@@ -8,34 +8,33 @@ spring:
       - "file:./env/network-api.yml"
       #logging 모듈
       - "classpath:application-logging.yml"
-      #domain-jpa 모듈
-      - "classpath:application-domain-jpa.yml"
+      #infra-jpa 모듈
+      - "classpath:application-infra-jpa.yml"
 
 server:
   port: 2471 # 24시간 운영 + network-api니까 1번째
 
 room-name: ${ROOM_NAME}
-
 sudo-password: ${SUDO_PASSWORD:}
-
 my-ip-hosts: ${MY_IP_HOSTS}
-
 discord:
   bot-token: ${DISCORD.BOT_TOKEN}
   server-status-channel-id: ${DISCORD.SERVER_STATUS_CHANNEL_ID}
-
 command:
   managed:
     mdns: "tshark -l -i {{interface}} -Y mdns -T fields -e eth.src -e ip.src -e dns.ptr.domain_name"
     arp: "arp-scan --interface={{interface}} --localnet"
   monitor: "tshark -l -i {{interface}} -T fields -e wlan.sa -e wlan.ra"
-
 #TODO: main-api랑 같이 공동으로 관리해야 할듯
 frontend:
   network-api:
     internal-access-ssid: ${FRONTEND.NETWORK_API.INTERNAL_ACCESS_SSID}
     port: ${FRONTEND.NETWORK_API.PORT}
-
 main-api:
   base-url: ${MAIN_API_BASE_URL}
   api-key: ${MAIN_API_API_KEY}
+
+#### 아래는 다른 모듈의 설정
+infra-jpa:
+  domain:
+    enabled: true
