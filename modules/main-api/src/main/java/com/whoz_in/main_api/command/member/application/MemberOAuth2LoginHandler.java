@@ -5,9 +5,11 @@ import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +23,22 @@ public class MemberOAuth2LoginHandler implements CommandHandler<MemberOAuth2Logi
     private final MemberFinderService memberFinderService;
     private final TokenSerializer<AccessToken> accessTokenSerializer;
     private final TokenSerializer<RefreshToken> refreshTokenSerializer;
+    private final JwtProperties jwtProperties;
 
     @Transactional(readOnly = true)
     @Override
     public LoginSuccessTokens handle(MemberOAuth2Login cmd) {
         Member member = memberFinderService.findBySocialId(cmd.socialId());
 
-        String accessToken = accessTokenSerializer.serialize(
-                new AccessToken(member.getId(), AccountType.USER));
-        String refreshToken = refreshTokenSerializer.serialize(
-                new RefreshToken(member.getId()));
+        String accessToken = accessTokenSerializer.serialize(new AccessToken(
+                member.getId(),
+                AccountType.USER,
+                jwtProperties.getTokenExpiry(TokenType.ACCESS)
+        ));
+        String refreshToken = refreshTokenSerializer.serialize(new RefreshToken(
+                member.getId(),
+                jwtProperties.getTokenExpiry(TokenType.REFRESH))
+        );
 
         return new LoginSuccessTokens(accessToken, refreshToken);
     }

@@ -12,14 +12,13 @@ import org.springframework.stereotype.Component;
 public final class OAuth2TempTokenSerializer extends TokenSerializer<OAuth2TempToken> {
 
     public OAuth2TempTokenSerializer(JwtUtil jwtUtil, JwtProperties jwtProperties) {
-        super(jwtUtil, jwtProperties);
+        super(jwtUtil);
     }
 
     @Override
     protected OAuth2TempToken buildToken(Claims claims) {
         String userInfoKey = claims.get(OAUTH_USER_INFO_KEY, String.class);
-
-        return new OAuth2TempToken(userInfoKey);
+        return new OAuth2TempToken(userInfoKey, claims.getExpiration().toInstant());
     }
 
     @Override

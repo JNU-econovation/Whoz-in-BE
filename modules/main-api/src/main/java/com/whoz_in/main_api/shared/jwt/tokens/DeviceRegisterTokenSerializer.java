@@ -4,7 +4,6 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import java.util.Map;
@@ -13,15 +12,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class DeviceRegisterTokenSerializer extends TokenSerializer<DeviceRegisterToken> {
-    public DeviceRegisterTokenSerializer(JwtUtil jwtUtil, JwtProperties jwtProperties) {
-        super(jwtUtil, jwtProperties);
+    public DeviceRegisterTokenSerializer(JwtUtil jwtUtil) {
+        super(jwtUtil);
     }
 
     @Override
     protected DeviceRegisterToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
         UUID tokenId = UUID.fromString(claims.get(TOKEN_ID, String.class));
-        return new DeviceRegisterToken(tokenId, memberId);
+        return new DeviceRegisterToken(tokenId, memberId, claims.getExpiration().toInstant());
     }
 
     @Override

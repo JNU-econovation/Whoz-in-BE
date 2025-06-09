@@ -8,7 +8,6 @@ import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
@@ -22,14 +21,14 @@ import org.springframework.stereotype.Component;
 public class JwtUtil {
     private final JwtProperties jwtProperties;
 
-    public String createJwt(TokenType tokenType, Map<String, String> claims, Duration expiryDuration) {
+    public String createJwt(TokenType tokenType, Map<String, String> claims, Instant expiryAt) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .claim(TOKEN_TYPE, tokenType.toString().toLowerCase())
                 .claims(claims)
                 .issuer(ISSUER)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(expiryDuration)))
+                .expiration(Date.from(expiryAt))
                 .signWith(jwtProperties.getSecretKey())
                 .compact();
     }
