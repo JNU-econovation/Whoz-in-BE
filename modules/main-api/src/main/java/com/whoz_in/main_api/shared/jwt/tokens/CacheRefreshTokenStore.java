@@ -17,16 +17,14 @@ public class CacheRefreshTokenStore implements RefreshTokenStore {
                         long remainingMillis = Duration.between(Instant.now(), value).toMillis();
                         return Math.max(TimeUnit.MILLISECONDS.toNanos(remainingMillis), 0);
                     }
-
-                @Override
-                public long expireAfterUpdate(String key, Instant value, long currentTimeNanos, long currentDurationNanos) {
-                    return currentDurationNanos;
-                }
-
-                @Override
-                public long expireAfterRead(String key, Instant value, long currentTimeNanos, long currentDurationNanos) {
-                    return currentDurationNanos;
-                }
+                    @Override
+                    public long expireAfterUpdate(String key, Instant value, long currentTimeNanos, long currentDurationNanos) {
+                        return currentDurationNanos;
+                    }
+                    @Override
+                    public long expireAfterRead(String key, Instant value, long currentTimeNanos, long currentDurationNanos) {
+                        return currentDurationNanos;
+                    }
             }).build();
 
 
