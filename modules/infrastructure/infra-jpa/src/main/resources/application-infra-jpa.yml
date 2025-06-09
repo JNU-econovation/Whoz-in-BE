@@ -8,6 +8,7 @@ spring:
     password: ${INFRA_JPA.DB_PASSWORD}
     # 처음 마이그레이션 적용할 땐 변경 이력 테이블이 없으므로 baseline 자동 생성
     baseline-on-migrate: true
+    fail-on-missing-locations: true
 
 infra-jpa:
   datasource:
