@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.shared.jwt.tokens;
 
-import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public abstract class TokenSerializer<T extends Token> {
     private final JwtUtil jwtUtil;
-    private final JwtProperties jwtProperties;
 
     public final Optional<T> deserialize(String token){
         try {
@@ -34,7 +32,7 @@ public abstract class TokenSerializer<T extends Token> {
 
     public final String serialize(T jwtInfo) {
         Map<String, String> claims = buildClaims(jwtInfo);
-        return jwtUtil.createJwt(getTokenType(), claims, jwtProperties.getTokenExpiry(getTokenType()));
+        return jwtUtil.createJwt(getTokenType(), claims, jwtInfo.getExpiredAt());
     }
 
     //TODO: jwt.Claims 의존성 끊기

@@ -5,7 +5,6 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_ID;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import java.util.Map;
@@ -15,15 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public final class RefreshTokenSerializer extends TokenSerializer<RefreshToken> {
     //TODO: AutoConstructor
-    public RefreshTokenSerializer(JwtUtil jwtUtil, JwtProperties jwtProperties) {
-        super(jwtUtil, jwtProperties);
+    public RefreshTokenSerializer(JwtUtil jwtUtil) {
+        super(jwtUtil);
     }
 
     @Override
     protected RefreshToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
         UUID tokenId = UUID.fromString(claims.get(TOKEN_ID, String.class));
-        return new RefreshToken(memberId, tokenId);
+        return new RefreshToken(memberId, tokenId, claims.getExpiration().toInstant());
     }
 
     @Override
@@ -36,7 +35,6 @@ public final class RefreshTokenSerializer extends TokenSerializer<RefreshToken> 
 
     @Override
     protected void validate(Claims claims) {
-        //TODO: claims.get(TOKEN_ID, String.class); 블랙리스트에 있으면 예외 던지기
         super.validate(claims);
     }
 

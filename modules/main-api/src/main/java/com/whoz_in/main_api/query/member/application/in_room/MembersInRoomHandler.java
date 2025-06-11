@@ -12,7 +12,6 @@ import com.whoz_in.main_api.query.member.application.shared.TodayActivityViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
-import jakarta.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 
 @Handler
@@ -31,7 +32,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
     private final RequesterInfo requesterInfo;
     private volatile List<MemberInRoom> cachedMembers; // 여러 스레드에서 동시에 읽기/쓰기가 가능하므로 volatile
 
-    @PostConstruct
+    @EventListener(ApplicationReadyEvent.class)
     protected void init() {
         refresh(); // 초기화 시 멤버 현황을 채운다.
     }

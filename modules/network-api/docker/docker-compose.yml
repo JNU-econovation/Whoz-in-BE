@@ -9,9 +9,9 @@ services:
     env_file:
       - .env
     environment: # main-api에서 실행하는 db와 연결함
-      - DOMAIN_JPA.DB_URL=jdbc:mysql://${MAIN_API_HOST:-localhost}:4306/whozin?useSSL=false&allowPublicKeyRetrieval=true
-      - DOMAIN_JPA.DB_USERNAME=network-api
-      - DOMAIN_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - INFRA_JPA.DB_URL=jdbc:mysql://${MAIN_API_HOST:-localhost}:4306/whozin?useSSL=false&allowPublicKeyRetrieval=true
+      - INFRA_JPA.DB_USERNAME=network-api
+      - INFRA_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - network-api-data:/root/whozin # 컨테이너의 HOME은 /root임
       - ../env:/app/env #network-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)

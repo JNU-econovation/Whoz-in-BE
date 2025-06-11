@@ -4,7 +4,7 @@ import static org.springframework.transaction.event.TransactionPhase.BEFORE_COMM
 
 import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.device_connection.DeviceConnectionRepository;
-import com.whoz_in.main_api.command.device_connection.DeviceDisconnector;
+import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.shared.domain_event.device.DeviceDeactivated;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,14 +14,16 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 @RequiredArgsConstructor
 public class DisconnectOnDeviceDeactivated {
+    private final EventBus eventBus;
     private final DeviceConnectionRepository deviceConnectionRepository;
-    private final DeviceDisconnector deviceDisconnector;
 
     @TransactionalEventListener(phase = BEFORE_COMMIT) // 삭제 시 연결 해제 필수라서 같은 트랜잭션으로 처리
     public void handle(DeviceDeactivated event) {
         deviceConnectionRepository.findConnectedByDeviceId(new DeviceId(event.getDeviceId()))
                 .ifPresent(conn -> {
-                    deviceDisconnector.disconnect(conn, event.getOccurredOn());
+                    conn.disconnect(event.getOccurredOn());
+                    deviceConnectionRepository.save(conn);
+                    eventBus.publish(conn.pullDomainEvents());
                 });
     }
 }

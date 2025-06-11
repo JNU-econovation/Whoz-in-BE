@@ -66,7 +66,7 @@ public class MemberController extends CommandController implements MemberCommand
   public ResponseEntity<SuccessBody<Void>> reissue(RefreshToken refreshToken, HttpServletResponse response){
     removeTokenCookies(response);
 
-    LoginSuccessTokens newTokens = dispatch(new Reissue(refreshToken.getMemberId().toString(), refreshToken.getTokenId().toString()));
+    LoginSuccessTokens newTokens = dispatch(new Reissue(refreshToken));
 
     addTokenCookies(response, newTokens);
     return ResponseEntityGenerator.success("토큰 재발급 완료", HttpStatus.CREATED);
@@ -79,12 +79,7 @@ public class MemberController extends CommandController implements MemberCommand
           RefreshToken refreshToken,
           HttpServletResponse response) {
 
-    LogOut command = new LogOut(
-            accessToken.getMemberId().toString(),
-            refreshToken.getTokenId().toString());
-
-    dispatch(command);
-
+    dispatch(new LogOut(refreshToken));
     removeTokenCookies(response);
 
     return ResponseEntityGenerator.success("로그아웃 성공", HttpStatus.OK);
