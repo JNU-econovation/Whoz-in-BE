@@ -22,7 +22,8 @@ public class MemberConnectionService {
     private final DeviceRepository deviceRepository;
     private final DeviceConnectionRepository deviceConnectionRepository;
 
-    // 반환되는 Map의 key는 MemberId
+    // 모든 회원들에 대해, 주어진 기간 동안 기기 연결 기록을 반환한다.
+    // 반환 형식: Map<MemberId, 기기 연결 기록>
     @Transactional(readOnly = true)
     @WithDeleted
     public Map<UUID, List<DeviceConnection>> getMemberConnections(LocalDateTime start, LocalDateTime end){

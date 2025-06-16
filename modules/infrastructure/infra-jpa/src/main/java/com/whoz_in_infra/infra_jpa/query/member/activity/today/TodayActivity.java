@@ -1,6 +1,7 @@
 package com.whoz_in_infra.infra_jpa.query.member.activity.today;
 
 import com.whoz_in.shared.Nullable;
+import com.whoz_in_infra.infra_jpa.query.device.connection.DeviceConnection;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,7 +10,11 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-// 한 멤버에 대한 오늘의 재실 상태를 나타내는 클래스
+
+/**
+ *  한 멤버에 대한 오늘의 재실 상태를 나타내는 클래스
+ *  원본 데이터인 {@link DeviceConnection}를 이용해 하루 재실 기록을 미리 집계한 것.
+ */
 @Slf4j
 @Getter
 public final class TodayActivity {
