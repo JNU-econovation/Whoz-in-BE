@@ -56,6 +56,7 @@ services:
       - main-api-data:/main-api-data:ro
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    restart: always
     depends_on:
       main-api:
         condition: service_started
