@@ -47,7 +47,7 @@ public final class TokenArgumentResolver implements HandlerMethodArgumentResolve
 
         String tokenStr = resolveTokenString(webRequest, tokenType.getCookieName());
         if (tokenStr == null) {
-            throw new TokenException("2001", tokenType + "이 없음");
+            throw new TokenException("2001", tokenType + " 없음");
         }
 
         return matchedSerializer.deserialize(tokenStr)

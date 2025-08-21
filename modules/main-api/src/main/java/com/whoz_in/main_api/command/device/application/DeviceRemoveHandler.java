@@ -1,13 +1,13 @@
 package com.whoz_in.main_api.command.device.application;
 
 import com.whoz_in.domain.device.DeviceRepository;
+import com.whoz_in.domain.device.model.Device;
+import com.whoz_in.domain.device.service.DeviceFinderService;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
-import com.whoz_in.shared.domain_event.device.DeviceDeleted;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +17,17 @@ public class DeviceRemoveHandler implements CommandHandler<DeviceRemove, Void> {
     private final RequesterInfo requesterInfo;
     private final MemberFinderService memberFinderService;
     private final DeviceRepository deviceRepository;
+    private final DeviceFinderService deviceFinderService;
     private final EventBus eventBus;
 
     @Transactional
     @Override
     public Void handle(DeviceRemove command) {
         memberFinderService.mustExist(requesterInfo.getMemberId());
-        boolean result = deviceRepository.delete(command.getDeviceId());
-        if(result) eventBus.publish(List.of(new DeviceDeleted(command.getDeviceId().id())));
+        Device device = deviceFinderService.find(command.getDeviceId());
+        device.deactivate();
+        deviceRepository.save(device);
+        eventBus.publish(device.pullDomainEvents());
         return null;
     }
 }

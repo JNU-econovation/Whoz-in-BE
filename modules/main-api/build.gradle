@@ -35,10 +35,8 @@ dependencies {
     implementation project(':shared')
 
     implementation project(':domain') //domain
-    runtimeOnly project(":domain-jpa") // domain 구현 모듈
+    runtimeOnly project(":infra-jpa") // domain 및 main-api의 query를 구현한 모듈
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
-    runtimeOnly project(":api-query-jpa")
     runtimeOnly project(":api-redis")
-
 }

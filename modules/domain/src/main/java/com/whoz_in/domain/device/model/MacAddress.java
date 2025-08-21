@@ -32,7 +32,7 @@ public final class MacAddress {
     }
 
     private static String normalize(String address){
-        return address.toUpperCase().replace("-", ":");
+        return address.toLowerCase().replace("-", ":");
     }
 
     @Override

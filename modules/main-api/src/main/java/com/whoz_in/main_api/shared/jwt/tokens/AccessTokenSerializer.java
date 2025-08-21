@@ -6,7 +6,6 @@ import static com.whoz_in.main_api.shared.jwt.JwtConst.MEMBER_ID;
 
 import com.whoz_in.domain.member.model.AccountType;
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import java.util.Map;
@@ -15,15 +14,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public final class AccessTokenSerializer extends TokenSerializer<AccessToken> {
-    public AccessTokenSerializer(JwtUtil jwtUtil, JwtProperties jwtProperties) {
-        super(jwtUtil, jwtProperties);
+    public AccessTokenSerializer(JwtUtil jwtUtil) {
+        super(jwtUtil);
     }
 
     @Override
     protected AccessToken buildToken(Claims claims) {
         MemberId memberId = new MemberId(UUID.fromString(claims.get(MEMBER_ID, String.class)));
         AccountType accountType = AccountType.findAccountType(claims.get(ACCOUNT_TYPE, String.class));
-        return new AccessToken(memberId, accountType);
+        return new AccessToken(memberId, accountType, claims.getExpiration().toInstant());
     }
 
     @Override

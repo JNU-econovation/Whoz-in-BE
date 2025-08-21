@@ -4,10 +4,13 @@ import com.whoz_in.domain.device.exception.DeviceInfoAlreadyRegisteredException;
 import com.whoz_in.domain.device.exception.NoDeviceInfoException;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.shared.AggregateRoot;
+import com.whoz_in.shared.Nullable;
 import com.whoz_in.shared.domain_event.device.DeviceCreated;
+import com.whoz_in.shared.domain_event.device.DeviceDeactivated;
 import com.whoz_in.shared.domain_event.device.DeviceInfoPayload;
 import com.whoz_in.shared.domain_event.device.DeviceInfoRegistered;
 import com.whoz_in.shared.domain_event.device.DeviceInfoUpdated;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -23,6 +26,17 @@ public final class Device extends AggregateRoot {
     @Getter private final MemberId memberId; //양도 기능 생기면 final 제거
     @Getter private String deviceName;
     private final Set<DeviceInfo> deviceInfos;
+    @Getter @Nullable private LocalDateTime deactivatedAt;
+
+    public boolean isDeactivated() {
+        return deactivatedAt != null;
+    }
+
+    public void deactivate(){
+        if (isDeactivated()) return;
+        this.deactivatedAt = LocalDateTime.now();
+        this.register(new DeviceDeactivated(id.id(), memberId.id()));
+    }
 
     public Set<DeviceInfo> getDeviceInfos(){
         return Set.copyOf(deviceInfos);
@@ -61,6 +75,7 @@ public final class Device extends AggregateRoot {
                 .memberId(memberId)
                 .deviceInfos(deviceInfos)
                 .deviceName(deviceName)
+                .deactivatedAt(null)
                 .build();
         device.register(new DeviceCreated(
                 device.getId().id(),
@@ -77,12 +92,14 @@ public final class Device extends AggregateRoot {
         return device;
     }
 
-    public static Device load(DeviceId id, MemberId memberId, Set<DeviceInfo> deviceInfos, String deviceName){
+    public static Device load(DeviceId id, MemberId memberId, Set<DeviceInfo> deviceInfos,
+            String deviceName, @Nullable LocalDateTime deactivatedAt){
         return Device.builder()
                 .id(id)
                 .memberId(memberId)
                 .deviceInfos(new HashSet<>(deviceInfos))
                 .deviceName(deviceName)
+                .deactivatedAt(deactivatedAt)
                 .build();
     }
 }

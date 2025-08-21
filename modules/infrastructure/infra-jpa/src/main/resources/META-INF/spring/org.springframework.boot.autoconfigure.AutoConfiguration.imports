@@ -1,0 +1,3 @@
+com.whoz_in_infra.infra_jpa.autoconfig.DataSourcePropertiesConfig
+com.whoz_in_infra.infra_jpa.autoconfig.InfraJpaDomainAutoConfiguration
+com.whoz_in_infra.infra_jpa.autoconfig.InfraJpaQueryAutoConfiguration

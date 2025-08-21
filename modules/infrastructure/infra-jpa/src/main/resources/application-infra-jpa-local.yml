@@ -1,0 +1,7 @@
+infra-jpa:
+  domain:
+    hibernate:
+      show_sql: true
+  query:
+    hibernate:
+      show_sql: true

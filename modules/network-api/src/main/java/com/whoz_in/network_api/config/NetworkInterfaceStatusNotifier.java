@@ -35,7 +35,7 @@ public class NetworkInterfaceStatusNotifier {
     }
 
     @EventListener(NetworkInterfaceStatusEvent.class)
-    public void handle(){
+    private void handle(){
         String content =
                 tag +
                 "\n\n" +
@@ -49,6 +49,7 @@ public class NetworkInterfaceStatusNotifier {
             // 이미 메시지가 있으면 편집
             niStatusMessage.editMessage(content).queue();
         }
+        log.info("[NetworkInterfaceStatusNotifier] NI status updated");
     }
 
     private Message retrieveTagMessage() {

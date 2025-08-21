@@ -2,6 +2,7 @@ package com.whoz_in.network_api.system.routing_policy;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import java.io.IOException;
@@ -14,12 +15,12 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 public final class MappedRtTables {
     private final Map<String, String> rtTables; // Map<ni name, table>
 

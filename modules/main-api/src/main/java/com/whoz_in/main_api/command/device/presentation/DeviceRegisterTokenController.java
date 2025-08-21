@@ -1,8 +1,10 @@
 package com.whoz_in.main_api.command.device.presentation;
 
 import com.whoz_in.main_api.command.device.presentation.docs.DeviceRegisterTokenApi;
+import com.whoz_in.main_api.shared.jwt.JwtProperties;
 import com.whoz_in.main_api.shared.jwt.tokens.DeviceRegisterToken;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenSerializer;
+import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
@@ -21,12 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class DeviceRegisterTokenController implements DeviceRegisterTokenApi {
     private final TokenSerializer<DeviceRegisterToken> deviceRegisterTokenSerializer;
     private final RequesterInfo requesterInfo;
+    private final JwtProperties jwtProperties;
 
     @PostMapping("/device-register-token")
     public ResponseEntity<SuccessBody<String>> getDeviceRegisterToken() {
         return ResponseEntityGenerator.success(
                 deviceRegisterTokenSerializer.serialize(
-                        new DeviceRegisterToken(requesterInfo.getMemberId())),
+                        new DeviceRegisterToken(
+                                requesterInfo.getMemberId(),
+                                jwtProperties.getTokenExpiry(TokenType.DEVICE_REGISTER)
+                        )
+                ),
                 "기기 등록 토큰 발급 완료",
                 HttpStatus.OK
         );

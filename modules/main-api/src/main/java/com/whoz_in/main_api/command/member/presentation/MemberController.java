@@ -66,12 +66,10 @@ public class MemberController extends CommandController implements MemberCommand
   public ResponseEntity<SuccessBody<Void>> reissue(RefreshToken refreshToken, HttpServletResponse response){
     removeTokenCookies(response);
 
-    // TODO: 다른 타입을 쓸까?
-    LoginSuccessTokens newTokens = dispatch(new Reissue(refreshToken.getMemberId().toString(), refreshToken.getTokenId().toString()));
+    LoginSuccessTokens newTokens = dispatch(new Reissue(refreshToken));
 
     addTokenCookies(response, newTokens);
     return ResponseEntityGenerator.success("토큰 재발급 완료", HttpStatus.CREATED);
-
   }
 
   @Override
@@ -81,12 +79,7 @@ public class MemberController extends CommandController implements MemberCommand
           RefreshToken refreshToken,
           HttpServletResponse response) {
 
-    LogOut command = new LogOut(
-            accessToken.getMemberId().toString(),
-            refreshToken.getTokenId().toString());
-
-    dispatch(command);
-
+    dispatch(new LogOut(refreshToken));
     removeTokenCookies(response);
 
     return ResponseEntityGenerator.success("로그아웃 성공", HttpStatus.OK);
@@ -103,6 +96,7 @@ public class MemberController extends CommandController implements MemberCommand
   private void addTokenCookies(HttpServletResponse response, LoginSuccessTokens tokens){
     Cookie accessTokenCookie = cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS));
     Cookie refreshTokenCookie = cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH));
+    refreshTokenCookie.setPath("/api/v1/reissue");
     response.addCookie(accessTokenCookie);
     response.addCookie(refreshTokenCookie);
   }

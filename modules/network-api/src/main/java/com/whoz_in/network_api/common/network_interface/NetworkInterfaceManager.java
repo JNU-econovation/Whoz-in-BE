@@ -1,6 +1,5 @@
 package com.whoz_in.network_api.common.network_interface;
 
-import static com.whoz_in.logging.LogMarkers.ALERT;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
 import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
@@ -64,6 +63,8 @@ public final class NetworkInterfaceManager {
         return ni;
     };
 
+    // isAvailable은 네트워크 인터페이스가 잘 동작하는지를 판단하는 메서드
+    // TODO: 이 클래스는 네트워크 인터페이스를 나타내는 것이 아니라 관리라서 여기에 있으면 안됨
     public boolean isAvailable(){
         return unavailableInterfaces.isEmpty();
     }
@@ -75,10 +76,10 @@ public final class NetworkInterfaceManager {
         }
     }
 
+    // TODO: 이 클래스는 네트워크 인터페이스를 나타내는 것이 아니라 관리라서 여기에 있으면 안됨
     public void logInterfaces(){
         log.info("네트워크 인터페이스 목록\n{}", this);
     }
-
     @Override
     public String toString(){
         return this.nowInterfaces.values().stream()
@@ -140,7 +141,7 @@ public final class NetworkInterfaceManager {
         for (String niName : removed) {
             NetworkInterface oldInterface = oldInterfaces.get(niName);
             unavailableInterfaces.put(niName, REMOVED);
-            log.error("인터페이스 {}가 사라졌습니다.", niName);
+            log.warn("인터페이스 {}가 사라졌습니다.", niName);
             eventPublisher.publishEvent(
                     new NetworkInterfaceStatusEvent(niName, oldInterface, null, REMOVED)
             );
@@ -154,13 +155,13 @@ public final class NetworkInterfaceManager {
             NetworkInterface nowInterface = nowInterfaces.get(niName);
             if (nowInterface.isConnected()) {
                 unavailableInterfaces.remove(niName);
-                log.info(ALERT, "{}가 추가되고 연결되었습니다.", niName);
+                log.info("{}가 추가되고 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED_AND_RECONNECTED)
                 );
             } else {
                 unavailableInterfaces.put(niName, ADDED);
-                log.info(ALERT, "{}가 새로 추가되었습니다.", niName);
+                log.info("{}가 새로 추가되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, null, nowInterface, ADDED)
                 );
@@ -171,7 +172,7 @@ public final class NetworkInterfaceManager {
     private void checkAddedMonitorNI(String addedMonitorNI){
         NetworkInterface nowInterface = nowInterfaces.get(addedMonitorNI);
         unavailableInterfaces.remove(addedMonitorNI);
-        log.info(ALERT, "{}가 새로 추가되었습니다.", addedMonitorNI);
+        log.info("{}가 새로 추가되었습니다.", addedMonitorNI);
         eventPublisher.publishEvent(
                 new NetworkInterfaceStatusEvent(addedMonitorNI, null, nowInterface, ADDED)
         );
@@ -189,13 +190,13 @@ public final class NetworkInterfaceManager {
             // 연결 상태 변화
             if (oldInterface.isConnected() && !nowInterface.isConnected()) {
                 unavailableInterfaces.put(niName, DISCONNECTED);
-                log.error("{}의 네트워크 연결이 끊겼습니다.", niName);
+                log.warn("{}의 네트워크 연결이 끊겼습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, DISCONNECTED)
                 );
             } else if (!oldInterface.isConnected() && nowInterface.isConnected()) {
                 unavailableInterfaces.remove(niName);
-                log.info(ALERT, "{}가 다시 네트워크에 연결되었습니다.", niName);
+                log.info("{}가 다시 네트워크에 연결되었습니다.", niName);
                 eventPublisher.publishEvent(
                         new NetworkInterfaceStatusEvent(niName, oldInterface, nowInterface, RECONNECTED)
                 );
@@ -214,14 +215,14 @@ public final class NetworkInterfaceManager {
         if (nowMode == MANAGED){
             // monitor여야 하는게 managed로 바뀐거니 에러로 판단
             unavailableInterfaces.put(niName, MODE_CHANGED);
-            log.error("{}의 무선 모드가 변경되었습니다. {} -> {}",
+            log.warn("{}의 무선 모드가 변경되었습니다. {} -> {}",
                     niName,
                     oldInterface.getWirelessInfo(),
                     nowInterface.getWirelessInfo());
         } else {
             // monitor여야 하는게 monitor로 바뀐거니 정상화된 것
             unavailableInterfaces.remove(niName);
-            log.info(ALERT, "{}의 무선 모드가 변경되었습니다. {} -> {}",
+            log.info("{}의 무선 모드가 변경되었습니다. {} -> {}",
                     niName,
                     oldInterface.getWirelessInfo(),
                     nowInterface.getWirelessInfo());

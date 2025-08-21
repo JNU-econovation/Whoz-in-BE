@@ -1,15 +1,16 @@
 package com.whoz_in.network_api.system.validation;
 
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
 //시스템의 전체적인 검증을 진행하는 클래스
 @Slf4j
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 @Component
 public final class SystemStartupValidator {
     //서버 시작 시 검증 (실패 시 예외가 발생하면시작이 실패되도록 함)

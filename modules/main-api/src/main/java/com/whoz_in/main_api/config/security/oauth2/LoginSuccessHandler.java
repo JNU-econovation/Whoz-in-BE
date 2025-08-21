@@ -57,7 +57,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             String userInfoKey = oAuth2UserInfoStore.save(userInfo);
             Cookie oAuth2TempTokenCookie = cookieFactory.create(
                     OAUTH2_TEMP_TOKEN,
-                    oAuth2TempTokenSerializer.serialize(new OAuth2TempToken(userInfoKey))
+                    oAuth2TempTokenSerializer.serialize(new OAuth2TempToken(userInfoKey, jwtProperties.getTokenExpiry(TokenType.OAUTH2_TEMP)))
             );
             response.addCookie(oAuth2TempTokenCookie);
         }

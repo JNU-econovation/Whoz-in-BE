@@ -6,16 +6,17 @@ import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONI
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Profile;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 // 모니터 모드여야 하는 인터페이스를 모니터 모드로 설정함
 @Slf4j
-@Profile("prod")
+@Conditional(LinuxCondition.class)
 @Component
 public class MonitorModeSwitcher {
     private final String interfaceName;

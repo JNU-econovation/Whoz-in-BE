@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 //라이브러리나 프레임워크에서 정의된 예외를 처리한다.
 @Slf4j
@@ -18,6 +19,16 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExternalExceptionHandler {
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<FailureBody> handle(NoResourceFoundException e) {
+        return ResponseEntityGenerator.fail(
+                "NO_RESOURCE_FOUND",
+                e.getMessage(),
+                HttpStatus.valueOf(e.getStatusCode().value())
+        );
+    }
+
     @ExceptionHandler(MissingRequestCookieException.class)
     public ResponseEntity<FailureBody> handle(MissingRequestCookieException e) {
         String missingCookieName = e.getCookieName();

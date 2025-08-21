@@ -6,9 +6,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
+@Slf4j
 public class ContinuousProcess extends AbstractProcess{
     ContinuousProcess(String command){
         super(command);

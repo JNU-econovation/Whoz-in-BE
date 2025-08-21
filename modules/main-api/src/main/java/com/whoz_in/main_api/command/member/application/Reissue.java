@@ -1,9 +1,9 @@
 package com.whoz_in.main_api.command.member.application;
 
 import com.whoz_in.main_api.command.shared.application.Command;
+import com.whoz_in.main_api.shared.jwt.tokens.RefreshToken;
 
 public record Reissue(
-    String memberId,
-    String refreshTokenId
+    RefreshToken refreshToken
 ) implements Command {
 }
