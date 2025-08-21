@@ -28,7 +28,7 @@ import org.hibernate.annotations.UuidGenerator;
         + "m.status_message, "
         + "b.id AS main_badge_id, "
         + "b.name AS main_badge_name, "
-        + "b.color_code AS main_badge_color, "
+        + "b.color_string AS main_badge_color, "
         + "a.active_time AS total_active_time "
         + "FROM member_entity m "
         + "LEFT JOIN badge_entity b ON m.main_badge = b.id "

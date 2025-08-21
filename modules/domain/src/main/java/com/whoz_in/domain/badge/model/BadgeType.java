@@ -5,5 +5,6 @@ public enum BadgeType {
     TF,
     DEPARTMENT,
     RANK,
-    USERMADE
+    USERMADE,
+    SPECIAL
 }
