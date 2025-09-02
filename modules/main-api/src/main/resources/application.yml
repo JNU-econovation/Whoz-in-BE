@@ -45,3 +45,6 @@ infra-jpa:
     enabled: true
   query:
     enabled: true
+
+file:
+  path: ${FILE_PATH}

@@ -14,6 +14,7 @@ services:
     volumes:
       - ../env:/app/env #main-api.jar가 요구하는 env파일들을 구성하면 됨 (application.yml 참고)
       - main-api-data:/root/whozin # 컨테이너의 HOME은 /root임
+      - image-uploads:/app/uploads/images
     ports:
       - "2470:2470"
     restart: always
@@ -30,6 +31,8 @@ services:
       - MYSQL_ROOT_HOST=% #main-api #TODO: 외부에선 접속 못하도록 하기
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=whozin
+      - APP_FILE_UPLOAD_DIR=/app/uploads/images
+      - APP_FILE_BASE_URL=http://localhost:2470
     volumes:
       - mysql-data:/var/lib/mysql # 데이터 백업
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -54,6 +57,7 @@ services:
     volumes:
       - ${BASE_BACKUP_DIR}:/backup
       - main-api-data:/main-api-data:ro
+      - image-uploads:/image-uploads:ro
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     restart: always
@@ -66,3 +70,4 @@ services:
 volumes:
   main-api-data:
   mysql-data:
+  image-uploads:
