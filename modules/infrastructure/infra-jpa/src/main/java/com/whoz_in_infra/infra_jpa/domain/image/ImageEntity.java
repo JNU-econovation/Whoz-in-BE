@@ -19,10 +19,8 @@ public class ImageEntity extends BaseEntity {
 
     private String imagePath;
 
-    private String imageName;
-
-    public ImageEntity(String imagePath, String imageName) {
-        this.imagePath = imagePath;
-        this.imageName = imageName;
+    public ImageEntity(UUID id, String url) {
+        this.id = id;
+        this.imagePath = url;
     }
 }
