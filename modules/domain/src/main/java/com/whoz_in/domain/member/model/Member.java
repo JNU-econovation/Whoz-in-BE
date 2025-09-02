@@ -4,6 +4,7 @@ package com.whoz_in.domain.member.model;
 import com.whoz_in.domain.badge.exception.BadgeCurrentHidedException;
 import com.whoz_in.domain.badge.exception.NoBadgeException;
 import com.whoz_in.domain.badge.model.BadgeId;
+import com.whoz_in.domain.image.model.ImageId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.shared.domain_event.member.MemberBadgeVisibilityChanged;
 import com.whoz_in.shared.domain_event.member.MemberCreated;
@@ -28,6 +29,7 @@ public final class Member extends AggregateRoot {
     private OAuthCredentials oAuthCredentials;
     private final Map<BadgeId, Boolean> badges; // Map<가진뱃지, 보여줌?>
     @Getter private BadgeId mainBadge; // 대표 뱃지
+    @Getter private ImageId image; // 사용자 프로필 이미지
 
     public OAuthCredentials getOAuthCredentials(){
         return oAuthCredentials;
@@ -66,7 +68,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge){
+                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge, ImageId image){
         return builder()
                 .id(id)
                 .name(name)
@@ -76,6 +78,7 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(mainBadge)
+                .image(image)
                 .build();
     }
 
