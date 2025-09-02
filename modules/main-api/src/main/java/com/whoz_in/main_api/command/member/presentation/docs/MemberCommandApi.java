@@ -1,6 +1,5 @@
 package com.whoz_in.main_api.command.member.presentation.docs;
 
-import com.whoz_in.main_api.command.member.application.UploadProfileImage;
 import com.whoz_in.main_api.command.member.presentation.MemberOAuthSignUpAdditionalInfo;
 import com.whoz_in.main_api.shared.jwt.tokens.AccessToken;
 import com.whoz_in.main_api.shared.jwt.tokens.OAuth2TempToken;
@@ -10,10 +9,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import java.io.IOException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "회원, 인증, 인가", description = "회원 Command Api")
 public interface MemberCommandApi {
@@ -64,5 +64,5 @@ public interface MemberCommandApi {
             summary = "프로필 이미지 업로드",
             description = "사용자의 프로필 이미지를 업로드합니다."
     )
-    ResponseEntity<SuccessBody<Void>> upload(@Valid @ModelAttribute UploadProfileImage request);
+    ResponseEntity<SuccessBody<Void>> upload(@RequestParam("image") MultipartFile file) throws IOException;;
 }

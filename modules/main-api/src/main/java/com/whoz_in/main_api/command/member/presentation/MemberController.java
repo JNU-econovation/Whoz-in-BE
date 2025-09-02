@@ -24,13 +24,14 @@ import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
+import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class MemberController extends CommandController implements MemberCommandApi {
@@ -90,8 +91,9 @@ public class MemberController extends CommandController implements MemberCommand
 
   @Override
   @PostMapping("/api/v1/members/images")
-  public ResponseEntity<SuccessBody<Void>> upload(@Valid @ModelAttribute UploadProfileImage request) {
-    dispatch(request);
+  public ResponseEntity<SuccessBody<Void>> upload(@RequestParam("image") MultipartFile file) throws IOException {
+    UploadProfileImage cmd = new UploadProfileImage(file.getBytes());
+    dispatch(cmd);
     return ResponseEntityGenerator.success("프로필 이미지 업로드 성공", HttpStatus.CREATED);
   }
 
