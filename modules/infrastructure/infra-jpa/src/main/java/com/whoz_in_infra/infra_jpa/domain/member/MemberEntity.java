@@ -56,7 +56,7 @@ public class MemberEntity extends BaseEntity {
   @JoinColumn(name = "member_id")
   private Set<BadgeMemberEntity> badgeMembers;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private UUID imageId;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
