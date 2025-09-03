@@ -7,6 +7,7 @@ import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.shared.domain_event.member.MemberBadgeVisibilityChanged;
 import com.whoz_in.shared.domain_event.member.MemberCreated;
+import com.whoz_in.shared.domain_event.member.MemberProfileImageUploaded;
 import com.whoz_in.shared.domain_event.member.MemberStatusMessageChanged;
 import java.util.Collections;
 import java.util.HashMap;
@@ -111,5 +112,6 @@ public final class Member extends AggregateRoot {
 
     public void updateProfileImage(ImageId imageId) {
         this.imageId = imageId;
+        this.register(new MemberProfileImageUploaded(this.imageId.id().toString()));
     }
 }
