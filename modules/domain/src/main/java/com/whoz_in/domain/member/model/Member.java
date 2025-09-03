@@ -7,7 +7,6 @@ import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.shared.domain_event.member.MemberBadgeVisibilityChanged;
 import com.whoz_in.shared.domain_event.member.MemberCreated;
-import com.whoz_in.shared.domain_event.member.MemberProfileImageUploaded;
 import com.whoz_in.shared.domain_event.member.MemberStatusMessageChanged;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,7 +35,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member create(String name, Position mainPosition, int generation,
-            OAuthCredentials oAuthCredentials, BadgeId badgeId){
+            OAuthCredentials oAuthCredentials, BadgeId badgeId, ImageId imageId) {
         Map<BadgeId, Boolean> badges = new HashMap<>();
         badges.put(badgeId, true);
         Member member = builder()
@@ -48,9 +47,10 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(badgeId)
+                .imageId(new ImageId())
                 .build();
         member.register(new MemberCreated(
-                member.getId().id(),
+                member.getId().id().toString(),
                 name,
                 mainPosition.getName(),
                 generation,
@@ -62,7 +62,8 @@ public final class Member extends AggregateRoot {
                                 (Map.Entry<BadgeId, Boolean> e) -> e.getKey().id(),
                                 Map.Entry::getValue
                         )),
-                badgeId.id()
+                badgeId.id().toString(),
+                imageId.id().toString()
         ));
         return member;
     }
@@ -112,6 +113,5 @@ public final class Member extends AggregateRoot {
 
     public void updateProfileImage(ImageId imageId) {
         this.imageId = imageId;
-        this.register(new MemberProfileImageUploaded(this.imageId.id().toString()));
     }
 }
