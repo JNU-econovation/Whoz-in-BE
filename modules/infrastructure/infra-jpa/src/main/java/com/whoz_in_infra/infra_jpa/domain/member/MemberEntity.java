@@ -56,11 +56,11 @@ public class MemberEntity extends BaseEntity {
   @JoinColumn(name = "member_id")
   private Set<BadgeMemberEntity> badgeMembers;
 
-  @Column(nullable = true)
-  private String imageUrl;
+  @Column(nullable = false)
+  private UUID imageId;
 
   public MemberEntity(UUID id, String name, int generation, Position position, String statusMessage,
-                      SocialProvider socialProvider, String socialId, UUID mainBadge,Set<BadgeMemberEntity> badgeMembers, String imageUrl) {
+                      SocialProvider socialProvider, String socialId, UUID mainBadge,Set<BadgeMemberEntity> badgeMembers, UUID imageId) {
     this.id = id;
     this.name = name;
     this.generation = generation;
@@ -70,6 +70,6 @@ public class MemberEntity extends BaseEntity {
     this.socialId = socialId;
     this.mainBadge = mainBadge;
     this.badgeMembers = badgeMembers;
-    this.imageUrl = imageUrl;
+    this.imageId = imageId;
   }
 }
