@@ -35,7 +35,7 @@ public final class Member extends AggregateRoot {
     }
 
     public static Member create(String name, Position mainPosition, int generation,
-            OAuthCredentials oAuthCredentials, BadgeId badgeId, ImageId imageId) {
+            OAuthCredentials oAuthCredentials, BadgeId badgeId) {
         Map<BadgeId, Boolean> badges = new HashMap<>();
         badges.put(badgeId, true);
         Member member = builder()
@@ -63,7 +63,7 @@ public final class Member extends AggregateRoot {
                                 Map.Entry::getValue
                         )),
                 badgeId.id().toString(),
-                imageId.id().toString()
+                member.getImageId().id().toString()
         ));
         return member;
     }

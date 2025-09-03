@@ -12,4 +12,3 @@ public record ImageId(UUID id) {
         return id.toString();
     }
 }
-
