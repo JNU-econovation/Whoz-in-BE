@@ -6,6 +6,7 @@ import com.whoz_in.main_api.command.member.exception.InvalidFileFormatException;
 import com.whoz_in.main_api.command.member.exception.InvalidFileSizeException;
 import com.whoz_in.main_api.command.member.exception.InvalidImageDimensionException;
 import com.whoz_in.main_api.command.member.exception.InvalidImageFormatException;
+import com.whoz_in.main_api.command.member.exception.InvalidImageRatioException;
 import com.whoz_in.main_api.command.shared.application.Command;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -112,7 +113,7 @@ public record UploadProfileImage(byte[] bytes) implements Command {
 
         double ratio = (double) Math.max(width, height) / Math.min(width, height);
         if (ratio > MAX_ASPECT_RATIO) {
-            throw new IllegalArgumentException("이미지의 가로세로 비율이 너무 극단적입니다. (최대 10:1)");
+            throw InvalidImageRatioException.EXCEPTION;
         }
     }
 
