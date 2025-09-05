@@ -1,8 +1,8 @@
-package com.whoz_in_infra.infra_jpa.domain.member;
+package com.whoz_in.main_api.shared.persistence;
 
-import com.whoz_in.domain.member.ImageUploadStorage;
 import com.whoz_in.domain.member.model.ImageId;
 import com.whoz_in.main_api.command.member.exception.FailUploadImageException;
+import com.whoz_in.main_api.shared.utils.ImageUploadStorage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,8 +16,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ImageUploaderStorageImpl implements ImageUploadStorage {
-
+public class FileSystemImageUploadStorage implements ImageUploadStorage {
     @Value("${file.path}")
     private String uploadFolder;
 

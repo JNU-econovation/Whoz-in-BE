@@ -1,11 +1,11 @@
 package com.whoz_in.main_api.command.member.application;
 
-import com.whoz_in.domain.member.ImageUploadStorage;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.utils.ImageUploadStorage;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
