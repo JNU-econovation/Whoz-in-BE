@@ -48,4 +48,3 @@ infra-jpa:
 
 file:
   path: ${FILE_PATH:/app/uploads/images}
-  url-path: /uploads/images

@@ -21,9 +21,6 @@ public class ImageUploaderStorageImpl implements ImageUploadStorage {
     @Value("${file.path}")
     private String uploadFolder;
 
-    @Value("${file.url-path}")
-    private String urlPath;
-
     private static final int MAX_WIDTH = 1024;
     private static final int MAX_HEIGHT = 1024;
     private static final String OUTPUT_FORMAT = "jpg";
