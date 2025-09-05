@@ -24,6 +24,7 @@ public class ImageUploaderStorageImpl implements ImageUploadStorage {
     private static final int MAX_WIDTH = 1024;
     private static final int MAX_HEIGHT = 1024;
     private static final String OUTPUT_FORMAT = "jpg";
+    private static final float OUTPUT_QUALITY = 0.5f;
 
     @Override
     public void save(ImageId imageId, byte[] bytes) {
@@ -32,19 +33,26 @@ public class ImageUploaderStorageImpl implements ImageUploadStorage {
             Path imageFilePath = Paths.get(uploadFolder, imgId + "." + OUTPUT_FORMAT);
             Files.createDirectories(imageFilePath.getParent());
 
-            try (ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
-                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            byte[] optimizedImage = optimizeImage(bytes);
 
-                Thumbnails.of(inputStream)
-                        .size(MAX_WIDTH, MAX_HEIGHT)
-                        .outputFormat(OUTPUT_FORMAT)
-                        .toOutputStream(outputStream);
-
-                Files.write(imageFilePath, outputStream.toByteArray());
-            }
+            Files.write(imageFilePath, optimizedImage);
 
         } catch (IOException e) {
             throw FailUploadImageException.EXCEPTION;
+        }
+    }
+
+    private byte[] optimizeImage(byte[] originalBytes) throws IOException {
+        try (ByteArrayInputStream inputStream = new ByteArrayInputStream(originalBytes);
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
+            Thumbnails.of(inputStream)
+                    .size(MAX_WIDTH, MAX_HEIGHT)
+                    .outputFormat(OUTPUT_FORMAT)
+                    .outputQuality(OUTPUT_QUALITY)
+                    .toOutputStream(outputStream);
+
+            return outputStream.toByteArray();
         }
     }
 }
