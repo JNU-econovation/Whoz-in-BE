@@ -56,7 +56,7 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()),
                 badges,
                 new BadgeId(entity.getMainBadge()),
-                new ProfileImageId(entity.getImageId())
+                new ProfileImageId(entity.getProfile_image_id())
         );
     }
 }
