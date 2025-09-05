@@ -28,7 +28,7 @@ public final class Member extends AggregateRoot {
     private OAuthCredentials oAuthCredentials;
     private final Map<BadgeId, Boolean> badges; // Map<가진뱃지, 보여줌?>
     @Getter private BadgeId mainBadge; // 대표 뱃지
-    @Getter private ImageId imageId; // 사용자 프로필 이미지
+    @Getter private ProfileImageId profileImageId; // 사용자 프로필 이미지
 
     public OAuthCredentials getOAuthCredentials(){
         return oAuthCredentials;
@@ -47,7 +47,7 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(badgeId)
-                .imageId(new ImageId())
+                .profileImageId(new ProfileImageId())
                 .build();
         member.register(new MemberCreated(
                 member.getId().id().toString(),
@@ -63,13 +63,13 @@ public final class Member extends AggregateRoot {
                                 Map.Entry::getValue
                         )),
                 badgeId.id().toString(),
-                member.getImageId().id().toString()
+                member.getProfileImageId().id().toString()
         ));
         return member;
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge, ImageId imageId){
+                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge, ProfileImageId profileImageId){
         return builder()
                 .id(id)
                 .name(name)
@@ -79,7 +79,7 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(mainBadge)
-                .imageId(imageId)
+                .profileImageId(profileImageId)
                 .build();
     }
 

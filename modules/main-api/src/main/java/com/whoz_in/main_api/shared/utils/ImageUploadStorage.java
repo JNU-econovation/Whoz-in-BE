@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.utils;
 
-import com.whoz_in.domain.member.model.ImageId;
+import com.whoz_in.domain.member.model.ProfileImageId;
 
 public interface ImageUploadStorage {
-    void save(ImageId imageId, byte[]bytes);
+    void save(ProfileImageId profileImageId, byte[]bytes);
 }

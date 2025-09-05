@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.shared.persistence;
 
-import com.whoz_in.domain.member.model.ImageId;
+import com.whoz_in.domain.member.model.ProfileImageId;
 import com.whoz_in.main_api.command.member.exception.FailUploadImageException;
 import com.whoz_in.main_api.shared.utils.ImageUploadStorage;
 import java.io.ByteArrayInputStream;
@@ -26,9 +26,9 @@ public class FileSystemImageUploadStorage implements ImageUploadStorage {
     private static final float OUTPUT_QUALITY = 0.5f;
 
     @Override
-    public void save(ImageId imageId, byte[] bytes) {
+    public void save(ProfileImageId profileImageId, byte[] bytes) {
         try {
-            String imgId = imageId.id().toString();
+            String imgId = profileImageId.id().toString();
             Path imageFilePath = Paths.get(uploadFolder, imgId + "." + OUTPUT_FORMAT);
             Files.createDirectories(imageFilePath.getParent());
 

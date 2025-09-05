@@ -2,8 +2,8 @@ package com.whoz_in.domain.member.model;
 
 import java.util.UUID;
 
-public record ImageId(UUID id) {
-    public ImageId() {
+public record ProfileImageId(UUID id) {
+    public ProfileImageId() {
         this(UUID.randomUUID());
     }
 
