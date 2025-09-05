@@ -110,8 +110,4 @@ public final class Member extends AggregateRoot {
         }
         this.mainBadge = badgeId;
     }
-
-    public void updateProfileImage(ImageId imageId) {
-        this.imageId = imageId;
-    }
 }
