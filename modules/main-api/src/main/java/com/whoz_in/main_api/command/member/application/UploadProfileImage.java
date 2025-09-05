@@ -1,10 +1,13 @@
 package com.whoz_in.main_api.command.member.application;
 
 import com.whoz_in.main_api.command.member.exception.EmptyFileException;
+import com.whoz_in.main_api.command.member.exception.ImageProcessingException;
 import com.whoz_in.main_api.command.member.exception.InvalidFileFormatException;
 import com.whoz_in.main_api.command.member.exception.InvalidFileSizeException;
+import com.whoz_in.main_api.command.member.exception.InvalidImageDimensionException;
 import com.whoz_in.main_api.command.member.exception.InvalidImageFormatException;
 import com.whoz_in.main_api.command.shared.application.Command;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Iterator;
@@ -16,6 +19,9 @@ import javax.imageio.stream.ImageInputStream;
 public record UploadProfileImage(byte[] bytes) implements Command {
     private static final int MAX_SIZE = 2 * 1024 * 1024; // 2MB
     private static final int MIN_SIZE = 1024; // 1KB
+    private static final int MAX_DIMENSION = 5000; // 5000px
+    private static final int MIN_DIMENSION = 50; // 50px
+    private static final double MAX_ASPECT_RATIO = 10.0;
 
     private static final Set<String> ALLOWED_FORMATS = Set.of("jpg", "jpeg", "png", "webp");
 
@@ -32,6 +38,8 @@ public record UploadProfileImage(byte[] bytes) implements Command {
         validateFileSize(bytes);
         validateMaliciousSignatures(bytes);
         validateImageFormat(bytes);
+        validateImageDimensions(bytes);
+        validateImageRatio(bytes);
     }
 
     private void valideFileNotEmpty(byte[] bytes) {
@@ -81,6 +89,33 @@ public record UploadProfileImage(byte[] bytes) implements Command {
         }
     }
 
+    private void validateImageDimensions(byte[] bytes) {
+        BufferedImage image = toImage(bytes);
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        if (width < MIN_DIMENSION || height < MIN_DIMENSION) {
+            throw InvalidImageDimensionException.EXCEPTION;
+        }
+
+        if (width > MAX_DIMENSION || height > MAX_DIMENSION) {
+            throw InvalidImageDimensionException.EXCEPTION;
+        }
+    }
+
+    private void validateImageRatio(byte[] bytes) {
+        BufferedImage image = toImage(bytes);
+
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        double ratio = (double) Math.max(width, height) / Math.min(width, height);
+        if (ratio > MAX_ASPECT_RATIO) {
+            throw new IllegalArgumentException("이미지의 가로세로 비율이 너무 극단적입니다. (최대 10:1)");
+        }
+    }
+
     private String getImageFormat(byte[] bytes) {
         try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
              ImageInputStream iis = ImageIO.createImageInputStream(bais)) {
@@ -94,5 +129,17 @@ public record UploadProfileImage(byte[] bytes) implements Command {
             throw InvalidImageFormatException.EXCEPTION;
         }
         return null;
+    }
+
+    private BufferedImage toImage(byte[] bytes) {
+        try (ByteArrayInputStream bais = new ByteArrayInputStream(bytes)) {
+            BufferedImage image = ImageIO.read(bais);
+            if (image == null) {
+                throw ImageProcessingException.EXCEPTION;
+            }
+            return image;
+        } catch (IOException e) {
+            throw ImageProcessingException.EXCEPTION;
+        }
     }
 }
