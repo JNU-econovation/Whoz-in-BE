@@ -25,7 +25,7 @@ public class UploadProfileImageHandler implements CommandHandler<UploadProfileIm
     public Void handle(UploadProfileImage cmd) {
         MemberId requesterId = requesterInfo.getMemberId();
         Member member = memberFinderService.find(requesterId);
-        member.changeProfileImage();
+        member.initProfileImageIdIfAbsent();
         memberRepository.save(member);
         imageUploadStorage.save(member.getProfileImageId(), cmd.bytes());
         return null;
