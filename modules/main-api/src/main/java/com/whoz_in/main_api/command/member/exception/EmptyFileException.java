@@ -4,7 +4,7 @@ import com.whoz_in.shared.WhozinException;
 
 public class EmptyFileException extends WhozinException {
     public static final EmptyFileException EXCEPTION = new EmptyFileException();
-    public EmptyFileException() {
+    private EmptyFileException() {
         super("6003", "빈 파일입니다.");
     }
 }

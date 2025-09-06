@@ -4,7 +4,7 @@ import com.whoz_in.shared.WhozinException;
 
 public class ImageProcessingException extends WhozinException {
     public static final ImageProcessingException EXCEPTION = new ImageProcessingException();
-    public ImageProcessingException() {
+    private ImageProcessingException() {
         super("6007", "이미지 변환에 실패하였습니다.");
     }
 }
