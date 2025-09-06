@@ -84,12 +84,12 @@ public final class Member extends AggregateRoot {
 
     public void changeStatusMessage(String newStatusMessage){
         this.statusMessage = newStatusMessage;
-        this.register(new MemberStatusMessageChanged(this.getId().id(), this.statusMessage));
+        this.register(new MemberStatusMessageChanged(this.getId().id().toString(), this.statusMessage));
     }
 
     public void changeBadgeVisibility(BadgeId badgeId, boolean show) {
         this.badges.put(badgeId, show);
-        this.register(new MemberBadgeVisibilityChanged(this.getId().id(), badgeId.id(), show));
+        this.register(new MemberBadgeVisibilityChanged(this.getId().id().toString(), badgeId.id().toString(), show));
     }
 
     public void attachBadge(BadgeId badgeId) {

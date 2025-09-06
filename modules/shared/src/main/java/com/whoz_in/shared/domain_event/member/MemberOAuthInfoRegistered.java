@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberOAuthInfoRegistered extends DomainEvent {
 
-    private final UUID memberId;
+    private final String memberId;
     private final String socialProvider;
     private final String socialId;
 

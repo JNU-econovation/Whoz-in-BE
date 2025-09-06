@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class MemberStatusMessageChanged extends DomainEvent {
-    private final UUID memberId;
+    private final String memberId;
     private final String statusMessage;
 }

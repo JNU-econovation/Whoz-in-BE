@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class MemberBadgeVisibilityChanged extends DomainEvent {
-    private final UUID memberId;
-    private final UUID badgeId;
+    private final String memberId;
+    private final String badgeId;
     private final Boolean isVisible;
 }

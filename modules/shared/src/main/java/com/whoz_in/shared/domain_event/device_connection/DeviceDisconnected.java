@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class DeviceDisconnected extends DomainEvent {
-    private final UUID deviceConnectionId;
-    private final UUID deviceId;
+    private final String deviceConnectionId;
+    private final String deviceId;
     private final String connectedRoom;
     private final LocalDateTime connectedAt;
     private final LocalDateTime disconnectedAt;

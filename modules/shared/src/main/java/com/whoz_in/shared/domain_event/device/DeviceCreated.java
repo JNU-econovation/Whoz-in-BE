@@ -9,8 +9,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class DeviceCreated extends DomainEvent {
-    private final UUID deviceId;
-    private final UUID memberId;
+    private final String deviceId;
+    private final String memberId;
     private final String deviceName;
     private final List<DeviceInfoPayload> deviceInfos;
 }

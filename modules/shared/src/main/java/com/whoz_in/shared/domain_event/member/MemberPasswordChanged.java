@@ -9,5 +9,5 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class MemberPasswordChanged extends DomainEvent {
-    private final UUID memberId;
+    private final String memberId;
 }

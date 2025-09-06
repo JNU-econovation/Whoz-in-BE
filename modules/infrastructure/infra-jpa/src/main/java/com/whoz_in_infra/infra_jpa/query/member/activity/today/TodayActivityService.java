@@ -96,7 +96,7 @@ public class TodayActivityService {
     // 디바이스 연결 시 해당 멤버의 재실 상태를 업데이트
     @TransactionalEventListener(phase = AFTER_COMMIT)
     private void updateOnDeviceConnected(DeviceConnected event) {
-        UUID deviceId = event.getDeviceId();
+        UUID deviceId = UUID.fromString(event.getDeviceId());
         UUID memberId = getMemberId(deviceId);
         this.findOne(memberId)
                 .ifPresentOrElse(
@@ -111,7 +111,7 @@ public class TodayActivityService {
     // 연결이 끊겼을때 상태 업데이트
     @TransactionalEventListener(phase = AFTER_COMMIT)
     private void updatedOnDeviceDisconnected(DeviceDisconnected event) {
-        UUID deviceId = event.getDeviceId();
+        UUID deviceId = UUID.fromString(event.getDeviceId());
         UUID memberId = getMemberId(deviceId);
         this.findOne(memberId)
                 .ifPresent(

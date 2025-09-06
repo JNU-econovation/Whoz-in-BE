@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public final class DeviceDeactivated extends DomainEvent {
 
-    private final UUID deviceId;
-    private final UUID memberId;
+    private final String deviceId;
+    private final String memberId;
 }
