@@ -2,7 +2,7 @@ package com.whoz_in.domain.member.model;
 
 
 import com.whoz_in.domain.badge.exception.BadgeCurrentHidedException;
-import com.whoz_in.domain.badge.exception.NoBadgeException;
+import com.whoz_in.domain.badge.exception.BadgeNotOwnedByMemberException;
 import com.whoz_in.domain.badge.model.BadgeId;
 import com.whoz_in.domain.shared.AggregateRoot;
 import com.whoz_in.shared.domain_event.member.MemberBadgeVisibilityChanged;
@@ -102,7 +102,7 @@ public final class Member extends AggregateRoot {
 
     public void changeMainBadge(BadgeId badgeId) {
         if (!badges.containsKey(badgeId)) {
-            throw NoBadgeException.EXCEPTION;
+            throw BadgeNotOwnedByMemberException.EXCEPTION;
         }
         if (!badges.get(badgeId)) {
             throw BadgeCurrentHidedException.EXCEPTION;
