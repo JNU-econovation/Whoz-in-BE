@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.command.member.application;
 
+import com.whoz_in.domain.member.MemberRepository;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
@@ -16,6 +17,7 @@ public class UploadProfileImageHandler implements CommandHandler<UploadProfileIm
     private final RequesterInfo requesterInfo;
     private final MemberFinderService memberFinderService;
     private final ImageUploadStorage imageUploadStorage;
+    private final MemberRepository memberRepository;
 
 
     @Transactional
@@ -23,6 +25,8 @@ public class UploadProfileImageHandler implements CommandHandler<UploadProfileIm
     public Void handle(UploadProfileImage cmd) {
         MemberId requesterId = requesterInfo.getMemberId();
         Member member = memberFinderService.find(requesterId);
+        member.changeProfileImage();
+        memberRepository.save(member);
         imageUploadStorage.save(member.getProfileImageId(), cmd.bytes());
         return null;
     }
