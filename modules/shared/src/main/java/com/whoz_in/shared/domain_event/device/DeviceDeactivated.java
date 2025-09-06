@@ -1,7 +1,6 @@
 package com.whoz_in.shared.domain_event.device;
 
 import com.whoz_in.shared.domain_event.DomainEvent;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -9,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public final class DeviceDeactivated extends DomainEvent {
 
-    private final UUID deviceId;
-    private final UUID memberId;
+    private final String deviceId;
+    private final String memberId;
 }

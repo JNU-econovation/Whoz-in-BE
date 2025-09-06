@@ -39,4 +39,7 @@ dependencies {
 
     //main-api 구현 모듈 (runtimeOnly - 순환 의존 방지)
     runtimeOnly project(":api-redis")
+
+    // 이미지 최적화용
+    implementation 'net.coobird:thumbnailator:0.4.14'
 }

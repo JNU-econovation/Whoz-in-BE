@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public final class MemberCreated extends DomainEvent {
-    private final UUID memberId;
+    private final String memberId;
     private final String name;
     private final String mainPosition;
     private final int generation;
@@ -18,5 +18,5 @@ public final class MemberCreated extends DomainEvent {
     private final String socialId;
 
     private final Map<UUID, Boolean> badges;
-    private final UUID mainBadge;
+    private final String mainBadge;
 }

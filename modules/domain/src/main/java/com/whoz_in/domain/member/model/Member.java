@@ -28,13 +28,14 @@ public final class Member extends AggregateRoot {
     private OAuthCredentials oAuthCredentials;
     private final Map<BadgeId, Boolean> badges; // Map<가진뱃지, 보여줌?>
     @Getter private BadgeId mainBadge; // 대표 뱃지
+    @Getter private ProfileImageId profileImageId; // 사용자 프로필 이미지
 
     public OAuthCredentials getOAuthCredentials(){
         return oAuthCredentials;
     }
 
     public static Member create(String name, Position mainPosition, int generation,
-            OAuthCredentials oAuthCredentials, BadgeId badgeId){
+            OAuthCredentials oAuthCredentials, BadgeId badgeId) {
         Map<BadgeId, Boolean> badges = new HashMap<>();
         badges.put(badgeId, true);
         Member member = builder()
@@ -46,9 +47,10 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(badgeId)
+                .profileImageId(null)
                 .build();
         member.register(new MemberCreated(
-                member.getId().id(),
+                member.getId().id().toString(),
                 name,
                 mainPosition.getName(),
                 generation,
@@ -60,13 +62,13 @@ public final class Member extends AggregateRoot {
                                 (Map.Entry<BadgeId, Boolean> e) -> e.getKey().id(),
                                 Map.Entry::getValue
                         )),
-                badgeId.id()
+                badgeId.id().toString()
         ));
         return member;
     }
 
     public static Member load(MemberId id, String name, Position mainPosition, int generation, String statusMessage,
-                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge){
+                              OAuthCredentials oAuthCredentials, Map<BadgeId, Boolean> badges, BadgeId mainBadge, ProfileImageId profileImageId){
         return builder()
                 .id(id)
                 .name(name)
@@ -76,17 +78,18 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(mainBadge)
+                .profileImageId(profileImageId)
                 .build();
     }
 
     public void changeStatusMessage(String newStatusMessage){
         this.statusMessage = newStatusMessage;
-        this.register(new MemberStatusMessageChanged(this.getId().id(), this.statusMessage));
+        this.register(new MemberStatusMessageChanged(this.getId().id().toString(), this.statusMessage));
     }
 
     public void changeBadgeVisibility(BadgeId badgeId, boolean show) {
         this.badges.put(badgeId, show);
-        this.register(new MemberBadgeVisibilityChanged(this.getId().id(), badgeId.id(), show));
+        this.register(new MemberBadgeVisibilityChanged(this.getId().id().toString(), badgeId.id().toString(), show));
     }
 
     public void attachBadge(BadgeId badgeId) {
@@ -105,5 +108,11 @@ public final class Member extends AggregateRoot {
             throw BadgeCurrentHidedException.EXCEPTION;
         }
         this.mainBadge = badgeId;
+    }
+
+    public void initProfileImageIdIfAbsent() {
+        if (this.profileImageId == null) {
+            this.profileImageId = new ProfileImageId();
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.shared.domain_event.device.DeviceCreated;
 import com.whoz_in.shared.domain_event.device.DeviceInfoPayload;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,7 +31,7 @@ public class ConnectOnDeviceCreated {
                         .map(DeviceInfoPayload::mac).toList())
                 .ifPresent(monitorLog -> {
                     DeviceConnection connection = DeviceConnection.create(
-                            new DeviceId(event.getDeviceId()),
+                            new DeviceId(UUID.fromString(event.getDeviceId())),
                             monitorLog.getRoom(),
                             event.getOccurredOn()
                     );

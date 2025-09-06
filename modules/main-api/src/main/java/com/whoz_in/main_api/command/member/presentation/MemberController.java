@@ -8,6 +8,7 @@ import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
 import com.whoz_in.main_api.command.member.application.Reissue;
+import com.whoz_in.main_api.command.member.application.UploadProfileImage;
 import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
@@ -23,11 +24,14 @@ import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class MemberController extends CommandController implements MemberCommandApi {
@@ -83,6 +87,14 @@ public class MemberController extends CommandController implements MemberCommand
     removeTokenCookies(response);
 
     return ResponseEntityGenerator.success("로그아웃 성공", HttpStatus.OK);
+  }
+
+  @Override
+  @PostMapping("/api/v1/members/images")
+  public ResponseEntity<SuccessBody<Void>> upload(@RequestParam("image") MultipartFile file) throws IOException {
+    UploadProfileImage cmd = new UploadProfileImage(file.getBytes());
+    dispatch(cmd);
+    return ResponseEntityGenerator.success("프로필 이미지 업로드 성공", HttpStatus.CREATED);
   }
 
   private void removeTokenCookies(HttpServletResponse response) {

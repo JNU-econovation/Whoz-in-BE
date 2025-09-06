@@ -5,7 +5,7 @@ import com.whoz_in.shared.WhozinException;
 public class NoPcDeviceException extends WhozinException {
     public static final NoPcDeviceException EXCEPTION = new NoPcDeviceException();
 
-    public NoPcDeviceException() {
+    private NoPcDeviceException() {
         super("3031", "첫 기기는 pc여야 합니다.");
     }
 }

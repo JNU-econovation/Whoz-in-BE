@@ -1,5 +1,6 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.member.exception.NoAccountTypeException;
 import java.util.Arrays;
 
 public enum AccountType {
@@ -17,7 +18,7 @@ public enum AccountType {
         return Arrays.stream(AccountType.values())
                 .filter(at -> at.name().equals(accountType))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("no account type"));
+                .orElseThrow(() -> NoAccountTypeException.EXCEPTION);
     }
 
 }

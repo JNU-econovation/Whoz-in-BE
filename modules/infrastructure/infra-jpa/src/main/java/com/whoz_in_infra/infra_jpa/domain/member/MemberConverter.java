@@ -1,6 +1,7 @@
 package com.whoz_in_infra.infra_jpa.domain.member;
 
 import com.whoz_in.domain.badge.model.BadgeId;
+import com.whoz_in.domain.member.model.ProfileImageId;
 import com.whoz_in.domain.member.model.Member;
 import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.model.OAuthCredentials;
@@ -34,7 +35,8 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 oAuth.getSocialProvider(),
                 oAuth.getSocialId(),
                 mainBadge != null ? member.getMainBadge().id() : null,
-                badgeMembers
+                badgeMembers,
+                member.getProfileImageId().id()
         );
     }
 
@@ -53,7 +55,8 @@ public class MemberConverter extends BaseConverter<MemberEntity, Member> {
                 entity.getStatusMessage(),
                 OAuthCredentials.create(entity.getSocialProvider(), entity.getSocialId()),
                 badges,
-                new BadgeId(entity.getMainBadge())
+                new BadgeId(entity.getMainBadge()),
+                new ProfileImageId(entity.getProfile_image_id())
         );
     }
 }
