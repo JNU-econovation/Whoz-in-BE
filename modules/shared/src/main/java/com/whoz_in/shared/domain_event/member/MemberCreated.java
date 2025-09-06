@@ -19,5 +19,4 @@ public final class MemberCreated extends DomainEvent {
 
     private final Map<UUID, Boolean> badges;
     private final String mainBadge;
-    private final String imageId;
 }

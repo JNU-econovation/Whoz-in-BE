@@ -47,7 +47,7 @@ public final class Member extends AggregateRoot {
                 .oAuthCredentials(oAuthCredentials)
                 .badges(badges)
                 .mainBadge(badgeId)
-                .profileImageId(new ProfileImageId())
+                .profileImageId(null)
                 .build();
         member.register(new MemberCreated(
                 member.getId().id().toString(),
@@ -62,8 +62,7 @@ public final class Member extends AggregateRoot {
                                 (Map.Entry<BadgeId, Boolean> e) -> e.getKey().id(),
                                 Map.Entry::getValue
                         )),
-                badgeId.id().toString(),
-                member.getProfileImageId().id().toString()
+                badgeId.id().toString()
         ));
         return member;
     }
@@ -109,5 +108,9 @@ public final class Member extends AggregateRoot {
             throw BadgeCurrentHidedException.EXCEPTION;
         }
         this.mainBadge = badgeId;
+    }
+
+    public void changeProfileImage() {
+        this.profileImageId = new ProfileImageId();
     }
 }
