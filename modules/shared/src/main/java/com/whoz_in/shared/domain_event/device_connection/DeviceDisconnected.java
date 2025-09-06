@@ -2,7 +2,6 @@ package com.whoz_in.shared.domain_event.device_connection;
 
 import com.whoz_in.shared.domain_event.DomainEvent;
 import java.time.LocalDateTime;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

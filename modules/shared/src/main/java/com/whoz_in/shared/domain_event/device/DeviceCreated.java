@@ -2,7 +2,6 @@ package com.whoz_in.shared.domain_event.device;
 
 import com.whoz_in.shared.domain_event.DomainEvent;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
