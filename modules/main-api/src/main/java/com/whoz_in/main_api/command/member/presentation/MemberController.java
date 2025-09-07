@@ -100,8 +100,8 @@ public class MemberController extends CommandController implements MemberCommand
   }
 
   @DeleteMapping("/api/v1/members/image")
-  public ResponseEntity<SuccessBody<Void>> deleteProfileImage(ProfileImageDelete request) {
-    dispatch(request);
+  public ResponseEntity<SuccessBody<Void>> deleteProfileImage() {
+    dispatch(new ProfileImageDelete());
     return ResponseEntityGenerator.success("기본 프로필 이미지 적용 성공", HttpStatus.OK);
   }
 
