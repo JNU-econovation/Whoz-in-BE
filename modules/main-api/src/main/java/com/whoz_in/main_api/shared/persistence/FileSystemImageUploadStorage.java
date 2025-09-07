@@ -42,6 +42,10 @@ public class FileSystemImageUploadStorage implements ImageUploadStorage {
 
     @Override
     public void delete(ProfileImageId profileImageId) {
+        if (profileImageId == null) {
+            return;
+        }
+
         try {
             String imgId = profileImageId.id().toString();
             Path imageFilePath = Paths.get(uploadFolder, imgId + "." + OUTPUT_FORMAT);
