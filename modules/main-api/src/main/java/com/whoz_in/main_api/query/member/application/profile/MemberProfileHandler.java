@@ -26,7 +26,7 @@ public class MemberProfileHandler implements QueryHandler<MemberProfileGet, Memb
                 });
 
         // url 생성 로직이 S3 등으로 변경되면 ProfileImageService를 수정한다.
-        String profileImageUrl = profileImageUtil.getProfileImageUrl(memberInfoView.profileImageId().toString());
+        String profileImageUrl = profileImageUtil.getProfileImageUrl(memberInfoView.profileImageId());
 
         return new MemberProfile(
                 memberInfoView.memberId(),

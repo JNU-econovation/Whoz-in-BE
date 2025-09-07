@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.shared.utils;
 
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ public class ProfileImageUtil {
      * @param profileImageId 회원 프로필 이미지 ID
      * @return 이미지 URL
      */
-    public String getProfileImageUrl(String profileImageId) {
-        if (profileImageId == null || profileImageId.isBlank()) {
+    public String getProfileImageUrl(UUID profileImageId) {
+        if (profileImageId == null) {
             return DEFAULT_IMAGE_URL;
         }
 
