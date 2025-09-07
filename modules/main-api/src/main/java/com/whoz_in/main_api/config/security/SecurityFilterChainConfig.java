@@ -166,7 +166,7 @@ public class SecurityFilterChainConfig {
                         "/api/v1/feedback/**",
                         "/api/v1/badges",
                         "/api/v1/badges/members",
-                        "/api/v1/members/images"
+                        "/api/v1/members/image"
                 ).requestMatchers(HttpMethod.PATCH,
                         "/api/v1/device/info",
                         "/api/v1/badges/members"

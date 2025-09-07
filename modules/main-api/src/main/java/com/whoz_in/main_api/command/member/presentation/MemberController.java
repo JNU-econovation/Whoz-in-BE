@@ -90,7 +90,7 @@ public class MemberController extends CommandController implements MemberCommand
   }
 
   @Override
-  @PostMapping("/api/v1/members/images")
+  @PostMapping("/api/v1/members/image")
   public ResponseEntity<SuccessBody<Void>> upload(@RequestParam("image") MultipartFile file) throws IOException {
     UploadProfileImage cmd = new UploadProfileImage(file.getBytes());
     dispatch(cmd);
