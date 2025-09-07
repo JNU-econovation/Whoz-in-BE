@@ -1,7 +1,6 @@
 package com.whoz_in.main_api.shared.persistence;
 
 import com.whoz_in.domain.member.model.ProfileImageId;
-import com.whoz_in.main_api.command.member.exception.FailUploadImageException;
 import com.whoz_in.main_api.shared.utils.ImageUploadStorage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -38,6 +37,18 @@ public class FileSystemImageUploadStorage implements ImageUploadStorage {
 
         } catch (IOException e) {
             throw FailUploadImageException.EXCEPTION;
+        }
+    }
+
+    @Override
+    public void delete(ProfileImageId profileImageId) {
+        try {
+            String imgId = profileImageId.id().toString();
+            Path imageFilePath = Paths.get(uploadFolder, imgId + "." + OUTPUT_FORMAT);
+
+            Files.deleteIfExists(imageFilePath);
+        } catch (IOException e) {
+            throw FailDeleteImageException.EXCEPTION;
         }
     }
 
