@@ -109,7 +109,7 @@ public class SecurityFilterChainConfig {
                             "/api/v1/reissue"
                     )
                     // ssid를 기기 등록 토큰으로만 요청하는게 아니라 AT로도 요청할 수 있어야 함. 필터를 새로 만들거나 다른 방법을 생각해봐야 함
-                    .requestMatchers(HttpMethod.GET, "/api/v1/ssid");
+                    .requestMatchers(HttpMethod.GET, "/api/v1/ssid", "/api/v1/members/images/**");
         });
 
         commonConfigurations(httpSecurity);
