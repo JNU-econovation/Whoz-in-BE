@@ -40,7 +40,8 @@ public class MemberInfoJpaViewer implements MemberInfoViewer {
                                 .orElse(Duration.ZERO)
                 ),
                 entity.getMainBadgeName(),
-                entity.getMainBadgeColor()
+                entity.getMainBadgeColor(),
+                entity.getProfileImageId()
         );
     }
 

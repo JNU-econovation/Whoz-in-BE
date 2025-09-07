@@ -113,4 +113,8 @@ public final class Member extends AggregateRoot {
             this.profileImageId = new ProfileImageId();
         }
     }
+
+    public void setDefaultProfileImage() {
+        this.profileImageId = null;
+    }
 }
