@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.command.member.exception;
+package com.whoz_in.main_api.shared.persistence;
 
 import com.whoz_in.shared.WhozinException;
 
