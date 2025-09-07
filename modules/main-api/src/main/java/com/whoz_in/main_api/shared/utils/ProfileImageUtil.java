@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class ProfileImageService {
+public class ProfileImageUtil {
 
     private static final String IMAGE_BASE_URL = "/images/";
     private static final String DEFAULT_IMAGE_URL = "/images/default.png";
