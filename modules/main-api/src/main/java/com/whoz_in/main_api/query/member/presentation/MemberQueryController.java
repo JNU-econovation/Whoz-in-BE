@@ -62,5 +62,4 @@ public class MemberQueryController extends QueryController implements MemberQuer
     public ResponseEntity<SuccessBody<MemberProfile>> getProfileInfo(@PathVariable("memberId") String memberId){
         return ResponseEntityGenerator.success(ask(new MemberProfileGet(UUID.fromString(memberId))), CrudResponseCode.READ);
     }
-
 }

@@ -12,6 +12,7 @@ public record MemberProfile(
         String memberName,
         String position,
         @JsonSerialize(using = HourSerializer.class)
-        Duration totalActiveTime
+        Duration totalActiveTime,
+        String profileImageUrl
 ) implements Response {
 }
