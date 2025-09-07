@@ -171,7 +171,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/device/info",
                         "/api/v1/badges/members"
                 ).requestMatchers(HttpMethod.DELETE,
-                        "/api/v1/device"
+                        "/api/v1/device",
+                        "/api/v1/members/image"
                 )
         ).authorizeHttpRequests(auth-> auth.anyRequest().authenticated());
 
