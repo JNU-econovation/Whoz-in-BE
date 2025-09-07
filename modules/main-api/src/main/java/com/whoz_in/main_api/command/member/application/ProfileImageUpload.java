@@ -17,7 +17,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
-public record UploadProfileImage(byte[] bytes) implements Command {
+public record ProfileImageUpload(byte[] bytes) implements Command {
     private static final int MAX_SIZE = 2 * 1024 * 1024; // 2MB
     private static final int MIN_SIZE = 1024; // 1KB
     private static final int MAX_DIMENSION = 5000; // 5000px
@@ -34,7 +34,7 @@ public record UploadProfileImage(byte[] bytes) implements Command {
             {0x23, 0x21} // 스크립트 파일 (#!)
     };
 
-    public UploadProfileImage {
+    public ProfileImageUpload {
         valideFileNotEmpty(bytes);
         validateFileSize(bytes);
         validateMaliciousSignatures(bytes);

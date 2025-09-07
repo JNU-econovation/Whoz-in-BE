@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Handler
 @RequiredArgsConstructor
-public class UploadProfileImageHandler implements CommandHandler<UploadProfileImage, Void> {
+public class ProfileImageUploadHandler implements CommandHandler<ProfileImageUpload, Void> {
     private final RequesterInfo requesterInfo;
     private final MemberFinderService memberFinderService;
     private final ImageUploadStorage imageUploadStorage;
@@ -22,7 +22,7 @@ public class UploadProfileImageHandler implements CommandHandler<UploadProfileIm
 
     @Transactional
     @Override
-    public Void handle(UploadProfileImage cmd) {
+    public Void handle(ProfileImageUpload cmd) {
         MemberId requesterId = requesterInfo.getMemberId();
         Member member = memberFinderService.find(requesterId);
         member.initProfileImageIdIfAbsent();
