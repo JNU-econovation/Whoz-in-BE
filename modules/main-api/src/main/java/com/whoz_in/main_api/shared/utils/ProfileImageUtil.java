@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 public class ProfileImageUtil {
 
     private static final String IMAGE_BASE_URL = "/images/";
-    private static final String DEFAULT_IMAGE_URL = "/images/default.png";
     private static final String IMAGE_EXTENSION = ".jpg";
 
     /**
@@ -19,7 +18,7 @@ public class ProfileImageUtil {
      */
     public String getProfileImageUrl(UUID profileImageId) {
         if (profileImageId == null) {
-            return DEFAULT_IMAGE_URL;
+            return null;
         }
 
         return IMAGE_BASE_URL + profileImageId + IMAGE_EXTENSION;
