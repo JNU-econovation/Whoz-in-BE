@@ -17,7 +17,7 @@ public class OpenApiConfig {
                 .components(new Components())
                 .info(apiInfo())
                 .servers(List.of(
-                        new Server().url("https://www.whozin.econovation.kr")
+                        new Server().url("https://be.whozin.econovation.kr")
                                 .description("운영 서버"),
                         new Server().url("http://localhost:2470")
                                 .description("로컬 개발 서버")
