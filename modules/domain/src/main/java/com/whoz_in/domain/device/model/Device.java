@@ -28,7 +28,7 @@ public final class Device extends AggregateRoot {
     private final Set<DeviceInfo> deviceInfos;
     @Getter @Nullable private LocalDateTime deactivatedAt;
 
-    public boolean isDeactivated() {
+    private boolean isDeactivated() {
         return deactivatedAt != null;
     }
 
