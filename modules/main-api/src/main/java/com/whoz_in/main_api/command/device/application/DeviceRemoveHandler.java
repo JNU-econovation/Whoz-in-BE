@@ -3,6 +3,8 @@ package com.whoz_in.main_api.command.device.application;
 import com.whoz_in.domain.device.DeviceRepository;
 import com.whoz_in.domain.device.model.Device;
 import com.whoz_in.domain.device.service.DeviceFinderService;
+import com.whoz_in.domain.device.service.DeviceOwnershipService;
+import com.whoz_in.domain.member.model.MemberId;
 import com.whoz_in.domain.member.service.MemberFinderService;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.main_api.command.shared.application.CommandHandler;
@@ -19,12 +21,15 @@ public class DeviceRemoveHandler implements CommandHandler<DeviceRemove, Void> {
     private final DeviceRepository deviceRepository;
     private final DeviceFinderService deviceFinderService;
     private final EventBus eventBus;
+    private final DeviceOwnershipService deviceOwnershipService;
+
 
     @Transactional
     @Override
     public Void handle(DeviceRemove command) {
-        memberFinderService.mustExist(requesterInfo.getMemberId());
+        MemberId memberId = requesterInfo.getMemberId();
         Device device = deviceFinderService.find(command.getDeviceId());
+        deviceOwnershipService.validateIsMine(device,memberId);
         device.deactivate();
         deviceRepository.save(device);
         eventBus.publish(device.pullDomainEvents());
