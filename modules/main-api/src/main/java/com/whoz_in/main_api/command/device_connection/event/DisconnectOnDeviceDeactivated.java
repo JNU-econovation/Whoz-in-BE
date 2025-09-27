@@ -6,6 +6,7 @@ import com.whoz_in.domain.device.model.DeviceId;
 import com.whoz_in.domain.device_connection.DeviceConnectionRepository;
 import com.whoz_in.domain.shared.event.EventBus;
 import com.whoz_in.shared.domain_event.device.DeviceDeactivated;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -19,7 +20,7 @@ public class DisconnectOnDeviceDeactivated {
 
     @TransactionalEventListener(phase = BEFORE_COMMIT) // 삭제 시 연결 해제 필수라서 같은 트랜잭션으로 처리
     public void handle(DeviceDeactivated event) {
-        deviceConnectionRepository.findConnectedByDeviceId(new DeviceId(event.getDeviceId()))
+        deviceConnectionRepository.findConnectedByDeviceId(new DeviceId(UUID.fromString(event.getDeviceId())))
                 .ifPresent(conn -> {
                     conn.disconnect(event.getOccurredOn());
                     deviceConnectionRepository.save(conn);

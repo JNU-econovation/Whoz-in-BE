@@ -1,5 +1,6 @@
 package com.whoz_in.domain.member.model;
 
+import com.whoz_in.domain.member.exception.NoPositionException;
 import java.util.Arrays;
 import lombok.Getter;
 
@@ -23,6 +24,6 @@ public enum Position {
         return Arrays.stream(Position.values())
                 .filter(pos -> pos.getName().equalsIgnoreCase(position))
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("no position"));
+                .orElseThrow(() -> NoPositionException.EXCEPTION);
     }
 }

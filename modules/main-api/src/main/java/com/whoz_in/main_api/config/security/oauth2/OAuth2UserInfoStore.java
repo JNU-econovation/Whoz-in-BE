@@ -2,6 +2,7 @@ package com.whoz_in.main_api.config.security.oauth2;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.whoz_in.main_api.command.member.exception.NotFoundSocailLoginInfoException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class OAuth2UserInfoStore {
         UUID uuidKey = UUID.fromString(key);
         OAuth2UserInfo userInfo = store.asMap().remove(uuidKey);
         if (userInfo == null) {
-            throw new IllegalArgumentException("소셜 로그인 정보를 찾을 수 없습니다.");
+            throw NotFoundSocailLoginInfoException.EXCEPTION;
         }
         return userInfo;
     }

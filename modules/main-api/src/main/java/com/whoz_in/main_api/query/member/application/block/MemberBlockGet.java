@@ -1,5 +1,6 @@
 package com.whoz_in.main_api.query.member.application.block;
 
+import com.whoz_in.main_api.query.member.exception.InvalidDateException;
 import com.whoz_in.main_api.query.shared.application.Query;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -17,7 +18,7 @@ public record MemberBlockGet(
         LocalDate requested = LocalDate.of(year, month, 1);
         LocalDate thisMonth = LocalDate.of(today.getYear(), today.getMonthValue(), 1);
         if (requested.isAfter(thisMonth)) {
-            throw new IllegalArgumentException("아직 %d년 %d월입니다.".formatted(thisMonth.getYear(), thisMonth.getMonthValue()));
+            throw InvalidDateException.of(thisMonth.getYear(), thisMonth.getMonthValue());
         }
         return requested;
     }

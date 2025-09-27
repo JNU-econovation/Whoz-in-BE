@@ -12,7 +12,8 @@ public record MemberInfoView(
         String statusMessage,
         Duration totalActiveTime,
         String mainBadgeName,
-        String mainBadgeColor
+        String mainBadgeColor,
+        UUID profileImageId
 ) implements View {
 
 }

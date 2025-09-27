@@ -7,7 +7,9 @@ import com.whoz_in.main_api.command.member.application.LogOut;
 import com.whoz_in.main_api.command.member.application.LoginSuccessTokens;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2Login;
 import com.whoz_in.main_api.command.member.application.MemberOAuth2SignUp;
+import com.whoz_in.main_api.command.member.application.ProfileImageDelete;
 import com.whoz_in.main_api.command.member.application.Reissue;
+import com.whoz_in.main_api.command.member.application.ProfileImageUpload;
 import com.whoz_in.main_api.command.member.presentation.docs.MemberCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
@@ -23,11 +25,15 @@ import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class MemberController extends CommandController implements MemberCommandApi {
@@ -83,6 +89,20 @@ public class MemberController extends CommandController implements MemberCommand
     removeTokenCookies(response);
 
     return ResponseEntityGenerator.success("로그아웃 성공", HttpStatus.OK);
+  }
+
+  @Override
+  @PostMapping("/api/v1/members/image")
+  public ResponseEntity<SuccessBody<Void>> upload(@RequestParam("image") MultipartFile file) throws IOException {
+    ProfileImageUpload cmd = new ProfileImageUpload(file.getBytes());
+    dispatch(cmd);
+    return ResponseEntityGenerator.success("프로필 이미지 업로드 성공", HttpStatus.CREATED);
+  }
+
+  @DeleteMapping("/api/v1/members/image")
+  public ResponseEntity<SuccessBody<Void>> deleteProfileImage() {
+    dispatch(new ProfileImageDelete());
+    return ResponseEntityGenerator.success("기본 프로필 이미지 적용 성공", HttpStatus.OK);
   }
 
   private void removeTokenCookies(HttpServletResponse response) {

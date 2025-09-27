@@ -28,8 +28,9 @@ import org.hibernate.annotations.UuidGenerator;
         + "m.status_message, "
         + "b.id AS main_badge_id, "
         + "b.name AS main_badge_name, "
-        + "b.color_code AS main_badge_color, "
-        + "a.active_time AS total_active_time "
+        + "b.color_string AS main_badge_color, "
+        + "a.active_time AS total_active_time, "
+        + "m.profile_image_id "
         + "FROM member_entity m "
         + "LEFT JOIN badge_entity b ON m.main_badge = b.id "
         + "LEFT JOIN activity_history a ON m.id = a.member_id AND a.time_unit = 'TOTAL'"
@@ -65,6 +66,9 @@ public class Member {
 
     @Column(name = "total_active_time")
     private Duration totalActiveTime;
+
+    @Column(name = "profile_image_id")
+    private UUID profileImageId;
 
     /**
      * {@link YesterdayActivityRecorder}가

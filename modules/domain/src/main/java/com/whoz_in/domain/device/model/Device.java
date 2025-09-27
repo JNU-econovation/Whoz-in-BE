@@ -28,14 +28,14 @@ public final class Device extends AggregateRoot {
     private final Set<DeviceInfo> deviceInfos;
     @Getter @Nullable private LocalDateTime deactivatedAt;
 
-    public boolean isDeactivated() {
+    private boolean isDeactivated() {
         return deactivatedAt != null;
     }
 
     public void deactivate(){
         if (isDeactivated()) return;
         this.deactivatedAt = LocalDateTime.now();
-        this.register(new DeviceDeactivated(id.id(), memberId.id()));
+        this.register(new DeviceDeactivated(id.id().toString(), memberId.id().toString()));
     }
 
     public Set<DeviceInfo> getDeviceInfos(){
@@ -78,8 +78,8 @@ public final class Device extends AggregateRoot {
                 .deactivatedAt(null)
                 .build();
         device.register(new DeviceCreated(
-                device.getId().id(),
-                device.getMemberId().id(),
+                device.getId().id().toString(),
+                device.getMemberId().id().toString(),
                 device.getDeviceName(),
                 device.getDeviceInfos().stream()
                         .map(info -> new DeviceInfoPayload(

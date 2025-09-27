@@ -3,6 +3,7 @@ package com.whoz_in.main_api.command.badge.presentation;
 import com.whoz_in.main_api.command.badge.application.BadgeAttach;
 import com.whoz_in.main_api.command.badge.application.BadgeRegister;
 import com.whoz_in.main_api.command.badge.application.BadgeSwitchVisibility;
+import com.whoz_in.main_api.command.badge.application.MainBadgeChange;
 import com.whoz_in.main_api.command.badge.presentation.docs.BadgeCommandApi;
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
@@ -40,5 +41,12 @@ public class BadgeCommandController extends CommandController implements BadgeCo
     public ResponseEntity<SuccessBody<Void>> update(@RequestBody BadgeSwitchVisibility request) {
         dispatch(request);
         return ResponseEntityGenerator.success( "뱃지 보여주기 또는 숨기기 변환 완료", HttpStatus.OK);
+    }
+
+    @Override
+    @PatchMapping("/badges/main")
+    public ResponseEntity<SuccessBody<Void>> changeMainBadge(@RequestBody MainBadgeChange request) {
+        dispatch(request);
+        return ResponseEntityGenerator.success("메인 뱃지 변경 완료", HttpStatus.OK);
     }
 }

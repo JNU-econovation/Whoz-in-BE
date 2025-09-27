@@ -22,7 +22,7 @@ public final class Badge extends AggregateRoot {
         badge.register(new BadgeCreated(badge.getBadgeInfo().getName(),
                 badge.getBadgeInfo().getBadgeType().toString(),
                 badge.getBadgeInfo().getCreator().id().toString(),
-                badge.getBadgeInfo().getColorCode(),
+                badge.getBadgeInfo().getColorString(),
                 badge.getBadgeInfo().getDescription()));
         return badge;
     }

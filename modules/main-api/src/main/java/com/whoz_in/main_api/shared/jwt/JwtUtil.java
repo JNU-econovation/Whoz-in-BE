@@ -4,6 +4,8 @@ package com.whoz_in.main_api.shared.jwt;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ISSUER;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_TYPE;
 
+import com.whoz_in.main_api.command.member.exception.ExpiredTokenException;
+import com.whoz_in.main_api.command.member.exception.InvalidTokenTyepException;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -48,11 +50,11 @@ public class JwtUtil {
     //TODO: 이걸 여기다 둘 필요가 있을까
     public void ensureTokenTypeMatches(Claims claims, TokenType tokenType) {
         if (TokenType.findByName(getClaim(claims, TOKEN_TYPE)) != tokenType)
-            throw new IllegalArgumentException("맞지 않은 토큰 타입");
+            throw InvalidTokenTyepException.EXCEPTION;
     }
 
     public void ensureNotExpired(Claims claims){
         if (getExpiryDate(claims).before(new Date()))
-            throw new IllegalArgumentException("만료된 토큰");
+            throw ExpiredTokenException.EXCEPTION;
     }
 }

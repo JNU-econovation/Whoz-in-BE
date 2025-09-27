@@ -18,7 +18,7 @@ import org.hibernate.annotations.Synchronize;
         + "bm.badge_id, "
         + "b.id, "
         + "b.name, "
-        + "b.color_code, "
+        + "b.color_string, "
         + "b.badge_type, "
         + "b.created_at, "
         + "b.description, "
@@ -37,8 +37,8 @@ public class BadgeMember {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "color_code")
-    private String colorCode;
+    @Column(name = "color_string")
+    private String colorString;
 
     @Column(name = "badge_type")
     private String badgeType;

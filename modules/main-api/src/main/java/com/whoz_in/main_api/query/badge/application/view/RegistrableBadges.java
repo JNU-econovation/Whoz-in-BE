@@ -10,7 +10,7 @@ public record RegistrableBadges(List<RegistrableBadge> registerableBadge)
     public record RegistrableBadge(
             UUID badgeId,
             String name,
-            String colorCode,
+            String colorString,
             String description
     ) {}
 }
