@@ -35,9 +35,11 @@ services:
       - APP_FILE_BASE_URL=http://localhost:2470
     volumes:
       - mysql-data:/var/lib/mysql # 데이터 백업
+      - ${BASE_BACKUP_DIR}/mysql-binlogs:/var/log/mysql # binlog 위치 마운트
       - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     command: [
       "--character-set-server=utf8mb4",
+      "--log-bin=/var/log/mysql/mysql-bin", # binlog 외부 저장
       "--binlog-expire-logs-seconds=604800" # binlog 자동 삭제 (7일)
     ]
     ports: # network-api가 접근하므로 열어둠
