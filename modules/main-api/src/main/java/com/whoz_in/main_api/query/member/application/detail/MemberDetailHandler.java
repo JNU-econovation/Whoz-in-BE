@@ -4,6 +4,7 @@ import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
 import com.whoz_in.main_api.query.shared.application.QueryHandler;
 import com.whoz_in.main_api.shared.application.Handler;
+import com.whoz_in.main_api.shared.utils.ProfileImageUtil;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import lombok.RequiredArgsConstructor;
 
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 public class MemberDetailHandler implements QueryHandler<MemberDetailGet, MemberDetail> {
     private final MemberInfoViewer memberInfoViewer;
     private final RequesterInfo requesterInfo;
+    private final ProfileImageUtil profileImageUtil;
 
     @Override
     public MemberDetail handle(MemberDetailGet query) {
@@ -22,7 +24,8 @@ public class MemberDetailHandler implements QueryHandler<MemberDetailGet, Member
                 memberInfoView.generation(),
                 memberInfoView.name(),
                 memberInfoView.position(),
-                memberInfoView.statusMessage()
+                memberInfoView.statusMessage(),
+                profileImageUtil.getProfileImageUrl(memberInfoView.profileImageId())
         );
     }
 }

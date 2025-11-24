@@ -47,4 +47,4 @@ infra-jpa:
     enabled: true
 
 file:
-  path: ${FILE_PATH:/app/uploads/images}
+  path: ${FILE_IMAGE_PATH}

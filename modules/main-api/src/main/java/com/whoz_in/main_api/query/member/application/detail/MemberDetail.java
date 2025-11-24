@@ -8,5 +8,6 @@ public record MemberDetail(
         int generation,
         String name,
         String position,
-        String statusMessage
+        String statusMessage,
+        String profileImageUrl
 ) implements Response {}
