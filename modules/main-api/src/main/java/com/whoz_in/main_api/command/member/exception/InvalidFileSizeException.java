@@ -5,6 +5,6 @@ import com.whoz_in.shared.WhozinException;
 public class InvalidFileSizeException extends WhozinException {
     public static final InvalidFileSizeException EXCEPTION = new InvalidFileSizeException();
     private InvalidFileSizeException() {
-        super("6004", "파일 크기는 최소 1KB이상 최대 2MB까지만 가능합니다.");
+        super("6004", "파일 크기는 최소 1KB이상 최대 10MB까지만 가능합니다.");
     }
 }

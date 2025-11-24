@@ -18,7 +18,7 @@ import javax.imageio.ImageReader;
 import javax.imageio.stream.ImageInputStream;
 
 public record ProfileImageUpload(byte[] bytes) implements Command {
-    private static final int MAX_SIZE = 2 * 1024 * 1024; // 2MB
+    private static final int MAX_SIZE = 10 * 1024 * 1024; // 10MB
     private static final int MIN_SIZE = 1024; // 1KB
     private static final int MAX_DIMENSION = 5000; // 5000px
     private static final int MIN_DIMENSION = 50; // 50px
