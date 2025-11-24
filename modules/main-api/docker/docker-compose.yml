@@ -9,6 +9,7 @@ services:
       - .env
     environment:
       # 도커에 맞게 설정 덮어씌움
+      - FILE_IMAGE_PATH=/app/uploads/images
       - INFRA_JPA.DB_URL=jdbc:mysql://command-db:3306/whozin?useSSL=false&allowPublicKeyRetrieval=true
       - INFRA_JPA.DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
@@ -31,8 +32,6 @@ services:
       - MYSQL_ROOT_HOST=% #main-api #TODO: 외부에선 접속 못하도록 하기
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=whozin
-      - APP_FILE_UPLOAD_DIR=/app/uploads/images
-      - APP_FILE_BASE_URL=http://localhost:2470
     volumes:
       - mysql-data:/var/lib/mysql # 데이터 백업
       - ${BASE_BACKUP_DIR}/mysql-binlogs:/var/log/mysql # binlog 위치 마운트
