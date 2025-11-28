@@ -159,7 +159,8 @@ public class SecurityFilterChainConfig {
                         "/api/v1/internal-access-url",
                         "/api/v1/badges",
                         "/api/v1/badges/register",
-                        "/api/v1/badges/members"
+                        "/api/v1/badges/members",
+                        "/api/v1/rankings"
                 ).requestMatchers(HttpMethod.POST,
                         "/api/v1/device-register-token",
                         "/api/v1/logout",
