@@ -10,6 +10,7 @@ import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -23,12 +24,14 @@ public class MonitorModeSwitcher {
     private final String disableInterfaceCommand;
     private final String setMonitorModeCommand;
     private final String enableInterfaceCommand;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public MonitorModeSwitcher(NetworkInterfaceProfileConfig config) {
+    public MonitorModeSwitcher(NetworkInterfaceProfileConfig config, ApplicationEventPublisher eventPublisher) {
         this.interfaceName = config.getMonitorProfile().interfaceName();
         this.disableInterfaceCommand = "sudo -S ip link set %s down".formatted(interfaceName);
         this.setMonitorModeCommand = "sudo -S iw dev %s set type monitor".formatted(interfaceName);
         this.enableInterfaceCommand = "sudo -S ip link set %s up".formatted(interfaceName);
+        this.eventPublisher = eventPublisher;
     }
 
     // 이미 모니터 모드였는지 확인 안함
@@ -37,6 +40,10 @@ public class MonitorModeSwitcher {
         TransientProcess.create(disableInterfaceCommand).waitForTermination();
         TransientProcess.create(setMonitorModeCommand).waitForTermination();
         TransientProcess.create(enableInterfaceCommand).waitForTermination();
+
+        eventPublisher.publishEvent(
+                new MonitorModeEnabledEvent(this.interfaceName)
+        );
     }
 
     @EventListener
