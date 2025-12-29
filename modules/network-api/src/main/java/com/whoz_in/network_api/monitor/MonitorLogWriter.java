@@ -4,10 +4,12 @@ import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
+import com.whoz_in.network_api.system.MonitorModeEnabledEvent;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +43,14 @@ public class MonitorLogWriter {
     }
 
     // TODO: 모니터 모드로 변경됨 이벤트 받으면 재실행
+    @EventListener
+    public void handle(MonitorModeEnabledEvent event) {
+        log.info("[monitor] {} 모니터 모드 전환 이벤트 수신 → tshark 재실행",
+                event.interfaceName());
+        if (!this.process.isAlive()) return;
+        this.process.restart();
+        log.info("[monitor] tshark가 재실행되었습니다.");
+    }
 
     // 오랫동안 켜진 tshark는 패킷을 제대로 잡지 못하는것으로 확인되어 오전 6시에 재실행한다.
     @Scheduled(cron = "0 0 6 * * *")
