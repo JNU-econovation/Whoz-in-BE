@@ -4,12 +4,13 @@ import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceS
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
 import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
@@ -32,6 +33,12 @@ public class MonitorModeSwitcher {
         this.setMonitorModeCommand = "sudo -S iw dev %s set type monitor".formatted(interfaceName);
         this.enableInterfaceCommand = "sudo -S ip link set %s up".formatted(interfaceName);
         this.eventPublisher = eventPublisher;
+    }
+
+    @EventListener
+    public void onApplicationReady(ApplicationReadyEvent event) {
+        log.info("애플리케이션 준비 완료. 모든 리스너 등록됨");
+        switchToMonitor();
     }
 
     // 이미 모니터 모드였는지 확인 안함
