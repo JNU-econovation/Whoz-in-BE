@@ -62,7 +62,7 @@ public class MonitorLogWriter {
     @Scheduled(initialDelay = 10000, fixedDelay = 3000)
     private void saveLogs(){
         //프로세스 죽었으면 기록 안함
-        if (!process.isAlive()) return;
+        if (process == null || !process.isAlive()) return;
 
         Set<String> macs = new HashSet<>();
         process.readLines().stream()
