@@ -18,22 +18,45 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class MonitorLogWriter {
-    private final TsharkProcess process;
+    private TsharkProcess process;
     private final String room;
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
+    private final InterfaceModeChecker modeChecker;
+    private final NetworkInterfaceProfileConfig config;
 
     public MonitorLogWriter(@Value("${room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config, InterfaceModeChecker modeChecker) {
         this.parser = parser;
         this.repository = repository;
         this.room = room;
+        this.config = config;
+        this.modeChecker = modeChecker;
+    }
+
+    @EventListener
+    public void onMonitorModeEnabled(MonitorModeEnabledEvent event) {
         NetworkInterfaceProfile profile = config.getMonitorProfile();
 
-        this.process = TsharkProcess.create(
-                profile.command(),
-                profile.interfaceName(),
-                modeChecker
-        );
+        // 다른 인터페이스의 이벤트면 무시
+        if (!profile.interfaceName().equals(event.interfaceName())) {
+            return;
+        }
+
+        if (process != null && process.isAlive()) return;
+
+        // 첫 시작 또는 종료된 프로세스 재생성
+        try {
+            log.info("[monitor] {} 모니터 모드 활성화됨. TsharkProcess 생성 시작", event.interfaceName());
+            this.process = TsharkProcess.create(
+                    profile.command(),
+                    profile.interfaceName(),
+                    modeChecker
+            );
+            log.info("[monitor] TsharkProcess 생성 완료");
+        } catch (Exception e) {
+            log.error("[monitor] TsharkProcess 생성 실패: {}", e.getMessage());
+            // 애플리케이션은 계속 실행, 다음 이벤트나 자동 복구를 기다림
+        }
     }
 
     @Scheduled(initialDelay = 10000, fixedDelay = 3000)
@@ -48,16 +71,6 @@ public class MonitorLogWriter {
         macs.remove("");
         log.info("[monitor] mac to save: " + macs.size());
         repository.saveAll(macs.stream().map(mac -> new MonitorLog(mac, room)).toList());
-    }
-
-    // TODO: 모니터 모드로 변경됨 이벤트 받으면 재실행
-    @EventListener
-    public void handle(MonitorModeEnabledEvent event) {
-        log.info("[monitor] {} 모니터 모드 전환 이벤트 수신 → tshark 재실행",
-                event.interfaceName());
-        if (!this.process.isAlive()) return;
-        this.process.restart();
-        log.info("[monitor] tshark가 재실행되었습니다.");
     }
 
     // 오랫동안 켜진 tshark는 패킷을 제대로 잡지 못하는것으로 확인되어 오전 6시에 재실행한다.
