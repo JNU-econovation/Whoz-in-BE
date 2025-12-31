@@ -30,7 +30,7 @@ public abstract class AbstractProcess {
             if (command.isSudoCommand()) {
                 enterSudoPassword();
             }
-        } catch (Exception e) {
+        } catch (IOException | IllegalStateException e) {
             throw new RuntimeException(getClass().getSimpleName() + " 실행 실패: " + command, e);
         }
     }
