@@ -22,9 +22,13 @@ public class SystemInterfaceModeDetector implements InterfaceModeChecker{
                 return false;
             }
 
-            boolean isMonitor = ni.getWirelessInfo().mode() == WirelessMode.MONITOR;
-            log.debug("[ModeDetector] {} 모드: {}", interfaceName,
-                    ni.getWirelessInfo().mode());
+            WirelessInfo wirelessInfo = ni.getWirelessInfo();
+            if (wirelessInfo == null) {
+                log.warn("[ModeDetector] {} 인터페이스의 무선 정보를 가져올 수 없음", interfaceName);
+                return false;
+            }
+            boolean isMonitor = wirelessInfo.mode() == WirelessMode.MONITOR;
+            log.debug("[ModeDetector] {} 모드: {}", interfaceName, wirelessInfo.mode());
 
             return isMonitor;
 
