@@ -54,8 +54,14 @@ public class MonitorModeSwitcher {
         // 모드가 바꼈거나 새로 추가됐을때
         if (event.status() == MODE_CHANGED || event.status() == ADDED) {
             NetworkInterface now = event.now();
+            if (now.getWirelessInfo().mode() == MONITOR) {
+                log.info("[MonitorModeSwitcher] {} 모니터 모드 전환 확인됨", this.interfaceName);
+                eventPublisher.publishEvent(
+                        new MonitorModeEnabledEvent(this.interfaceName)
+                );
+            }
             // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
-            if (this.interfaceName.equals(now.getName()) && now.getWirelessInfo().mode() != MONITOR){
+            else if (this.interfaceName.equals(now.getName()) && now.getWirelessInfo().mode() != MONITOR){
                 log.info("{}의 모드가 현재 {}입니다. 모니터 모드로 전환합니다.",
                         now.getName(), now.getWirelessInfo().mode());
                 switchToMonitor();
