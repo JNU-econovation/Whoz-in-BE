@@ -2,7 +2,9 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
+import com.whoz_in.network_api.common.network_interface.InterfaceModeChecker;
+import com.whoz_in.network_api.common.process.TsharkProcess;
+import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.system.MonitorModeEnabledEvent;
 import java.util.HashSet;
@@ -16,16 +18,22 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class MonitorLogWriter {
-    private final ResilientContinuousProcess process;
+    private final TsharkProcess process;
     private final String room;
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;
 
-    public MonitorLogWriter(@Value("${room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config) {
+    public MonitorLogWriter(@Value("${room-name}") String room, MonitorLogParser parser, MonitorLogRepository repository, NetworkInterfaceProfileConfig config, InterfaceModeChecker modeChecker) {
         this.parser = parser;
         this.repository = repository;
         this.room = room;
-        this.process = ResilientContinuousProcess.create(config.getMonitorProfile().command());
+        NetworkInterfaceProfile profile = config.getMonitorProfile();
+
+        this.process = TsharkProcess.create(
+                profile.command(),
+                profile.interfaceName(),
+                modeChecker
+        );
     }
 
     @Scheduled(initialDelay = 10000, fixedDelay = 3000)
