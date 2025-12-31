@@ -76,7 +76,7 @@ public class MonitorLogWriter {
     // 오랫동안 켜진 tshark는 패킷을 제대로 잡지 못하는것으로 확인되어 오전 6시에 재실행한다.
     @Scheduled(cron = "0 0 6 * * *")
     private void refreshTshark(){
-        if (!this.process.isAlive()) return;
+        if (process == null || !this.process.isAlive()) return;
         this.process.restart();
         log.info("[monitor] tshark가 재실행되었습니다.");
     }
