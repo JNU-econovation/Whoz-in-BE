@@ -47,10 +47,6 @@ public class MonitorModeSwitcher {
         TransientProcess.create(disableInterfaceCommand).waitForTermination();
         TransientProcess.create(setMonitorModeCommand).waitForTermination();
         TransientProcess.create(enableInterfaceCommand).waitForTermination();
-
-        eventPublisher.publishEvent(
-                new MonitorModeEnabledEvent(this.interfaceName)
-        );
     }
 
     @EventListener
