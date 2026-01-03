@@ -34,7 +34,7 @@ public class TsharkProcess extends ResilientContinuousProcess {
         // 매번 init 시에 모니터 모드 확인
         if (!isMonitorMode()) {
             log.warn("[TsharkProcess] {}가 모니터 모드가 아닙니다. tshark 실행 중단", interfaceName);
-            throw new IllegalStateException("Interface " + interfaceName + " is not in monitor mode");
+            return;
         }
 
         log.info("[TsharkProcess] 모니터 모드 확인 완료. tshark 시작");
