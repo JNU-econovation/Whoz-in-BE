@@ -32,6 +32,9 @@ public class ResilientContinuousProcess extends ContinuousProcess {
     protected void init() throws IOException{
         super.init(); // 프로세스 시작
         scheduleRestart(0); // 재시작 스케줄링
+        if (shouldStartProcess()) {
+            super.init();
+        }
     }
 
     // 주기적으로 프로세스가 종료됐는지 확인하고 재실행함. 계속 종료된다면 확인하고 재실행하는 간격을 늘림
@@ -60,5 +63,9 @@ public class ResilientContinuousProcess extends ContinuousProcess {
         scheduler.shutdownNow(); // 재시작 스케줄러 종료
         super.terminate(); // 프로세스 종료
         backoffCount = 0;
+    }
+
+    protected boolean shouldStartProcess() {
+        return true;
     }
 }
