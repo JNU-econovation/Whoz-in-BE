@@ -1,46 +1,63 @@
 package com.whoz_in.network_api.common.process;
 
-import com.whoz_in.network_api.common.network_interface.InterfaceModeChecker;
+import com.whoz_in.network_api.common.network_interface.NetworkInterface;
+import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
+import com.whoz_in.network_api.common.network_interface.WirelessMode;
 import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
-public class TsharkProcess extends ResilientContinuousProcess{
+public class TsharkProcess extends ResilientContinuousProcess {
     private final String interfaceName;
-    private final InterfaceModeChecker modeChecker;
+    private final NetworkInterfaceManager networkInterfaceManager;
+    private boolean canStart = false;
 
-    TsharkProcess(String command, String interfaceName, InterfaceModeChecker modeChecker) {
+    private TsharkProcess(String command, String interfaceName, NetworkInterfaceManager networkInterfaceManager) {
         super(command);
         this.interfaceName = interfaceName;
-        this.modeChecker = modeChecker;
+        this.networkInterfaceManager = networkInterfaceManager;
     }
 
-    public static TsharkProcess create(String command, String interfaceName, InterfaceModeChecker modeChecker) {
-        TsharkProcess tshark = new TsharkProcess(command, interfaceName, modeChecker);
-        tshark.start();
-        return tshark;
+    public static TsharkProcess create(String command, String interfaceName, NetworkInterfaceManager networkInterfaceManager) {
+        TsharkProcess process = new TsharkProcess(command, interfaceName, networkInterfaceManager);
+        try {
+            process.start();
+        } catch (Exception e) {
+            log.warn("[TsharkProcess] 초기 시작 실패: {}", e.getMessage());
+            // 시작 실패해도 객체는 반환 (나중에 재시도 가능)
+        }
+        return process;
     }
 
     @Override
     protected void init() throws IOException {
         // 모니터 모드 확인
-        if (!modeChecker.isMonitorMode(interfaceName)) {
-            String message = String.format(
-                    "[TsharkProcess] %s가 모니터 모드가 아닙니다. tshark를 시작하지 않습니다.",
-                    interfaceName
-            );
-            log.warn(message);
-            throw new IllegalStateException(message);
+        if (!isMonitorMode()) {
+            log.warn("[TsharkProcess] {}가 모니터 모드가 아닙니다. tshark 실행 중단", interfaceName);
+            canStart = false;
+            throw new IllegalStateException("Interface " + interfaceName + " is not in monitor mode");
         }
 
-        log.info("[TsharkProcess] {}가 모니터 모드 확인됨. tshark 시작", interfaceName);
-        super.init(); // 프로세스 시작
+        canStart = true;
+        log.info("[TsharkProcess] 모니터 모드 확인 완료. tshark 시작");
+        super.init();
     }
 
     @Override
-    public synchronized void restart() {
-        log.info("[TsharkProcess] 재시작 시도. 모니터 모드 재확인");
-        super.restart();
+    public boolean isAlive() {
+        return canStart && super.isAlive();
+    }
+
+    private boolean isMonitorMode() {
+        try {
+            NetworkInterface networkInterface = networkInterfaceManager.getByName(interfaceName);
+            return networkInterface != null &&
+                    networkInterface.getWirelessInfo() != null &&
+                    networkInterface.getWirelessInfo().mode() == WirelessMode.MONITOR;
+        } catch (Exception e) {
+            log.error("[TsharkProcess] 모니터 모드 확인 실패: {}", e.getMessage());
+            return false;
+        }
     }
 }
