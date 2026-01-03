@@ -2,6 +2,7 @@ package com.whoz_in.network_api.system;
 
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
 
 import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
@@ -44,7 +45,7 @@ public class MonitorModeSwitcher {
         if (event.status() == MODE_CHANGED || event.status() == ADDED) {
             NetworkInterface now = event.now();
             // 모니터 모드 인터페이스이고 모니터 모드가 아닐 때
-            if (this.interfaceName.equals(now.getName())){
+            if (this.interfaceName.equals(now.getName()) && now.getWirelessInfo().mode() != MONITOR){
                 log.info("{}의 모드가 현재 {}입니다. 모니터 모드로 전환합니다.",
                         now.getName(), now.getWirelessInfo().mode());
                 switchToMonitor();
