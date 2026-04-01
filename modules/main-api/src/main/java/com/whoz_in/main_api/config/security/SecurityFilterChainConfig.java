@@ -3,6 +3,7 @@ package com.whoz_in.main_api.config.security;
 import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INTERNAL_PREFIX;
 
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
+import com.whoz_in.main_api.config.security.oauth2.KakaoPromptAuthorizationRequestResolver;
 import com.whoz_in.main_api.config.security.oauth2.LoginFailureHandler;
 import com.whoz_in.main_api.config.security.oauth2.LoginSuccessHandler;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityFilterChainConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final ClientRegistrationRepository clientRegistrationRepository;
+    private final KakaoPromptAuthorizationRequestResolver kakaoPromptAuthorizationRequestResolver;
     private final LoginSuccessHandler loginSuccessHandler;
     private final LoginFailureHandler loginFailureHandler;
     private final ServerAuthenticationFilter serverAuthenticationFilter;
@@ -89,6 +91,7 @@ public class SecurityFilterChainConfig {
         httpSecurity.logout(AbstractHttpConfigurer::disable);
         httpSecurity.oauth2Login(oauth2->
                 oauth2
+                        .authorizationEndpoint(config -> config.authorizationRequestResolver(kakaoPromptAuthorizationRequestResolver))
                         .clientRegistrationRepository(clientRegistrationRepository)
                         .userInfoEndpoint(config -> config.userService(customOAuth2UserService))
                         .successHandler(loginSuccessHandler)
