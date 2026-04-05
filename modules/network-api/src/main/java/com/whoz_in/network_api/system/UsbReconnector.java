@@ -7,16 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Conditional;
-import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -24,39 +17,7 @@ import org.springframework.stereotype.Component;
 @Conditional(LinuxCondition.class)
 @RequiredArgsConstructor
 public class UsbReconnector {
-    @Qualifier("threadPoolTaskScheduler")
-    private final TaskScheduler scheduler;
-    private final Map<String, ScheduledFuture<?>> scheduledTasks = new ConcurrentHashMap<>();
-
-    public void scheduleReconnection(String interfaceName) {
-        if (isScheduled(interfaceName)) {
-            log.info("{}의 USB 초기화가 이미 예약되어 있습니다.", interfaceName);
-            return;
-        }
-
-        ScheduledFuture<?> scheduledTask = scheduler.schedule(() -> {
-            reconnect(interfaceName);
-            scheduledTasks.remove(interfaceName);
-        }, Instant.now().plus(10, ChronoUnit.SECONDS));
-
-        scheduledTasks.put(interfaceName, scheduledTask);
-        log.info("{}의 USB 초기화가 예약됐습니다. (10초 후 실행)", interfaceName);
-    }
-
-    public boolean isScheduled(String interfaceName){
-        return scheduledTasks.containsKey(interfaceName);
-    }
-
-    public void cancelReconnection(String interfaceName) {
-        if (!isScheduled(interfaceName)) return;
-        ScheduledFuture<?> scheduledTask = scheduledTasks.remove(interfaceName);
-        if (scheduledTask != null) {
-            scheduledTask.cancel(false);
-        }
-        log.info("{}의 USB 초기화 예약이 취소됐습니다. (다시 연결됨)", interfaceName);
-    }
-
-    private void reconnect(String interfaceName) {
+    public void reconnect(String interfaceName) {
         log.info("{}의 USB 초기화 시작", interfaceName);
 
         // 네트워크 인터페이스의 USB 경로 가져오기
@@ -82,7 +43,7 @@ public class UsbReconnector {
             writeToFile("/sys/bus/usb/drivers/usb/bind", usbPath);
             // 네트워크 인터페이스 활성화
             TransientProcess.create("sudo ip link set " + interfaceName + " up").waitForTermination();
-            log.info("{}의 USB 초기화 완료", interfaceName);
+            log.info("{}의 USB 초기화 명령 실행 완료", interfaceName);
 
         } catch (Exception e) {
             log.error("{} USB 초기화 중 오류 발생: {}", interfaceName, e.getMessage());
