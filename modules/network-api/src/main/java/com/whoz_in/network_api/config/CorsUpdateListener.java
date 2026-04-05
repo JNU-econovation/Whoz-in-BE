@@ -1,13 +1,14 @@
 package com.whoz_in.network_api.config;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
-
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
 
 // 변경된 내부 아이피가 대표 내부 아이피인 경우(network api에서 실행되는 프론트로 접근하는 아이피) CORS에 추가함
 @Slf4j

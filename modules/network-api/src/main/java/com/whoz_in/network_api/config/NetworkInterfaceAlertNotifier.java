@@ -2,9 +2,6 @@ package com.whoz_in.network_api.config;
 
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.concurrent.ScheduledFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,6 +9,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.concurrent.ScheduledFuture;
 
 // NI 상태가 올바르지 않을때 5분 후에 에러 로깅 -> 디스코드로 가게 됨
 @Slf4j

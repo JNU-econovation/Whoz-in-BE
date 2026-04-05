@@ -1,18 +1,18 @@
 package com.whoz_in.network_api.system;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED;
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
-
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
 
 // 모니터 모드여야 하는 인터페이스를 모니터 모드로 설정함
 @Slf4j

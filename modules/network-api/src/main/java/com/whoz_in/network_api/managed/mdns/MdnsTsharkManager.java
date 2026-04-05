@@ -1,29 +1,30 @@
 package com.whoz_in.network_api.managed.mdns;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
-
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
+import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
+
 @Slf4j
 @Component
 public class MdnsTsharkManager {
-    private final Map<String, ResilientContinuousProcess> processesByInterfaceName;
+    private final Map<String, ContinuousProcess> processesByInterfaceName;
     @Getter
-    private final Map<NetworkInterfaceProfile, ResilientContinuousProcess> processes;
+    private final Map<NetworkInterfaceProfile, ContinuousProcess> processes;
 
     public MdnsTsharkManager(NetworkInterfaceProfileConfig config) {
         processes = Collections.unmodifiableMap(
@@ -47,7 +48,7 @@ public class MdnsTsharkManager {
             return;
         }
 
-        ResilientContinuousProcess process = processesByInterfaceName.get(event.interfaceName());
+        ContinuousProcess process = processesByInterfaceName.get(event.interfaceName());
         if (process == null) {
             return;
         }

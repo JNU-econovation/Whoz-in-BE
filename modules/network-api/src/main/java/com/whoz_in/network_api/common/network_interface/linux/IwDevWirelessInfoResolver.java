@@ -5,11 +5,12 @@ import com.whoz_in.network_api.common.network_interface.WirelessInfo;
 import com.whoz_in.network_api.common.network_interface.WirelessInfoResolver;
 import com.whoz_in.network_api.common.network_interface.WirelessMode;
 import com.whoz_in.network_api.common.process.TransientProcess;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.stereotype.Component;
 
 @Conditional(LinuxCondition.class)
 @Component

@@ -1,8 +1,5 @@
 package com.whoz_in.network_api.controller;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
-
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
@@ -10,11 +7,6 @@ import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEv
 import com.whoz_in.network_api.common.util.IpHolder;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.controller.docs.MyIpApi;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
@@ -22,6 +14,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 @Slf4j
 @RestController

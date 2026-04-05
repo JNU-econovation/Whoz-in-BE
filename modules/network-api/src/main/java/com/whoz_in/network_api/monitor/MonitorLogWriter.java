@@ -2,18 +2,19 @@ package com.whoz_in.network_api.monitor;
 
 import com.whoz_in.domain.network_log.MonitorLog;
 import com.whoz_in.domain.network_log.MonitorLogRepository;
-import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
-import java.util.HashSet;
-import java.util.Set;
+import com.whoz_in.network_api.common.process.ContinuousProcess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Slf4j
 @Component
 public class MonitorLogWriter {
-    private final ResilientContinuousProcess process;
+    private final ContinuousProcess process;
     private final String room;
     private final MonitorLogParser parser;
     private final MonitorLogRepository  repository;

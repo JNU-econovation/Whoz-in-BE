@@ -2,15 +2,16 @@ package com.whoz_in.network_api.system;
 
 import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Component;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component

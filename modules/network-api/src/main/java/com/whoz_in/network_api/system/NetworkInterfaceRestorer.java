@@ -1,20 +1,8 @@
 package com.whoz_in.network_api.system;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
-
-import com.whoz_in.network_api.common.network_interface.NetworkInterface;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus;
-import com.whoz_in.network_api.common.network_interface.WirelessMode;
 import com.whoz_in.network_api.common.LinuxCondition;
-import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
+import com.whoz_in.network_api.common.network_interface.*;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ScheduledFuture;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,6 +10,15 @@ import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledFuture;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
 
 @Slf4j
 @Component

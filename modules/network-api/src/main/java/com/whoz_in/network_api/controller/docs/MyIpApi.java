@@ -2,9 +2,10 @@ package com.whoz_in.network_api.controller.docs;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.ResponseEntity;
+
 import java.net.UnknownHostException;
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 
 @Tag(name = "Ip", description = "Ip API")
 public interface MyIpApi {

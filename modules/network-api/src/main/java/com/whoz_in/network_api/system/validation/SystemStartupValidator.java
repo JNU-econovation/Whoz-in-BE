@@ -2,11 +2,12 @@ package com.whoz_in.network_api.system.validation;
 
 
 import com.whoz_in.network_api.common.LinuxCondition;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+
+import java.util.List;
 
 //시스템의 전체적인 검증을 진행하는 클래스
 @Slf4j

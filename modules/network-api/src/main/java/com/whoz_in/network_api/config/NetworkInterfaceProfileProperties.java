@@ -1,9 +1,10 @@
 package com.whoz_in.network_api.config;
 
-import java.util.List;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.ConstructorBinding;
+
+import java.util.List;
 
 // NetworkInterfaceProfile을 구성하기 위한 값들을 환경 변수로부터 읽는다.
 // 그리고 Profile을 구성하는 NetworkInterfaceProfileConfig가 사용하기 쉽도록 가공해놓는다.

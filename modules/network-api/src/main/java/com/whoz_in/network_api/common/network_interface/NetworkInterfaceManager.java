@@ -1,23 +1,17 @@
 package com.whoz_in.network_api.common.network_interface;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
-
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 // 시스템의 현재 네트워크 인터페이스를 주기적으로 가져와서 저장 및 변경 감지
 @Slf4j

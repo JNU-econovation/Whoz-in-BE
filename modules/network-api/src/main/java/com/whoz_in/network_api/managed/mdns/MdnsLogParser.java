@@ -1,9 +1,10 @@
 package com.whoz_in.network_api.managed.mdns;
 
 import com.whoz_in.network_api.managed.ParsedLog;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Slf4j
 @Component

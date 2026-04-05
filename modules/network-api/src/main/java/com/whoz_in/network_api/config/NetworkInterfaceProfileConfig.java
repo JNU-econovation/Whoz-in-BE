@@ -1,11 +1,12 @@
 package com.whoz_in.network_api.config;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Stream;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Stream;
 
 // 환경변수에 설정된 네트워크 인터페이스의 정보들을 profile로 매핑한다.
 @Getter

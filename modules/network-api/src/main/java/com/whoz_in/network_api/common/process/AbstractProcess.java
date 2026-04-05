@@ -1,12 +1,9 @@
 package com.whoz_in.network_api.common.process;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
+
+import java.io.*;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public abstract class AbstractProcess {

@@ -1,17 +1,17 @@
 package com.whoz_in.network_api.system;
 
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
-
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.WirelessMode;
-import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.system.routing_policy.PolicyRoutingInitializer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
+
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
 
 // managed 인터페이스 중 무선 인터페이스들을 라우팅 테이블에 매칭시켜놓음
 @Slf4j

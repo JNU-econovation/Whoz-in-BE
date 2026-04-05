@@ -1,8 +1,11 @@
 package com.whoz_in.network_api.common.network_interface.nonLinux;
 
+import com.whoz_in.network_api.common.NonLinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
-import com.whoz_in.network_api.common.NonLinuxCondition;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Component;
+
 import java.net.InetAddress;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
@@ -10,8 +13,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.stereotype.Component;
 
 @Conditional(NonLinuxCondition.class)
 @Component

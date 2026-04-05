@@ -4,11 +4,12 @@ import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkAddress;
 import com.whoz_in.network_api.common.network_interface.NetworkAddressResolver;
 import com.whoz_in.network_api.common.process.TransientProcess;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.stereotype.Component;
 
 @Conditional(LinuxCondition.class)
 @Component

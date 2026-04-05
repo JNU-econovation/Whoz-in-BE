@@ -1,8 +1,9 @@
 package com.whoz_in.network_api.managed;
 
-import java.time.LocalDateTime;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

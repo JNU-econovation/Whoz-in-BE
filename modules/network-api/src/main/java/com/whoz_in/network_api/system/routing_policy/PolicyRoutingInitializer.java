@@ -1,17 +1,19 @@
 package com.whoz_in.network_api.system.routing_policy;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.*;
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
-
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
-import com.whoz_in.network_api.common.LinuxCondition;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MANAGED;
 
 @Conditional(LinuxCondition.class)
 @Component

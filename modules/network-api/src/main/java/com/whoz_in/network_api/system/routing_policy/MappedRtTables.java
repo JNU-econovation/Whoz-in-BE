@@ -1,10 +1,14 @@
 package com.whoz_in.network_api.system.routing_policy;
 
+import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
-import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,9 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component

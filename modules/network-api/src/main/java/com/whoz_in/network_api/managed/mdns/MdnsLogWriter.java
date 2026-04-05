@@ -3,26 +3,22 @@ package com.whoz_in.network_api.managed.mdns;
 import com.whoz_in.domain.network_log.ManagedLog;
 import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
-import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.managed.ParsedLog;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 //TODO: tshark가 종료되지 않더라도 오류가 발생할 수 있으려나? 이 경우에도 로깅이 필요하긴 함
 @Slf4j
 @Component
 public class MdnsLogWriter {
     private final String room;
-    private final Map<NetworkInterfaceProfile, ResilientContinuousProcess> processes;
+    private final Map<NetworkInterfaceProfile, ContinuousProcess> processes;
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
 

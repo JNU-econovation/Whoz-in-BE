@@ -1,10 +1,11 @@
 package com.whoz_in.network_api.common.process;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ResilientContinuousProcess extends ContinuousProcess {
@@ -39,19 +40,15 @@ public class ResilientContinuousProcess extends ContinuousProcess {
         scheduler.schedule(() -> {
             if (isAlive()){
                 backoffCount = 0;
-            }else {
-                log.warn("[ResilientContinuousProcess] 종료 감지! 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", backoffCount, command, readErrorLines());
-                restart();
-                backoffCount++;
+            } else if (!isRestarting()) {
+                String errorLines = readErrorLines();
+                if (restart()) {
+                    log.warn("[ResilientContinuousProcess] 종료 감지! 프로세스를 재실행합니다({})\ncommand: {}\n에러 스트림: {}", backoffCount, command, errorLines);
+                    backoffCount++;
+                }
             }
             scheduleRestart(Math.min(backoffMaxMs, backoffIntervalMs + backoffStepMs * backoffCount));
         }, delayMs, TimeUnit.MILLISECONDS);
-    }
-
-    // 프로세스 재시작
-    public synchronized void restart() {
-        super.terminate(); // 프로세스 종료
-        this.start(); // 프로세스 시작
     }
 
     // 완전히 종료하는 것. 이 객체는 재사용 불가능해짐

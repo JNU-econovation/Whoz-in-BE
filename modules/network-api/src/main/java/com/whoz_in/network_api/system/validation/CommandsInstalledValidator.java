@@ -4,11 +4,12 @@ package com.whoz_in.network_api.system.validation;
 import com.whoz_in.network_api.common.LinuxCondition;
 import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.common.validation.CustomValidator;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
+
+import java.util.List;
 
 //which로 커맨드가 설치되어있는지 확인함
 @Component

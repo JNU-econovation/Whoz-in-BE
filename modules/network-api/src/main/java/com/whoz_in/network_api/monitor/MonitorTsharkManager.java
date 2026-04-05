@@ -1,12 +1,9 @@
 package com.whoz_in.network_api.monitor;
 
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED;
-import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
-import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
-
 import com.whoz_in.network_api.common.network_interface.NetworkInterface;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceManager;
 import com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatusEvent;
+import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import lombok.Getter;
@@ -15,13 +12,17 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED;
+import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.MODE_CHANGED;
+import static com.whoz_in.network_api.common.network_interface.WirelessMode.MONITOR;
+
 @Slf4j
 @Component
 public class MonitorTsharkManager {
     private final String interfaceName;
     private final NetworkInterfaceManager networkInterfaceManager;
     @Getter
-    private final ResilientContinuousProcess process;
+    private final ContinuousProcess process;
 
     public MonitorTsharkManager(NetworkInterfaceProfileConfig config, NetworkInterfaceManager networkInterfaceManager) {
         this.interfaceName = config.getMonitorProfile().interfaceName();

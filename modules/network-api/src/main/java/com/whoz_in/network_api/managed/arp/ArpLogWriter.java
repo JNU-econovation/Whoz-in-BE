@@ -7,14 +7,15 @@ import com.whoz_in.network_api.common.process.TransientProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
 import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Slf4j

@@ -1,12 +1,13 @@
 package com.whoz_in.network_api.config;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @Slf4j
 @Component

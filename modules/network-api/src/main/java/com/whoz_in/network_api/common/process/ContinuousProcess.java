@@ -1,17 +1,21 @@
 package com.whoz_in.network_api.common.process;
 
 import com.whoz_in.network_api.common.util.NonBlockingBufferedReader;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.extern.slf4j.Slf4j;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 //실행 후 종료되지 않는 프로세스
 //꾸준히 출력을 읽을 수 있어야 한다.
 @Slf4j
 public class ContinuousProcess extends AbstractProcess{
+    private final AtomicBoolean restarting = new AtomicBoolean(false);
+
     ContinuousProcess(String command){
         super(command);
     }
@@ -27,6 +31,25 @@ public class ContinuousProcess extends AbstractProcess{
         super.process = new ProcessBuilder(command.getCommand()).start();
         super.outputReader = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getInputStream())));
         super.errorReader = new NonBlockingBufferedReader(new BufferedReader(new InputStreamReader(process.getErrorStream())));
+    }
+
+    protected boolean isRestarting() {
+        return this.restarting.get();
+    }
+
+    // 프로세스 재시작
+    public boolean restart() {
+        if (!this.restarting.compareAndSet(false, true)) {
+            return false;
+        }
+
+        try {
+            super.terminate(); // 프로세스 종료
+            this.start(); // 프로세스 시작
+            return true;
+        } finally {
+            this.restarting.set(false);
+        }
     }
 
     // 읽을 줄이 없을경우 null을 출력한다.
