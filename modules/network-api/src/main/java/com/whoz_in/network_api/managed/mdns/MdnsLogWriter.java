@@ -5,14 +5,12 @@ import com.whoz_in.domain.network_log.ManagedLogRepository;
 import com.whoz_in.network_api.common.process.ContinuousProcess;
 import com.whoz_in.network_api.common.process.ResilientContinuousProcess;
 import com.whoz_in.network_api.config.NetworkInterfaceProfile;
-import com.whoz_in.network_api.config.NetworkInterfaceProfileConfig;
 import com.whoz_in.network_api.managed.ParsedLog;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,15 +26,15 @@ public class MdnsLogWriter {
     private final MdnsLogParser parser;
     private final ManagedLogRepository repository;
 
-    public MdnsLogWriter(@Value("${room-name}") String room, NetworkInterfaceProfileConfig config, ManagedLogRepository repository, MdnsLogParser parser) {
+    public MdnsLogWriter(
+            @Value("${room-name}") String room,
+            MdnsTsharkManager tsharkManager,
+            ManagedLogRepository repository,
+            MdnsLogParser parser) {
         this.room = room;
         this.repository = repository;
         this.parser = parser;
-        this.processes = config.getMdnsProfiles().stream()
-                        .collect(Collectors.toMap(
-                                Function.identity(),
-                                profile -> ResilientContinuousProcess.create(profile.command()))
-                        );
+        this.processes = tsharkManager.getProcesses();
     }
 
     //주기적으로 로그를 저장함
@@ -69,13 +67,4 @@ public class MdnsLogWriter {
                 .toList();
     }
 
-    // 오랫동안 켜진 tshark는 모든 대역의 mdns 패킷을 받지 못하는 것으로 확인되어 오전 9시, 오후 9시에 재실행한다.
-    @Scheduled(cron = "0 0 9,21 * * *")
-    private void restartTshark(){
-        this.processes.forEach((profile, process)-> {
-                    if (!process.isAlive()) return;
-                    process.restart();
-                    log.info("[managed - mdns({})] tshark가 재실행되었습니다.", profile.ssid());
-                });
-    }
 }
