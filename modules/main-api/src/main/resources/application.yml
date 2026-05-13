@@ -23,6 +23,7 @@ spring:
 frontend:
   main: # 메인 프론트 서버
     base-url: ${FRONTEND.MAIN.BASE-URL} # 배열이면 안됨
+    additional-cors-allowed-origins: ${FRONTEND.MAIN.ADDITIONAL_CORS_ALLOWED_ORIGINS:}
 api-key: ${API_KEY}
 https-enabled: ${HTTPS_ENABLED}
 oauth:

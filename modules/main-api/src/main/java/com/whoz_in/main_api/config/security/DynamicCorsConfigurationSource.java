@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.config.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,15 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource{
     private final List<String> allowedOrigins = new CopyOnWriteArrayList<>();
 
     public DynamicCorsConfigurationSource(
-            @Value("${frontend.main.base-url}") String mainFrontendBaseUrl) {
+            @Value("${frontend.main.base-url}") String mainFrontendBaseUrl,
+            @Value("${frontend.main.additional-cors-allowed-origins:}") String additionalCorsAllowedOrigins) {
         // 기본으로 허용할 origin
         allowedOrigins.add("http://localhost:3000");
         allowedOrigins.add(mainFrontendBaseUrl);
+        Arrays.stream(additionalCorsAllowedOrigins.split(","))
+                .map(String::trim)
+                .filter(origin -> !origin.isEmpty())
+                .forEach(allowedOrigins::add);
         log.info("등록된 cors origin: {}", allowedOrigins);
     }
 
