@@ -42,7 +42,7 @@ public final class InternalAccessUrlWriter {
 
         try {
             restTemplate.exchange(
-                    mainApiBaseUrl + "/internal/api/v1/internal-access-url",
+                    mainApiBaseUrl + "/network-api/api/v1/internal-access-url", // m-a와 통합 관리 필요(HttpRequestIdentifier)
                     HttpMethod.PUT,
                     requestEntity,
                     Void.class

@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.config.security;
 
-import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INTERNAL_PREFIX;
+import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.NETWORK_API_PREFIX;
 
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.KakaoPromptAuthorizationRequestResolver;
@@ -44,7 +44,7 @@ public class SecurityFilterChainConfig {
     @Order(0)
     public SecurityFilterChain serverToServerFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher(
-                INTERNAL_PREFIX + "/**"
+                NETWORK_API_PREFIX + "/**"
         );
 
         commonConfigurations(httpSecurity);

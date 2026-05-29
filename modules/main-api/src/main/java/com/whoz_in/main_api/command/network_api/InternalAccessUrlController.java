@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.command.network_api;
 
-import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.INTERNAL_PREFIX;
+import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.NETWORK_API_PREFIX;
 
 import com.whoz_in.main_api.command.shared.application.CommandBus;
 import com.whoz_in.main_api.command.shared.presentation.CommandController;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 //server to server
 // network-api가 이 api를 사용하여 자신의 Internal Access Ssid의 ip를 알릴 수 있다.
 @RestController
-@RequestMapping(INTERNAL_PREFIX + "/api/v1")
+@RequestMapping(NETWORK_API_PREFIX + "/api/v1")
 public class InternalAccessUrlController extends CommandController {
 
     public InternalAccessUrlController(CommandBus commandBus) {
