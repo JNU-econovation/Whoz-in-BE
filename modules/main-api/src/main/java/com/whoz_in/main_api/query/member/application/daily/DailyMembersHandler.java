@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.query.member.application.in_room;
+package com.whoz_in.main_api.query.member.application.daily;
 
 import static com.whoz_in.main_api.shared.statics.DeviceConnectionStatics.UPDATE_TERM_MINUTE;
 
@@ -25,12 +25,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 @Handler
 @RequiredArgsConstructor
-public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, MembersInRoom> {
+public class DailyMembersHandler implements QueryHandler<DailyMembersGet, DailyMembers> {
     private final MemberInfoViewer memberInfoViewer;
     private final TodayActivityViewer todayActivityViewer;
     private final DeviceViewer deviceViewer;
     private final RequesterInfo requesterInfo;
-    private volatile List<MemberInRoom> cachedMembers; // 여러 스레드에서 동시에 읽기/쓰기가 가능하므로 volatile
+    private volatile List<DailyMember> cachedMembers; // 여러 스레드에서 동시에 읽기/쓰기가 가능하므로 volatile
 
     @EventListener(ApplicationReadyEvent.class)
     protected void init() {
@@ -38,7 +38,7 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
     }
 
     @Override
-    public MembersInRoom handle(MembersInRoomGet query) {
+    public DailyMembers handle(DailyMembersGet query) {
         validateRegisteredDeviceCount(requesterInfo.getMemberId());
         return filter(query);
     }
@@ -48,14 +48,14 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
         if(count.value()<1) throw RegisteredDeviceCountException.EXCEPTION;
     }
 
-    private MembersInRoom filter(MembersInRoomGet query) {
+    private DailyMembers filter(DailyMembersGet query) {
         int page = query.page() - 1;
         int size = query.size();
         int start = page * size;
         int end = Math.min(start + size, cachedMembers.size());
-        List<MemberInRoom> paged = cachedMembers.subList(start, end);
-        int activeCount = (int) cachedMembers.stream().filter(MemberInRoom::isActive).count();
-        return new MembersInRoom(paged, activeCount);
+        List<DailyMember> paged = cachedMembers.subList(start, end);
+        int activeCount = (int) cachedMembers.stream().filter(DailyMember::isActive).count();
+        return new DailyMembers(paged, activeCount);
     }
 
     @Scheduled(fixedRate = UPDATE_TERM_MINUTE, timeUnit = TimeUnit.MINUTES)
@@ -66,19 +66,19 @@ public class MembersInRoomHandler implements QueryHandler<MembersInRoomGet, Memb
         this.cachedMembers = memberInfoViewer.findAll().stream()
                 .map(info -> {
                     TodayActivityView activityView = activities.get(info.memberId());
-                    return new MemberInRoom(info, activityView);
+                    return new DailyMember(info, activityView);
                 })
                 .sorted(
                         // 오늘 동방에 온 사람 우선
-                        Comparator.comparing(MemberInRoom::hasBeenActive).reversed()
+                        Comparator.comparing(DailyMember::hasBeenActive).reversed()
                                 // active인 사람 우선
-                                .thenComparing(MemberInRoom::isActive, Comparator.reverseOrder())
+                                .thenComparing(DailyMember::isActive, Comparator.reverseOrder())
                                 // activeTime이 큰 순
-                                .thenComparing(MemberInRoom::todayActiveTime, Comparator.reverseOrder())
+                                .thenComparing(DailyMember::todayActiveTime, Comparator.reverseOrder())
                                 // generation 내림차순
-                                .thenComparing(MemberInRoom::generation, Comparator.reverseOrder())
+                                .thenComparing(DailyMember::generation, Comparator.reverseOrder())
                                 // 이름순 정렬
-                                .thenComparing(MemberInRoom::memberName)
+                                .thenComparing(DailyMember::memberName)
                 )
                 .toList();
     }

@@ -2,10 +2,10 @@ package com.whoz_in.main_api.query.member.presentation;
 
 import com.whoz_in.main_api.query.member.application.block.MemberBlock;
 import com.whoz_in.main_api.query.member.application.block.MemberBlockGet;
+import com.whoz_in.main_api.query.member.application.daily.DailyMembers;
+import com.whoz_in.main_api.query.member.application.daily.DailyMembersGet;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetail;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetailGet;
-import com.whoz_in.main_api.query.member.application.in_room.MembersInRoomGet;
-import com.whoz_in.main_api.query.member.application.in_room.MembersInRoom;
 import com.whoz_in.main_api.query.member.application.profile.MemberProfileGet;
 import com.whoz_in.main_api.query.member.application.profile.MemberProfile;
 import com.whoz_in.main_api.query.member.presentation.docs.MemberQueryApi;
@@ -30,12 +30,12 @@ public class MemberQueryController extends QueryController implements MemberQuer
     }
 
     @GetMapping("/members")
-    public ResponseEntity<SuccessBody<MembersInRoom>> getActiveMembers(
+    public ResponseEntity<SuccessBody<DailyMembers>> getActiveMembers(
             @RequestParam("size") int size,
             @RequestParam("page") int page
     ) {
-        MembersInRoomGet query = new MembersInRoomGet(page, size);
-        MembersInRoom response = ask(query);
+        DailyMembersGet query = new DailyMembersGet(page, size);
+        DailyMembers response = ask(query);
         return ResponseEntityGenerator.success(response, CrudResponseCode.READ);
     }
 

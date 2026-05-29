@@ -1,4 +1,4 @@
-package com.whoz_in.main_api.query.member.application.in_room;
+package com.whoz_in.main_api.query.member.application.daily;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
@@ -8,7 +8,7 @@ import com.whoz_in.main_api.query.shared.presentation.HourMinuteSerializer;
 import com.whoz_in.shared.Nullable;
 import java.time.Duration;
 
-public record MemberInRoom(
+public record DailyMember(
     String memberId,
     int generation,
     String memberName,
@@ -19,7 +19,7 @@ public record MemberInRoom(
     Duration todayActiveTime,
     boolean isActive
 ) implements Response {
-    public MemberInRoom(MemberInfoView info, @Nullable TodayActivityView todayActivity) {
+    public DailyMember(MemberInfoView info, @Nullable TodayActivityView todayActivity) {
         this(
                 info.memberId().toString(),
                 info.generation(),

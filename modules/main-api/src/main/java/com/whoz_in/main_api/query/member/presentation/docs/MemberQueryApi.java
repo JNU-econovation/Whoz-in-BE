@@ -1,8 +1,8 @@
 package com.whoz_in.main_api.query.member.presentation.docs;
 
 import com.whoz_in.main_api.query.member.application.block.MemberBlock;
+import com.whoz_in.main_api.query.member.application.daily.DailyMembers;
 import com.whoz_in.main_api.query.member.application.detail.MemberDetail;
-import com.whoz_in.main_api.query.member.application.in_room.MembersInRoom;
 import com.whoz_in.main_api.query.member.application.profile.MemberProfile;
 import com.whoz_in.main_api.shared.presentation.response.SuccessBody;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +21,7 @@ public interface MemberQueryApi {
                     동아리 방 현황을 조회합니다.
                     """
     )
-    ResponseEntity<SuccessBody<MembersInRoom>> getActiveMembers(
+    ResponseEntity<SuccessBody<DailyMembers>> getActiveMembers(
             @Parameter(name="size") int size,
             @Parameter(name="page") int page
     );

@@ -1,10 +1,10 @@
-package com.whoz_in.main_api.query.member.application.in_room;
+package com.whoz_in.main_api.query.member.application.daily;
 
 import com.whoz_in.main_api.query.shared.application.Response;
 import java.util.List;
 
-public record MembersInRoom(
-        List<MemberInRoom> members,
+public record DailyMembers(
+        List<DailyMember> members,
         int size
 ) implements Response {
 }
