@@ -10,24 +10,24 @@ import org.springframework.stereotype.Component;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.ADDED_AND_RECONNECTED;
 import static com.whoz_in.network_api.common.network_interface.NetworkInterfaceStatus.RECONNECTED;
 
-// 변경된 내부 아이피가 대표 내부 아이피인 경우(network api에서 실행되는 프론트로 접근하는 아이피) CORS에 추가함
+// 변경된 사설 아이피가 대표 사설 아이피인 경우(network api에서 실행되는 프론트로 접근하는 아이피) CORS에 추가함
 @Slf4j
 @Profile({"dev", "prod"})
 @Component
 public class CorsUpdateListener {
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
-    private final String internalAccessInterface;
+    private final String RoomAccessInterface;
     private final NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider;
 
     public CorsUpdateListener(
             NetworkInterfaceProfileConfig profileConfig,
             DynamicCorsConfigurationSource dynamicCorsConfigurationSource,
-            @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
+            @Value("${frontend.network-api.room-access-ssid}") String roomAccessSsid,
             NetworkApiFrontendUrlProvider networkApiFrontendUrlProvider
     ) {
         this.networkApiFrontendUrlProvider = networkApiFrontendUrlProvider;
         this.dynamicCorsConfigurationSource = dynamicCorsConfigurationSource;
-        this.internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
+        this.RoomAccessInterface = profileConfig.getBySsid(roomAccessSsid).interfaceName();
     }
 
     @EventListener
@@ -35,7 +35,7 @@ public class CorsUpdateListener {
         // 재연결일 때만 처리
         if (event.status() != RECONNECTED && event.status() != ADDED_AND_RECONNECTED) return;
         // 해당 인터페이스에 대한 이벤트일때만 처리
-        if (!event.now().getName().equals(internalAccessInterface)) return;
+        if (!event.now().getName().equals(RoomAccessInterface)) return;
 
         dynamicCorsConfigurationSource.addAllowedOrigin(networkApiFrontendUrlProvider.get().get()); // 이상적으론 무조건 값이 존재
     }

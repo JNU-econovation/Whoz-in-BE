@@ -13,28 +13,28 @@ import java.util.Optional;
 @Component
 public final class NetworkApiFrontendUrlProvider {
     private final NetworkInterfaceManager manager;
-    private final String internalAccessInterface;
+    private final String roomAccessInterface;
     private final int networkApiFrontendPort;
 
     public NetworkApiFrontendUrlProvider(
             NetworkInterfaceManager manager,
             NetworkInterfaceProfileConfig profileConfig,
-            @Value("${frontend.network-api.internal-access-ssid}") String internalAccessSsid,
+            @Value("${frontend.network-api.room-access-ssid}") String roomAccessSsid,
             @Value("${frontend.network-api.port}") int networkApiFrontendPort
     ) {
         this.manager = manager;
         // 사용자가 어떤 와이파이에 연결돼있든 network-api에 배포된 프론트로 접근할 수 있는 ssid를 인터페이스로 변환
-        this.internalAccessInterface = profileConfig.getBySsid(internalAccessSsid).interfaceName();
+        this.roomAccessInterface = profileConfig.getBySsid(roomAccessSsid).interfaceName();
         this.networkApiFrontendPort = networkApiFrontendPort;
     }
 
     public Optional<String> get(){
-        NetworkInterface internalAccessNI = manager.getByName(internalAccessInterface);
-        if (!internalAccessNI.isConnected()) {
+        NetworkInterface roomAccessNI = manager.getByName(roomAccessInterface);
+        if (!roomAccessNI.isConnected()) {
             return Optional.empty();
         }
         return Optional.of("http://%s:%d".formatted(
-                internalAccessNI.getNetworkAddress().ip(),
+                roomAccessNI.getNetworkAddress().ip(),
                 networkApiFrontendPort
         ));
     }

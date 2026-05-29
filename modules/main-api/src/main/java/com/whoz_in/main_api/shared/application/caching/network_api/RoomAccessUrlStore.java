@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class InternalAccessUrlStore {
+public class RoomAccessUrlStore {
     private static final Cache<String, String> store = CacheBuilder.newBuilder() // Cache<Room, url>
             .expireAfterAccess(1, TimeUnit.MINUTES) // 1분 동안 접근이 없으면 해당 url을 신뢰하지 않고 삭제
             .build();

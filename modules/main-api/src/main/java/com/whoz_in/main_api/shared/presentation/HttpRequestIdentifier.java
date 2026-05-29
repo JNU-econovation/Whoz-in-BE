@@ -10,10 +10,13 @@ public final class HttpRequestIdentifier {
     public static final String NETWORK_API_PREFIX = "/network-api";
     public static final String OPEN_API_PREFIX = "/open-api";
 
-    public boolean isInternal(HttpServletRequest request) {
+    public boolean isNetworkApi(HttpServletRequest request) {
         return request.getRequestURI().startsWith(NETWORK_API_PREFIX);
     }
+    public boolean isOpenApi(HttpServletRequest request) {
+        return request.getRequestURI().startsWith(OPEN_API_PREFIX);
+    }
     public boolean isPublic(HttpServletRequest request) {
-        return !isInternal(request);
+        return !isNetworkApi(request);
     }
 }

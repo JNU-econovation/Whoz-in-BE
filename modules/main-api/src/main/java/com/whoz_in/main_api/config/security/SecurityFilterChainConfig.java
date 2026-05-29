@@ -159,7 +159,7 @@ public class SecurityFilterChainConfig {
                         "/api/v1/private-ips",
                         "/api/v1/members/**",
                         "/api/v1/member/**",
-                        "/api/v1/internal-access-url",
+                        "/api/v1/room-access-url",
                         "/api/v1/badges",
                         "/api/v1/badges/register",
                         "/api/v1/badges/members",

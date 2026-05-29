@@ -16,15 +16,15 @@ import java.util.Map;
 
 @Slf4j
 @Component
-public final class InternalAccessUrlWriter {
+public final class RoomAccessUrlWriter {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final String mainApiBaseUrl;
     private final String mainApiKey;
 
-    public InternalAccessUrlWriter(RestTemplate restTemplate, ObjectMapper objectMapper,
-            @Value("${main-api.base-url}") String mainApiBaseUrl,
-            @Value("${main-api.api-key}") String mainApiKey) {
+    public RoomAccessUrlWriter(RestTemplate restTemplate, ObjectMapper objectMapper,
+                               @Value("${main-api.base-url}") String mainApiBaseUrl,
+                               @Value("${main-api.api-key}") String mainApiKey) {
         this.restTemplate = restTemplate;
         this.objectMapper = objectMapper;
         this.mainApiBaseUrl = mainApiBaseUrl;
@@ -42,12 +42,12 @@ public final class InternalAccessUrlWriter {
 
         try {
             restTemplate.exchange(
-                    mainApiBaseUrl + "/network-api/api/v1/internal-access-url", // m-a와 통합 관리 필요(HttpRequestIdentifier)
+                    mainApiBaseUrl + "/network-api/v1/room-access-url", // m-a와 통합 관리 필요(HttpRequestIdentifier)
                     HttpMethod.PUT,
                     requestEntity,
                     Void.class
             );
-            log.info("'internal access url' updated");
+            log.info("'room access url' updated");
         } catch (ResourceAccessException e){
             log.warn("main api에 접근할 수 없음 : {}", e.getMessage()); //서버가 꺼져있는지 확인
         } catch (HttpClientErrorException.Forbidden e) {

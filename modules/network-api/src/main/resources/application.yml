@@ -28,7 +28,8 @@ command:
 #TODO: main-api랑 같이 공동으로 관리해야 할듯
 frontend:
   network-api:
-    internal-access-ssid: ${FRONTEND.NETWORK_API.INTERNAL_ACCESS_SSID}
+    # 사용자가 network-api에 요청할 수 있는 ssid를 가르킴
+    room-access-ssid: ${FRONTEND.NETWORK_API.ROOM_ACCESS_SSID}
     port: ${FRONTEND.NETWORK_API.PORT}
 main-api:
   base-url: ${MAIN_API_BASE_URL}

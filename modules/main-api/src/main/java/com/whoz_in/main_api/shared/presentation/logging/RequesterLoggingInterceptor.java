@@ -21,7 +21,7 @@ public class RequesterLoggingInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        if (httpRequestIdentifier.isInternal(request)) return true;
+        if (httpRequestIdentifier.isNetworkApi(request)) return true;
 
         requesterInfo.findMemberId()
                 .map(MemberId::id)

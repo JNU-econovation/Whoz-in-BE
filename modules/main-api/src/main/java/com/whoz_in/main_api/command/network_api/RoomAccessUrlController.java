@@ -11,17 +11,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 //server to server
-// network-api가 이 api를 사용하여 자신의 Internal Access Ssid의 ip를 알릴 수 있다.
+// network-api가 이 api를 사용하여 자신의 Network Access Ssid의 ip를 알릴 수 있다.
 @RestController
-@RequestMapping(NETWORK_API_PREFIX + "/api/v1")
-public class InternalAccessUrlController extends CommandController {
+@RequestMapping(NETWORK_API_PREFIX + "/v1")
+public class RoomAccessUrlController extends CommandController {
 
-    public InternalAccessUrlController(CommandBus commandBus) {
+    public RoomAccessUrlController(CommandBus commandBus) {
         super(commandBus);
     }
 
-    @PutMapping("/internal-access-url")
-    public void updateCors(@Valid @RequestBody InternalAccessUrlUpdate req){
+    @PutMapping("/room-access-url")
+    public void updateCors(@Valid @RequestBody RoomAccessUrlUpdate req){
         dispatch(req);
     }
 }
