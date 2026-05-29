@@ -2,8 +2,8 @@ package com.whoz_in_infra.infra_jpa.query.member;
 
 import com.whoz_in_infra.infra_jpa.query.member.activity.today.TodayActivity;
 import com.whoz_in_infra.infra_jpa.query.member.activity.today.TodayActivityService;
-import com.whoz_in.main_api.query.member.application.shared.MemberInfoView;
-import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
+import com.whoz_in.main_api.query.api.member.application.shared.MemberInfoView;
+import com.whoz_in.main_api.query.api.member.application.shared.MemberInfoViewer;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;

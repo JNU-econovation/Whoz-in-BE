@@ -1,9 +1,9 @@
 package com.whoz_in_infra.infra_jpa.query.badge;
 
-import com.whoz_in.main_api.query.badge.application.BadgeViewer;
-import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
-import com.whoz_in.main_api.query.badge.application.view.BadgesOfMember;
-import com.whoz_in.main_api.query.badge.application.view.RegistrableBadges;
+import com.whoz_in.main_api.query.api.badge.application.BadgeViewer;
+import com.whoz_in.main_api.query.api.badge.application.view.BadgeInfo;
+import com.whoz_in.main_api.query.api.badge.application.view.BadgesOfMember;
+import com.whoz_in.main_api.query.api.badge.application.view.RegistrableBadges;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;

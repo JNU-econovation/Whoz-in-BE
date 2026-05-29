@@ -1,9 +1,9 @@
 package com.whoz_in_infra.infra_jpa.query.device;
 
-import com.whoz_in.main_api.query.device.application.DeviceCount;
-import com.whoz_in.main_api.query.device.application.DevicesStatus;
-import com.whoz_in.main_api.query.device.application.DevicesStatus.DeviceStatus;
-import com.whoz_in.main_api.query.device.application.DeviceViewer;
+import com.whoz_in.main_api.query.api.device.application.DeviceCount;
+import com.whoz_in.main_api.query.api.device.application.DevicesStatus;
+import com.whoz_in.main_api.query.api.device.application.DevicesStatus.DeviceStatus;
+import com.whoz_in.main_api.query.api.device.application.DeviceViewer;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

@@ -4,8 +4,8 @@ package com.whoz_in.main_api.shared.jwt;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.ISSUER;
 import static com.whoz_in.main_api.shared.jwt.JwtConst.TOKEN_TYPE;
 
-import com.whoz_in.main_api.command.member.exception.ExpiredTokenException;
-import com.whoz_in.main_api.command.member.exception.InvalidTokenTyepException;
+import com.whoz_in.main_api.command.api.member.exception.ExpiredTokenException;
+import com.whoz_in.main_api.command.api.member.exception.InvalidTokenTyepException;
 import com.whoz_in.main_api.shared.jwt.tokens.TokenType;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;

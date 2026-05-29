@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.shared.domain.badge;
 
-import com.whoz_in.main_api.query.badge.application.view.BadgeInfo;
+import com.whoz_in.main_api.query.api.badge.application.view.BadgeInfo;
 
 public class BadgeFixture {
 

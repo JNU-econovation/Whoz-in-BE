@@ -1,7 +1,7 @@
 package com.whoz_in.main_api.shared.presentation.logging;
 
 import com.whoz_in.domain.member.model.MemberId;
-import com.whoz_in.main_api.query.member.application.shared.MemberInfoViewer;
+import com.whoz_in.main_api.query.api.member.application.shared.MemberInfoViewer;
 import com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;
 import jakarta.servlet.http.HttpServletRequest;

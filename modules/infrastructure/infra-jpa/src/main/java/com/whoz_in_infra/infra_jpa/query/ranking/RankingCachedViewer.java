@@ -1,7 +1,7 @@
 package com.whoz_in_infra.infra_jpa.query.ranking;
 
-import com.whoz_in.main_api.query.ranking.application.RankingMember;
-import com.whoz_in.main_api.query.ranking.application.RankingViewer;
+import com.whoz_in.main_api.query.api.ranking.application.RankingMember;
+import com.whoz_in.main_api.query.api.ranking.application.RankingViewer;
 import com.whoz_in.main_api.shared.enums.RankingType;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;

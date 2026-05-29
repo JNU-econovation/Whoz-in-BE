@@ -1,7 +1,7 @@
 package com.whoz_in_infra.infra_jpa.query.member.activity.today;
 
-import com.whoz_in.main_api.query.member.application.shared.TodayActivityView;
-import com.whoz_in.main_api.query.member.application.shared.TodayActivityViewer;
+import com.whoz_in.main_api.query.api.member.application.shared.TodayActivityView;
+import com.whoz_in.main_api.query.api.member.application.shared.TodayActivityViewer;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

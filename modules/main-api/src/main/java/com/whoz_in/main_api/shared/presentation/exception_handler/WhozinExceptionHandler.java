@@ -1,6 +1,6 @@
 package com.whoz_in.main_api.shared.presentation.exception_handler;
 
-import com.whoz_in.main_api.command.device.application.DeviceInfoTempAddFailedException;
+import com.whoz_in.main_api.command.api.device.application.DeviceInfoTempAddFailedException;
 import com.whoz_in.main_api.shared.presentation.response.FailureBody;
 import com.whoz_in.main_api.shared.presentation.response.ResponseEntityGenerator;
 import com.whoz_in.main_api.shared.utils.RequesterInfo;

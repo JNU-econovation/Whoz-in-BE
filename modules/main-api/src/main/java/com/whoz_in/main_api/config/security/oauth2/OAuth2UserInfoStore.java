@@ -2,7 +2,7 @@ package com.whoz_in.main_api.config.security.oauth2;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.whoz_in.main_api.command.member.exception.NotFoundSocailLoginInfoException;
+import com.whoz_in.main_api.command.api.member.exception.NotFoundSocailLoginInfoException;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
