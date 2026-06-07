@@ -1,6 +1,7 @@
 package com.whoz_in.main_api.config.security;
 
 import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.NETWORK_API_PREFIX;
+import static com.whoz_in.main_api.shared.presentation.HttpRequestIdentifier.OPEN_API_PREFIX;
 
 import com.whoz_in.main_api.config.security.oauth2.CustomOAuth2UserService;
 import com.whoz_in.main_api.config.security.oauth2.KakaoPromptAuthorizationRequestResolver;
@@ -112,7 +113,11 @@ public class SecurityFilterChainConfig {
                             "/api/v1/reissue"
                     )
                     // ssid를 기기 등록 토큰으로만 요청하는게 아니라 AT로도 요청할 수 있어야 함. 필터를 새로 만들거나 다른 방법을 생각해봐야 함
-                    .requestMatchers(HttpMethod.GET, "/api/v1/ssid", "/images/**");
+                    .requestMatchers(HttpMethod.GET,
+                            "/api/v1/ssid",
+                            "/images/**",
+                            OPEN_API_PREFIX + "/api/v1/members"
+                    );
         });
 
         commonConfigurations(httpSecurity);

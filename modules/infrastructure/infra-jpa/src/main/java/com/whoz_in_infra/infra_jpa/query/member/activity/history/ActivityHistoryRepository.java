@@ -19,4 +19,10 @@ public interface ActivityHistoryRepository extends JpaRepository<ActivityHistory
             LocalDate endDate,
             TimeUnit timeUnit
     );
+
+    Collection<ActivityHistory> findByReferenceDateGreaterThanEqualAndReferenceDateLessThanEqualAndTimeUnit(
+            LocalDate startDate,
+            LocalDate endDate,
+            TimeUnit timeUnit
+    );
 }
