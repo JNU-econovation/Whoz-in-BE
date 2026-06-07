@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController("openApiMemberQueryController")
-@RequestMapping(OPEN_API_PREFIX + "/api/v1")
+@RequestMapping(OPEN_API_PREFIX + "/v1")
 public class MemberQueryController extends QueryController implements MemberQueryApi {
     public MemberQueryController(QueryBus queryBus) {
         super(queryBus);
