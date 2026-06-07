@@ -58,6 +58,15 @@ public class SecurityConfig {
         return registrationBean;
     }
 
+    //위와 동일한 이유로 추가
+    @Bean
+    public FilterRegistrationBean<OpenApiTokenFilter> openApiTokenFilterRegistrationBean(
+            OpenApiTokenFilter openApiTokenFilter) {
+        FilterRegistrationBean<OpenApiTokenFilter> registrationBean = new FilterRegistrationBean<>(openApiTokenFilter);
+        registrationBean.setEnabled(false);
+        return registrationBean;
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
