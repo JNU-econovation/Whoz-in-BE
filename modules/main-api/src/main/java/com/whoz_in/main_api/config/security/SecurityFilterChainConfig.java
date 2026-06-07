@@ -35,8 +35,10 @@ public class SecurityFilterChainConfig {
     private final ServerAuthenticationFilter serverAuthenticationFilter;
     private final AccessTokenFilter accessTokenFilter;
     private final DeviceRegisterTokenFilter deviceRegisterTokenFilter;
+    private final OpenApiTokenFilter openApiTokenFilter;
     private final AccessTokenEntryPoint accessTokenEntryPoint;
     private final DeviceRegisterTokenEntryPoint deviceRegisterTokenEntryPoint;
+    private final OpenApiTokenEntryPoint openApiTokenEntryPoint;
     private final OptionsFilter optionsFilter;
     private final UnknownEndpointFilter unknownEndpointFilter;
     private final DynamicCorsConfigurationSource corsConfigurationSource;
@@ -102,9 +104,24 @@ public class SecurityFilterChainConfig {
         return httpSecurity.build();
     }
 
-    //인증인가 필요 없는 엔드포인트
     @Bean
     @Order(3)
+    public SecurityFilterChain openApiFilterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.securityMatcher(OPEN_API_PREFIX + "/**")
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated());
+
+        commonConfigurations(httpSecurity);
+        httpSecurity.logout(AbstractHttpConfigurer::disable);
+        httpSecurity.securityContext(AbstractHttpConfigurer::disable);
+        httpSecurity.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource));
+        httpSecurity.addFilterAt(openApiTokenFilter, LogoutFilter.class);
+        httpSecurity.exceptionHandling(ex -> ex.authenticationEntryPoint(openApiTokenEntryPoint));
+        return httpSecurity.build();
+    }
+
+    //인증인가 필요 없는 엔드포인트
+    @Bean
+    @Order(4)
     public SecurityFilterChain noAuthenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->{
             matcher.requestMatchers(HttpMethod.OPTIONS, "/**")
@@ -115,8 +132,7 @@ public class SecurityFilterChainConfig {
                     // ssid를 기기 등록 토큰으로만 요청하는게 아니라 AT로도 요청할 수 있어야 함. 필터를 새로 만들거나 다른 방법을 생각해봐야 함
                     .requestMatchers(HttpMethod.GET,
                             "/api/v1/ssid",
-                            "/images/**",
-                            OPEN_API_PREFIX + "/api/v1/members"
+                            "/images/**"
                     );
         });
 
@@ -131,7 +147,7 @@ public class SecurityFilterChainConfig {
 
     // 기기 등록 페이지에서 요청할 수 있는 api를 처리하는 필터
     @Bean
-    @Order(4)
+    @Order(5)
     public SecurityFilterChain deviceRegisterFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher ->
                 matcher.requestMatchers(HttpMethod.POST,
@@ -155,7 +171,7 @@ public class SecurityFilterChainConfig {
     //인증이 필요한 엔드포인트
     //로그아웃, 게시글 작성 등
     @Bean
-    @Order(5)
+    @Order(6)
     public SecurityFilterChain authenticationFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatchers(matcher->
                 matcher.requestMatchers(HttpMethod.GET,
@@ -200,7 +216,7 @@ public class SecurityFilterChainConfig {
     // TODO: 인증 여부에 따라 다른 동작을 하는 엔드포인트가 생기면 필터 체인 추가하기
 
     @Bean
-    @Order(6)
+    @Order(7)
     public SecurityFilterChain unknownFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.securityMatcher("/**");
 

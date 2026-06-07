@@ -29,13 +29,15 @@ public class JwtProperties {
             @NonNull Duration accessTokenExpiry,
             @NonNull Duration refreshTokenExpiry,
             @NonNull Duration oAuth2TempTokenExpiry,
-            @NonNull Duration deviceRegisterTokenExpiry
+            @NonNull Duration deviceRegisterTokenExpiry,
+            @NonNull Duration openApiTokenExpiry
     ) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
         tokenExpiryDurations.put(TokenType.ACCESS, accessTokenExpiry);
         tokenExpiryDurations.put(TokenType.REFRESH, refreshTokenExpiry);
         tokenExpiryDurations.put(TokenType.OAUTH2_TEMP, oAuth2TempTokenExpiry);
         tokenExpiryDurations.put(TokenType.DEVICE_REGISTER, deviceRegisterTokenExpiry);
+        tokenExpiryDurations.put(TokenType.OPEN_API, openApiTokenExpiry);
         Arrays.stream(TokenType.values()).forEach(tokenType -> {
             if (!tokenExpiryDurations.containsKey(tokenType))
                 throw new IllegalStateException("%s의 토큰 만료 기간 설정 안됨".formatted(tokenType));
