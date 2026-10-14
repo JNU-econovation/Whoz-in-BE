@@ -116,7 +116,10 @@ public class MemberController extends CommandController implements MemberCommand
   private void addTokenCookies(HttpServletResponse response, LoginSuccessTokens tokens){
     Cookie accessTokenCookie = cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS));
     Cookie refreshTokenCookie = cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH));
-    refreshTokenCookie.setPath("/api/v1/reissue");
+    // TODO: 배포 30일 후 제거. 예전 경로(/api/v1/reissue)에 남은 리프레시 토큰 쿠키를 지운다.
+    Cookie legacyRefreshTokenCookie = cookieFactory.createDeletionCookie(REFRESH_TOKEN);
+    legacyRefreshTokenCookie.setPath("/api/v1/reissue");
+    response.addCookie(legacyRefreshTokenCookie);
     response.addCookie(accessTokenCookie);
     response.addCookie(refreshTokenCookie);
   }
