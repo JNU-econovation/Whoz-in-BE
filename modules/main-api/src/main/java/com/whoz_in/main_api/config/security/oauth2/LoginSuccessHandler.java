@@ -50,6 +50,10 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
             LoginSuccessTokens tokens = commandBus.dispatch(new MemberOAuth2Login(userInfo.getSocialId()));
             response.addCookie(cookieFactory.create(ACCESS_TOKEN, tokens.accessToken(), jwtProperties.getTokenExpiry(TokenType.ACCESS)));
             response.addCookie(cookieFactory.create(REFRESH_TOKEN, tokens.refreshToken(), jwtProperties.getTokenExpiry(TokenType.REFRESH)));
+            // TODO: 배포 30일 후 제거. 예전 경로(/api/v1/reissue)에 남은 리프레시 토큰 쿠키를 지운다.
+            Cookie legacyRefreshTokenCookie = cookieFactory.createDeletionCookie(REFRESH_TOKEN);
+            legacyRefreshTokenCookie.setPath("/api/v1/reissue");
+            response.addCookie(legacyRefreshTokenCookie);
         } else {
             //소셜 회원이 없을 때
             //소셜 정보를 저장하고, 정보를 찾을 수 있는 키를 반환한다.
